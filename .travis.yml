@@ -24,7 +24,7 @@ install:
  
 # Run test
 script:
-  - nosetests --with-cov --cover-tests deepy --cov-config .coveragerc --logging-level=INFO
+  - nosetests --with-cov --cover-tests deepy --logging-level=INFO
 
 # Calculate coverage
 after_success:
