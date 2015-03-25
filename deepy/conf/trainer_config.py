@@ -1,25 +1,56 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging as loggers
+
+logging = loggers.getLogger(__name__)
 
 class TrainerConfig(object):
+    """
+    Training configuration container.
+    """
 
     def __init__(self):
-        self.validation_frequency = 10
-        self.test_frequency = 50
-        self.monitor_frequency = 50
+        object.__setattr__(self, "attrs", {
+            # Training
+            "validation_frequency": 1,
+            "test_frequency": 10,
+            "monitor_frequency": 1,
+            "min_improvement": 0.,
+            "patience": 20,
 
-        self.min_improvement = 0.
-        self.patience = 20
+            # Optimization
+            "momentum": 0.9,
+            "learning_rate": 0.01,
 
-        self.momentum = 0.9
-        self.learning_rate = 1e-4
+            # Regularization
+            "update_l1": 0,
+            "update_l2": 0,
+            "weight_l1": 0,
+            "weight_l2": 0,
+            "hidden_l1": 0,
+            "hidden_l2": 0,
+            "contractive_l2": 0,
+        })
 
-        # Regularization
-        self.update_l1 = 0
-        self.update_l2 = 0
-        self.weight_l1 = 0
-        self.weight_l2 = 0
-        self.hidden_l1 = 0
-        self.hidden_l2 = 0
-        self.contractive_l2 = 0
+        object.__setattr__(self, "used_parameters", set())
+        object.__setattr__(self, "undefined_parameters", set())
+
+    def __getattr__(self, key):
+        self.used_parameters.add(key)
+        if key not in self.attrs:
+            self.undefined_parameters.add(key)
+            return None
+        else:
+            return self.attrs[key]
+
+    def __setattr__(self, key, value):
+        self.attrs[key] = value
+
+    def report(self):
+        """
+        Report usage of training parameters.
+        """
+        logging.info("Accessed parameters in training configurations:")
+        for key in self.used_parameters:
+            logging.info(" - %s %s" % (key, "(undefined)" if key in self.undefined_parameters else ""))

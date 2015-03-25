@@ -12,6 +12,7 @@ import theano
 import theano.tensor as T
 from deepy.conf import TrainerConfig
 from deepy.trainers.optimize import optimize_parameters
+from deepy.trainers.util import wrap_core
 from theano.ifelse import ifelse
 from deepy.functions import FLOATX
 
@@ -408,37 +409,11 @@ class AdamTrainer(NeuralTrainer):
             self.cost_exprs,
             updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
 
-    def adam(self, loss, all_params, learning_rate=0.0002, beta1=0.1, beta2=0.001,
-         epsilon=1e-8, gamma=1-1e-8):
-        updates = []
-        all_grads = theano.grad(loss,all_params)
-
-        i = theano.shared(np.float32(1), name="adam_i")
-        i_t = i + 1.
-        fix1 = 1. - (1. - beta1)**i_t
-        fix2 = 1. - (1. - beta2)**i_t
-        beta1_t = 1-(1-beta1)*gamma**(i_t-1)
-        learning_rate_t = learning_rate * (T.sqrt(fix2) / fix1)
-
-        for param_i, g in zip(all_params, all_grads):
-            m = theano.shared(
-                np.zeros(param_i.get_value().shape, dtype=theano.config.floatX), name="adam_m_%s" % param_i.name)
-            v = theano.shared(
-                np.zeros(param_i.get_value().shape, dtype=theano.config.floatX), name="adam_v_%s" % param_i.name)
-
-            m_t = (beta1_t * g) + ((1. - beta1_t) * m)
-            v_t = (beta2 * g**2) + ((1. - beta2) * v)
-            g_t = m_t / (T.sqrt(v_t) + epsilon)
-            param_i_t = param_i - (learning_rate_t * g_t)
-
-            updates.append((m, m_t))
-            updates.append((v, v_t))
-            updates.append((param_i, param_i_t) )
-        updates.append((i, i_t))
-        return updates
-
     def learning_updates(self):
-        return self.adam(self.J, self.network.weights + self.network.biases, learning_rate=self.learning_rate)
+        from adam import adam_core
+        params = self.network.weights + self.network.biases
+        gradients = map(lambda p: T.grad(self.J, p), params)
+        return wrap_core(adam_core, self.config, params, gradients)
 
 class SSGD2Trainer(NeuralTrainer):
     """

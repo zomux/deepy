@@ -10,12 +10,38 @@ import theano
 import theano.tensor as T
 import numpy as np
 from deepy.functions import FLOATX
+from deepy.trainers.util import wrap_core
 
 logging = loggers.getLogger(__name__)
 
+def optimize(params, gradients, method="ADAM", clip=True, max_norm=5.0, config=None):
+    """
+    General optimization function for Theano.
+    """
+    func = None
+
+    if max_norm and clip:
+        clipped_gradients = []
+        norm_constant = T.constant(max_norm, dtype=FLOATX)
+        for g in gradients:
+            grad_norm = g.norm(L=2)
+            g = (T.minimum(norm_constant, grad_norm)/ grad_norm) * g
+            clipped_gradients.append(g)
+        gradients = clipped_gradients
+
+    if method == "ADAM":
+        from adam import adam_core
+        func = adam_core
+
+    if not func:
+        raise NotImplementedError("method '%s' is not supported" % method)
+
+    logging.info("optimize method=%s parameters=%s" % (method, str(params)))
+
+    return wrap_core(func, config, params, gradients)
 
 def optimize_parameters(params, gparams, shapes=None, max_norm = 5.0, lr = 0.01, eps= 1e-6, rho=0.95, method="ADADELTA",
-                        beta=0.0, gsum_regularization = 0, weight_l2 = 0, clip = True, monitor_norm = False):
+                        beta=0.0, gsum_regularization = 0, weight_l2 = 0, clip = True):
     """
     Optimize by SGD, AdaGrad, or AdaDelta.
     Returns the shared variables for the gradient caches,

@@ -351,7 +351,7 @@ attention_layer = AttentionLayer(std=0.005)
 net_conf.layers = [attention_layer]
 
 trainer_conf = TrainerConfig()
-trainer_conf.learning_rate = 0.005
+trainer_conf.learning_rate = 0.0012
 trainer_conf.weight_l2 = 0.0001
 trainer_conf.hidden_l2 = 0.0001
 trainer_conf.monitor_frequency = trainer_conf.validation_frequency = trainer_conf.test_frequency = 1
@@ -370,6 +370,8 @@ if os.path.exists(model_path) and True:
 
 trainer = AttentionTrainer(network, attention_layer, config=trainer_conf)
 # trainer = AdaDeltaTrainer(network, config=trainer_conf)
+
+trainer_conf.report()
 
 start_time = time.time()
 c = 1
