@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import numpy as np
 import os
+
+import numpy as np
 from numpy import linalg as LA
 from theano import tensor as T
 import theano
 from theano.tensor.shared_randomstreams import RandomStreams
-from deepy import nnprocessors, NeuralClassifier, NetworkConfig
-from deepy.functions import FLOATX
+
+from deepy import NeuralClassifier, NetworkConfig
+from deepy.util import build_activation
+from deepy.util.functions import FLOATX
 from deepy.networks import NeuralLayer
 from experiments.attention_models.gaussian_sampler import SampleMultivariateGaussian
 
@@ -152,9 +155,9 @@ class AttentionLayer(NeuralLayer):
 
     def _setup_functions(self):
         self._assistive_params = []
-        self._relu = nnprocessors.build_activation("tanh")
-        self._tanh = nnprocessors.build_activation("tanh")
-        self._softmax = nnprocessors.build_activation("softmax")
+        self._relu = build_activation("tanh")
+        self._tanh = build_activation("tanh")
+        self._softmax = build_activation("softmax")
         self.output_func = self._output_func()
 
     def _setup_params(self):

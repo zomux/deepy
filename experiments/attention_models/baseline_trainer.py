@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
+
 import numpy as np
 from numpy import linalg as LA
 from theano import tensor as T
 import theano
-from deepy.functions import FLOATX
+
+from deepy.util.functions import FLOATX
 from deepy.trainers import CustomizeTrainer
 from deepy.trainers.optimize import gradient_interface
 

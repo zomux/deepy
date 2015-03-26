@@ -7,14 +7,15 @@ import logging as loggers
 import numpy as np
 import theano
 import theano.tensor as T
-from deepy.functions import FLOATX, make_float_vectors
-from deepy.functions import smart_replace_graph as SRG
+from theano.ifelse import ifelse
+
+from deepy.util.functions import FLOATX, make_float_vectors
+from deepy.util.functions import smart_replace_graph as SRG
 from deepy.trainers.optimize import optimize_parameters
 from deepy.trainers.minibatch_optimizer import MiniBatchOptimizer
-from deepy import nnprocessors
+from deepy.util import build_activation
 from deepy.networks.layer import NeuralLayer
 from basic_nn import NeuralNetwork
-from theano.ifelse import ifelse
 
 
 logging = loggers.getLogger(__name__)
@@ -175,9 +176,9 @@ class LSTMLayer(NeuralLayer):
         return s_list, [(self.h0, h_list[-1]), (self.c0, c_list[-1])]
 
     def _setup_functions(self):
-        self._tanh = nnprocessors.build_activation('tanh')
-        self._sigmoid = nnprocessors.build_activation('sigmoid')
-        self._softmax = nnprocessors.build_activation('softmax')
+        self._tanh = build_activation('tanh')
+        self._sigmoid = build_activation('sigmoid')
+        self._softmax = build_activation('softmax')
         [self.output_func, self.hidden_func, self.memory_func], recurrent_updates = self._recurrent_func()
         self.predict_func, self.predict_updates = self._predict_func()
         self.monitors.append(("last_h<0.1", 100 * (abs(self.hidden_func[-1]) < 0.1).mean()))

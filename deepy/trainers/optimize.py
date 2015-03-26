@@ -9,8 +9,10 @@ import logging as loggers
 import theano
 import theano.tensor as T
 import numpy as np
-from deepy.functions import FLOATX
+
+from deepy.util.functions import FLOATX
 from deepy.trainers.util import wrap_core
+
 
 logging = loggers.getLogger(__name__)
 

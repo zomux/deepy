@@ -1,41 +1,49 @@
 import time
 import logging
+from argparse import ArgumentParser
 
 from deepy import TrainerConfig
 from deepy.dataset import MnistDataset, MiniBatches
 from experiments.attention_models.baseline_trainer import AttentionTrainer
 from baseline_model import get_network
+from deepy.util import Timer
 
 logging.basicConfig(level=logging.INFO)
 
+if __name__ == '__main__':
+    ap = ArgumentParser()
+    ap.add_argument("--model", default="/tmp/mnist_att_params2.gz")
+    ap.add_argument("--method", default="ADAGRAD")
+    ap.add_argument("--learning_rate", default=0.005)
+    ap.add_argument("--variance", default=0.005)
+    ap.add_argument("--disable_backprop", default=False)
+    ap.add_argument("--disable_rienforce", default=False)
+    args = ap.parse_args()
 
-mnist = MiniBatches((MnistDataset()), batch_size=1)
+    mnist = MiniBatches((MnistDataset()), batch_size=1)
 
-model_path = "/tmp/mnist_att_params2.gz"
+    model_path = args.model
 
-network = get_network(model_path)
+    network = get_network(model_path, std=args.variance)
 
-trainer_conf = TrainerConfig()
-trainer_conf.learning_rate = 0.0012
-trainer_conf.weight_l2 = 0.0001
-trainer_conf.hidden_l2 = 0.0001
-trainer_conf.monitor_frequency = trainer_conf.validation_frequency = trainer_conf.test_frequency = 1
-trainer_conf.test_frequency = 10
-trainer_conf.patience = 100
+    trainer_conf = TrainerConfig()
+    trainer_conf.learning_rate = args.learning_rate
+    trainer_conf.weight_l2 = 0.0001
+    trainer_conf.hidden_l2 = 0.0001
+    trainer_conf.monitor_frequency = trainer_conf.validation_frequency = trainer_conf.test_frequency = 1
+    trainer_conf.test_frequency = 10
+    trainer_conf.patience = 20
 
-trainer = AttentionTrainer(network, network.layers[0], config=trainer_conf)
+    trainer = AttentionTrainer(network, network.layers[0], config=trainer_conf,
+                               disable_rienforce=args.disable_rienforce, disable_backprop=args.disable_backprop)
 
-trainer_conf.report()
+    trainer_conf.report()
 
-start_time = time.time()
-c = 1
-for k in list(trainer.train(mnist.train_set(), mnist.valid_set(), mnist.test_set())):
-    if c > 10:
-        break
-    c += 1
-print k
-end_time = time.time()
+    timer = Timer()
+    for _ in list(trainer.train(mnist.train_set(), mnist.valid_set(), mnist.test_set())):
+        pass
+    timer.end()
 
-network.save_params(model_path)
+    network.save_params(model_path)
 
-print "time:", ((end_time - start_time )/ 60), "mins"
+    timer.report()

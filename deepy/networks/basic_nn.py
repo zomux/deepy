@@ -14,8 +14,8 @@ import theano
 
 logging = loggers.getLogger(__name__)
 
-from deepy.functions import VarMap
-from deepy import nnprocessors
+from deepy.util.functions import VarMap
+from deepy.util import build_activation
 
 
 class NeuralNetwork(object):
@@ -61,7 +61,7 @@ class NeuralNetwork(object):
     def setup_layers(self):
         last_size = self.config.input_size
         parameter_count = 0
-        z = nnprocessors.add_noise(
+        z = build_activation.add_noise(
             self.vars.x,
             self.config.input_noise,
             self.config.input_dropouts)

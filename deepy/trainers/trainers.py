@@ -10,11 +10,12 @@ import cPickle as pickle
 import numpy as np
 import theano
 import theano.tensor as T
+from theano.ifelse import ifelse
+
 from deepy.conf import TrainerConfig
 from deepy.trainers.optimize import optimize_parameters
 from deepy.trainers.util import wrap_core
-from theano.ifelse import ifelse
-from deepy.functions import FLOATX
+from deepy.util.functions import FLOATX
 
 
 logging = loggers.getLogger(__name__)

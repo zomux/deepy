@@ -5,12 +5,13 @@
 from collections import OrderedDict
 import logging as loggers
 
-from deepy.trainers.optimize import optimize_parameters
 import theano
 import theano.tensor as T
 import numpy as np
-from deepy.functions import FLOATX
 from theano.ifelse import ifelse
+
+from deepy.trainers.optimize import optimize_parameters
+from deepy.util.functions import FLOATX
 
 
 logging = loggers.getLogger(__name__)

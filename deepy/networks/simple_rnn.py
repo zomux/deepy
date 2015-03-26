@@ -7,8 +7,9 @@ import logging as loggers
 import numpy as np
 import theano
 import theano.tensor as T
-from deepy.functions import FLOATX, global_rand
-from deepy import nnprocessors
+
+from deepy.util.functions import FLOATX, global_rand
+from deepy.util import build_activation
 from deepy.networks.layer import NeuralLayer
 from basic_nn import NeuralNetwork
 
@@ -56,8 +57,8 @@ class SimpleRNNLayer(NeuralLayer):
         return h_list, s_list
 
     def _setup_functions(self):
-        self._activation_func = nnprocessors.build_activation(self.activation)
-        self._softmax_func = nnprocessors.build_activation('softmax')
+        self._activation_func = build_activation(self.activation)
+        self._softmax_func = build_activation('softmax')
         self.hidden_func, self.output_func = self._recurrent_func()
         self.monitors.append(("h<0.1", 100 * (abs(self.hidden_func[-1]) < 0.1).mean()))
         self.monitors.append(("h<0.9", 100 * (abs(self.hidden_func[-1]) < 0.9).mean()))

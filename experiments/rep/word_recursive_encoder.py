@@ -13,17 +13,17 @@ import random as rnd
 import logging
 
 import numpy as np
-from deepy import NetworkConfig, TrainerConfig, AdaGradTrainer
-from deepy.functions import FLOATX
-from deepy.networks import NeuralLayer
-from deepy import nnprocessors
-from deepy.networks.recursive import GeneralAutoEncoder
-from nlpy.util import LineIterator, FakeGenerator
-from deepy import nnprocessors
-from deepy.trainers.minibatch_optimizer import MiniBatchOptimizer
-import numpy as np
 import theano
 import theano.tensor as T
+
+from deepy import NetworkConfig, TrainerConfig, AdaGradTrainer
+from deepy.util.functions import FLOATX
+from deepy.networks import NeuralLayer
+from deepy.networks.recursive import GeneralAutoEncoder
+from nlpy.util import LineIterator, FakeGenerator
+from deepy.util import build_activation
+from deepy.trainers.minibatch_optimizer import MiniBatchOptimizer
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -162,8 +162,8 @@ class WRELayer(NeuralLayer):
 
     def _setup_functions(self):
         self._assistive_params = []
-        self._activation_func = nnprocessors.build_activation(self.activation)
-        self._softmax_func = nnprocessors.build_activation('softmax')
+        self._activation_func = build_activation(self.activation)
+        self._softmax_func = build_activation('softmax')
         top_rep, self.output_func = self._recursive_func()
         # self.predict_func, self.predict_updates = self._encode_func()
         self.monitors.append(("top_rep<0.1", 100 * (abs(top_rep) < 0.1).mean()))

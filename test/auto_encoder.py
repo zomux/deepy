@@ -5,10 +5,12 @@
 import time
 import logging
 
-from deepy.conf import NetworkConfig, TrainerConfig
-from deepy.functions import FLOATX
-from deepy import NeuralLayer, SGDTrainer, AutoEncoder
 import numpy as np
+
+from deepy.conf import NetworkConfig, TrainerConfig
+from deepy.util.functions import FLOATX
+from deepy import NeuralLayer, SGDTrainer, AutoEncoder
+
 
 logging.basicConfig(level=logging.INFO)
 

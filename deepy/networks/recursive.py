@@ -6,8 +6,9 @@ import logging as loggers
 
 import theano
 import theano.tensor as T
-from deepy.functions import FLOATX
-from deepy import nnprocessors
+
+from deepy.util.functions import FLOATX
+from deepy.util import build_activation
 from deepy.networks.layer import NeuralLayer
 from basic_nn import NeuralNetwork
 
@@ -108,8 +109,8 @@ class RAELayer(NeuralLayer):
 
     def _setup_functions(self):
         self._assistive_params = []
-        self._activation_func = nnprocessors.build_activation(self.activation)
-        self._softmax_func = nnprocessors.build_activation('softmax')
+        self._activation_func = build_activation(self.activation)
+        self._softmax_func = build_activation('softmax')
         top_rep, self.output_func = self._recursive_func()
         # self.predict_func, self.predict_updates = self._encode_func()
         self.monitors.append(("top_rep<0.1", 100 * (abs(top_rep) < 0.1).mean()))

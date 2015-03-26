@@ -4,9 +4,8 @@ from collections import Counter
 import random as rnd
 
 from experiments.lm import Vocab
-
 from deepy import NetworkConfig, TrainerConfig, SGDTrainer
-from deepy.functions import FLOATX
+from deepy.util.functions import FLOATX
 from deepy.networks.simple_rnn import SimpleRNN, SimpleRNNLayer
 from nlpy.util import LineIterator, FakeGenerator
 

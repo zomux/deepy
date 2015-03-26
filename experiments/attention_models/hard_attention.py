@@ -5,14 +5,13 @@ import time
 import os
 import logging
 
+import numpy as np
+
 from deepy import NetworkConfig, TrainerConfig, NeuralClassifier, AdaDeltaTrainer
 from deepy.networks import NeuralLayer
-from deepy import nnprocessors
 from deepy.dataset import MnistDataset, MiniBatches
-from deepy import nnprocessors
-from deepy.functions import FLOATX
-import theano.gradient
-import numpy as np
+from deepy.util import build_activation
+from deepy.util.functions import FLOATX
 
 
 logging.basicConfig(level=logging.INFO)
@@ -50,9 +49,9 @@ class HardAttentionLayer(NeuralLayer):
 
     def _setup_functions(self):
         self._assistive_params = []
-        self._relu = nnprocessors.build_activation("tanh")
-        self._tanh = nnprocessors.build_activation("tanh")
-        self._softmax = nnprocessors.build_activation("softmax")
+        self._relu = build_activation("tanh")
+        self._tanh = build_activation("tanh")
+        self._softmax = build_activation("softmax")
         self.output_func = self._output_func()
 
     def _setup_params(self):

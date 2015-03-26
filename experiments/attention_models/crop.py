@@ -1,12 +1,14 @@
 import time
 import os
 
+import theano.tensor as T
+
 from deepy import NetworkConfig, TrainerConfig, NeuralRegressor
 from deepy.trainers.trainer import AdamTrainer
 from deepy.networks import NeuralLayer
 from deepy.dataset import MnistDataset, MiniBatches
-import theano.tensor as T
-from deepy import nnprocessors
+from deepy.util import build_activation
+
 
 
 ########
@@ -36,7 +38,7 @@ class CropLayer(NeuralLayer):
 
     def _setup_functions(self):
         self._assistive_params = []
-        self._activation_func = nnprocessors.build_activation(self.activation)
+        self._activation_func = build_activation(self.activation)
         self.output_func = self._output_func()
 
     def _setup_params(self):

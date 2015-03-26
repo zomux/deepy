@@ -5,11 +5,13 @@
 import time
 import logging
 
+import numpy as np
+
 from deepy.networks.recurrent import RecurrentLayer, RecurrentNetwork
 from deepy.conf import NetworkConfig, TrainerConfig
-from deepy.functions import FLOATX
+from deepy.util.functions import FLOATX
 from deepy import SGDTrainer
-import numpy as np
+
 
 logging.basicConfig(level=logging.INFO)
 

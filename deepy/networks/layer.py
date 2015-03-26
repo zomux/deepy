@@ -7,8 +7,9 @@ import logging as loggers
 import numpy as np
 import theano
 import theano.tensor as T
-from deepy.functions import FLOATX, global_rand
-from deepy import nnprocessors
+
+from deepy.util.functions import FLOATX, global_rand
+from deepy.util import build_activation
 
 
 logging = loggers.getLogger(__name__)
@@ -61,9 +62,9 @@ class NeuralLayer(object):
         if self.disable_bias:
             bias = 0
 
-        self._activation_func = nnprocessors.build_activation(self.activation)
+        self._activation_func = build_activation(self.activation)
         self.preact_func = T.dot(self.x, self.W) + bias
-        self.output_func = nnprocessors.add_noise(
+        self.output_func = build_activation.add_noise(
                 self._activation_func(self.preact_func),
                 self.noise,
                 self.dropouts)

@@ -8,14 +8,14 @@ from collections import OrderedDict
 import numpy as np
 import theano
 import theano.tensor as T
-from deepy.functions import FLOATX, global_rand, make_float_matrices, make_float_vectors
-from deepy.functions import replace_graph as RG, smart_replace_graph as SRG
-from deepy import nnprocessors
+from theano.ifelse import ifelse
+
+from deepy.util.functions import FLOATX, global_rand, make_float_matrices, make_float_vectors
+from deepy.util.functions import replace_graph as RG, smart_replace_graph as SRG
 from deepy.trainers.optimize import optimize_parameters
-from deepy import nnprocessors
+from deepy.util import build_activation
 from layer import NeuralLayer
 from basic_nn import NeuralNetwork
-from theano.ifelse import ifelse
 
 
 logging = loggers.getLogger(__name__)
@@ -155,8 +155,8 @@ class RecurrentLayer(NeuralLayer):
 
     def _setup_functions(self):
         self._assistive_params = []
-        self._activation_func = nnprocessors.build_activation(self.activation)
-        self._softmax_func = nnprocessors.build_activation('softmax')
+        self._activation_func = build_activation(self.activation)
+        self._softmax_func = build_activation('softmax')
         self.hidden_func, self.output_func, recurrent_updates = self._recurrent_func()
         self.predict_func, self.predict_updates = self._predict_func()
         self.monitors.append(("hh<0.1", 100 * (abs(self.hidden_func[-1]) < 0.1).mean()))

@@ -6,10 +6,11 @@ import logging as loggers
 
 import numpy as np
 import theano.tensor as T
-from deepy import nnprocessors
-from deepy.networks.layer import NeuralLayer
 from theano.tensor.nnet import conv
 from theano.tensor.signal import downsample
+
+from deepy.util import build_activation
+from deepy.networks.layer import NeuralLayer
 
 
 logging = loggers.getLogger(__name__)
@@ -62,7 +63,7 @@ class ConvPoolLayer(NeuralLayer):
 
     def _setup_functions(self):
         self._assistive_params = []
-        self._activation_func = nnprocessors.build_activation(self.activation)
+        self._activation_func = build_activation(self.activation)
         self.output_func = self._output_func()
 
     def _setup_params(self):
