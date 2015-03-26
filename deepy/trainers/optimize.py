@@ -119,3 +119,8 @@ def gradient_interface(params, **kwargs):
     gs = [T.matrix() if p.ndim == 2 else T.vector() for p in params]
     updates = optimize_parameters(params, gs, **kwargs)
     return theano.function(gs, [], updates=updates)
+
+def gradient_interface_future(params, method="ADAM", clip=True, max_norm=5.0, config=None):
+    gs = [T.matrix() if p.ndim == 2 else T.vector() for p in params]
+    updates = optimize(params, gs, method, clip, max_norm, config)
+    return theano.function(gs, [], updates=updates)

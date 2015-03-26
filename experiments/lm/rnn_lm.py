@@ -6,8 +6,9 @@ import logging
 from experiments.lm import Vocab
 
 from experiments.lm.data_generator import RNNDataGenerator
-from nlpy.util import internal_resource
-from deepy import NetworkConfig, TrainerConfig, SGDTrainer
+from deepy.util import resource
+from deepy import NetworkConfig, TrainerConfig
+from deepy.trainers import MomentumTrainer
 from deepy.networks.recurrent import RecurrentNetwork, RecurrentLayer
 import numpy as np
 
@@ -38,9 +39,9 @@ def entropy(network, data):
 
 model_path = "/tmp/rnn_lm_params12.gz"
 
-train_path = internal_resource("ptb_lm_test/ptb.train.txt")
-train_100_path = internal_resource("ptb_lm_test/ptb.train.txt")
-valid_path = internal_resource("ptb_lm_test/ptb.valid.txt")
+train_path = resource("ptb_lm_test/ptb.train.txt")
+train_100_path = resource("ptb_lm_test/ptb.train.txt")
+valid_path = resource("ptb_lm_test/ptb.valid.txt")
 question_train = "/home/hadoop/data/questions/train.txt"
 question_valid = "/home/hadoop/data/questions/valid.txt"
 vocab = Vocab()
@@ -65,7 +66,7 @@ network = RecurrentNetwork(net_conf)
 # perplexity(network, valid_data)
 # raise SystemExit
 
-trainer = SGDTrainer(network, config=trainer_conf)
+trainer = MomentumTrainer(network, config=trainer_conf)
 
 start_time = time.time()
 

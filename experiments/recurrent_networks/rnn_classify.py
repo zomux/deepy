@@ -4,10 +4,11 @@ from collections import Counter
 import random as rnd
 
 from experiments.lm import Vocab
-from deepy import NetworkConfig, TrainerConfig, SGDTrainer
+from deepy import NetworkConfig, TrainerConfig
+from deepy.trainers import MomentumTrainer
 from deepy.util.functions import FLOATX
 from deepy.networks.simple_rnn import SimpleRNN, SimpleRNNLayer
-from nlpy.util import LineIterator, FakeGenerator
+from deepy.util import LineIterator, FakeGenerator
 
 
 random = rnd.Random(3)
@@ -137,7 +138,7 @@ trainer_conf.monitor_frequency = trainer_conf.validation_frequency = trainer_con
 
 network = SimpleRNN(net_conf)
 
-trainer = SGDTrainer(network, config=trainer_conf)
+trainer = MomentumTrainer(network, config=trainer_conf)
 
 start_time = time.time()
 

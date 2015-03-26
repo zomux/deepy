@@ -180,7 +180,7 @@ class NeuralTrainer(object):
             self.test(0, test_set)
 
 
-class SGDTrainer(NeuralTrainer):
+class MomentumTrainer(NeuralTrainer):
     '''Stochastic gradient descent network trainer.'''
 
     def __init__(self, network, config=None):
@@ -190,7 +190,7 @@ class SGDTrainer(NeuralTrainer):
         :type config: deepy.conf.TrainerConfig
         :return:
         """
-        super(SGDTrainer, self).__init__(network, config)
+        super(MomentumTrainer, self).__init__(network, config)
 
         self.momentum = self.config.momentum
         self.learning_rate = self.config.learning_rate
@@ -372,7 +372,7 @@ class FineTuningAdaGradTrainer(AdaGradTrainer):
         """
         super(FineTuningAdaGradTrainer, self).__init__(network, config, 0)
 
-class RmspropTrainer(SGDTrainer):
+class RmspropTrainer(MomentumTrainer):
     """
     RmsProp
     """

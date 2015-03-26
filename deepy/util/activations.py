@@ -44,7 +44,8 @@ def build_activation(act=None):
             'logistic': T.nnet.sigmoid,
             'sigmoid': T.nnet.sigmoid,
             'softplus': T.nnet.softplus,
-            'softmax': T.nnet.softmax,
+            'softmax': softmax,
+            'theano_softmax': T.nnet.softmax,
 
             # shorthands
             'relu': lambda z: z * (z > 0),

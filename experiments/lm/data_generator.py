@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-from nlpy.util import LineIterator
 import sys
 import numpy as np
 import math
@@ -40,7 +38,8 @@ class RNNDataGenerator(object):
         self.sentences = []
 
         # Treat each sentence as a trunk
-        for line in LineIterator(data_path):
+        for line in open(data_path).xreadlines():
+            line = line.strip()
             sequence = [vocab.sent_index]
             wc = line.count(" ") + 1
             if wc < min_words or wc > max_words:

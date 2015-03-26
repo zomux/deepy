@@ -5,7 +5,6 @@
 SENT_MARK = "</s>"
 UNK_MARK = "<unk>"
 
-from nlpy.util import LineIterator
 import numpy as np
 import logging as loggers
 
@@ -55,7 +54,8 @@ class Vocab(object):
         from collections import Counter
         logging.info("fixed size: %d" % fixed_size)
         counter = Counter()
-        for line in LineIterator(path):
+        for line in open(path).readlines():
+            line = line.strip()
             words = line.split(" ")
             counter.update(words)
         for w, _ in counter.most_common(fixed_size):
@@ -66,7 +66,8 @@ class Vocab(object):
         if fixed_size > 0:
             self._load_fixed_size(path, fixed_size)
             return
-        for line in LineIterator(path):
+        for line in open(path).xreadlines():
+            line = line.strip()
             words = line.split(" ")
             map(self.add, words)
         logging.info("vocab size: %d" % self.size)

@@ -15,7 +15,7 @@ import theano
 logging = loggers.getLogger(__name__)
 
 from deepy.util.functions import VarMap
-from deepy.util import build_activation
+from deepy.util import build_activation, add_noise
 
 
 class NeuralNetwork(object):
@@ -61,7 +61,7 @@ class NeuralNetwork(object):
     def setup_layers(self):
         last_size = self.config.input_size
         parameter_count = 0
-        z = build_activation.add_noise(
+        z = add_noise(
             self.vars.x,
             self.config.input_noise,
             self.config.input_dropouts)
@@ -135,20 +135,23 @@ class NeuralNetwork(object):
     def J(self, train_conf):
         cost = self.cost
 
-        # if train_conf.weight_l1 > 0:
-        #     cost += train_conf.weight_l1 * sum(abs(w).sum() for w in self.weights)
+        if train_conf.weight_l1 > 0:
+            logging.info("L1 weight regularization: %f" % train_conf.weight_l2)
+            cost += train_conf.weight_l1 * sum(abs(w).sum() for w in self.weights)
+        if train_conf.hidden_l1 > 0:
+            logging.info("L1 hidden unit regularization: %f" % train_conf.weight_l2)
+            cost += train_conf.hidden_l1 * sum(abs(h).mean(axis=0).sum() for h in self.hiddens)
 
-        # if train_conf.hidden_l1 > 0:
-        #     cost += train_conf.hidden_l1 * sum(abs(h).mean(axis=0).sum() for h in self.hiddens)
         if train_conf.weight_l2 > 0:
             logging.info("L2 weight regularization: %f" % train_conf.weight_l2)
             cost += train_conf.weight_l2 * sum((w * w).sum() for w in self.weights)
         if train_conf.hidden_l2 > 0:
             logging.info("L2 hidden unit regularization: %f" % train_conf.hidden_l2)
             cost += train_conf.hidden_l2 * sum((h * h).mean(axis=0).sum() for h in self.hiddens)
-        # if train_conf.contractive_l2 > 0:
-        #     cost += train_conf.contractive_l2 * sum(
-        #         T.sqr(T.grad(h.mean(axis=0).sum(), self.vars.x)).sum() for h in self.hiddens)
+        if train_conf.contractive_l2 > 0:
+            logging.info("L2 contractive regularization: %f" % train_conf.hidden_l2)
+            cost += train_conf.contractive_l2 * sum(
+                T.sqr(T.grad(h.mean(axis=0).sum(), self.vars.x)).sum() for h in self.hiddens)
 
         return cost
 

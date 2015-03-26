@@ -3,14 +3,14 @@
 
 
 from deepy.dataset import AbstractDataset
-from nlpy.util import FeatureContainer, internal_resource
+from deepy.util import resource
 import numpy as np
 
 class HeartScaleDataset(AbstractDataset):
 
     def __init__(self, target_format=None):
         super(HeartScaleDataset, self).__init__(target_format)
-        feature = FeatureContainer(internal_resource("dataset/heart_scale.txt"))
+        feature = FeatureContainer(resource("dataset/heart_scale.txt"))
         self.data = feature.data
         self.targets = feature.targets
         self._target_size = 2

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from deepy.trainers.trainers import NeuralTrainer, SGDTrainer, AdaDeltaTrainer, AdaGradTrainer, RmspropTrainer, PureSGDTrainer
+from trainers import *
+from optimize import *
 from deepy.trainers.customize_trainer import CustomizeTrainer
 from util import wrap_core

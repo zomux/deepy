@@ -4,3 +4,4 @@
 from functions import *
 from activations import *
 from timer import Timer
+from resource import resource

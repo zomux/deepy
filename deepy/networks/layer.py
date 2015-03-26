@@ -9,7 +9,7 @@ import theano
 import theano.tensor as T
 
 from deepy.util.functions import FLOATX, global_rand
-from deepy.util import build_activation
+from deepy.util import build_activation, add_noise
 
 
 logging = loggers.getLogger(__name__)
@@ -64,7 +64,7 @@ class NeuralLayer(object):
 
         self._activation_func = build_activation(self.activation)
         self.preact_func = T.dot(self.x, self.W) + bias
-        self.output_func = build_activation.add_noise(
+        self.output_func = add_noise(
                 self._activation_func(self.preact_func),
                 self.noise,
                 self.dropouts)

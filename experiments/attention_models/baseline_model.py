@@ -214,4 +214,5 @@ def get_network(model=None, std=0.005, disable_reinforce=False, random_glimpse=F
     network = NeuralClassifier(net_conf)
     if model and os.path.exists(model):
         network.load_params(model)
+    return network
 

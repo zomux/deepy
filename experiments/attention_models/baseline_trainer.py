@@ -9,7 +9,7 @@ import theano
 
 from deepy.util.functions import FLOATX
 from deepy.trainers import CustomizeTrainer
-from deepy.trainers.optimize import gradient_interface
+from deepy.trainers.optimize import gradient_interface, gradient_interface_future
 
 
 class AttentionTrainer(CustomizeTrainer):
@@ -42,9 +42,10 @@ class AttentionTrainer(CustomizeTrainer):
         self.batch_wl_grad = np.zeros(attention_layer.W_l.get_value().shape, dtype=FLOATX)
         self.batch_grad = [np.zeros(p.get_value().shape, dtype=FLOATX) for p in network.weights + network.biases]
         self.grad_func = theano.function(network.inputs, [self.J, grad_l, attention_layer.positions, attention_layer.last_decision] + grads, allow_input_downcast=True)
-        self.opt_interface = gradient_interface(self.network.weights + self.network.biases, lr=self.config.learning_rate, method="FINETUNING_ADAGRAD", gsum_regularization=0.0001)
-        self.l_opt_interface = gradient_interface([self.layer.W_l], lr=self.config.learning_rate, method="FINETUNING_ADAGRAD", max_norm=0.8, gsum_regularization=0.0001)
-
+        self.opt_interface = gradient_interface(self.network.weights + self.network.biases, lr=self.config.learning_rate, method="ADADELTA", gsum_regularization=0.0001)
+        self.l_opt_interface = gradient_interface([self.layer.W_l], lr=self.config.learning_rate, method="ADADELTA", max_norm=0.8, gsum_regularization=0.0001)
+        # self.opt_interface = gradient_interface_future(self.network.weights + self.network.biases, config=self.config)
+        # self.l_opt_interface = gradient_interface_future([self.layer.W_l], config=self.config)
 
     def update_parameters(self, update_wl):
         if not self.disable_backprop:

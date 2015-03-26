@@ -7,9 +7,10 @@ import logging
 from experiments.lm import Vocab
 
 from experiments.lm.data_generator import RNNDataGenerator
-from nlpy.util import internal_resource
-from deepy import NetworkConfig, TrainerConfig, PureSGDTrainer
+from deepy import NetworkConfig, TrainerConfig
 from deepy.networks.lstm import RecurrentNetwork, LSTMLayer
+from deepy.trainers import PureSGDTrainer
+from deepy.util import Timer, resource
 import numpy as np
 
 
@@ -50,9 +51,9 @@ print "args:", args
 pre_model_path = args.premodel
 model_path = args.model
 
-train_path = internal_resource("ptb_lm_test/ptb.train.txt")
-train_100_path = internal_resource("ptb_lm_test/ptb.train.10k.txt")
-valid_path = internal_resource("ptb_lm_test/ptb.valid.txt")
+train_path = resource("ptb_lm_test/ptb.train.txt")
+train_100_path = resource("ptb_lm_test/ptb.train.10k.txt")
+valid_path = resource("ptb_lm_test/ptb.valid.txt")
 # question_train = "/home/hadoop/data/questions/train.txt"
 # question_valid = "/home/hadoop/data/questions/valid.txt"
 vocab = Vocab()
@@ -78,7 +79,6 @@ network = RecurrentNetwork(net_conf)
 
 trainer = PureSGDTrainer(network, config=trainer_conf)
 
-start_time = time.time()
 
 best_entropy = 9999999.9
 if os.path.exists(pre_model_path):
@@ -104,8 +104,6 @@ def expand(sent):
     return words
 
 
-# print expand("what do")
-# import pdb; pdb.set_trace()
 
 """
 Strategy:
@@ -117,6 +115,8 @@ network.do_reset_grads = True
 threshold = 3
 failed_count = 0
 reload_count = 0
+
+timer = Timer()
 
 c = 0
 for _ in trainer.train(train_data):
@@ -147,7 +147,4 @@ for _ in trainer.train(train_data):
     if c >= 20:
         break
 
-end_time = time.time()
-
-
-print "elapsed time:", (end_time - start_time) / 60, "mins"
+timer.report()
