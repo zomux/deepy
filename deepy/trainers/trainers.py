@@ -13,8 +13,7 @@ import theano.tensor as T
 from theano.ifelse import ifelse
 
 from deepy.conf import TrainerConfig
-from deepy.trainers.optimize import optimize_parameters
-from deepy.trainers.util import wrap_core
+from deepy.trainers.optimize import optimize_updates
 from deepy.util.functions import FLOATX
 
 
@@ -179,21 +178,19 @@ class NeuralTrainer(object):
         if test_set:
             self.test(0, test_set)
 
+class GeneralNeuralTrainer(NeuralTrainer):
+    """
+    General neural network trainer.
+    """
+    def __init__(self, network, config=None, method=None):
 
-class MomentumTrainer(NeuralTrainer):
-    '''Stochastic gradient descent network trainer.'''
+        if method:
+            logging.info("changing optimization method to '%s'" % method)
+            if not config:
+                config = TrainerConfig()
+            config.method = method
 
-    def __init__(self, network, config=None):
-        """
-        Create a SGD trainer.
-        :type network:
-        :type config: deepy.conf.TrainerConfig
-        :return:
-        """
-        super(MomentumTrainer, self).__init__(network, config)
-
-        self.momentum = self.config.momentum
-        self.learning_rate = self.config.learning_rate
+        super(GeneralNeuralTrainer, self).__init__(network, config)
 
         logging.info('compiling %s learning function', self.__class__.__name__)
 
@@ -209,45 +206,12 @@ class MomentumTrainer(NeuralTrainer):
             updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
 
     def learning_updates(self):
-        for param in self.network.weights + self.network.biases:
-            delta = self.learning_rate * T.grad(self.J, param)
-            velocity = theano.shared(
-                np.zeros_like(param.get_value()), name=param.name + '_vel')
-            yield velocity, self.momentum * velocity - delta
-            yield param, param + velocity
-
-class PureSGDTrainer(NeuralTrainer):
-    '''Stochastic gradient descent network trainer.'''
-
-    def __init__(self, network, config=None):
         """
-        Create a SGD trainer.
-        :type network:
-        :type config: deepy.conf.TrainerConfig
-        :return:
+        Return updates in the training.
         """
-        super(PureSGDTrainer, self).__init__(network, config)
-
-        self.learning_rate = self.config.learning_rate
-
-        logging.info('compiling %s learning function', self.__class__.__name__)
-
-        network_updates = list(network.updates) + list(network.learning_updates)
-        learning_updates = list(self.learning_updates())
-        update_list = network_updates + learning_updates
-        logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
-        logging.info("learning updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
-
-        self.learning_func = theano.function(
-            network.inputs,
-            self.cost_exprs,
-            updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
-
-    def learning_updates(self):
-        for param in self.network.weights + self.network.biases:
-            delta = self.learning_rate * T.grad(self.J, param)
-            yield param, param - delta
-
+        params = self.network.weights + self.network.biases
+        gradients = [T.grad(self.J, param) for param in params]
+        return optimize_updates(params, gradients, self.config)
 
 class BatchPureSGDTrainer(NeuralTrainer):
     """
@@ -295,126 +259,56 @@ class BatchPureSGDTrainer(NeuralTrainer):
         yield batch_counter, ifelse(to_update, T.constant(0, dtype="int32"), batch_counter + 1)
 
 
-class AdaDeltaTrainer(NeuralTrainer):
-    '''AdaDelta network trainer.'''
-
+class SGDTrainer(GeneralNeuralTrainer):
+    """
+    SGD trainer.
+    """
     def __init__(self, network, config=None):
-        """
-        Create a SGD trainer.
-        :type network:
-        :type config: deepy.conf.TrainerConfig
-        :return:
-        """
-        super(AdaDeltaTrainer, self).__init__(network, config)
+        super(SGDTrainer).__init__(network, config, "SGD")
 
-
-        logging.info('compiling %s learning function', self.__class__.__name__)
-
-        network_updates = list(network.updates) + list(network.learning_updates)
-        learning_updates = list(self.learning_updates())
-        update_list = network_updates + learning_updates
-        logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
-        logging.info("learning updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
-
-        self.learning_func = theano.function(
-            network.inputs,
-            self.cost_exprs,
-            updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
-
-    def learning_updates(self):
-        params = self.network.weights + self.network.biases
-        gparams = [T.grad(self.J, param) for param in params]
-        return optimize_parameters(params, gparams, method="ADADELTA")
-
-
-class AdaGradTrainer(NeuralTrainer):
-    '''AdaDelta network trainer.'''
-
-    def __init__(self, network, config=None, gsum_regularization=0.0001):
-        """
-        Create a SGD trainer.
-        :type network:
-        :type config: deepy.conf.TrainerConfig
-        :return:
-        """
-        super(AdaGradTrainer, self).__init__(network, config)
-
-        self.learning_rate = self.config.learning_rate
-        self.gsum_regularization = gsum_regularization
-
-        logging.info('compiling %s learning function', self.__class__.__name__)
-
-        network_updates = list(network.updates) + list(network.learning_updates)
-        learning_updates = list(self.learning_updates())
-        update_list = network_updates + learning_updates
-        logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
-        logging.info("learning updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
-
-        self.learning_func = theano.function(
-            network.inputs,
-            self.cost_exprs,
-            updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
-
-    def learning_updates(self):
-        params = self.network.weights + self.network.biases
-        gparams = [T.grad(self.J, param) for param in params]
-        return optimize_parameters(params, gparams, method="ADAGRAD", lr=self.learning_rate, beta=self.config.update_l1, gsum_regularization=self.gsum_regularization)
-
-class FineTuningAdaGradTrainer(AdaGradTrainer):
-    '''AdaDelta network trainer.'''
-
+class AdaDeltaTrainer(GeneralNeuralTrainer):
+    """
+    AdaDelta trainer.
+    """
     def __init__(self, network, config=None):
-        """
-        Create a SGD trainer.
-        :type network:
-        :type config: deepy.conf.TrainerConfig
-        :return:
-        """
-        super(FineTuningAdaGradTrainer, self).__init__(network, config, 0)
+        super(AdaDeltaTrainer).__init__(network, config, "ADADELTA")
 
-class RmspropTrainer(MomentumTrainer):
+
+class AdaGradTrainer(GeneralNeuralTrainer):
     """
-    RmsProp
+    AdaGrad trainer.
     """
-
-    def learning_updates(self):
-        for param in self.params:
-            grad = T.grad(self.J, param)
-            rms_ = theano.shared(
-                np.zeros_like(param.get_value()), name=param.name + '_rms')
-            rms = self.momentum * rms_ + (1 - self.momentum) * grad * grad
-            yield rms_, rms
-            yield param, param - self.learning_rate * grad / T.sqrt(rms + 1e-8)
-
-
-class AdamTrainer(NeuralTrainer):
-    """
-    Optimization class of Adam.
-    """
-
     def __init__(self, network, config=None):
-        super(AdamTrainer, self).__init__(network, config)
+        super(AdaGradTrainer).__init__(network, config, "ADAGRAD")
 
-        self.learning_rate = self.config.learning_rate
+class FineTuningAdaGradTrainer(GeneralNeuralTrainer):
+    """
+    AdaGrad trainer.
+    """
+    def __init__(self, network, config=None):
+        super(FineTuningAdaGradTrainer).__init__(network, config, "FINETUNING_ADAGRAD")
 
-        logging.info('compiling %s learning function', self.__class__.__name__)
+class AdamTrainer(GeneralNeuralTrainer):
+    """
+    AdaGrad trainer.
+    """
+    def __init__(self, network, config=None):
+        super(AdamTrainer).__init__(network, config, "ADAM")
 
-        network_updates = list(network.updates) + list(network.learning_updates)
-        learning_updates = list(self.learning_updates())
-        update_list = network_updates + learning_updates
-        logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
-        logging.info("learning updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
+class RmspropTrainer(GeneralNeuralTrainer):
+    """
+    RmsProp trainer.
+    """
+    def __init__(self, network, config=None):
+        super(RmspropTrainer).__init__(network, config, "RMSPROP")
 
-        self.learning_func = theano.function(
-            network.inputs,
-            self.cost_exprs,
-            updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
+class MomentumTrainer(GeneralNeuralTrainer):
+    """
+    Momentum trainer.
+    """
+    def __init__(self, network, config=None):
+        super(MomentumTrainer).__init__(network, config, "MOMENTUM")
 
-    def learning_updates(self):
-        from adam import adam_core
-        params = self.network.weights + self.network.biases
-        gradients = map(lambda p: T.grad(self.J, p), params)
-        return wrap_core(adam_core, self.config, params, gradients)
 
 class SSGD2Trainer(NeuralTrainer):
     """

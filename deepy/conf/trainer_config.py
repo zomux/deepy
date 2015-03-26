@@ -20,8 +20,7 @@ class TrainerConfig(object):
             "patience": 20,
 
             # Optimization
-            "momentum": 0.9,
-            "learning_rate": 0.01,
+            "method": "ADADELTA",
 
             # Regularization
             "update_l1": 0,
@@ -46,6 +45,9 @@ class TrainerConfig(object):
 
     def __setattr__(self, key, value):
         self.attrs[key] = value
+
+    def get(self, key, default=None):
+        return getattr(self, key, default=default)
 
     def report(self):
         """

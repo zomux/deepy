@@ -12,7 +12,7 @@ from theano.ifelse import ifelse
 
 from deepy.util.functions import FLOATX, global_rand, make_float_matrices, make_float_vectors
 from deepy.util.functions import replace_graph as RG, smart_replace_graph as SRG
-from deepy.trainers.optimize import optimize_parameters
+from deepy.trainers import optimize_updates
 from deepy.util import build_activation
 from layer import NeuralLayer
 from basic_nn import NeuralNetwork
@@ -71,12 +71,10 @@ class RecurrentLayer(NeuralLayer):
 
             g_L_h = T.grad(_cost, h)
 
-            stepping_updates = optimize_parameters([self.W_s], [T.grad(_cost, self.W_s)],
-                                                   method=self.optimization, lr=self.learning_rate, beta=self.beta)
+            stepping_updates = optimize_updates([self.W_s], [T.grad(_cost, self.W_s)])
 
             if not self.bptt:
-                stepping_updates += optimize_parameters([self.W_i, self.W_r], [T.grad(_cost, self.W_i), T.grad(_cost, self.W_r)],
-                                                        method=self.optimization, lr=self.learning_rate, beta=self.beta)
+                stepping_updates += optimize_updates([self.W_i, self.W_r], [T.grad(_cost, self.W_i), T.grad(_cost, self.W_r)])
 
             self._assistive_params.extend([x[0] for x in stepping_updates if x[0] not in {self.W_i, self.W_s, self.W_r}])
             return [h ,s, g_L_h], stepping_updates
@@ -116,8 +114,8 @@ class RecurrentLayer(NeuralLayer):
             g_wr = (g_z_wr * (g_h_z * error))
 
             # TODO: Updating weights in each step is slow, move it out
-            w_updates = OrderedDict(optimize_parameters([wi, wr], [g_wi, g_wr], shapes=[self.W_i, self.W_r],
-                                                        method=self.optimization, lr=self.learning_rate, beta=self.beta))
+            # TODO: fix shape
+            w_updates = OrderedDict(optimize_updates([wi, wr], [g_wi, g_wr], shapes=[self.W_i, self.W_r]))
 
             wi_out = w_updates[wi]
             wr_out = w_updates[wr]

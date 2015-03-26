@@ -137,34 +137,6 @@ class Rprop(SGDTrainer):
             yield step_tm1, step
 
 
-class RmsProp(SGDTrainer):
-    '''RmsProp trains neural network models using scaled SGD.
-    The Rprop method uses the same general strategy as SGD (both methods are
-    make small parameter adjustments using local derivative information). The
-    difference here is that as gradients are computed during each parameter
-    update, an exponential moving average of squared gradient magnitudes is
-    maintained as well. At each update, the EMA is used to compute the
-    root-mean-square (RMS) gradient value that's been seen in the recent past.
-    The actual gradient is normalized by this RMS scale before being applied to
-    update the parameters.
-    Like Rprop, this learning method effectively maintains a sort of
-    parameter-specific momentum value, but the difference here is that only the
-    magnitudes of the gradients are taken into account, rather than the signs.
-    The weight parameter for the EMA window is taken from the "momentum" keyword
-    argument. If this weight is set to a low value, the EMA will have a short
-    memory and will be prone to changing quickly. If the momentum parameter is
-    set close to 1, the EMA will have a long history and will change slowly.
-    '''
-
-    def learning_updates(self):
-        for param in self.params:
-            grad = TT.grad(self.J, param)
-            rms_ = theano.shared(
-                np.zeros_like(param.get_value()), name=param.name + '_rms')
-            rms = self.momentum * rms_ + (1 - self.momentum) * grad * grad
-            yield rms_, rms
-            yield param, param - self.learning_rate * grad / TT.sqrt(rms + 1e-8)
-
 
 class Scipy(NeuralTrainer):
     '''General trainer for neural nets using `scipy.optimize.minimize`.'''

@@ -9,7 +9,7 @@ from experiments.lm import Vocab
 from experiments.lm.data_generator import RNNDataGenerator
 from deepy import NetworkConfig, TrainerConfig
 from deepy.networks.lstm import RecurrentNetwork, LSTMLayer
-from deepy.trainers import PureSGDTrainer
+from deepy.trainers import SGDTrainer
 from deepy.util import Timer, resource
 import numpy as np
 
@@ -77,7 +77,7 @@ network = RecurrentNetwork(net_conf)
 # perplexity(network, valid_data)
 # raise SystemExit
 
-trainer = PureSGDTrainer(network, config=trainer_conf)
+trainer = SGDTrainer(network, config=trainer_conf)
 
 
 best_entropy = 9999999.9

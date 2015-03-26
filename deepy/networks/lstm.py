@@ -11,7 +11,7 @@ from theano.ifelse import ifelse
 
 from deepy.util.functions import FLOATX, make_float_vectors
 from deepy.util.functions import smart_replace_graph as SRG
-from deepy.trainers.optimize import optimize_parameters
+from deepy.trainers.ada_family import optimize_parameters
 from deepy.trainers.minibatch_optimizer import MiniBatchOptimizer
 from deepy.util import build_activation
 from deepy.networks.layer import NeuralLayer

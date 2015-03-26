@@ -10,7 +10,7 @@ import theano.tensor as T
 import numpy as np
 from theano.ifelse import ifelse
 
-from deepy.trainers.optimize import optimize_parameters
+from deepy.trainers.ada_family import optimize_parameters
 from deepy.util.functions import FLOATX
 
 
