@@ -14,7 +14,7 @@ from deepy.trainers.optimize import gradient_interface
 
 class AttentionTrainer(CustomizeTrainer):
 
-    def __init__(self, network, attention_layer, config, batch_size=20, disable_backprop=False, disable_rienforce=False):
+    def __init__(self, network, attention_layer, config, batch_size=20, disable_backprop=False, disable_reinforce=False):
         """
         Parameters:
             network - AttentionNetwork
@@ -25,7 +25,7 @@ class AttentionTrainer(CustomizeTrainer):
         """
         super(AttentionTrainer, self).__init__(network, config)
         self.disable_backprop = disable_backprop
-        self.disable_rienforce = disable_rienforce
+        self.disable_reinforce = disable_reinforce
         self.large_cov_mode = False
         self.batch_size = 20
         self.last_average_reward = 999
@@ -35,7 +35,7 @@ class AttentionTrainer(CustomizeTrainer):
             grads = []
         else:
             grads = [T.grad(self.J, p) for p in network.weights + network.biases]
-        if self.disable_rienforce:
+        if self.disable_reinforce:
             grad_l = self.layer.W_l
         else:
             grad_l = self.layer.wl_grad
@@ -51,7 +51,7 @@ class AttentionTrainer(CustomizeTrainer):
             grads = [self.batch_grad[i] / self.batch_size for i in range(len(self.network.weights + self.network.biases))]
             self.opt_interface(*grads)
         # REINFORCE update
-        if update_wl and not self.disable_rienforce:
+        if update_wl and not self.disable_reinforce:
             if np.sum(self.batch_wl_grad) == 0:
                 sys.stdout.write("[0 WLG] ")
                 sys.stdout.flush()
@@ -89,7 +89,7 @@ class AttentionTrainer(CustomizeTrainer):
             batch_reward += reward
             if self.last_average_reward == 999 and total > 2000:
                 self.last_average_reward = total_reward / total
-            if not self.disable_rienforce:
+            if not self.disable_reinforce:
                 self.batch_wl_grad += wl_grad *  - (reward - self.last_average_reward)
             if not self.disable_backprop:
                 for grad_cache, grad in zip(self.batch_grad, pairs[4:]):
@@ -101,7 +101,7 @@ class AttentionTrainer(CustomizeTrainer):
                 self.update_parameters(self.last_average_reward < 999)
 
                 # Clean batch gradients
-                if not self.disable_rienforce:
+                if not self.disable_reinforce:
                     self.batch_wl_grad *= 0
                 if not self.disable_backprop:
                     for grad_cache in self.batch_grad:
@@ -112,7 +112,7 @@ class AttentionTrainer(CustomizeTrainer):
                     sys.stdout.flush()
 
                 # Cov
-                if not self.disable_rienforce:
+                if not self.disable_reinforce:
                     cov_changed = False
                     if batch_reward / self.batch_size < 0.001:
                         if not self.large_cov_mode:

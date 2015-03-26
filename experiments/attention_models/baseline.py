@@ -17,14 +17,16 @@ if __name__ == '__main__':
     ap.add_argument("--learning_rate", default=0.005)
     ap.add_argument("--variance", default=0.005)
     ap.add_argument("--disable_backprop", default=False)
-    ap.add_argument("--disable_rienforce", default=False)
+    ap.add_argument("--disable_reinforce", default=False)
+    ap.add_argument("--random_glimpse", default=False)
     args = ap.parse_args()
 
     mnist = MiniBatches((MnistDataset()), batch_size=1)
 
     model_path = args.model
 
-    network = get_network(model_path, std=args.variance)
+    network = get_network(model_path, std=args.variance,
+                          disable_reinforce=args.disable_reinforce, random_glimpse=args.random_glimpse)
 
     trainer_conf = TrainerConfig()
     trainer_conf.learning_rate = args.learning_rate
@@ -35,7 +37,7 @@ if __name__ == '__main__':
     trainer_conf.patience = 20
 
     trainer = AttentionTrainer(network, network.layers[0], config=trainer_conf,
-                               disable_rienforce=args.disable_rienforce, disable_backprop=args.disable_backprop)
+                               disable_reinforce=args.disable_reinforce, disable_backprop=args.disable_backprop)
 
     trainer_conf.report()
 

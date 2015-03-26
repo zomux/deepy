@@ -9,7 +9,7 @@ import theano
 from theano.tensor.shared_randomstreams import RandomStreams
 
 from deepy import NeuralClassifier, NetworkConfig
-from deepy.util import build_activation
+from deepy.util import build_activation, disconnected_grad
 from deepy.util.functions import FLOATX
 from deepy.networks import NeuralLayer
 from experiments.attention_models.gaussian_sampler import SampleMultivariateGaussian
@@ -17,7 +17,9 @@ from experiments.attention_models.gaussian_sampler import SampleMultivariateGaus
 
 class AttentionLayer(NeuralLayer):
 
-    def __init__(self, activation='relu', std=0.1):
+    def __init__(self, activation='relu', std=0.1, disable_reinforce=False, random_glimpse=False):
+        self.disable_reinforce = disable_reinforce
+        self.random_glimpse = random_glimpse
         self.gaussian_std = std
         super(AttentionLayer, self).__init__(10, activation)
 
@@ -128,16 +130,21 @@ class AttentionLayer(NeuralLayer):
         g_t = self._glimpse_network(x_t, l_p)
         h_t = self._tanh(T.dot(g_t, self.W_h_g) + T.dot(h_p, self.W_h) + self.B_h)
         l_t = self._location_network(h_t)
-        # sampled_l_t = self._sample_gaussian(l_t, self.cov)
-        # sampled_pdf = self._multi_gaussian_pdf(disconnected_grad(sampled_l_t), l_t)
-        # sampled_l_t = self.srng.uniform((2,)) * 0.8
 
-        #wl_grad = T.grad(T.log(sampled_pdf), self.W_l)
-        wl_grad = self.W_l
+        if not self.disable_reinforce:
+            sampled_l_t = self._sample_gaussian(l_t, self.cov)
+            sampled_pdf = self._multi_gaussian_pdf(disconnected_grad(sampled_l_t), l_t)
+            wl_grad = T.grad(T.log(sampled_pdf), self.W_l)
+        else:
+            sampled_l_t = l_t
+            wl_grad = self.W_l
+
+        if self.random_glimpse and self.disable_reinforce:
+            sampled_l_t = self.srng.uniform((2,)) * 0.8
 
         a_t = self._action_network(h_t)
 
-        return l_t, h_t, a_t, wl_grad
+        return sampled_l_t, h_t, a_t, wl_grad
 
 
     def _output_func(self):
@@ -193,7 +200,7 @@ class AttentionLayer(NeuralLayer):
         self.params = [self.W_l]
 
 
-def get_network(model=None, std=0.005):
+def get_network(model=None, std=0.005, disable_reinforce=False, random_glimpse=False):
     """
     Get baseline model.
     Parameters:
@@ -202,7 +209,7 @@ def get_network(model=None, std=0.005):
         network
     """
     net_conf = NetworkConfig(input_size=28*28)
-    attention_layer = AttentionLayer(std=std)
+    attention_layer = AttentionLayer(std=std, disable_reinforce=disable_reinforce, random_glimpse=random_glimpse)
     net_conf.layers = [attention_layer]
     network = NeuralClassifier(net_conf)
     if model and os.path.exists(model):
