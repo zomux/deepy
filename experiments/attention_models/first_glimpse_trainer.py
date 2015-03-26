@@ -12,7 +12,7 @@ from deepy.trainers import CustomizeTrainer
 from deepy.trainers.optimize import optimize_function
 
 
-class AttentionTrainer(CustomizeTrainer):
+class FirstGlimpseTrainer(CustomizeTrainer):
 
     def __init__(self, network, attention_layer, config):
         """
@@ -20,10 +20,10 @@ class AttentionTrainer(CustomizeTrainer):
             network - AttentionNetwork
             config - training config
         :type network: NeuralClassifier
-        :type attention_layer: experiments.attention_models.baseline_model.AttentionLayer
+        :type attention_layer: experiments.attention_models.first_glimpse_model.FirstGlimpseLayer
         :type config: TrainerConfig
         """
-        super(AttentionTrainer, self).__init__(network, config)
+        super(FirstGlimpseTrainer, self).__init__(network, config)
         self.large_cov_mode = False
         self.batch_size = config.get("batch_size", 20)
         self.disable_backprop = config.get("disable_backprop", False)
@@ -37,28 +37,32 @@ class AttentionTrainer(CustomizeTrainer):
             grads = [T.grad(self.J, p) for p in network.weights + network.biases]
         if self.disable_reinforce:
             grad_l = self.layer.W_l
+            grad_f = self.layer.W_f
         else:
             grad_l = self.layer.wl_grad
+            grad_f = self.layer.wf_grad
         self.batch_wl_grad = np.zeros(attention_layer.W_l.get_value().shape, dtype=FLOATX)
+        self.batch_wf_grad = np.zeros(attention_layer.W_f.get_value().shape, dtype=FLOATX)
         self.batch_grad = [np.zeros(p.get_value().shape, dtype=FLOATX) for p in network.weights + network.biases]
-        self.grad_func = theano.function(network.inputs, [self.J, grad_l, attention_layer.positions, attention_layer.last_decision] + grads, allow_input_downcast=True)
-        self.opt_interface = optimize_function(self.network.weights + self.network.biases, self.config)
-        self.l_opt_interface = optimize_function([self.layer.W_l], self.config)
-        # self.opt_interface = gradient_interface_future(self.network.weights + self.network.biases, config=self.config)
-        # self.l_opt_interface = gradient_interface_future([self.layer.W_l], config=self.config)
+        self.grad_func = theano.function(network.inputs,
+                                         [self.J, grad_l, grad_f, attention_layer.positions, attention_layer.last_decision] + grads,
+                                         allow_input_downcast=True)
+        self.opt_func = optimize_function(self.network.weights + self.network.biases, self.config)
+        self.rl_opt_func = optimize_function([self.layer.W_l, self.layer.W_f], self.config)
 
-    def update_parameters(self, update_wl):
+    def update_parameters(self, update_rl):
         if not self.disable_backprop:
             grads = [self.batch_grad[i] / self.batch_size for i in range(len(self.network.weights + self.network.biases))]
-            self.opt_interface(*grads)
+            self.opt_func(*grads)
         # REINFORCE update
-        if update_wl and not self.disable_reinforce:
-            if np.sum(self.batch_wl_grad) == 0:
-                sys.stdout.write("[0 WLG] ")
+        if update_rl and not self.disable_reinforce:
+            if np.sum(self.batch_wl_grad) == 0 or np.sum(self.batch_wf_grad) == 0:
+                sys.stdout.write("0WRL ")
                 sys.stdout.flush()
             else:
                 grad_wl = self.batch_wl_grad / self.batch_size
-                self.l_opt_interface(grad_wl)
+                grad_wf = self.batch_wf_grad / self.batch_size
+                self.rl_opt_func(grad_wl, grad_wf)
 
     def train_func(self, train_set):
         cost_sum = 0.0
@@ -79,12 +83,13 @@ class AttentionTrainer(CustomizeTrainer):
             batch_cost += cost
 
             wl_grad = pairs[1]
-            max_position_value = np.max(np.absolute(pairs[2]))
+            wf_grad = pairs[2]
+            max_position_value = np.max(np.absolute(pairs[3]))
             total_position_value += max_position_value
-            last_decision = pairs[3]
+            last_decision = pairs[4]
             target_decision = d[1][0]
             reward = 0.005 if last_decision == target_decision else 0
-            if max_position_value > 0.8:
+            if max_position_value > 1.7:
                 reward =  0
             total_reward += reward
             batch_reward += reward
@@ -92,8 +97,9 @@ class AttentionTrainer(CustomizeTrainer):
                 self.last_average_reward = total_reward / total
             if not self.disable_reinforce:
                 self.batch_wl_grad += wl_grad *  - (reward - self.last_average_reward)
+                self.batch_wf_grad += wf_grad *  - (reward - self.last_average_reward)
             if not self.disable_backprop:
-                for grad_cache, grad in zip(self.batch_grad, pairs[4:]):
+                for grad_cache, grad in zip(self.batch_grad, pairs[5:]):
                     grad_cache += grad
             counter += 1
             total += 1
@@ -104,6 +110,7 @@ class AttentionTrainer(CustomizeTrainer):
                 # Clean batch gradients
                 if not self.disable_reinforce:
                     self.batch_wl_grad *= 0
+                    self.batch_wf_grad *= 0
                 if not self.disable_backprop:
                     for grad_cache in self.batch_grad:
                         grad_cache *= 0

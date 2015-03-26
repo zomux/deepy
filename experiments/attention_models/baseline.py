@@ -33,9 +33,10 @@ if __name__ == '__main__':
     trainer_conf.weight_l2 = 0.0001
     trainer_conf.hidden_l2 = 0.0001
     trainer_conf.method = args.method
+    trainer_conf.disable_reinforce=args.disable_reinforce
+    trainer_conf.disable_backprop=args.disable_backprop
 
-    trainer = AttentionTrainer(network, network.layers[0], config=trainer_conf,
-                               disable_reinforce=args.disable_reinforce, disable_backprop=args.disable_backprop)
+    trainer = AttentionTrainer(network, network.layers[0], config=trainer_conf)
 
     trainer_conf.report()
 

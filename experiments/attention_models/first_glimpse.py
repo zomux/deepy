@@ -3,8 +3,8 @@ import logging
 
 from deepy import TrainerConfig
 from deepy.dataset import MnistDataset, MiniBatches
-from experiments.attention_models.baseline_trainer import AttentionTrainer
-from baseline_model import get_network
+from experiments.attention_models.first_glimpse_trainer import FirstGlimpseTrainer
+from first_glimpse_model import get_network
 from deepy.util import Timer
 
 logging.basicConfig(level=logging.INFO)
@@ -13,7 +13,7 @@ if __name__ == '__main__':
     from argparse import ArgumentParser
     ap = ArgumentParser()
     ap.add_argument("--model", default="/tmp/mnist_att_params2.gz")
-    ap.add_argument("--method", default="ADAGRAD")
+    ap.add_argument("--method", default="MOMENTUM")
     ap.add_argument("--learning_rate", default=0.005)
     ap.add_argument("--variance", default=0.005)
     ap.add_argument("--disable_backprop", default=False)
@@ -32,12 +32,8 @@ if __name__ == '__main__':
     trainer_conf.learning_rate = args.learning_rate
     trainer_conf.weight_l2 = 0.0001
     trainer_conf.hidden_l2 = 0.0001
-    trainer_conf.monitor_frequency = trainer_conf.validation_frequency = trainer_conf.test_frequency = 1
-    trainer_conf.test_frequency = 10
-    trainer_conf.patience = 20
 
-    trainer = AttentionTrainer(network, network.layers[0], config=trainer_conf,
-                               disable_reinforce=args.disable_reinforce, disable_backprop=args.disable_backprop)
+    trainer = FirstGlimpseTrainer(network, network.layers[0], config=trainer_conf)
 
     trainer_conf.report()
 
