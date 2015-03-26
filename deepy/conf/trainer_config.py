@@ -47,7 +47,11 @@ class TrainerConfig(object):
         self.attrs[key] = value
 
     def get(self, key, default=None):
-        return getattr(self, key, default=default)
+        key = getattr(self, key)
+        if key != None:
+            return key
+        else:
+            return default
 
     def report(self):
         """

@@ -264,14 +264,14 @@ class SGDTrainer(GeneralNeuralTrainer):
     SGD trainer.
     """
     def __init__(self, network, config=None):
-        super(SGDTrainer).__init__(network, config, "SGD")
+        super(SGDTrainer, self).__init__(network, config, "SGD")
 
 class AdaDeltaTrainer(GeneralNeuralTrainer):
     """
     AdaDelta trainer.
     """
     def __init__(self, network, config=None):
-        super(AdaDeltaTrainer).__init__(network, config, "ADADELTA")
+        super(AdaDeltaTrainer, self).__init__(network, config, "ADADELTA")
 
 
 class AdaGradTrainer(GeneralNeuralTrainer):
@@ -279,35 +279,35 @@ class AdaGradTrainer(GeneralNeuralTrainer):
     AdaGrad trainer.
     """
     def __init__(self, network, config=None):
-        super(AdaGradTrainer).__init__(network, config, "ADAGRAD")
+        super(AdaGradTrainer, self).__init__(network, config, "ADAGRAD")
 
 class FineTuningAdaGradTrainer(GeneralNeuralTrainer):
     """
     AdaGrad trainer.
     """
     def __init__(self, network, config=None):
-        super(FineTuningAdaGradTrainer).__init__(network, config, "FINETUNING_ADAGRAD")
+        super(FineTuningAdaGradTrainer, self).__init__(network, config, "FINETUNING_ADAGRAD")
 
 class AdamTrainer(GeneralNeuralTrainer):
     """
     AdaGrad trainer.
     """
     def __init__(self, network, config=None):
-        super(AdamTrainer).__init__(network, config, "ADAM")
+        super(AdamTrainer, self).__init__(network, config, "ADAM")
 
 class RmspropTrainer(GeneralNeuralTrainer):
     """
     RmsProp trainer.
     """
     def __init__(self, network, config=None):
-        super(RmspropTrainer).__init__(network, config, "RMSPROP")
+        super(RmspropTrainer, self).__init__(network, config, "RMSPROP")
 
 class MomentumTrainer(GeneralNeuralTrainer):
     """
     Momentum trainer.
     """
     def __init__(self, network, config=None):
-        super(MomentumTrainer).__init__(network, config, "MOMENTUM")
+        super(MomentumTrainer, self).__init__(network, config, "MOMENTUM")
 
 
 class SSGD2Trainer(NeuralTrainer):
