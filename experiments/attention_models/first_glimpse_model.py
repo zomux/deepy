@@ -46,6 +46,8 @@ class FirstGlimpseLayer(NeuralLayer):
         first_l = T.dot(downsampled_img, self.W_f)
         if self.disable_reinforce:
             wf_grad = self.W_f
+            if self.random_glimpse:
+                first_l = self.srng.uniform((2,), low=-1.7, high=1.7)
         else:
             sampled_l_t = self._sample_gaussian(first_l, self.cov)
             sampled_pdf = self._multi_gaussian_pdf(disconnected_grad(sampled_l_t), first_l)
@@ -126,7 +128,7 @@ class FirstGlimpseLayer(NeuralLayer):
             wl_grad = self.W_l
 
         if self.random_glimpse and self.disable_reinforce:
-            sampled_l_t = self.srng.uniform((2,)) * 0.8
+            sampled_l_t = self.srng.uniform((2,), low=-1.7, high=1.7)
 
         a_t = self._action_network(h_t)
 
@@ -204,4 +206,3 @@ def get_network(model=None, std=0.005, disable_reinforce=False, random_glimpse=F
     if model and os.path.exists(model):
         network.load_params(model)
     return network
-
