@@ -21,7 +21,7 @@ import theano.tensor.signal.downsample
 
 class FirstGlimpseLayer(NeuralLayer):
 
-    def __init__(self, activation='relu', std=0.1, disable_reinforce=False, random_glimpse=False):
+    def __init__(self, activation='tanh', std=0.1, disable_reinforce=False, random_glimpse=False):
         self.disable_reinforce = disable_reinforce
         self.random_glimpse = random_glimpse
         self.gaussian_std = std

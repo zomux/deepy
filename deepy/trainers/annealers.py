@@ -13,7 +13,7 @@ class LearningRateAnnealer(object):
     Learning rate annealer.
     """
 
-    def __init__(self, trainer, start=0.01, patience=3, anneal_times=10):
+    def __init__(self, trainer, patience=5, anneal_times=10):
         """
         :type trainer: deepy.trainers.trainers.NeuralTrainer
         """
