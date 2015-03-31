@@ -3,6 +3,7 @@
 
 
 from deepy.networks.basic_nn import NeuralNetwork
+from deepy.util import FLOATX
 import theano.tensor as T
 
 class NeuralClassifier(NeuralNetwork):
@@ -19,17 +20,15 @@ class NeuralClassifier(NeuralNetwork):
         self.inputs.append(self.vars.k)
         self.target_inputs.append(self.vars.k)
 
-    @staticmethod
     def _cost_func(self):
-            return -T.mean(T.log(self.vars.y)[T.arange(self.vars.k.shape[0]), self.vars.k])
+        return -T.mean(T.log(self.vars.y)[T.arange(self.vars.k.shape[0]), self.vars.k])
 
-    @staticmethod
     def _error_func(self):
         return 100 * T.mean(T.neq(T.argmax(self.vars.y, axis=1), self.vars.k))
 
     @property
     def cost(self):
-        return self._cost_func(self)
+        return self._cost_func()
 
     @cost.setter
     def cost(self, value):
@@ -38,7 +37,7 @@ class NeuralClassifier(NeuralNetwork):
     @property
     def errors(self):
         '''Compute the percent correct classifications.'''
-        return self._error_func(self)
+        return self._error_func()
 
     @errors.setter
     def errors(self, value):
@@ -55,3 +54,30 @@ class NeuralClassifier(NeuralNetwork):
 
     def classify(self, x):
         return self.predict(x).argmax(axis=1)
+
+class MultiTargetNeuralClassifier(NeuralClassifier):
+    """
+    Classifier for multiple targets.
+    """
+
+    def __init__(self, config, class_num=3):
+        super(MultiTargetNeuralClassifier, self).__init__(config)
+        self.class_num = class_num
+
+    def setup_vars(self):
+        super(NeuralClassifier, self).setup_vars()
+        # for a classifier, k specifies the correct labels for a given input.
+        self.vars.k = T.imatrix('k')
+        self.inputs.append(self.vars.k)
+        self.target_inputs.append(self.vars.k)
+
+    def _cost_func(self):
+        entropy_sum = T.constant(0, dtype=FLOATX)
+        for i in range(self.class_num):
+            entropy_sum += T.sum(T.nnet.categorical_crossentropy(self.vars.y[:, i, :], self.vars.k[:,i]))
+        return entropy_sum / (self.vars.k.shape[0] * self.vars.k.shape[1])
+
+    def _error_func(self):
+        return 100 * T.mean(T.neq(T.argmax(self.vars.y, axis=2), self.vars.k))
+
+

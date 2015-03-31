@@ -34,7 +34,7 @@ resource_dir = os.path.join(os.path.dirname(__file__), 'deepy', 'resources')
 
 setup(
     name='deepy',
-    version='0.0.1',
+    version='0.0.2',
     description='Highly extensible deep learning framework based on Theano',
 
     author='Raphael Shu',
