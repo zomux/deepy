@@ -89,7 +89,7 @@ class FirstGlimpseTrainer(CustomizeTrainer):
             last_decision = pairs[4]
             target_decision = d[1][0]
             reward = 0.005 if last_decision == target_decision else 0
-            if max_position_value > 1.7:
+            if max_position_value > 1.8:
                 reward =  0
             total_reward += reward
             batch_reward += reward
