@@ -88,13 +88,18 @@ class FirstGlimpseTrainer(CustomizeTrainer):
             total_position_value += max_position_value
             last_decision = pairs[4]
             target_decision = d[1][0]
+            # Compute reward
             reward = 0.005 if last_decision == target_decision else 0
             if max_position_value > 1.8:
                 reward =  0
+            # if cost > 5:
+            #     cost = 5
+            # reward += (5 - cost) / 100
             total_reward += reward
             batch_reward += reward
             if self.last_average_reward == 999 and total > 2000:
                 self.last_average_reward = total_reward / total
+
             if not self.disable_reinforce:
                 self.batch_wl_grad += wl_grad *  - (reward - self.last_average_reward)
                 self.batch_wf_grad += wf_grad *  - (reward - self.last_average_reward)
