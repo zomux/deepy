@@ -17,12 +17,10 @@ if __name__ == '__main__':
 
     trainer_conf = TrainerConfig()
     trainer_conf.learning_rate = LearningRateAnnealer.learning_rate(0.01)
-    trainer_conf.weight_l2 = 0.0001
-    trainer_conf.hidden_l2 = 0.0001
+    trainer_conf.method = "momentum"
 
     network = NeuralClassifier(net_conf)
     trainer = MomentumTrainer(network, config=trainer_conf)
-    trainer_conf.report()
 
     annealer = LearningRateAnnealer(trainer)
 

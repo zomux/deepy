@@ -26,7 +26,7 @@ class TrainerConfig(GeneralConfig):
             "update_l1": 0,
             "update_l2": 0,
             "weight_l1": 0,
-            "weight_l2": 0,
+            "weight_l2": 0.0001,
             "hidden_l1": 0,
             "hidden_l2": 0,
             "contractive_l2": 0,

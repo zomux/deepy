@@ -173,7 +173,7 @@ class NeuralTrainer(object):
 
             yield dict(costs)
 
-        if valid_set:
+        if valid_set and self.config.get("save_best_parameters", True):
             self.set_params(self.best_params)
         if test_set:
             self.test(0, test_set)
