@@ -1,7 +1,10 @@
 deepy: Highly extensible deep learning framework based on Theano
 ===
+.. image:: https://travis-ci.org/uaca/deepy.svg
+   :target: https://travis-ci.org/uaca/deepy
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
+   :target: https://github.com/uaca/deepy/blob/master/LICENSE
 
-[![Build Status](https://travis-ci.org/uaca/deepy.svg)](https://travis-ci.org/uaca/deepy)
 
 Many codes are still not well documented.
 
