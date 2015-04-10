@@ -1,13 +1,13 @@
 from deepy.util import build_activation, FLOATX
 import theano.tensor as T
-from layer import NeuralLayer
+from . import NeuralLayer
 
 class Dense(NeuralLayer):
     """
     Fully connected layer.
     """
 
-    def __init__(self, size, activation='tanh', disable_bias=False):
+    def __init__(self, size, activation='linear', disable_bias=False):
         super(Dense, self).__init__("dense")
         self.activation = activation
         self.output_dim = size
