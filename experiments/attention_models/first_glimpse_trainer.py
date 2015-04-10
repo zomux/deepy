@@ -34,7 +34,7 @@ class FirstGlimpseTrainer(CustomizeTrainer):
         if self.disable_backprop:
             grads = []
         else:
-            grads = [T.grad(self.J, p) for p in network.weights + network.biases]
+            grads = [T.grad(self.cost, p) for p in network.weights + network.biases]
         if self.disable_reinforce:
             grad_l = self.layer.W_l
             grad_f = self.layer.W_f
@@ -45,7 +45,7 @@ class FirstGlimpseTrainer(CustomizeTrainer):
         self.batch_wf_grad = np.zeros(attention_layer.W_f.get_value().shape, dtype=FLOATX)
         self.batch_grad = [np.zeros(p.get_value().shape, dtype=FLOATX) for p in network.weights + network.biases]
         self.grad_func = theano.function(network.inputs,
-                                         [self.J, grad_l, grad_f, attention_layer.positions, attention_layer.last_decision] + grads,
+                                         [self.cost, grad_l, grad_f, attention_layer.positions, attention_layer.last_decision] + grads,
                                          allow_input_downcast=True)
         self.opt_func = optimize_function(self.network.weights + self.network.biases, self.config)
         self.rl_opt_func = optimize_function([self.layer.W_l, self.layer.W_f], self.config)

@@ -34,14 +34,14 @@ class AttentionTrainer(CustomizeTrainer):
         if self.disable_backprop:
             grads = []
         else:
-            grads = [T.grad(self.J, p) for p in network.weights + network.biases]
+            grads = [T.grad(self.cost, p) for p in network.weights + network.biases]
         if self.disable_reinforce:
             grad_l = self.layer.W_l
         else:
             grad_l = self.layer.wl_grad
         self.batch_wl_grad = np.zeros(attention_layer.W_l.get_value().shape, dtype=FLOATX)
         self.batch_grad = [np.zeros(p.get_value().shape, dtype=FLOATX) for p in network.weights + network.biases]
-        self.grad_func = theano.function(network.inputs, [self.J, grad_l, attention_layer.positions, attention_layer.last_decision] + grads, allow_input_downcast=True)
+        self.grad_func = theano.function(network.inputs, [self.cost, grad_l, attention_layer.positions, attention_layer.last_decision] + grads, allow_input_downcast=True)
         self.opt_interface = optimize_function(self.network.weights + self.network.biases, self.config)
         self.l_opt_interface = optimize_function([self.layer.W_l], self.config)
         # self.opt_interface = gradient_interface_future(self.network.weights + self.network.biases, config=self.config)

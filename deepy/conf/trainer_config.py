@@ -2,8 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import logging as loggers
-logging = loggers.getLogger(__name__)
 from config import GeneralConfig
+from deepy.util import FLOATX
+import theano
+import numpy as np
+logging = loggers.getLogger(__name__)
+
 
 class TrainerConfig(GeneralConfig):
     """
@@ -13,6 +17,7 @@ class TrainerConfig(GeneralConfig):
         super(TrainerConfig, self).__init__(logger=logging)
         object.__setattr__(self, "attrs", {
             # Training
+            "learning_rate": theano.shared(np.array(0.01, dtype=FLOATX)),
             "validation_frequency": 1,
             "test_frequency": 10,
             "monitor_frequency": 1,

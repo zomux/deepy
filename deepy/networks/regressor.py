@@ -2,36 +2,27 @@
 # -*- coding: utf-8 -*-
 
 from theano import tensor as T
-from deepy import NeuralNetwork
+from network import NeuralNetwork
 
 
 class NeuralRegressor(NeuralNetwork):
-    '''A regressor attempts to produce a target output.'''
+    """
+    Regression network.
+    """
 
     def setup_vars(self):
-        super(NeuralRegressor, self).setup_vars()
+        super(NeuralRegressor, self).setup_variables()
+        self.k = T.matrix('k')
+        self.target_variables.append(self.k)
 
-        # the k variable holds the target output for input x.
-        self.vars.k = T.matrix('k')
-        self.inputs.append(self.vars.k)
-
-    @property
-    def cost(self):
-        err = self.vars.y - self.vars.k
+    def _cost_func(self, y):
+        err = y - self.k
         return T.mean((err * err).sum(axis=1))
 
-
-class SimpleRegressor(NeuralNetwork):
-    '''A regressor attempts to produce a target output.'''
-
-    def setup_vars(self):
-        super(SimpleRegressor, self).setup_vars()
-
-        # the k variable holds the target output for input x.
-        self.vars.k = T.dvector('k')
-        self.inputs.append(self.vars.k)
-
     @property
     def cost(self):
-        err = self.vars.y[:, 0] - self.vars.k
-        return T.mean(err * err)
+        return self._cost_func(self.output)
+
+    @property
+    def test_cost(self):
+        return self._cost_func(self.test_output)

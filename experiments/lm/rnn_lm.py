@@ -3,14 +3,14 @@ import os
 import sys
 import logging
 
-from experiments.lm import Vocab
+import numpy as np
 
+from experiments.lm import Vocab
 from experiments.lm.data_generator import RNNDataGenerator
 from deepy.util import resource
 from deepy import NetworkConfig, TrainerConfig
 from deepy.trainers import MomentumTrainer
-from deepy.networks.recurrent import RecurrentNetwork, RecurrentLayer
-import numpy as np
+from deepy.layers.recurrent import RecurrentNetwork, RecurrentLayer
 
 
 logging.basicConfig(level=logging.INFO)

@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-
 import logging as loggers
 import gzip
 import cPickle as pickle
@@ -14,13 +12,12 @@ from theano.ifelse import ifelse
 
 from deepy.conf import TrainerConfig
 from deepy.trainers.optimize import optimize_updates
-from deepy.util.functions import FLOATX
+from deepy.util import FLOATX, Timer
 
 
 logging = loggers.getLogger(__name__)
 
 THEANO_LINKER = 'cvm'
-
 
 def inspect_inputs(i, node, fn):
     print i, node, "input(s) value(s):", [input[0] for input in fn.inputs],
@@ -28,12 +25,9 @@ def inspect_inputs(i, node, fn):
 def inspect_outputs(i, node, fn):
     print "output(s) value(s):", [output[0] for output in fn.outputs]
 
-
-
 def default_mapper(f, dataset, *args, **kwargs):
     '''Apply a function to each element of a dataset.'''
     return [f(x, *args, **kwargs) for x in dataset]
-
 
 def ipcluster_mapper(client):
     '''Get a mapper from an IPython.parallel cluster client.'''
@@ -57,60 +51,76 @@ class NeuralTrainer(object):
         """
         super(NeuralTrainer, self).__init__()
 
-        self.params = network.params
         self.config = config if config else TrainerConfig()
         self.network = network
 
-        self.J = network.J(self.config)
-        self.cost_exprs = [self.J]
-        self.cost_names = ['J']
-        for name, monitor in network.monitors:
-            self.cost_names.append(name)
-            self.cost_exprs.append(monitor)
-        logging.info("monitor list: %s" % ",".join(self.cost_names))
+        self.network.prepare_training()
 
+        self._setup_costs()
 
-        logging.info('compiling evaluation function')
-        self.ev_cost_exprs = []
-        self.ev_cost_names = []
-        for i in range(len(self.cost_names)):
-            if self.cost_names[i].endswith("x"):
-                continue
-            self.ev_cost_exprs.append(self.cost_exprs[i])
-            self.ev_cost_names.append(self.cost_names[i])
+        logging.info("compile evaluation function")
         self.evaluation_func = theano.function(
-            network.inputs, self.ev_cost_exprs, updates=network.updates, allow_input_downcast=True,
-            mode=theano.Mode(linker=THEANO_LINKER))
-            # mode=theano.compile.MonitorMode(
-            #             pre_func=inspect_inputs,
-            #             post_func=inspect_outputs) )
+            network.input_variables + network.target_variables, self.evaluation_variables, updates=network.updates,
+            allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
 
         self.validation_frequency = self.config.validation_frequency
         self.min_improvement = self.config.min_improvement
         self.patience = self.config.patience
 
-        self.shapes = [p.get_value(borrow=True).shape for p in self.params]
+        self.shapes = [p.get_value(borrow=True).shape for p in self.network.parameters]
         self.counts = [np.prod(s) for s in self.shapes]
         self.starts = np.cumsum([0] + self.counts)[:-1]
 
         self.best_cost = 1e100
         self.best_iter = 0
-        self.best_params = [p.get_value().copy() for p in self.params]
+        self.best_params = [p.get_value().copy() for p in self.network.parameters]
+
+    def _setup_costs(self):
+        self.cost = self._add_regularization(self.network.cost)
+        self.test_cost = self._add_regularization(self.network.test_cost)
+        self.training_variables = [self.cost]
+        self.training_names = ['J']
+        for name, monitor in self.network.training_monitors:
+            self.training_names.append(name)
+            self.training_variables.append(monitor)
+        logging.info("monitor list: %s" % ",".join(self.training_names))
+
+        self.evaluation_variables = [self.test_cost]
+        self.evaluation_names = ['J']
+        for name, monitor in self.network.testing_monitors:
+            self.evaluation_names.append(name)
+            self.evaluation_variables.append(monitor)
+
+    def _add_regularization(self, cost):
+        if self.config.weight_l1 > 0:
+            logging.info("L1 weight regularization: %f" % self.config.weight_l2)
+            cost += self.config.weight_l1 * sum(abs(w).sum() for w in self.network.parameters)
+        if self.config.hidden_l1 > 0:
+            logging.info("L1 hidden unit regularization: %f" % self.config.weight_l2)
+            cost += self.config.hidden_l1 * sum(abs(h).mean(axis=0).sum() for h in self.network._hidden_outputs)
+        if self.config.weight_l2 > 0:
+            logging.info("L2 weight regularization: %f" % self.config.weight_l2)
+            cost += self.config.weight_l2 * sum((w * w).sum() for w in self.network.parameters)
+        if self.config.hidden_l2 > 0:
+            logging.info("L2 hidden unit regularization: %f" % self.config.hidden_l2)
+            cost += self.config.hidden_l2 * sum((h * h).mean(axis=0).sum() for h in self.network._hidden_outputs)
+
+        return cost
 
     def set_params(self, targets):
-        for param, target in zip(self.params, targets):
+        for param, target in zip(self.network.parameters, targets):
             param.set_value(target)
 
     def test(self, iteration, test_set):
         costs = list(zip(
-            self.ev_cost_names,
+            self.evaluation_names,
             np.mean([self.evaluation_func(*x) for x in test_set], axis=0)))
         info = ' '.join('%s=%.2f' % el for el in costs)
         logging.info('test    (iter=%i) %s', iteration + 1, info)
 
     def evaluate(self, iteration, valid_set):
         costs = list(zip(
-            self.ev_cost_names,
+            self.evaluation_names,
             np.mean([self.evaluation_func(*x) for x in valid_set], axis=0)))
         marker = ''
         # this is the same as: (J_i - J_f) / J_i > min improvement
@@ -118,7 +128,7 @@ class NeuralTrainer(object):
         if self.best_cost - J > self.best_cost * self.min_improvement:
             self.best_cost = J
             self.best_iter = iteration
-            self.best_params = [p.get_value().copy() for p in self.params]
+            self.best_params = [p.get_value().copy() for p in self.network.parameters]
             marker = ' *'
         info = ' '.join('%s=%.2f' % el for el in costs)
         logging.info('valid   (iter=%i) %s%s', iteration + 1, info, marker)
@@ -132,7 +142,9 @@ class NeuralTrainer(object):
         handle.close()
 
     def train(self, train_set, valid_set=None, test_set=None):
-        '''We train over mini-batches and evaluate periodically.'''
+        """
+        Train the model and return costs.
+        """
         if not hasattr(self, 'learning_func'):
             raise NotImplementedError
         iteration = 0
@@ -153,13 +165,14 @@ class NeuralTrainer(object):
                     logging.info('interrupted!')
                     break
 
+            training_callback = bool(self.network.training_callbacks)
             try:
                 cost_matrix = []
                 for x in train_set:
                     cost_matrix.append(self.learning_func(*x))
-                    if self.network.needs_callback:
-                        self.network.updating_callback()
-                costs = list(zip(self.cost_names, np.mean(cost_matrix, axis=0)))
+                    if training_callback:
+                        self.network.training_callback()
+                costs = list(zip(self.training_names, np.mean(cost_matrix, axis=0)))
             except KeyboardInterrupt:
                 logging.info('interrupted!')
                 break
@@ -168,8 +181,7 @@ class NeuralTrainer(object):
                 logging.info('monitor (iter=%i) %s', iteration + 1, info)
 
             iteration += 1
-            if hasattr(self.network, "iteration_callback"):
-                self.network.iteration_callback()
+            self.network.epoch_callback()
 
             yield dict(costs)
 
@@ -177,6 +189,19 @@ class NeuralTrainer(object):
             self.set_params(self.best_params)
         if test_set:
             self.test(0, test_set)
+
+    def run(self, train_set, valid_set=None, test_set=None, controllers=None):
+        """
+        Run until the end.
+        """
+        timer = Timer()
+        for _ in self.train(train_set, valid_set=valid_set, test_set=test_set):
+            if controllers:
+                for controller in controllers:
+                    if hasattr(controller, 'invoke') and controller.invoke():
+                        break
+        timer.report()
+        return
 
 class GeneralNeuralTrainer(NeuralTrainer):
     """
@@ -194,23 +219,23 @@ class GeneralNeuralTrainer(NeuralTrainer):
 
         logging.info('compiling %s learning function', self.__class__.__name__)
 
-        network_updates = list(network.updates) + list(network.learning_updates)
+        network_updates = list(network.updates) + list(network.training_updates)
         learning_updates = list(self.learning_updates())
         update_list = network_updates + learning_updates
         logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
         logging.info("learning updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
 
         self.learning_func = theano.function(
-            network.inputs,
-            self.cost_exprs,
+            network.input_variables + network.target_variables,
+            self.training_variables,
             updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
 
     def learning_updates(self):
         """
         Return updates in the training.
         """
-        params = self.network.weights + self.network.biases
-        gradients = [T.grad(self.J, param) for param in params]
+        params = self.network.parameters
+        gradients = [T.grad(self.cost, param) for param in params]
         return optimize_updates(params, gradients, self.config)
 
 class BatchPureSGDTrainer(NeuralTrainer):
@@ -240,7 +265,7 @@ class BatchPureSGDTrainer(NeuralTrainer):
 
         self.learning_func = theano.function(
             network.inputs,
-            self.cost_exprs,
+            self.training_variables,
             updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
 
 
@@ -249,10 +274,10 @@ class BatchPureSGDTrainer(NeuralTrainer):
         batch_size = self.batch_size
         to_update = batch_counter >= batch_size
 
-        for param in self.network.weights + self.network.biases:
+        for param in self.network.parameters:
             # delta = self.learning_rate * T.grad(self.J, param)
             gsum = theano.shared(np.zeros(param.get_value().shape, dtype=FLOATX), "batch_gsum_%s" % param.name)
-            yield gsum, ifelse(to_update, T.zeros_like(gsum), gsum + T.grad(self.J, param))
+            yield gsum, ifelse(to_update, T.zeros_like(gsum), gsum + T.grad(self.cost, param))
             delta = self.learning_rate * gsum / batch_size
             yield param, ifelse(to_update, param - delta, param)
 
@@ -330,7 +355,7 @@ class SSGD2Trainer(NeuralTrainer):
 
         self.learning_func = theano.function(
             network.inputs,
-            self.cost_exprs,
+            self.training_variables,
             updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
 
     def ssgd2(self, loss, all_params, learning_rate=0.01, chaos_energy=0.01, alpha=0.9):
@@ -353,7 +378,7 @@ class SSGD2Trainer(NeuralTrainer):
         return updates
 
     def learning_updates(self):
-        return self.ssgd2(self.J, self.network.weights + self.network.biases, learning_rate=self.learning_rate)
+        return self.ssgd2(self.cost, self.network.parameters, learning_rate=self.learning_rate)
 
 class FakeTrainer(NeuralTrainer):
     """
@@ -375,5 +400,5 @@ class FakeTrainer(NeuralTrainer):
 
         self.learning_func = theano.function(
             network.inputs,
-            self.cost_exprs,
+            self.training_variables,
             updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))

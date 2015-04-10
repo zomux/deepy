@@ -19,7 +19,7 @@ import theano.tensor as T
 from deepy import NetworkConfig, TrainerConfig, AdaGradTrainer
 from deepy.util.functions import FLOATX
 from deepy.networks import NeuralLayer
-from deepy.networks.recursive import GeneralAutoEncoder
+from deepy.layers.recursive import GeneralAutoEncoder
 from nlpy.util import LineIterator, FakeGenerator
 from deepy.util import build_activation
 from deepy.trainers.minibatch_optimizer import MiniBatchOptimizer
@@ -191,7 +191,7 @@ class WRELayer(NeuralLayer):
 
         self.W = [self.W_e1, self.W_e2, self.W_d1, self.W_d2, self.W_in, self.W_out]
         self.B = [self.B_e, self.B_d, self.B_in, self.B_out]
-        self.params = []
+        self.parameters = []
 
         # Just for decoding
         self._vars.p = T.vector("p", dtype=FLOATX)

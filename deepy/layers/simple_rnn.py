@@ -10,7 +10,7 @@ import theano.tensor as T
 
 from deepy.util.functions import FLOATX, global_rand
 from deepy.util import build_activation
-from deepy.networks.layer import NeuralLayer
+from deepy.layers.layer import NeuralLayer
 from basic_nn import NeuralNetwork
 
 
@@ -68,12 +68,12 @@ class SimpleRNNLayer(NeuralLayer):
         if self.target_size < 0:
             self.target_size = self.input_n
 
-        self.h0 = theano.shared(value=np.zeros((self.output_n,), dtype=FLOATX), name='h_input')
+        self.h0 = theano.shared(value=np.zeros((self.output_dim,), dtype=FLOATX), name='h_input')
 
-        self.W_i, _, self.param_count = self.create_params(self.input_n, self.output_n, "input")
-        self.W_r, self.B_r, param_count = self.create_params(self.output_n, self.output_n, "recurrent")
+        self.W_i, _, self.param_count = self.create_params(self.input_n, self.output_dim, "input")
+        self.W_r, self.B_r, param_count = self.create_params(self.output_dim, self.output_dim, "recurrent")
         self.param_count += param_count
-        self.W_s, self.B_s, param_count = self.create_params(self.output_n, self.target_size, "softmax")
+        self.W_s, self.B_s, param_count = self.create_params(self.output_dim, self.target_size, "softmax")
         self.param_count += param_count
 
         # Don't register parameters to the whole network
@@ -104,7 +104,7 @@ class SimpleRNNLayer(NeuralLayer):
 
 
     def reset_hidden_layer(self):
-        self.h0.set_value(np.zeros((self.output_n,), dtype=FLOATX), borrow=True)
+        self.h0.set_value(np.zeros((self.output_dim,), dtype=FLOATX), borrow=True)
 
 
 class SimpleRNN(NeuralNetwork):
@@ -114,7 +114,7 @@ class SimpleRNN(NeuralNetwork):
         super(SimpleRNN, self).__init__(config)
 
     def setup_vars(self):
-        super(SimpleRNN, self).setup_vars()
+        super(SimpleRNN, self).setup_variables()
 
         # for a classifier, k specifies the correct labels for a given input.
         self.vars.k = T.ivector('k')

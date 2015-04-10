@@ -14,7 +14,7 @@ from deepy.util.functions import smart_replace_graph as SRG
 from deepy.trainers.ada_family import optimize_parameters
 from deepy.trainers.minibatch_optimizer import MiniBatchOptimizer
 from deepy.util import build_activation
-from deepy.networks.layer import NeuralLayer
+from deepy.layers.layer import NeuralLayer
 from basic_nn import NeuralNetwork
 
 
@@ -159,11 +159,11 @@ class LSTMLayer(NeuralLayer):
         self._build_gradient_func()
         gradient_vars, _ = theano.scan(fn=self._lstm_full_gradient_step,
                                        sequences=[T.arange(self.x.shape[0]-1, -1, -1)],
-                                       outputs_info=[self.init_h, self.init_c]+[None for _ in self.params],
+                                       outputs_info=[self.init_h, self.init_c]+[None for _ in self.parameters],
                                        non_sequences=[self.x, self._vars.k] + recurrent_vars)
         gradient_vars = gradient_vars[2:]
         gradients = [T.mean(g, axis=0) for g in gradient_vars]
-        updates = optimize_parameters(self.params, gradients, lr=self.learning_rate, method=self.optimization,
+        updates = optimize_parameters(self.parameters, gradients, lr=self.learning_rate, method=self.optimization,
                                       beta=self.beta, weight_l2=self.weight_l2, clip=True)
 
         return recurrent_vars[:3], updates
@@ -196,41 +196,41 @@ class LSTMLayer(NeuralLayer):
         if self.target_size < 0:
             self.target_size = self.input_n
 
-        self.h0 = theano.shared(value=np.zeros((self.output_n,), dtype=FLOATX), name='h_input')
-        self.c0 = theano.shared(value=np.zeros((self.output_n,), dtype=FLOATX), name='c_input')
+        self.h0 = theano.shared(value=np.zeros((self.output_dim,), dtype=FLOATX), name='h_input')
+        self.c0 = theano.shared(value=np.zeros((self.output_dim,), dtype=FLOATX), name='c_input')
 
         self.init_h = theano.shared(value=self.h0.get_value(), name='init_h')
         self.init_c = theano.shared(value=self.c0.get_value(), name='init_c')
-        self.zero_vector = theano.shared(value=np.zeros((self.output_n,), dtype=FLOATX), name='zero_h')
+        self.zero_vector = theano.shared(value=np.zeros((self.output_dim,), dtype=FLOATX), name='zero_h')
 
-        self.W_xi = self.create_weight(self.input_n, self.output_n, "xi", scale=0.08)
-        self.W_hi = self.create_weight(self.output_n, self.output_n, "hi", scale=0.08)
-        self.W_ci = self.create_weight(self.output_n, self.output_n, "ci", scale=0.08)
-        self.W_xf = self.create_weight(self.input_n, self.output_n, "xf", scale=0.08)
-        self.W_hf = self.create_weight(self.output_n, self.output_n, "hf", scale=0.08)
-        self.W_cf = self.create_weight(self.output_n, self.output_n, "cf", scale=0.08)
-        self.W_xc = self.create_weight(self.input_n, self.output_n, "xc", scale=0.08)
-        self.W_hc = self.create_weight(self.output_n, self.output_n, "hc", scale=0.08)
-        self.W_xo = self.create_weight(self.input_n, self.output_n, "xo", scale=0.08)
-        self.W_ho = self.create_weight(self.output_n, self.output_n, "ho", scale=0.08)
-        self.W_co = self.create_weight(self.output_n, self.output_n, "co", scale=0.08)
-        self.W_os = self.create_weight(self.output_n, self.target_size, "os", scale=0.08)
+        self.W_xi = self.create_weight(self.input_n, self.output_dim, "xi", scale=0.08)
+        self.W_hi = self.create_weight(self.output_dim, self.output_dim, "hi", scale=0.08)
+        self.W_ci = self.create_weight(self.output_dim, self.output_dim, "ci", scale=0.08)
+        self.W_xf = self.create_weight(self.input_n, self.output_dim, "xf", scale=0.08)
+        self.W_hf = self.create_weight(self.output_dim, self.output_dim, "hf", scale=0.08)
+        self.W_cf = self.create_weight(self.output_dim, self.output_dim, "cf", scale=0.08)
+        self.W_xc = self.create_weight(self.input_n, self.output_dim, "xc", scale=0.08)
+        self.W_hc = self.create_weight(self.output_dim, self.output_dim, "hc", scale=0.08)
+        self.W_xo = self.create_weight(self.input_n, self.output_dim, "xo", scale=0.08)
+        self.W_ho = self.create_weight(self.output_dim, self.output_dim, "ho", scale=0.08)
+        self.W_co = self.create_weight(self.output_dim, self.output_dim, "co", scale=0.08)
+        self.W_os = self.create_weight(self.output_dim, self.target_size, "os", scale=0.08)
 
-        self.B_f = self.create_bias(self.output_n, "f", value=0.7)
-        self.B_i = self.create_bias(self.output_n, "i", value=0.)
-        self.B_c = self.create_bias(self.output_n, "c", value=0.)
-        self.B_o = self.create_bias(self.output_n, "o", value=0.)
+        self.B_f = self.create_bias(self.output_dim, "f", value=0.7)
+        self.B_i = self.create_bias(self.output_dim, "i", value=0.)
+        self.B_c = self.create_bias(self.output_dim, "c", value=0.)
+        self.B_o = self.create_bias(self.output_dim, "o", value=0.)
 
         # Don't register parameters to the weights or bias
         # Update inside the recurrent steps
         self.W = []
-        self.params = [self.W_xi,self.W_hi,self.W_ci,self.W_xf,self.W_hf,
+        self.parameters = [self.W_xi,self.W_hi,self.W_ci,self.W_xf,self.W_hf,
                        self.W_cf,self.W_xc,self.W_hc,self.W_xo,self.W_ho,self.W_co,self.W_os]
                        #self.B_f, self.B_i, self.B_c, self.B_o]
 
     def clear_hidden(self):
-        self.h0.set_value(np.zeros((self.output_n,), dtype=FLOATX))
-        self.c0.set_value(np.zeros((self.output_n,), dtype=FLOATX))
+        self.h0.set_value(np.zeros((self.output_dim,), dtype=FLOATX))
+        self.c0.set_value(np.zeros((self.output_dim,), dtype=FLOATX))
 
     # def updating_callback(self):
     #     self.optimizer.run()
@@ -244,7 +244,7 @@ class RecurrentNetwork(NeuralNetwork):
         self.do_reset_grads = True
 
     def setup_vars(self):
-        super(RecurrentNetwork, self).setup_vars()
+        super(RecurrentNetwork, self).setup_variables()
 
         # for a classifier, k specifies the correct labels for a given input.
         self.vars.k = T.ivector('k')

@@ -12,7 +12,8 @@ import numpy as np
 
 from deepy import NetworkConfig, TrainerConfig, AdaDeltaTrainer
 from deepy.util.functions import plot_hinton
-from deepy.networks.recursive import RAELayer, GeneralAutoEncoder
+from deepy.layers.recursive import RAELayer, GeneralAutoEncoder
+
 
 logging.basicConfig(level=logging.INFO)
 

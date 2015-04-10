@@ -186,7 +186,7 @@ class FirstGlimpseLayer(NeuralLayer):
 
         self.W = [self.W_g0, self.W_g1, self.W_g2_hg, self.W_g2_hl, self.W_h_g, self.W_h, self.W_a]
         self.B = [self.B_h, self.B_a]
-        self.params = [self.W_l, self.W_f]
+        self.parameters = [self.W_l, self.W_f]
 
 def get_network(model=None, std=0.005, disable_reinforce=False, random_glimpse=False):
     """

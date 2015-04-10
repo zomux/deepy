@@ -9,7 +9,7 @@ import theano.tensor as T
 
 from deepy.util.functions import FLOATX
 from deepy.util import build_activation
-from deepy.networks.layer import NeuralLayer
+from deepy.layers.layer import NeuralLayer
 from basic_nn import NeuralNetwork
 
 
@@ -121,22 +121,22 @@ class RAELayer(NeuralLayer):
         if self.target_size < 0:
             self.target_size = self.input_n
 
-        self.W_e1 = self.create_weight(self.output_n, self.output_n, "enc1")
-        self.W_e2 = self.create_weight(self.input_n, self.output_n, "enc2")
-        self.B_e = self.create_bias(self.output_n, "enc")
+        self.W_e1 = self.create_weight(self.output_dim, self.output_dim, "enc1")
+        self.W_e2 = self.create_weight(self.input_n, self.output_dim, "enc2")
+        self.B_e = self.create_bias(self.output_dim, "enc")
 
-        self.W_d1 = self.create_weight(self.output_n, self.output_n, "dec1")
-        self.W_d2 = self.create_weight(self.output_n, self.input_n, "dec2")
-        self.B_d1 = self.create_bias(self.output_n, "dec1")
+        self.W_d1 = self.create_weight(self.output_dim, self.output_dim, "dec1")
+        self.W_d2 = self.create_weight(self.output_dim, self.input_n, "dec2")
+        self.B_d1 = self.create_bias(self.output_dim, "dec1")
         self.B_d2 = self.create_bias(self.input_n, "dec2")
 
         self.h0 = None
         if self.additional_h:
-            self.h0 = self.create_vector(self.output_n, "h0")
+            self.h0 = self.create_vector(self.output_dim, "h0")
 
         self.W = [self.W_e1, self.W_e2, self.W_d1, self.W_d2]
         self.B = [self.B_e, self.B_d1, self.B_d2]
-        self.params = []
+        self.parameters = []
 
         # Just for decoding
         self._vars.n = T.iscalar("n")
@@ -150,7 +150,7 @@ class GeneralAutoEncoder(NeuralNetwork):
         self._predict_compiled = False
 
     def setup_vars(self):
-        super(GeneralAutoEncoder, self).setup_vars()
+        super(GeneralAutoEncoder, self).setup_variables()
 
         # for a classifier, k specifies the correct labels for a given input.
         # No additional parameters

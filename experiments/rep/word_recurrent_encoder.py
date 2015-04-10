@@ -19,7 +19,7 @@ import theano.tensor as T
 from deepy import NetworkConfig, TrainerConfig, AdaGradTrainer
 from deepy.util.functions import FLOATX
 from deepy.networks import NeuralLayer
-from deepy.networks.recursive import GeneralAutoEncoder
+from deepy.layers.recursive import GeneralAutoEncoder
 from nlpy.util import LineIterator, FakeGenerator
 from deepy.util import build_activation
 
@@ -190,7 +190,7 @@ class RecurrentEncoderLayer(NeuralLayer):
             self.W_di3 = self.create_weight(self.size, self.size, "di3")
 
             if self.partial_training == 2:
-                self.params = self.W + self.B
+                self.parameters = self.W + self.B
                 self.W = [self.W_ei3, self.W_eh3, self.W_dh3, self.W_di3]
                 self.B = []
             else:

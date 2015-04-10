@@ -10,7 +10,7 @@ from theano.tensor.nnet import conv
 from theano.tensor.signal import downsample
 
 from deepy.util import build_activation
-from deepy.networks.layer import NeuralLayer
+from deepy.layers.layer import NeuralLayer
 
 
 logging = loggers.getLogger(__name__)
@@ -78,4 +78,4 @@ class ConvPoolLayer(NeuralLayer):
 
         self.W = [self.W_conv]
         self.B = [self.B_conv]
-        self.params = []
+        self.parameters = []

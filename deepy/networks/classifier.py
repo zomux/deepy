@@ -2,58 +2,45 @@
 # -*- coding: utf-8 -*-
 
 
-from deepy.networks.basic_nn import NeuralNetwork
+from network import NeuralNetwork
 from deepy.util import FLOATX
 import theano.tensor as T
 
 class NeuralClassifier(NeuralNetwork):
-    '''A classifier attempts to match a 1-hot target output.'''
+    """
+    Classifier network.
+    """
 
-    def __init__(self, config):
-        super(NeuralClassifier, self).__init__(config)
+    def __init__(self, input_dim, config=None):
+        super(NeuralClassifier, self).__init__(input_dim, config=config)
 
-    def setup_vars(self):
-        super(NeuralClassifier, self).setup_vars()
+    def setup_variables(self):
+        super(NeuralClassifier, self).setup_variables()
 
-        # for a classifier, k specifies the correct labels for a given input.
-        self.vars.k = T.ivector('k')
-        self.inputs.append(self.vars.k)
-        self.target_inputs.append(self.vars.k)
+        self.k = T.ivector('k')
+        self.target_variables.append(self.k)
 
-    def _cost_func(self):
-        return -T.mean(T.log(self.vars.y)[T.arange(self.vars.k.shape[0]), self.vars.k])
+    def _cost_func(self, y):
+        return -T.mean(T.log(y)[T.arange(self.k.shape[0]), self.k])
 
-    def _error_func(self):
-        return 100 * T.mean(T.neq(T.argmax(self.vars.y, axis=1), self.vars.k))
+    def _error_func(self, y):
+        return 100 * T.mean(T.neq(T.argmax(y, axis=1), self.k))
 
     @property
     def cost(self):
-        return self._cost_func()
-
-    @cost.setter
-    def cost(self, value):
-        self._cost_func = value
+        return self._cost_func(self.output)
 
     @property
-    def errors(self):
-        '''Compute the percent correct classifications.'''
-        return self._error_func()
+    def test_cost(self):
+        return self._cost_func(self.test_output)
 
-    @errors.setter
-    def errors(self, value):
-      self._error_func = value
+    def prepare_training(self):
+        self.training_monitors.append(("err", self._error_func(self.output)))
+        self.testing_monitors.append(("err", self._error_func(self.test_output)))
+        super(NeuralClassifier, self).prepare_training()
 
-    @property
-    def monitors(self):
-        yield 'err', self.errors
-        for i, h in enumerate(self.hiddens):
-            yield 'h{}<0.1'.format(i+1), 100 * (abs(h) < 0.1).mean()
-            yield 'h{}<0.9'.format(i+1), 100 * (abs(h) < 0.9).mean()
-        for name, exp in self.special_monitors:
-            yield name, exp
-
-    def classify(self, x):
-        return self.predict(x).argmax(axis=1)
+    def predict(self, x):
+        return self.compute(x).argmax(axis=1)
 
 class MultiTargetNeuralClassifier(NeuralClassifier):
     """
@@ -65,19 +52,18 @@ class MultiTargetNeuralClassifier(NeuralClassifier):
         self.class_num = class_num
 
     def setup_vars(self):
-        super(NeuralClassifier, self).setup_vars()
-        # for a classifier, k specifies the correct labels for a given input.
-        self.vars.k = T.imatrix('k')
-        self.inputs.append(self.vars.k)
-        self.target_inputs.append(self.vars.k)
+        super(NeuralClassifier, self).setup_variables()
 
-    def _cost_func(self):
+        self.k = T.imatrix('k')
+        self.target_variables.append(self.k)
+
+    def _cost_func(self, y):
         entropy_sum = T.constant(0, dtype=FLOATX)
         for i in range(self.class_num):
-            entropy_sum += T.sum(T.nnet.categorical_crossentropy(self.vars.y[:, i, :], self.vars.k[:,i]))
-        return entropy_sum / (self.vars.k.shape[0] * self.vars.k.shape[1])
+            entropy_sum += T.sum(T.nnet.categorical_crossentropy(self._output[:, i, :], self._output[:,i]))
+        return entropy_sum / (self.k.shape[0] * self.k.shape[1])
 
-    def _error_func(self):
-        return 100 * T.mean(T.neq(T.argmax(self.vars.y, axis=2), self.vars.k))
+    def _error_func(self, y):
+        return 100 * T.mean(T.neq(T.argmax(self._output, axis=2), self.k))
 
 

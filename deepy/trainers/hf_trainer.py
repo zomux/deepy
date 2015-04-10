@@ -128,7 +128,7 @@ class HFTrainer(NeuralTrainer):
                 for x in train_set:
                     cost_matrix.append(self.learning_func(*x))
                     if self.network.needs_callback:
-                        self.network.updating_callback()
+                        self.network.training_callback()
                 costs = list(zip(self.cost_names, np.mean(cost_matrix, axis=0)))
             except KeyboardInterrupt:
                 logging.info('interrupted!')

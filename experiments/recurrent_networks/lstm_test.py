@@ -1,17 +1,16 @@
-import time
 import os
 import sys
 from argparse import ArgumentParser
 import logging
 
-from experiments.lm import Vocab
+import numpy as np
 
+from experiments.lm import Vocab
 from experiments.lm.data_generator import RNNDataGenerator
 from deepy import NetworkConfig, TrainerConfig
-from deepy.networks.lstm import RecurrentNetwork, LSTMLayer
+from deepy.layers.lstm import RecurrentNetwork, LSTMLayer
 from deepy.trainers import SGDTrainer
 from deepy.util import Timer, resource
-import numpy as np
 
 
 logging.basicConfig(level=logging.INFO)

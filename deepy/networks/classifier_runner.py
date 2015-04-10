@@ -12,7 +12,7 @@ class NeuralClassifierRunner(NeuralNetwork):
         super(NeuralClassifierRunner, self).__init__(config)
 
     def setup_vars(self):
-        super(NeuralClassifierRunner, self).setup_vars()
+        super(NeuralClassifierRunner, self).setup_variables()
 
         # for a classifier, k specifies the correct labels for a given input.
         self.vars.k = T.ivector('k')

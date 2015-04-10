@@ -14,8 +14,8 @@ from deepy.util.functions import FLOATX, global_rand, make_float_matrices, make_
 from deepy.util.functions import replace_graph as RG, smart_replace_graph as SRG
 from deepy.trainers import optimize_updates
 from deepy.util import build_activation
-from layer import NeuralLayer
-from basic_nn import NeuralNetwork
+from deepy.layers.layer import NeuralLayer
+from deepy.networks import NeuralNetwork
 
 
 logging = loggers.getLogger(__name__)
@@ -163,28 +163,28 @@ class RecurrentLayer(NeuralLayer):
         self.updates.extend(recurrent_updates.items())
         if self.update_h0:
             self.updates.append((self.h0, ifelse(T.eq(self._vars.k[-1], 0), self.init_h, self.hidden_func[-1])))
-        self.params.extend(self._assistive_params)
+        self.parameters.extend(self._assistive_params)
 
     def _setup_params(self):
         if self.target_size < 0:
             self.target_size = self.input_n
-        self.h0 = theano.shared(value=np.ones((self.output_n,), dtype=FLOATX), name='h_input')
+        self.h0 = theano.shared(value=np.ones((self.output_dim,), dtype=FLOATX), name='h_input')
         self.init_h = theano.shared(value=self.h0.get_value(), name='init_h')
-        self.zero_vector = theano.shared(value=np.zeros((self.output_n,), dtype=FLOATX), name='zero_h')
+        self.zero_vector = theano.shared(value=np.zeros((self.output_dim,), dtype=FLOATX), name='zero_h')
 
-        self.W_i, _, self.param_count = self.create_params(self.input_n, self.output_n, "input")
-        self.W_r, self.B_r, param_count = self.create_params(self.output_n, self.output_n, "recurrent")
+        self.W_i, _, self.param_count = self.create_params(self.input_n, self.output_dim, "input")
+        self.W_r, self.B_r, param_count = self.create_params(self.output_dim, self.output_dim, "recurrent")
         self.param_count += param_count
-        self.W_s, self.B_s, param_count = self.create_params(self.output_n, self.target_size, "softmax")
+        self.W_s, self.B_s, param_count = self.create_params(self.output_dim, self.target_size, "softmax")
         self.param_count += param_count
 
         # Don't register parameters to the weights or bias
         # Update inside the recurrent steps
         self.W = []
         self.B = []
-        self.params = [self.W_i, self.W_r, self.W_s]
+        self.parameters = [self.W_i, self.W_r, self.W_s]
         if not self.disable_bias:
-            self.params += [self.B_r, self.B_s]
+            self.parameters += [self.B_r, self.B_s]
 
 
     def create_params(self, input_n, output_n, suffix, sparse=None):
@@ -204,7 +204,7 @@ class RecurrentLayer(NeuralLayer):
         return weight, bias, (input_n + 1) * output_n
 
     def clear_hidden(self):
-        self.h0.set_value(np.zeros((self.output_n,), dtype=FLOATX))
+        self.h0.set_value(np.zeros((self.output_dim,), dtype=FLOATX))
 
     def reset_assistive_params(self):
         for p in self._assistive_params:
@@ -219,7 +219,7 @@ class RecurrentNetwork(NeuralNetwork):
         self.do_reset_grads = True
 
     def setup_vars(self):
-        super(RecurrentNetwork, self).setup_vars()
+        super(RecurrentNetwork, self).setup_variables()
 
         # for a classifier, k specifies the correct labels for a given input.
         self.vars.k = T.ivector('k')

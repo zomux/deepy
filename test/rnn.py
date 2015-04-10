@@ -7,7 +7,7 @@ import logging
 
 import numpy as np
 
-from deepy.networks.recurrent import RecurrentLayer, RecurrentNetwork
+from deepy.layers.recurrent import RecurrentLayer, RecurrentNetwork
 from deepy.conf import NetworkConfig, TrainerConfig
 from deepy.util.functions import FLOATX
 from deepy import SGDTrainer

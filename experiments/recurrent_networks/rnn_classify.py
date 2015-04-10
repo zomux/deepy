@@ -7,7 +7,7 @@ from experiments.lm import Vocab
 from deepy import NetworkConfig, TrainerConfig
 from deepy.trainers import MomentumTrainer
 from deepy.util.functions import FLOATX
-from deepy.networks.simple_rnn import SimpleRNN, SimpleRNNLayer
+from deepy.layers.simple_rnn import SimpleRNN, SimpleRNNLayer
 from deepy.util import LineIterator, FakeGenerator
 
 
