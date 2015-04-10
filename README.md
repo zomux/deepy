@@ -11,12 +11,12 @@ deepy: Highly extensible deep learning framework based on Theano
 
 Many codes are still not well documented.
 
-Raphael Shu
+Raphael Shu, 2015
 
-Run with following setting
+Run with following commands
 ===
 
 ```
-PYTHONPATH="." THEANO_FLAGS='floatX=float32,nvcc.fastmath=True,openmp=True,openmp_elemwise_minsize=1000' \
-OMP_NUM_THREADS=8 python ...
+source bin/theano_cpu_env.sh
+python experiments/basic/mnist_feed_forward.py
 ```
