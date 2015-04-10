@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from deepy.util import build_activation
 
 class RevealDimension(NeuralLayer):
     """
