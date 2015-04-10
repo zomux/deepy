@@ -12,6 +12,7 @@ import theano
 
 from deepy.layers.layer import NeuralLayer
 from deepy.conf import NetworkConfig
+from deepy.util import dim_to_var
 
 logging = loggers.getLogger(__name__)
 
@@ -22,7 +23,7 @@ class NeuralNetwork(object):
     Basic neural network class.
     """
 
-    def __init__(self, input_dim, config=None, input_variable=None):
+    def __init__(self, input_dim, config=None):
         logging.info(DEEPY_MESSAGE)
         self.network_config = config if config else NetworkConfig()
         self.input_dim = input_dim
@@ -47,7 +48,6 @@ class NeuralNetwork(object):
         self.training_monitors = []
         self.testing_monitors = []
 
-        self._input_variable = input_variable
         self.setup_variables()
 
         if self.network_config.layers:
@@ -103,8 +103,12 @@ class NeuralNetwork(object):
         return params
 
     def setup_variables(self):
-        if self._input_variable:
-            x = self._input_variable
+        if self.network_config.input_tensor:
+            input_tensor = self.network_config.input_tensor
+            if type(input_tensor) == int:
+                x = dim_to_var(input_tensor)
+            else:
+                x = input_tensor
         else:
             x = T.matrix('x')
         self.input_variables.append(x)

@@ -149,7 +149,6 @@ class NeuralLayer(object):
 
         weight = theano.shared(ws.astype(FLOATX), name='W_{}'.format(suffix))
 
-        self.parameter_count += np.prod(shape)
         logging.info('create weight W_%s: %s', suffix, str(shape))
         return weight
 
@@ -159,7 +158,6 @@ class NeuralLayer(object):
         bs =  np.ones(shape)
         bs *= value
         bias = theano.shared(bs.astype(FLOATX), name='B_{}'.format(suffix))
-        self.parameter_count += np.prod(shape)
         logging.info('create bias B_%s: %s', suffix, str(shape))
         return bias
 

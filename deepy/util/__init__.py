@@ -7,3 +7,4 @@ from timer import Timer
 from resource import resource
 from fake_generator import FakeGenerator
 from line_iterator import LineIterator
+from dim_to_var import dim_to_var

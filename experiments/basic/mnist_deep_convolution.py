@@ -5,7 +5,6 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 from deepy.dataset import MnistDataset, MiniBatches
-from deepy.conf import TrainerConfig
 from deepy.networks import NeuralClassifier
 from deepy.layers import Convolution, Dense, Flatten, DimShuffle, Reshape, RevealDimension, Softmax
 from deepy.trainers import MomentumTrainer, LearningRateAnnealer
@@ -25,10 +24,7 @@ if __name__ == '__main__':
                        Dense(10, 'tanh'),
                        Softmax())
 
-    trainer_conf = TrainerConfig()
-    trainer_conf.method = "momentum"
-
-    trainer = MomentumTrainer(model, config=trainer_conf)
+    trainer = MomentumTrainer(model)
 
     annealer = LearningRateAnnealer(trainer)
 

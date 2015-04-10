@@ -7,7 +7,7 @@ import logging as loggers
 import theano
 import theano.tensor as T
 
-from deepy.util.functions import FLOATX
+from deepy.util import FLOATX, dim_to_var
 from deepy.trainers.util import wrap_core
 
 
@@ -72,17 +72,6 @@ def optimize_function(params, config=None):
     Returns:
         updating function receives gradients
     """
-    def creat_var(ndim):
-        if ndim == 1:
-            return T.vector()
-        elif ndim == 2:
-            return T.matrix()
-        elif ndim == 3:
-            return T.tensor3()
-        elif ndim == 4:
-            return T.tensor4()
-        else:
-            raise NotImplementedError
-    gs = [creat_var(p.ndim) for p in params]
+    gs = [dim_to_var(p.ndim) for p in params]
     updates = optimize_updates(params, gs, config)
     return theano.function(gs, [], updates=updates)

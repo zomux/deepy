@@ -9,3 +9,4 @@ from flatten import Flatten
 from dimshuffle import DimShuffle
 from reshape import Reshape
 from reveal_dimension import RevealDimension
+from recurrent import RNN

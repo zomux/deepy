@@ -13,6 +13,5 @@ class NetworkConfig(GeneralConfig):
         super(NetworkConfig, self).__init__(logger=logging)
         object.__setattr__(self, "attrs", {
             "layers": [],
-            "input_noise": 0.,
-            "input_dropouts": 0.,
+            "input_tensor": None
         })
