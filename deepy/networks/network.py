@@ -100,7 +100,7 @@ class NeuralNetwork(object):
         """
         self.report()
         for layer, hidden in zip(self.layers, self._hidden_outputs):
-            self.training_monitors.append(('mean(%s)' % (layer.name), 100 * (abs(hidden) < 0.1).mean()))
+            self.training_monitors.append(('mean(%s)' % (layer.name), abs(hidden).mean()))
 
     @property
     def all_parameters(self):
