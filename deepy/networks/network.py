@@ -82,19 +82,31 @@ class NeuralNetwork(object):
         self.layers.append(layer)
 
     def first_layer(self):
+        """
+        Return first layer.
+        """
         return self.layers[0] if self.layers else None
 
     def stack_layers(self, *layers):
+        """
+        Stack layers.
+        """
         for layer in layers:
             self.stack(layer)
 
     def prepare_training(self):
+        """
+        This function will be called before training.
+        """
         self.report()
         for layer, hidden in zip(self.layers, self._hidden_outputs):
             self.training_monitors.append(('mean(%s)' % (layer.name), 100 * (abs(hidden) < 0.1).mean()))
 
     @property
     def all_parameters(self):
+        """
+        Return all parameters.
+        """
         params = []
         params.extend(self.parameters)
         params.extend(self.free_parameters)
@@ -102,6 +114,9 @@ class NeuralNetwork(object):
         return params
 
     def setup_variables(self):
+        """
+        Set up variables.
+        """
         if self.network_config.input_tensor:
             input_tensor = self.network_config.input_tensor
             if type(input_tensor) == int:
@@ -121,26 +136,44 @@ class NeuralNetwork(object):
                 self.test_output, updates=self.updates, allow_input_downcast=True)
 
     def compute(self, *x):
+        """
+        Return network output.
+        """
         self._compile()
         return self._compute(*x)
 
     @property
     def output(self):
+        """
+        Return output variable.
+        """
         return self._output
 
     @property
     def test_output(self):
+        """
+        Return output variable in test time.
+        """
         return self._test_output
 
     @property
     def cost(self):
+        """
+        Return cost variable.
+        """
         return T.constant(0)
 
     @property
     def test_cost(self):
+        """
+        Return cost variable in test time.
+        """
         return self.cost
 
     def save_params(self, path):
+        """
+        Save parameters to file.
+        """
         logging.info("saving parameters to %s" % path)
         opener = gzip.open if path.lower().endswith('.gz') else open
         handle = opener(path, 'wb')
@@ -148,6 +181,9 @@ class NeuralNetwork(object):
         handle.close()
 
     def load_params(self, path):
+        """
+        Load parameters from file.
+        """
         logging.info("loading parameters from %s" % path)
         opener = gzip.open if path.lower().endswith('.gz') else open
         handle = opener(path, 'rb')
@@ -158,19 +194,31 @@ class NeuralNetwork(object):
         handle.close()
 
     def report(self):
+        """
+        Print network statistics.
+        """
         logging.info("network inputs: %s", " ".join(map(str, self.input_variables)))
         logging.info("network targets: %s", " ".join(map(str, self.target_variables)))
         logging.info("network parameters: %s", " ".join(map(str, self.all_parameters)))
         logging.info("parameter count: %d", self.parameter_count)
 
     def epoch_callback(self):
+        """
+        Callback for each epoch.
+        """
         for cb in self.epoch_callbacks:
             cb()
 
     def training_callback(self):
+        """
+        Callback for each training iteration.
+        """
         for cb in self.training_callbacks:
             cb()
 
     def testing_callback(self):
+        """
+        Callback for each testing iteration.
+        """
         for cb in self.training_callbacks:
             cb()
