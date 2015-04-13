@@ -8,15 +8,15 @@ class Dataset(object):
 
     def train_set(self):
         """
-        :rtype: tuple
+        :rtype: list of tuple
         """
 
     def valid_set(self):
         """
-        :rtype: tuple
+        :rtype: list of tuple
         """
 
     def test_set(self):
         """
-        :rtype: tuple
+        :rtype: list of tuple
         """
