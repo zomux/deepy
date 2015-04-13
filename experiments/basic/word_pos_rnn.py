@@ -5,7 +5,6 @@ import logging, os, random
 import numpy as np
 logging.basicConfig(level=logging.INFO)
 
-from deepy import NetworkConfig
 from deepy.dataset import SequenceDataset, MiniBatches
 from deepy.networks import NeuralClassifier
 from deepy.layers import RNN, Dense, Softmax
@@ -48,9 +47,7 @@ dataset.report()
 batch_set = MiniBatches(dataset)
 
 if __name__ == '__main__':
-    network_config = NetworkConfig()
-    network_config.input_tensor = 3
-    model = NeuralClassifier(input_dim=26, config=network_config)
+    model = NeuralClassifier(input_dim=26, input_tensor=3)
     model.stack_layers(RNN(hidden_size=50, input_type="sequence", output_type="last_hidden"),
                        Dense(4),
                        Softmax())

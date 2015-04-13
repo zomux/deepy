@@ -2,17 +2,23 @@
 # -*- coding: utf-8 -*-
 
 from theano import tensor as T
-from network import NeuralNetwork
+from . import NeuralNetwork
+from deepy.util import dim_to_var
 
 
 class NeuralRegressor(NeuralNetwork):
     """
     Regression network.
     """
+    def __init__(self, input_dim, config=None, input_tensor=None, target_tensor=2):
+        self.target_tensor = dim_to_var(target_tensor, "k") if type(target_tensor) == int else target_tensor
+        if input_tensor:
+            config.input_tensor = dim_to_var(input_tensor, "x") if type(input_tensor) == int else input_tensor
+        super(NeuralRegressor, self).__init__(input_dim, config=config)
 
-    def setup_vars(self):
+    def setup_variables(self):
         super(NeuralRegressor, self).setup_variables()
-        self.k = T.matrix('k')
+        self.k = self.target_tensor
         self.target_variables.append(self.k)
 
     def _cost_func(self, y):

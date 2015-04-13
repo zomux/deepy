@@ -27,6 +27,18 @@ class BasicDataset(Dataset):
     def test_set(self):
         return self._test_set
 
+    def map(self, func):
+        """
+        Process all data with given function.
+        The scheme of function should be x,y -> x,y.
+        """
+        if self._train_set:
+            self._train_set = map(func, self._train_set)
+        if self._valid_set:
+            self._valid_set = map(func, self._valid_set)
+        if self._test_set:
+            self._test_set = map(func, self._test_set)
+
     def _vectorize_set(self, subset, size):
         newset = []
         for x, y in subset:
