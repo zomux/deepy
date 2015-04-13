@@ -8,6 +8,7 @@ Sequence adding problem.
 This problem is described in http://arxiv.org/abs/1504.00941 .
 Each item of the sequence contains two units,
 the first one is real value, and the second-one 1 or 0.
+
 Train the recurrent network to return the sum of all first-unit values
 with 1 in the second unit.
 """
@@ -19,7 +20,7 @@ from deepy.dataset import SequenceDataset, MiniBatches
 from deepy.networks import NeuralRegressor
 from deepy.layers import RNN, Dense
 from deepy.trainers import MomentumTrainer, LearningRateAnnealer
-from deepy.util import FLOATX
+from deepy.util import FLOATX, IdentityInitializer, GaussianInitializer
 
 SEQUENCE_LEN = 30
 rand = np.random.RandomState(3)
@@ -51,7 +52,9 @@ batch_set = MiniBatches(dataset, batch_size=16)
 
 if __name__ == '__main__':
     model = NeuralRegressor(input_dim=2, input_tensor=3)
-    model.stack_layers(RNN(hidden_size=100, input_type="sequence", output_type="last_hidden"),
+    model.stack_layers(RNN(hidden_size=100, input_type="sequence", output_type="last_hidden",
+                           hidden_initializer=IdentityInitializer(),
+                           initializer=GaussianInitializer(deviation=0.001)),
                        Dense(1))
 
     trainer = MomentumTrainer(model)

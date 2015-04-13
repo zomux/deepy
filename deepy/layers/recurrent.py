@@ -16,13 +16,15 @@ class RNN(NeuralLayer):
     """
 
     def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden",
-                 activation="tanh", steps=None):
+                 activation="tanh", hidden_initializer=None, initializer=None, steps=None):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
         self._output_size = output_size
         self._input_type = input_type
         self._output_type = output_type
         self._activation = activation
+        self._hidden_initializer = hidden_initializer
+        self._initializer = hidden_initializer
         self._steps = steps
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of RNN is wrong: %s" % input_type)
@@ -80,18 +82,18 @@ class RNN(NeuralLayer):
         self._activation_func = build_activation(self._activation)
 
     def _setup_params(self):
-        self.W_h = self.create_weight(self._hidden_size, self._hidden_size, suffix="h")
+        self.W_h = self.create_weight(self._hidden_size, self._hidden_size, suffix="h", initializer=self._hidden_initializer)
         self.B_h = self.create_bias(self._hidden_size, suffix="h")
 
         self.register_parameters(self.W_h, self.B_h)
 
         if self._input_type == "sequence":
-            self.W_i = self.create_weight(self.input_dim, self._hidden_size, suffix="i")
+            self.W_i = self.create_weight(self.input_dim, self._hidden_size, suffix="i", initializer=self._initializer)
             self.register_parameters(self.W_i)
 
         if "output" in self._output_type:
             assert self._output_size
-            self.W_o = self.create_weight(self._hidden_size, self._output_size, suffix="o")
+            self.W_o = self.create_weight(self._hidden_size, self._output_size, suffix="o",  initializer=self._initializer)
             self.B_o = self.create_bias(self._output_size, suffix="o")
             self.register_parameters(self.W_o, self.B_o)
             self.output_dim = self._output_size

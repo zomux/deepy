@@ -3,6 +3,7 @@
 
 from functions import *
 from activations import *
+from weight_initializer import *
 from timer import Timer
 from resource import resource
 from fake_generator import FakeGenerator

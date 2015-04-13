@@ -7,7 +7,7 @@ import logging as loggers
 import numpy as np
 import theano
 
-from deepy.util.functions import FLOATX, global_rand
+from deepy.util import FLOATX, global_rand, UniformInitializer
 
 logging = loggers.getLogger(__name__)
 
@@ -119,35 +119,14 @@ class NeuralLayer(object):
         """
         self.epoch_callbacks.extend(callbacks)
 
-    def create_weight(self, input_n=1, output_n=1, suffix="", scheme=None, sparse=None, scale=None, shape=None):
-        # ws = np.asarray(global_rand.uniform(low=-np.sqrt(6. / (input_n + output_n)),
-        #                           high=np.sqrt(6. / (input_n + output_n)),
-        #                           size=(input_n, output_n)))
-        # if self.activation == 'sigmoid':
-        #     ws *= 4
-        # if sparse is not None:
-        #     ws *= np.random.binomial(n=1, p=sparse, size=(input_n, output_n))
-
-        adjust_weights = False
+    def create_weight(self, input_n=1, output_n=1, suffix="", initializer=None, shape=None):
         if not shape:
             shape = (input_n, output_n)
-            adjust_weights = True
 
-        if not scale:
-            scale = np.sqrt(6. / sum(shape))
-            # if self.activation == 'sigmoid':
-            #     scale *= 4
+        if not initializer:
+            initializer = UniformInitializer()
 
-        ws = np.asarray(global_rand.uniform(low=-scale, high=scale, size=shape))
-
-        # Adjust weights
-        if adjust_weights:
-            norm = np.sqrt((ws**2).sum())
-            ws = scale * ws / norm
-            _, v, _ = np.linalg.svd(ws)
-            ws = scale * ws / v[0]
-
-        weight = theano.shared(ws.astype(FLOATX), name='W_{}'.format(suffix))
+        weight = theano.shared(initializer.sample(shape).astype(FLOATX), name='W_{}'.format(suffix))
 
         logging.info('create weight W_%s: %s', suffix, str(shape))
         return weight
