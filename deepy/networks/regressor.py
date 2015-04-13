@@ -12,9 +12,7 @@ class NeuralRegressor(NeuralNetwork):
     """
     def __init__(self, input_dim, config=None, input_tensor=None, target_tensor=2):
         self.target_tensor = dim_to_var(target_tensor, "k") if type(target_tensor) == int else target_tensor
-        if input_tensor:
-            config.input_tensor = dim_to_var(input_tensor, "x") if type(input_tensor) == int else input_tensor
-        super(NeuralRegressor, self).__init__(input_dim, config=config)
+        super(NeuralRegressor, self).__init__(input_dim, config=config, input_tensor=input_tensor)
 
     def setup_variables(self):
         super(NeuralRegressor, self).setup_variables()

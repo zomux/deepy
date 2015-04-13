@@ -12,14 +12,15 @@ the first one is real value, and the second-one 1 or 0.
 Train the recurrent network to return the sum of all first-unit values
 with 1 in the second unit.
 """
-import logging, os, random
+import logging
 import numpy as np
 logging.basicConfig(level=logging.INFO)
 
+from deepy.conf import TrainerConfig
 from deepy.dataset import SequenceDataset, MiniBatches
 from deepy.networks import NeuralRegressor
 from deepy.layers import RNN, Dense
-from deepy.trainers import MomentumTrainer, LearningRateAnnealer
+from deepy.trainers import SGDTrainer, LearningRateAnnealer
 from deepy.util import FLOATX, IdentityInitializer, GaussianInitializer
 
 SEQUENCE_LEN = 30
@@ -54,11 +55,12 @@ if __name__ == '__main__':
     model = NeuralRegressor(input_dim=2, input_tensor=3)
     model.stack_layers(RNN(hidden_size=100, input_type="sequence", output_type="last_hidden",
                            hidden_initializer=IdentityInitializer(),
-                           initializer=GaussianInitializer(deviation=0.001)),
-                       Dense(1))
+                           initializer=GaussianInitializer(deviation=0.001),
+                           activation="relu"),
+                       Dense(1, initializer=GaussianInitializer(deviation=0.001)))
 
-    trainer = MomentumTrainer(model)
+    conf = TrainerConfig()
+    conf.learning_rate = 0.01
+    trainer = SGDTrainer(model, conf)
 
-    annealer = LearningRateAnnealer(trainer)
-
-    trainer.run(batch_set.train_set(), batch_set.valid_set(), controllers=[annealer])
+    trainer.run(batch_set.train_set(), batch_set.valid_set())

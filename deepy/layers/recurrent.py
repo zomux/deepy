@@ -16,15 +16,16 @@ class RNN(NeuralLayer):
     """
 
     def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden",
-                 activation="tanh", hidden_initializer=None, initializer=None, steps=None):
+                 hidden_activation="tanh", activation="tanh", hidden_initializer=None, initializer=None, steps=None):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
         self._output_size = output_size
         self._input_type = input_type
         self._output_type = output_type
         self._activation = activation
+        self._hidden_activation = hidden_activation
         self._hidden_initializer = hidden_initializer
-        self._initializer = hidden_initializer
+        self._initializer = initializer
         self._steps = steps
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of RNN is wrong: %s" % input_type)
@@ -40,7 +41,7 @@ class RNN(NeuralLayer):
             h, = variables
             z = T.dot(h, self.W_h) + self.B_h
 
-        new_h = self._activation_func(z)
+        new_h = self._hidden_activation_func(z)
         if "output" in self._output_type:
             o = self._activation_func(T.dot(new_h, self.W_o) + self.B_o)
             return new_h, o
@@ -80,6 +81,7 @@ class RNN(NeuralLayer):
 
     def _setup_functions(self):
         self._activation_func = build_activation(self._activation)
+        self._hidden_activation_func = build_activation(self._hidden_activation)
 
     def _setup_params(self):
         self.W_h = self.create_weight(self._hidden_size, self._hidden_size, suffix="h", initializer=self._hidden_initializer)

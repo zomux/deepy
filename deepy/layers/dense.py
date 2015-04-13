@@ -7,11 +7,12 @@ class Dense(NeuralLayer):
     Fully connected layer.
     """
 
-    def __init__(self, size, activation='linear', disable_bias=False):
+    def __init__(self, size, activation='linear', initializer=None, disable_bias=False):
         super(Dense, self).__init__("dense")
         self.activation = activation
         self.output_dim = size
         self.disable_bias = disable_bias
+        self.initializer = initializer
 
     def setup(self):
         self._setup_params()
@@ -24,7 +25,7 @@ class Dense(NeuralLayer):
         self._activation = build_activation(self.activation)
 
     def _setup_params(self):
-        self.W = self.create_weight(self.input_dim, self.output_dim, self.name)
+        self.W = self.create_weight(self.input_dim, self.output_dim, self.name, initializer=self.initializer)
         self.register_parameters(self.W)
         if self.disable_bias:
             self.B = T.constant(0, dtype=FLOATX)

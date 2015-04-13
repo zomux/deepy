@@ -12,9 +12,7 @@ class NeuralClassifier(NeuralNetwork):
     """
 
     def __init__(self, input_dim, config=None, input_tensor=None):
-        if input_tensor:
-            config.input_tensor = dim_to_var(input_tensor, "x") if type(input_tensor) == int else input_tensor
-        super(NeuralClassifier, self).__init__(input_dim, config=config)
+        super(NeuralClassifier, self).__init__(input_dim, config=config, input_tensor=input_tensor)
 
     def setup_variables(self):
         super(NeuralClassifier, self).setup_variables()

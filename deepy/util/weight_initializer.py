@@ -31,7 +31,7 @@ class UniformInitializer(WeightInitializer):
             scale = np.sqrt(6. / sum(shape))
         else:
             scale = self.scale
-        weight = rand.uniform(-1, 1, size=shape) * self.scale
+        weight = rand.uniform(-1, 1, size=shape) * scale
         if self.svd:
             norm = np.sqrt((weight**2).sum())
             ws = scale * weight / norm
@@ -50,6 +50,7 @@ class GaussianInitializer(WeightInitializer):
 
     def sample(self, shape):
         weight = rand.normal(self.mean, self.deviation, size=shape)
+        return weight
 
 class IdentityInitializer(WeightInitializer):
     """

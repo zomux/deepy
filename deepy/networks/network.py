@@ -23,10 +23,11 @@ class NeuralNetwork(object):
     Basic neural network class.
     """
 
-    def __init__(self, input_dim, config=None):
+    def __init__(self, input_dim, config=None, input_tensor=None):
         logging.info(DEEPY_MESSAGE)
         self.network_config = config if config else NetworkConfig()
         self.input_dim = input_dim
+        self.input_tensor = input_tensor
         self.parameter_count = 0
 
         self.parameters = []
@@ -117,12 +118,11 @@ class NeuralNetwork(object):
         """
         Set up variables.
         """
-        if self.network_config.input_tensor:
-            input_tensor = self.network_config.input_tensor
-            if type(input_tensor) == int:
-                x = dim_to_var(input_tensor)
+        if self.input_tensor:
+            if type(self.input_tensor) == int:
+                x = dim_to_var(self.input_tensor)
             else:
-                x = input_tensor
+                x = self.input_tensor
         else:
             x = T.matrix('x')
         self.input_variables.append(x)
