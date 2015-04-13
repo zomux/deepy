@@ -2,26 +2,31 @@
 # -*- coding: utf-8 -*-
 
 
-from deepy.dataset.abstract_dataset import AbstractDataset
+from . import Dataset
+from deepy.util import FLOATX
+import numpy as np
 
-class MiniBatches(AbstractDataset):
+class MiniBatches(Dataset):
 
     def __init__(self, dataset, batch_size=20):
         self.origin = dataset
         self.size = batch_size
 
-    def _yield_data(self, data, targets):
-        for i in xrange(0, len(data), self.size):
-            yield data[i:i + self.size], targets[i:i + self.size]
+    def _yield_data(self, subset):
+        for i in xrange(0, len(subset), self.size):
+            x_set, y_set = [], []
+            for x, y in subset[i:i + self.size]:
+                x_set.append(x)
+                y_set.append(y)
+            x_set = np.array(x_set)
+            y_set = np.array(y_set)
+            yield x_set, y_set
 
     def train_set(self):
-        data, targets = self.origin.train_set()[0]
-        return list(self._yield_data(data, targets))
+        return list(self._yield_data(self.origin.train_set()))
 
     def test_set(self):
-        data, targets = self.origin.test_set()[0]
-        return list(self._yield_data(data, targets))
+        return list(self._yield_data(self.origin.test_set()))
 
     def valid_set(self):
-        data, targets = self.origin.valid_set()[0]
-        return list(self._yield_data(data, targets))
+        return list(self._yield_data(self.origin.valid_set()))

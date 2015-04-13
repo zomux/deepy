@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
-from deepy.dataset.abstract_dataset import AbstractDataset
-from deepy.dataset.mnist import MnistDataset
-from deepy.dataset.mini_batch import MiniBatches
-
-Dataset = AbstractDataset
+from deepy.dataset.dataset import Dataset
+from basic import BasicDataset
+from mnist import MnistDataset
+from mini_batch import MiniBatches
+from sequence import SequenceDataset
