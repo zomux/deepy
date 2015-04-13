@@ -38,7 +38,6 @@ for line in open(WORD_POS_RESOURCE).readlines():
 # Shuffle the data
 random.Random(3).shuffle(data)
 
-
 # Make mini-batches
 batches = []
 batch_size = 5

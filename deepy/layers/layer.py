@@ -13,7 +13,7 @@ logging = loggers.getLogger(__name__)
 
 class NeuralLayer(object):
 
-    def __init__(self, name="unknown_layer"):
+    def __init__(self, name="unknown"):
         """
         Create a neural layer.
         """

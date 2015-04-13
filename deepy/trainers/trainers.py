@@ -197,9 +197,12 @@ class NeuralTrainer(object):
         timer = Timer()
         for _ in self.train(train_set, valid_set=valid_set, test_set=test_set):
             if controllers:
+                ending = False
                 for controller in controllers:
                     if hasattr(controller, 'invoke') and controller.invoke():
-                        break
+                        ending = True
+                if ending:
+                    break
         timer.report()
         return
 

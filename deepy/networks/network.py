@@ -90,9 +90,8 @@ class NeuralNetwork(object):
 
     def prepare_training(self):
         self.report()
-        for i, h in enumerate(self._hidden_outputs):
-            self.training_monitors.append(('h{}<0.1'.format(i+1), 100 * (abs(h) < 0.1).mean()))
-            self.training_monitors.append(('h{}<0.9'.format(i+1), 100 * (abs(h) < 0.9).mean()))
+        for layer, hidden in zip(self.layers, self._hidden_outputs):
+            self.training_monitors.append(('mean(%s)' % (layer.name), 100 * (abs(hidden) < 0.1).mean()))
 
     @property
     def all_parameters(self):
