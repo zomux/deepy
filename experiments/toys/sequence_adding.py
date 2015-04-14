@@ -23,7 +23,7 @@ from deepy.layers import RNN, IRNN
 from deepy.trainers import SGDTrainer
 from deepy.util import FLOATX
 
-SEQUENCE_LEN = 100
+SEQUENCE_LEN = 30
 rand = np.random.RandomState(3)
 
 data = []
@@ -59,12 +59,11 @@ if __name__ == '__main__':
     model.stack(IRNN(hidden_size=100, output_size=1,
                     input_type="sequence", output_type="last_output",
                     output_activation="linear"))
-    # if os.path.exists(model_file):
-    #     model.load_params(model_file)
 
     conf = TrainerConfig()
     conf.learning_rate = 0.01
-    conf.gradient_clipping = "l2"
+    conf.gradient_clipping = "l1"
+    conf.max_norm = 1
     conf.patience = 50
     trainer = SGDTrainer(model, conf)
 

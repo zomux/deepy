@@ -32,7 +32,7 @@ class LearningRateAnnealer(object):
         Run it, return whether to end training.
         """
         self._iter += 1
-        if self._iter - max(self._trainer.best_iter, self._annealed_iter) >= 3:
+        if self._iter - max(self._trainer.best_iter, self._annealed_iter) >= self._patience:
             if self._annealed_times >= self._anneal_times:
                 logging.info("ending")
                 return True
