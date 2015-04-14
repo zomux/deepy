@@ -26,6 +26,7 @@ class TrainerConfig(GeneralConfig):
 
             # Optimization
             "method": "ADADELTA",
+            "weight_bound": None,
 
             # Regularization
             "update_l1": 0,
@@ -34,5 +35,4 @@ class TrainerConfig(GeneralConfig):
             "weight_l2": 0.0001,
             "hidden_l1": 0,
             "hidden_l2": 0,
-            "contractive_l2": 0,
         })

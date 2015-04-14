@@ -12,18 +12,18 @@ the first one is real value, and the second-one 1 or 0.
 Train the recurrent network to return the sum of all first-unit values
 with 1 in the second unit.
 """
-import logging
+import logging, os
 import numpy as np
 logging.basicConfig(level=logging.INFO)
 
 from deepy.conf import TrainerConfig
 from deepy.dataset import SequenceDataset, MiniBatches
 from deepy.networks import NeuralRegressor
-from deepy.layers import RNN, Dense
-from deepy.trainers import SGDTrainer, LearningRateAnnealer
-from deepy.util import FLOATX, IdentityInitializer, GaussianInitializer
+from deepy.layers import RNN, IRNN
+from deepy.trainers import SGDTrainer
+from deepy.util import FLOATX
 
-SEQUENCE_LEN = 30
+SEQUENCE_LEN = 100
 rand = np.random.RandomState(3)
 
 data = []
@@ -52,15 +52,25 @@ dataset.report()
 batch_set = MiniBatches(dataset, batch_size=16)
 
 if __name__ == '__main__':
-    model = NeuralRegressor(input_dim=2, input_tensor=3)
-    model.stack_layers(RNN(hidden_size=100, input_type="sequence", output_type="last_hidden",
-                           hidden_initializer=IdentityInitializer(),
-                           initializer=GaussianInitializer(deviation=0.001),
-                           activation="relu"),
-                       Dense(1, initializer=GaussianInitializer(deviation=0.001)))
+
+    model_file = "/tmp/toy_adding_model1.gz"
+
+    model = NeuralRegressor(input_dim=2, input _tensor=3)
+    model.stack(IRNN(hidden_size=100, output_size=1,
+                    input_type="sequence", output_type="last_output",
+                    output_activation="linear"))
+    # if os.path.exists(model_file):
+    #     model.load_params(model_file)
+    #     import pdb;pdb.set_trace()
 
     conf = TrainerConfig()
     conf.learning_rate = 0.01
+    conf.max_norm = 5
+    conf.patience = 50
     trainer = SGDTrainer(model, conf)
 
     trainer.run(batch_set.train_set(), batch_set.valid_set())
+
+    model.save_params(model_file)
+    print "Identity matrix weight:"
+    print model.first_layer().W_h.get_value().diagonal()

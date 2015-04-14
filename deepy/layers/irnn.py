@@ -11,9 +11,11 @@ class IRNN(RNN):
     """
 
     def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden",
-                 activation="tanh", weight_scale=1, steps=None):
+                 output_activation="tanh", weight_scale=1, steps=None):
         super(IRNN, self).__init__(hidden_size, output_size=output_size,
                                    input_type=input_type, output_type=output_type,
+                                   output_activation=output_activation,
                                    hidden_activation="relu",
                                    hidden_initializer=IdentityInitializer(scale=weight_scale),
                                    initializer=GaussianInitializer(deviation=0.001))
+        self.name = "irnn"

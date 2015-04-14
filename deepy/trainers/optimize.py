@@ -61,7 +61,18 @@ def optimize_updates(params, gradients, config=None, shapes=None):
 
     logging.info("optimize method=%s parameters=%s" % (method, str(params)))
 
-    return wrap_core(func, config, params, gradients)
+    updates = wrap_core(func, config, params, gradients)
+    # Weight bound
+    if config.weight_bound:
+        logging.info("apply weight bound of %.2f" % config.weight_bound)
+        new_updates = []
+        for param, update_value in updates:
+            bounded_value = (update_value * (T.abs_(update_value) <= config.weight_bound) +
+                             config.weight_bound * (update_value > config.weight_bound) +
+                             -config.weight_bound * (update_value < -config.weight_bound))
+            new_updates.append((param, bounded_value))
+        updates = new_updates
+    return updates
 
 def optimize_function(params, config=None):
     """

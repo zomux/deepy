@@ -16,13 +16,13 @@ class RNN(NeuralLayer):
     """
 
     def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden",
-                 hidden_activation="tanh", activation="tanh", hidden_initializer=None, initializer=None, steps=None):
+                 hidden_activation="tanh", output_activation="tanh", hidden_initializer=None, initializer=None, steps=None):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
         self._output_size = output_size
         self._input_type = input_type
         self._output_type = output_type
-        self._activation = activation
+        self._output_activation = output_activation
         self._hidden_activation = hidden_activation
         self._hidden_initializer = hidden_initializer
         self._initializer = initializer
@@ -80,7 +80,7 @@ class RNN(NeuralLayer):
         self._setup_functions()
 
     def _setup_functions(self):
-        self._activation_func = build_activation(self._activation)
+        self._activation_func = build_activation(self._output_activation)
         self._hidden_activation_func = build_activation(self._hidden_activation)
 
     def _setup_params(self):
