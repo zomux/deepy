@@ -26,17 +26,26 @@ def optimize_updates(params, gradients, config=None, shapes=None):
     """
     # Clipping
     if config:
-        max_norm = config.get("max_norm", 5.0)
-        clip = config.get("clip", True)
+        clip_value = config.get("max_norm", 5.0)
+        clip = config.get("gradient_clipping", "l2")
 
-        if max_norm and clip:
+        if clip_value and clip:
+            clip_constant = T.constant(clip_value, dtype=FLOATX)
             clipped_gradients = []
-            norm_constant = T.constant(max_norm, dtype=FLOATX)
             for g in gradients:
-                grad_norm = g.norm(L=2)
-                g = (T.minimum(norm_constant, grad_norm)/ grad_norm) * g
+                grad_norm = g.norm(L=1) if clip == "l1" else g.norm(L=2)
+                g = (T.minimum(clip_constant, grad_norm)/ grad_norm) * g
                 clipped_gradients.append(g)
             gradients = clipped_gradients
+    # Regularization
+    if config and config.weight_l2:
+        regularized_gradients = []
+        for param, grad in zip(params, gradients):
+            grad = grad + (2 * config.weight_l2 * param)
+            regularized_gradients.append(grad)
+        gradients = regularized_gradients
+
+
     # Find method
     method = "SGD"
     if config:

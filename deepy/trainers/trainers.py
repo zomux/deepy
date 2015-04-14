@@ -93,14 +93,11 @@ class NeuralTrainer(object):
 
     def _add_regularization(self, cost):
         if self.config.weight_l1 > 0:
-            logging.info("L1 weight regularization: %f" % self.config.weight_l2)
+            logging.info("L1 weight regularization: %f" % self.config.weight_l1)
             cost += self.config.weight_l1 * sum(abs(w).sum() for w in self.network.parameters)
         if self.config.hidden_l1 > 0:
-            logging.info("L1 hidden unit regularization: %f" % self.config.weight_l2)
+            logging.info("L1 hidden unit regularization: %f" % self.config.hidden_l1)
             cost += self.config.hidden_l1 * sum(abs(h).mean(axis=0).sum() for h in self.network._hidden_outputs)
-        if self.config.weight_l2 > 0:
-            logging.info("L2 weight regularization: %f" % self.config.weight_l2)
-            cost += self.config.weight_l2 * sum((w * w).sum() for w in self.network.parameters)
         if self.config.hidden_l2 > 0:
             logging.info("L2 hidden unit regularization: %f" % self.config.hidden_l2)
             cost += self.config.hidden_l2 * sum((h * h).mean(axis=0).sum() for h in self.network._hidden_outputs)

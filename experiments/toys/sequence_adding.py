@@ -27,7 +27,7 @@ SEQUENCE_LEN = 100
 rand = np.random.RandomState(3)
 
 data = []
-for _ in range(10000):
+for _ in range(50000):
     sequence = []
     sum = 0.0
     selected_items = rand.choice(range(SEQUENCE_LEN), 2)
@@ -55,17 +55,16 @@ if __name__ == '__main__':
 
     model_file = "/tmp/toy_adding_model1.gz"
 
-    model = NeuralRegressor(input_dim=2, input _tensor=3)
+    model = NeuralRegressor(input_dim=2, input_tensor=3)
     model.stack(IRNN(hidden_size=100, output_size=1,
                     input_type="sequence", output_type="last_output",
                     output_activation="linear"))
     # if os.path.exists(model_file):
     #     model.load_params(model_file)
-    #     import pdb;pdb.set_trace()
 
     conf = TrainerConfig()
     conf.learning_rate = 0.01
-    conf.max_norm = 5
+    conf.gradient_clipping = "l2"
     conf.patience = 50
     trainer = SGDTrainer(model, conf)
 

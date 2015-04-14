@@ -10,7 +10,7 @@ from deepy.util import FLOATX
 
 
 def ada_family_core(params, gparams, learning_rate = 0.01, eps= 1e-6, rho=0.95, method="ADADELTA",
-                        beta=0.0, gsum_regularization = 0.0001, weight_l2 = 0):
+                        beta=0.0, gsum_regularization = 0.0001):
     """
     Optimize by SGD, AdaGrad, or AdaDelta.
     """
@@ -37,16 +37,14 @@ def ada_family_core(params, gparams, learning_rate = 0.01, eps= 1e-6, rho=0.95, 
     for gparam, param, gsum, xsum in zip(gparams, params, gsums, xsums):
 
         if method == 'ADADELTA':
-            if weight_l2 > 0:
-                gparam += (2 * weight_l2 * param)
             updates[gsum] = rho * gsum + (1. - rho) * (gparam **2)
             dparam = -T.sqrt((xsum + eps) / (updates[gsum] + eps)) * gparam
             updates[xsum] =rho * xsum + (1. - rho) * (dparam **2)
             updates[param] = param * oneMinusBeta + dparam
         elif method == 'ADAGRAD':
             updates[gsum] = gsum + (gparam **2) - gsum_regularization * gsum
-            updates[param] =  param * oneMinusBeta - learning_rate * (gparam / (T.sqrt(updates[gsum] + eps)) + (2 * weight_l2 * param))
+            updates[param] =  param * oneMinusBeta - learning_rate * (gparam / (T.sqrt(updates[gsum] + eps)))
         else:
-            updates[param] = param * oneMinusBeta - (gparam  + (2 * weight_l2 * param)) * learning_rate
+            updates[param] = param * oneMinusBeta - gparam * learning_rate
 
     return updates.items()
