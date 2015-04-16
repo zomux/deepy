@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from . import RNN
-from deepy.util import GaussianInitializer, IdentityInitializer
+from deepy.util import GaussianInitializer, IdentityInitializer, FLOATX
+
+MAX_IDENTITY_VALUE = 0.99
+MIN_IDENTITY_VALUE = 0.0
 
 class IRNN(RNN):
     """
@@ -11,7 +14,7 @@ class IRNN(RNN):
     """
 
     def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden",
-                 output_activation="tanh", weight_scale=1, steps=None):
+                 output_activation="linear", weight_scale=0.9, steps=None):
         super(IRNN, self).__init__(hidden_size, output_size=output_size,
                                    input_type=input_type, output_type=output_type,
                                    output_activation=output_activation,
@@ -19,3 +22,16 @@ class IRNN(RNN):
                                    hidden_initializer=IdentityInitializer(scale=weight_scale),
                                    initializer=GaussianInitializer(deviation=0.001))
         self.name = "irnn"
+        self.register_training_callbacks(self.training_callback)
+
+    def training_callback(self):
+        w_value = self.W_h.get_value(borrow=True)
+        changed = False
+        if w_value.max() > MAX_IDENTITY_VALUE:
+            w_value = w_value * (w_value <= MAX_IDENTITY_VALUE) + MAX_IDENTITY_VALUE * (w_value > MAX_IDENTITY_VALUE)
+            changed = True
+        if w_value.min() < MIN_IDENTITY_VALUE:
+            w_value = w_value * (w_value >= MIN_IDENTITY_VALUE) + MIN_IDENTITY_VALUE * (w_value < MIN_IDENTITY_VALUE)
+            changed = True
+        if changed:
+            self.W_h.set_value(w_value.astype(FLOATX))

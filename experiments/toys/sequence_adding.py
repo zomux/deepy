@@ -15,15 +15,14 @@ with 1 in the second unit.
 import logging, os
 import numpy as np
 logging.basicConfig(level=logging.INFO)
-
 from deepy.conf import TrainerConfig
 from deepy.dataset import SequenceDataset, MiniBatches
 from deepy.networks import NeuralRegressor
 from deepy.layers import RNN, IRNN
-from deepy.trainers import SGDTrainer
+from deepy.trainers import SGDTrainer, LearningRateAnnealer
 from deepy.util import FLOATX
 
-SEQUENCE_LEN = 30
+SEQUENCE_LEN = 100
 rand = np.random.RandomState(3)
 
 data = []
@@ -49,25 +48,28 @@ valid_set = data[:valid_size]
 dataset = SequenceDataset(train_set, valid=valid_set)
 dataset.report()
 
-batch_set = MiniBatches(dataset, batch_size=16)
+batch_set = MiniBatches(dataset, batch_size=32)
 
 if __name__ == '__main__':
 
-    model_file = "/tmp/toy_adding_model1.gz"
+    model_file = "/tmp/toy_adding_model2.gz"
 
     model = NeuralRegressor(input_dim=2, input_tensor=3)
     model.stack(IRNN(hidden_size=100, output_size=1,
                     input_type="sequence", output_type="last_output",
                     output_activation="linear"))
+    if os.path.exists(model_file):
+        model.load_params(model_file)
 
     conf = TrainerConfig()
-    conf.learning_rate = 0.01
-    conf.gradient_clipping = "l1"
-    conf.max_norm = 1
+    conf.learning_rate = LearningRateAnnealer.learning_rate(0.01)
+    conf.max_norm = 10
     conf.patience = 50
     trainer = SGDTrainer(model, conf)
 
-    trainer.run(batch_set.train_set(), batch_set.valid_set())
+    annealer = LearningRateAnnealer(trainer, patience=20)
+
+    trainer.run(batch_set.train_set(), batch_set.valid_set(), controllers=[annealer])
 
     model.save_params(model_file)
     print "Identity matrix weight:"
