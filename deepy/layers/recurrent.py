@@ -15,7 +15,7 @@ class RNN(NeuralLayer):
     Recurrent neural network layer.
     """
 
-    def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden",
+    def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden", vector_core=None,
                  hidden_activation="tanh", output_activation="tanh", hidden_initializer=None, initializer=None, steps=None):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
@@ -25,6 +25,7 @@ class RNN(NeuralLayer):
         self._output_activation = output_activation
         self._hidden_activation = hidden_activation
         self._hidden_initializer = hidden_initializer
+        self._vector_core = vector_core
         self._initializer = initializer
         self._steps = steps
         if input_type not in INPUT_TYPES:
@@ -32,14 +33,17 @@ class RNN(NeuralLayer):
         if output_type not in OUTPUT_TYPES:
             raise Exception("Output type of RNN is wrong: %s" % output_type)
 
+    def _hidden_preact(self, h):
+        return T.dot(h, self.W_h) if not self._vector_core else h * self.W_h
+
 
     def _step(self, *variables):
         if self._input_type == "sequence":
             x, h = variables
-            z = T.dot(x, self.W_i) + T.dot(h, self.W_h) + self.B_h
+            z = T.dot(x, self.W_i) + self._hidden_preact(h) + self.B_h
         else:
             h, = variables
-            z = T.dot(h, self.W_h) + self.B_h
+            z = self._hidden_preact(h) + self.B_h
 
         new_h = self._hidden_activation_func(z)
         if "output" in self._output_type:
@@ -84,7 +88,11 @@ class RNN(NeuralLayer):
         self._hidden_activation_func = build_activation(self._hidden_activation)
 
     def _setup_params(self):
-        self.W_h = self.create_weight(self._hidden_size, self._hidden_size, suffix="h", initializer=self._hidden_initializer)
+        if not self._vector_core:
+            self.W_h = self.create_weight(self._hidden_size, self._hidden_size, suffix="h", initializer=self._hidden_initializer)
+        else:
+            self.W_h = self.create_bias(self._hidden_size, suffix="h")
+            self.W_h.set_value(self.W_h.get_value() + self._vector_core)
         self.B_h = self.create_bias(self._hidden_size, suffix="h")
 
         self.register_parameters(self.W_h, self.B_h)
