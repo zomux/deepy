@@ -208,10 +208,8 @@ def get_network(model=None, std=0.005, disable_reinforce=False, random_glimpse=F
     Returns:
         network
     """
-    net_conf = NetworkConfig(input_size=28*28)
-    attention_layer = AttentionLayer(std=std, disable_reinforce=disable_reinforce, random_glimpse=random_glimpse)
-    net_conf.layers = [attention_layer]
-    network = NeuralClassifier(net_conf)
+    network = NeuralClassifier(input_dim=28*28)
+    network.stack(AttentionLayer(std=std, disable_reinforce=disable_reinforce, random_glimpse=random_glimpse))
     if model and os.path.exists(model):
         network.load_params(model)
     return network
