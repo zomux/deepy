@@ -52,7 +52,7 @@ batch_set = MiniBatches(dataset, batch_size=32)
 
 if __name__ == '__main__':
 
-    model_file = "/tmp/toy_adding_model2.gz"
+    model_file = os.path.join(os.path.dirname(__file__), "models", "sequence_adding_100.gz")
 
     model = NeuralRegressor(input_dim=2, input_tensor=3)
     model.stack(IRNN(hidden_size=100, output_size=1,
