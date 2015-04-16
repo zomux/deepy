@@ -5,7 +5,7 @@
 import sys, os
 
 if sys.version_info[:2] < (2, 6):
-    raise Exception('This version of gensim needs Python 2.6 or later. ')
+    raise Exception('This version needs Python 2.6 or later. ')
 
 
 from distutils.core import setup
@@ -13,28 +13,13 @@ from distutils.util import convert_path
 from fnmatch import fnmatchcase
 from setuptools import setup, find_packages, Extension
 
-
-def find_packages(where='.', exclude=()):
-    out = []
-    stack = [(convert_path(where), '')]
-    while stack:
-        where, prefix = stack.pop(0)
-        for name in os.listdir(where):
-            fn = os.path.join(where, name)
-            if ('.' not in name and os.path.isdir(fn) and
-                os.path.isfile(os.path.join(fn, '__init__.py'))
-            ):
-                out.append(prefix+name)
-                stack.append((fn, prefix+name+'.'))
-    for pat in list(exclude) + ['ez_setup', 'distribute_setup']:
-        out = [item for item in out if not fnmatchcase(item, pat)]
-    return out
-
 resource_dir = os.path.join(os.path.dirname(__file__), 'deepy', 'resources')
+
+requirements = open(os.path.join(os.path.dirname(__file__), 'requirements.txt')).read().strip().split("\n")
 
 setup(
     name='deepy',
-    version='0.0.2',
+    version='0.0.3',
     description='Highly extensible deep learning framework based on Theano',
 
     author='Raphael Shu',
@@ -44,7 +29,8 @@ setup(
     download_url='http://pypi.python.org/pypi/deepy',
 
     keywords=' Deep learning '
-        ' Neural network ',
+        ' Neural network '
+        ' Natural language processing ',
 
     license='MIT',
     platforms='any',
@@ -65,14 +51,8 @@ setup(
         'Topic :: Text Processing :: Linguistic',
     ],
 
-    setup_requires = [
-        'numpy >= 1.3',
-        'theano >= 0.6.0',
-    ],
-    install_requires=[
-        'numpy >= 1.3',
-        'theano >= 0.6.0',
-    ],
+    setup_requires = requirements,
+    install_requires=requirements,
 
     extras_require={
     },
