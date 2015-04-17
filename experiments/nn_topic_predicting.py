@@ -2,7 +2,6 @@ import cPickle as pickle
 import logging
 
 from deepy import NetworkConfig, NeuralClassifier
-from deepy.networks import NeuralLayer
 import numpy as np
 
 logging.basicConfig(level=logging.INFO)

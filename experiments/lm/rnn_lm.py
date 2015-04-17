@@ -10,7 +10,7 @@ from experiments.lm.data_generator import RNNDataGenerator
 from deepy.util import resource
 from deepy import NetworkConfig, TrainerConfig
 from deepy.trainers import MomentumTrainer
-from deepy.layers.recurrent import RecurrentNetwork, RecurrentLayer
+from deepy.layers import RNN
 
 
 logging.basicConfig(level=logging.INFO)
@@ -53,7 +53,7 @@ valid_data = RNNDataGenerator(vocab, question_valid, target_vector=False, overla
                               history_len=9, _just_test=False, fixed_length=False, progress=False)
 
 net_conf = NetworkConfig(input_size=vocab.size)
-net_conf.layers = [RecurrentLayer(size=50, activation='sigmoid', bptt=True, bptt_steps=3)]
+net_conf.layers = [RNN(size=50, activation='sigmoid', bptt=True, bptt_steps=3)]
 
 trainer_conf = TrainerConfig()
 trainer_conf.learning_rate = 0.3

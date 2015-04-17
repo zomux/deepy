@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from deepy.util.weight_initializer import UniformInitializer
 from config import GeneralConfig
+
 import logging as loggers
 logging = loggers.getLogger(__name__)
 
@@ -11,6 +13,5 @@ class NetworkConfig(GeneralConfig):
     """
     def __init__(self):
         super(NetworkConfig, self).__init__(logger=logging)
-        object.__setattr__(self, "attrs", {
-            "layers": []
-        })
+        object.__setattr__(self, "attrs", dict())
+        default_initializer = UniformInitializer()
