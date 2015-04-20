@@ -26,6 +26,9 @@ class NeuralLM(NeuralNetwork):
         k2 = self.k.reshape((-1,))
         return 100 * T.mean(T.neq(T.argmax(y2[:k2.shape[0]], axis=1), k2))
 
+    def _perplexity_func(self, y):
+        return 2**self._cost_func(y)
+
     @property
     def cost(self):
         return self._cost_func(self.output)
@@ -40,4 +43,6 @@ class NeuralLM(NeuralNetwork):
     def prepare_training(self):
         self.training_monitors.append(("err", self._error_func(self.output)))
         self.testing_monitors.append(("err", self._error_func(self.test_output)))
+        self.training_monitors.append(("err", self._perplexity_func(self.output)))
+        self.testing_monitors.append(("err", self._perplexity_func(self.test_output)))
         super(NeuralLM, self).prepare_training()

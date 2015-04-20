@@ -56,6 +56,6 @@ if __name__ == '__main__':
     for x, _ in batch.train_set():
         print [len(b) for b in x]
 
-    trainer = MomentumTrainer(model)
+    trainer = SGDTrainer(model)
 
     trainer.run(batch)
