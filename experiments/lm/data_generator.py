@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import numpy as np
 import math
 from progressbar import ProgressBar
 import random
@@ -11,14 +10,14 @@ import logging as loggers
 
 logging = loggers.getLogger(__name__)
 
-class RNNDataGenerator(object):
+class LMDataGenerator(object):
 
 
     def __init__(self, vocab, data_path, history_len, batch_size = 1, overlap=False, progress=False, fixed_length=True,
                  target_vector=False, _just_test=False, shuffle=True, max_words=999, min_words=0):
         """
         Generate data for training with RNN
-        :type vocab: nlpy.lm.Vocab
+        :type vocab: Vocab
         :type data_path: str
         :param history_len: if this value is -1, then one trunk is a sentence
         :type history_len: int

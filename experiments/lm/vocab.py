@@ -13,10 +13,11 @@ logging = loggers.getLogger(__name__)
 
 class Vocab(object):
 
-    def __init__(self, is_lang=True):
+    def __init__(self, is_lang=True, char_based=False):
         self.vocab_map = {}
         self.reversed_map = None
         self.size = 0
+        self._char_based = char_based
         if is_lang:
             self.add(SENT_MARK)
             self.add(UNK_MARK)
@@ -39,13 +40,12 @@ class Vocab(object):
                 self.reversed_map[self.vocab_map[k]] = k
         return self.reversed_map[index]
 
-
-    def binvector(self, word):
+    def transform(self, word):
         v = np.zeros(self.size, dtype=int)
         v[self.index(word)] = 1
         return v
 
-    def binvector_of_index(self, index):
+    def transform_index(self, index):
         v = np.zeros(self.size, dtype=int)
         v[index] = 1
         return v
@@ -56,7 +56,7 @@ class Vocab(object):
         counter = Counter()
         for line in open(path).readlines():
             line = line.strip()
-            words = line.split(" ")
+            words = line.split(" ") if not self._char_based else line
             counter.update(words)
         for w, _ in counter.most_common(fixed_size):
             self.add(w)
@@ -68,7 +68,7 @@ class Vocab(object):
             return
         for line in open(path).xreadlines():
             line = line.strip()
-            words = line.split(" ")
+            words = line.split(" ") if not self._char_based else line
             map(self.add, words)
         logging.info("vocab size: %d" % self.size)
 
@@ -78,6 +78,6 @@ class Vocab(object):
 
     @property
     def sent_vector(self):
-        return self.binvector(SENT_MARK)
+        return self.transform(SENT_MARK)
 
 
