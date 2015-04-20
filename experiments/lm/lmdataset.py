@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
-import math
-from progressbar import ProgressBar
-import random
-
 import logging as loggers
 import numpy as np
 from deepy.dataset import Dataset

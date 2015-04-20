@@ -11,6 +11,7 @@ import theano.tensor as T
 from theano.ifelse import ifelse
 
 from deepy.conf import TrainerConfig
+from deepy.dataset import Dataset
 from deepy.trainers.optimize import optimize_updates
 from deepy.util import FLOATX, Timer
 
@@ -191,6 +192,12 @@ class NeuralTrainer(object):
         """
         Run until the end.
         """
+        if isinstance(train_set, Dataset):
+            dataset = train_set
+            train_set = dataset.train_set()
+            valid_set = dataset.valid_set()
+            test_set = dataset.test_set()
+
         timer = Timer()
         for _ in self.train(train_set, valid_set=valid_set, test_set=test_set):
             if controllers:

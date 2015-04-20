@@ -48,6 +48,7 @@ class RNN(NeuralLayer):
         new_h = self._hidden_activation_func(z)
         if "output" in self._output_type:
             o = self._activation_func(T.dot(new_h, self.W_o) + self.B_o)
+            o = self._softmax(o)
             return new_h, o
         else:
             return new_h
@@ -86,6 +87,7 @@ class RNN(NeuralLayer):
     def _setup_functions(self):
         self._activation_func = build_activation(self._output_activation)
         self._hidden_activation_func = build_activation(self._hidden_activation)
+        self._softmax = build_activation("softmax")
 
     def _setup_params(self):
         if not self._vector_core:

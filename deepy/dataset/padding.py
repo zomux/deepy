@@ -15,6 +15,15 @@ def pad_dataset(subset, side, length):
     new_set = []
     max_len = max([len(x) for x, _ in subset]) if length == -1 else length
     for x, y in subset:
+        if type(y) == list:
+            # Clip target vector
+            if len(y) > max_len:
+                y = y[:max_len]
+            elif len(y) < max_len:
+                if side == "left":
+                    y = [0 for _ in range(max_len - len(y))] + y
+                elif side == "right":
+                    y = y + [0 for _ in range(max_len - len(y))]
         if len(x) > max_len:
             x = x[:max_len]
         elif len(x) < max_len:

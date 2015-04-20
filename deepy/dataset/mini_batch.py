@@ -22,10 +22,16 @@ class MiniBatches(Dataset):
             yield x_set, y_set
 
     def train_set(self):
+        if not self.origin.train_set():
+            return None
         return list(self._yield_data(self.origin.train_set()))
 
     def test_set(self):
+        if not self.origin.test_set():
+            return None
         return list(self._yield_data(self.origin.test_set()))
 
     def valid_set(self):
+        if not self.origin.valid_set():
+            return None
         return list(self._yield_data(self.origin.valid_set()))
