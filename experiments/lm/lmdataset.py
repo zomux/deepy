@@ -11,7 +11,7 @@ logging = loggers.getLogger(__name__)
 class LMDataset(Dataset):
 
 
-    def __init__(self, vocab, train_path, valid_path, history_len=-1, char_based=False, max_words=999, min_words=0):
+    def __init__(self, vocab, train_path, valid_path, history_len=-1, char_based=False, max_tokens=999, min_tokens=0, sort=True):
         """
         Generate data for training with RNN
         :type vocab: vocab.Vocab
@@ -20,9 +20,10 @@ class LMDataset(Dataset):
         self.vocab = vocab
         self.history_len = history_len
         self.char_based = char_based
+        self.sort = sort
 
-        self.min_words = min_words
-        self.max_words = max_words
+        self.min_tokens = min_tokens
+        self.max_tokens = max_tokens
 
         self._train_set = self.read_data(train_path)
         self._valid_set = self.read_data(valid_path)
@@ -39,7 +40,7 @@ class LMDataset(Dataset):
         for line in open(path).xreadlines():
             line = line.strip()
             wc = len(line) if self.char_based else line.count(" ") + 1
-            if wc < self.min_words or wc > self.max_words:
+            if wc < self.min_tokens or wc > self.max_tokens:
                 continue
             sent_count += 1
 
@@ -58,6 +59,8 @@ class LMDataset(Dataset):
                     trunk = sequence[begin: begin + self.history_len + 1]
                     if len(trunk) > 1:
                         data.append(self.convert_to_data(trunk))
+        if self.sort:
+            data.sort(key=lambda x: len(x[1]))
         logging.info("loaded from %s: %d sentences, %d data pieces " % (path, sent_count, len(data)))
         return data
 

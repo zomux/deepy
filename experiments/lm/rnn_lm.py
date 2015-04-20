@@ -1,4 +1,3 @@
-import time
 import os
 import sys
 import logging
@@ -51,9 +50,12 @@ model.stack_layers(RNN(hidden_size=30, output_size=vocab.size, output_type="all_
 
 
 if __name__ == '__main__':
-    lmdata = LMDataset(vocab, train_small_path, valid_path, history_len=-1, char_based=True)
+    lmdata = LMDataset(vocab, train_small_path, valid_path, history_len=-1, char_based=True, max_tokens=300)
     batch = SequentialMiniBatches(lmdata, batch_size=20)
 
-    trainer = SGDTrainer(model)
+    for x, _ in batch.train_set():
+        print [len(b) for b in x]
+
+    trainer = MomentumTrainer(model)
 
     trainer.run(batch)
