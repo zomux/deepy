@@ -3,7 +3,6 @@
 
 
 from . import Dataset
-from deepy.util import FLOATX
 import numpy as np
 
 class MiniBatches(Dataset):

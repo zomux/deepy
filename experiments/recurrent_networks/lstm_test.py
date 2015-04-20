@@ -6,7 +6,7 @@ import logging
 import numpy as np
 
 from experiments.lm import Vocab
-from experiments.lm.data_generator import LMDataGenerator
+from experiments.lm.data_generator import LMDataset
 from deepy import NetworkConfig, TrainerConfig
 from deepy.layers.lstm import RecurrentNetwork, LSTMLayer
 from deepy.trainers import SGDTrainer
@@ -58,11 +58,11 @@ valid_path = resource("ptb_lm_test/ptb.valid.txt")
 vocab = Vocab()
 vocab.load(train_path)
 
-train_data = LMDataGenerator(vocab, train_100_path, target_vector=False, overlap=False,
-                              history_len=9, _just_test=False, fixed_length=False, progress=True,
+train_data = LMDataset(vocab, train_100_path, target_vector=False, overlap=False,
+                              history_len=9, _just_test=False, fixed_length=False, show_progress=True,
                               min_words=int(args.min), max_words=int(args.max))
-valid_data = LMDataGenerator(vocab, valid_path, target_vector=False, overlap=False,
-                              history_len=9, _just_test=False, fixed_length=False, progress=False)
+valid_data = LMDataset(vocab, valid_path, target_vector=False, overlap=False,
+                              history_len=9, _just_test=False, fixed_length=False, show_progress=False)
 
 net_conf = NetworkConfig(input_size=vocab.size)
 net_conf.layers = [LSTMLayer(size=15)]

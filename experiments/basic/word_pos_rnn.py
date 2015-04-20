@@ -5,7 +5,7 @@ import logging, os, random
 import numpy as np
 logging.basicConfig(level=logging.INFO)
 
-from deepy.dataset import SequenceDataset, MiniBatches
+from deepy.dataset import SequentialDataset, MiniBatches
 from deepy.networks import NeuralClassifier
 from deepy.layers import RNN, Dense, Softmax
 from deepy.trainers import SGDTrainer, LearningRateAnnealer
@@ -40,7 +40,7 @@ valid_size = int(len(data) * 0.15)
 train_set = data[valid_size:]
 valid_set = data[:valid_size]
 
-dataset = SequenceDataset(train_set, valid=valid_set)
+dataset = SequentialDataset(train_set, valid=valid_set)
 dataset.pad_left(20)
 dataset.report()
 

@@ -6,7 +6,8 @@ import logging
 import numpy as np
 
 from vocab import Vocab
-from data_generator import LMDataGenerator
+from lmdataset import LMDataset
+from deepy.dataset import SequentialMiniBatches
 from deepy.conf import TrainerConfig
 from deepy.trainers import MomentumTrainer
 from deepy.layers import RNN
@@ -46,13 +47,12 @@ vocab = Vocab(char_based=True)
 vocab.load(train_path, fixed_size=1000)
 
 
+lmdata = LMDataset(vocab, train_small_path, valid_path, history_len=-1, char_based=True)
+batch = SequentialMiniBatches(lmdata, batch_size=5)
+print lmdata.valid_set()[0][0].argmax(axis=1)
+print batch.valid_set()[0][0].argmax(axis=1)
+import pdb;pdb.set_trace()
 
-#
-train_data = LMDataGenerator(vocab, train_small_path, target_vector=False, overlap=False,
-                              history_len=9, _just_test=False, fixed_length=False, progress=True)
-# valid_data = LMDataGenerator(vocab, question_valid, target_vector=False, overlap=False,
-#                               history_len=9, _just_test=False, fixed_length=False, progress=False)
-#
 # trainer_conf = TrainerConfig()
 # trainer_conf.learning_rate = 0.3
 # trainer_conf.weight_l2 = 0.0001

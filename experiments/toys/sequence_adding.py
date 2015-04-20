@@ -16,7 +16,7 @@ import logging, os
 import numpy as np
 logging.basicConfig(level=logging.INFO)
 from deepy.conf import TrainerConfig
-from deepy.dataset import SequenceDataset, MiniBatches
+from deepy.dataset import SequentialDataset, MiniBatches
 from deepy.networks import NeuralRegressor
 from deepy.layers import RNN, IRNN
 from deepy.trainers import SGDTrainer, LearningRateAnnealer
@@ -45,7 +45,7 @@ valid_size = int(1000)
 train_set = data[valid_size:]
 valid_set = data[:valid_size]
 
-dataset = SequenceDataset(train_set, valid=valid_set)
+dataset = SequentialDataset(train_set, valid=valid_set)
 dataset.report()
 
 batch_set = MiniBatches(dataset, batch_size=32)
