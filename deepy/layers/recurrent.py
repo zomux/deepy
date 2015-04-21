@@ -16,13 +16,14 @@ class RNN(NeuralLayer):
     """
 
     def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden", vector_core=None,
-                 hidden_activation="tanh", hidden_initializer=None, initializer=None, steps=None):
+                 hidden_activation="tanh", output_activation="softmax", hidden_initializer=None, initializer=None, steps=None):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
         self._output_size = output_size
         self._input_type = input_type
         self._output_type = output_type
         self._hidden_activation = hidden_activation
+        self._output_activation = output_activation
         self._hidden_initializer = hidden_initializer
         self._vector_core = vector_core
         self._initializer = initializer
@@ -47,7 +48,7 @@ class RNN(NeuralLayer):
         new_h = self._hidden_activation_func(z)
         if "output" in self._output_type:
             o = T.dot(new_h, self.W_o) + self.B_o
-            o = self._softmax(o)
+            o = self._output_activation_func(o) # Normally softmax
             return new_h, o
         else:
             return new_h
@@ -85,7 +86,7 @@ class RNN(NeuralLayer):
 
     def _setup_functions(self):
         self._hidden_activation_func = build_activation(self._hidden_activation)
-        self._softmax = build_activation("softmax")
+        self._output_activation_func = build_activation(self._output_activation_func)
 
     def _setup_params(self):
         if not self._vector_core:

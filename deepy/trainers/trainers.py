@@ -167,8 +167,8 @@ class NeuralTrainer(object):
                 cost_matrix = []
                 for x in train_set:
                     cost_x = self.learning_func(*x)
-                    if np.isnan(cost_x[0]):
-                        import pdb;pdb.set_trace()
+                    # if np.isnan(cost_x[0]):
+                    #     import pdb;pdb.set_trace()
                     cost_matrix.append(cost_x)
                     if training_callback:
                         self.network.training_callback()

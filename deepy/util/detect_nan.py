@@ -13,3 +13,5 @@ def detect_nan(i, node, fn):
             print 'Inputs : %s' % [input[0] for input in fn.inputs]
             print 'Outputs: %s' % [output[0] for output in fn.outputs]
             import pdb;pdb.set_trace()
+
+DETECT_NAN_MODE = theano.compile.MonitorMode(post_func=detect_nan)
