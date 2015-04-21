@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import logging as loggers
-import gzip
+import gzip, sys
 import cPickle as pickle
 
 import numpy as np
@@ -138,7 +138,7 @@ class NeuralTrainer(object):
         pickle.dump(self.best_params, handle)
         handle.close()
 
-    def train(self, train_set, valid_set=None, test_set=None):
+    def train(self, train_set, valid_set=None, test_set=None, train_size=None):
         """
         Train the model and return costs.
         """
@@ -165,6 +165,7 @@ class NeuralTrainer(object):
             training_callback = bool(self.network.training_callbacks)
             try:
                 cost_matrix = []
+                c = 0
                 for x in train_set:
                     cost_x = self.learning_func(*x)
                     # if np.isnan(cost_x[0]):
@@ -172,6 +173,13 @@ class NeuralTrainer(object):
                     cost_matrix.append(cost_x)
                     if training_callback:
                         self.network.training_callback()
+                    if train_size:
+                        c += 1
+                        sys.stdout.write("\r> %d%%" % (c * 100 / train_size))
+                        sys.stdout.flush()
+                if train_size:
+                    sys.stdout.write("\r")
+                    sys.stdout.flush()
                 costs = list(zip(self.training_names, np.mean(cost_matrix, axis=0)))
             except KeyboardInterrupt:
                 logging.info('interrupted!')
@@ -190,7 +198,7 @@ class NeuralTrainer(object):
         if test_set:
             self.test(0, test_set)
 
-    def run(self, train_set, valid_set=None, test_set=None, controllers=None):
+    def run(self, train_set, valid_set=None, test_set=None, train_size=None, controllers=None):
         """
         Run until the end.
         """
@@ -199,9 +207,10 @@ class NeuralTrainer(object):
             train_set = dataset.train_set()
             valid_set = dataset.valid_set()
             test_set = dataset.test_set()
+            train_size = dataset.train_size()
 
         timer = Timer()
-        for _ in self.train(train_set, valid_set=valid_set, test_set=test_set):
+        for _ in self.train(train_set, valid_set=valid_set, test_set=test_set, train_size=train_size):
             if controllers:
                 ending = False
                 for controller in controllers:

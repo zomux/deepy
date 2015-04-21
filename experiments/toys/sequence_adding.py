@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
     annealer = LearningRateAnnealer(trainer, patience=20)
 
-    trainer.run(batch_set.train_set(), batch_set.valid_set(), controllers=[annealer])
+    trainer.run(batch_set, controllers=[annealer])
 
     model.save_params(args.model)
     print "Identity matrix weight:"

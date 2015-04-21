@@ -20,3 +20,9 @@ class Dataset(object):
         """
         :rtype: list of tuple
         """
+
+    def train_size(self):
+        """
+        Return size of training data. (optional)
+        :rtype: number
+        """

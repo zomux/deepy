@@ -35,3 +35,6 @@ class MiniBatches(Dataset):
         if not self.origin.valid_set():
             return None
         return list(self._yield_data(self.origin.valid_set()))
+
+    def train_size(self):
+        return len(self.origin.train_set()) / self.size
