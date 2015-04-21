@@ -15,6 +15,7 @@ with 1 in the second unit.
 import logging, os
 import numpy as np
 logging.basicConfig(level=logging.INFO)
+from argparse import ArgumentParser
 from deepy.conf import TrainerConfig
 from deepy.dataset import SequentialDataset, MiniBatches
 from deepy.networks import NeuralRegressor
@@ -52,13 +53,16 @@ batch_set = MiniBatches(dataset, batch_size=32)
 
 if __name__ == '__main__':
 
-    model_file = os.path.join(os.path.dirname(__file__), "models", "sequence_adding_100_2.gz")
+    ap = ArgumentParser()
+    ap.add_argument("model", default=os.path.join(os.path.dirname(__file__), "models", "sequence_adding_100_2.gz"))
+    args = ap.parse_args()
 
     model = NeuralRegressor(input_dim=2, input_tensor=3)
     model.stack(IRNN(hidden_size=100, output_size=1,
                     input_type="sequence", output_type="last_output"))
-    if os.path.exists(model_file):
-        model.load_params(model_file)
+
+    if os.path.exists(args.model):
+        model.load_params(args.model)
 
     conf = TrainerConfig()
     conf.learning_rate = LearningRateAnnealer.learning_rate(0.01)
@@ -70,6 +74,6 @@ if __name__ == '__main__':
 
     trainer.run(batch_set.train_set(), batch_set.valid_set(), controllers=[annealer])
 
-    model.save_params(model_file)
+    model.save_params(args.model)
     print "Identity matrix weight:"
     print model.first_layer().W_h.get_value().diagonal()
