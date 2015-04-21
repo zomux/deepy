@@ -9,7 +9,7 @@ import re
 import copy
 
 FLOATX = theano.config.floatX
-EPSILON = T.constant(0.00001, dtype=FLOATX)
+EPSILON = T.constant(1.0e-15, dtype=FLOATX)
 
 global_rand = np.random.RandomState(seed=3)
 

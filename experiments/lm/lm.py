@@ -17,9 +17,10 @@ class NeuralLM(NeuralNetwork):
         self.target_variables.append(self.k)
 
     def _cost_func(self, y):
+        y = T.clip(y, EPSILON, 1.0 - EPSILON)
         y2 = y.reshape((-1, y.shape[-1]))
         k2 = self.k.reshape((-1,))
-        return -T.mean(T.log(y2 + EPSILON)[T.arange(k2.shape[0]), k2])
+        return -T.mean(T.log(y2)[T.arange(k2.shape[0]), k2])
 
     def _error_func(self, y):
         y2 = y.reshape((-1, y.shape[-1]))

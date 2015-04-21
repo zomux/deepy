@@ -21,7 +21,8 @@ class NeuralClassifier(NeuralNetwork):
         self.target_variables.append(self.k)
 
     def _cost_func(self, y):
-        return -T.mean(T.log(y + EPSILON)[T.arange(self.k.shape[0]), self.k])
+        y = T.clip(y, EPSILON, 1.0 - EPSILON)
+        return -T.mean(T.log(y)[T.arange(self.k.shape[0]), self.k])
 
     def _error_func(self, y):
         return 100 * T.mean(T.neq(T.argmax(y, axis=1), self.k))
