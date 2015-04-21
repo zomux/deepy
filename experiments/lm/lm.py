@@ -43,6 +43,6 @@ class NeuralLM(NeuralNetwork):
     def prepare_training(self):
         self.training_monitors.append(("err", self._error_func(self.output)))
         self.testing_monitors.append(("err", self._error_func(self.test_output)))
-        self.training_monitors.append(("err", self._perplexity_func(self.output)))
-        self.testing_monitors.append(("err", self._perplexity_func(self.test_output)))
+        self.training_monitors.append(("PPL", self._perplexity_func(self.output)))
+        self.testing_monitors.append(("PPL", self._perplexity_func(self.test_output)))
         super(NeuralLM, self).prepare_training()

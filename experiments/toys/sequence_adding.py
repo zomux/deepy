@@ -56,8 +56,7 @@ if __name__ == '__main__':
 
     model = NeuralRegressor(input_dim=2, input_tensor=3)
     model.stack(IRNN(hidden_size=100, output_size=1,
-                    input_type="sequence", output_type="last_output",
-                    output_activation="linear"))
+                    input_type="sequence", output_type="last_output"))
     if os.path.exists(model_file):
         model.load_params(model_file)
 

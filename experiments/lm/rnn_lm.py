@@ -8,33 +8,11 @@ from vocab import Vocab
 from lmdataset import LMDataset
 from lm import NeuralLM
 from deepy.dataset import SequentialMiniBatches
-from deepy.trainers import MomentumTrainer, SGDTrainer
-from deepy.layers import RNN
+from deepy.trainers import MomentumTrainer, SGDTrainer, LearningRateAnnealer
+from deepy.layers import RNN, IRNN
 
 
 logging.basicConfig(level=logging.INFO)
-
-####
-
-def entropy(network, data):
-    logp_sum = 0.0
-    wc = 0
-    for d in data:
-        xs, ys = d
-        preds = network.get_probs(xs, ys)
-        logps = np.log2(preds)
-        logp_sum += sum(logps)
-        wc += len(logps)
-        if ys[-1] == 0:
-            network.clear_hidden()
-        # sys.stdout.write("~PPL: %f\r" %  2 ** (- logp_sum / wc))
-        sys.stdout.write("~ENTROPY: %f\r" %  (- logp_sum / wc))
-    sys.stdout.write("")
-    ent = - logp_sum / wc
-    return ent
-
-
-#######
 
 model_path = "/tmp/rnn_lm_params12.gz"
 resource_dir = os.path.abspath(os.path.dirname(__file__)) + os.sep + "resources"
@@ -46,16 +24,15 @@ vocab = Vocab(char_based=True)
 vocab.load(train_path, fixed_size=1000)
 
 model = NeuralLM(input_dim=vocab.size, input_tensor=3)
-model.stack_layers(RNN(hidden_size=30, output_size=vocab.size, output_type="all_output"))
+model.stack_layers(
+    IRNN(hidden_size=30, output_size=vocab.size, output_type="all_output"))
 
 
 if __name__ == '__main__':
     lmdata = LMDataset(vocab, train_small_path, valid_path, history_len=-1, char_based=True, max_tokens=300)
     batch = SequentialMiniBatches(lmdata, batch_size=20)
 
-    for x, _ in batch.train_set():
-        print [len(b) for b in x]
-
     trainer = SGDTrainer(model)
+    annealer = LearningRateAnnealer(trainer)
 
-    trainer.run(batch)
+    trainer.run(batch, controllers=[annealer])
