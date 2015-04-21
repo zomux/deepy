@@ -29,10 +29,15 @@ model.stack_layers(
 if __name__ == '__main__':
     ap = ArgumentParser()
     ap.add_argument("--model", default=os.path.join(os.path.dirname(__file__), "models", "char_irnn_model1.gz"))
+    ap.add_argument("--sample", default="")
     args = ap.parse_args()
 
     if os.path.exists(args.model):
         model.load_params(args.model)
+        if args.sample:
+            targets = model.sample([vocab.sent_index] + map(vocab.index, args.sample), 50)
+            print "".join(map(vocab.word, targets))
+            raise SystemExit
 
     lmdata = LMDataset(vocab, train_small_path, valid_path, history_len=-1, char_based=True, max_tokens=300)
     batch = SequentialMiniBatches(lmdata, batch_size=20)

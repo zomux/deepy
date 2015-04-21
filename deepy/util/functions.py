@@ -13,6 +13,8 @@ EPSILON = T.constant(1.0e-15, dtype=FLOATX)
 
 global_rand = np.random.RandomState(seed=3)
 
+def onehot(size, eye):
+    return np.eye(1, size, eye, dtype=FLOATX)[0]
 
 def make_float_matrices(*names):
     ret = []

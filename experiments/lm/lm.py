@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from deepy.networks import NeuralNetwork
-from deepy.util import FLOATX, dim_to_var, EPSILON
+from deepy.util import onehot, EPSILON
 import theano.tensor as T
 
 class NeuralLM(NeuralNetwork):
@@ -40,6 +40,18 @@ class NeuralLM(NeuralNetwork):
 
     def predict(self, x):
         return self.compute(x).argmax(axis=1)
+
+    def sample(self, input, steps):
+        """
+        Sample outputs from LM.
+        """
+        inputs = [[onehot(self.input_dim, x) for x in input]]
+        for _ in range(steps):
+            target = self.compute(inputs)[0,-1].argmax()
+            input.append(target)
+            inputs[0].append(onehot(self.input_dim, target))
+        return input
+
 
     def prepare_training(self):
         self.training_monitors.append(("err", self._error_func(self.output)))
