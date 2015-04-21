@@ -8,12 +8,11 @@ import cPickle as pickle
 import numpy as np
 import theano
 import theano.tensor as T
-from theano.ifelse import ifelse
 
 from deepy.conf import TrainerConfig
 from deepy.dataset import Dataset
 from deepy.trainers.optimize import optimize_updates
-from deepy.util import FLOATX, Timer
+from deepy.util import Timer
 
 
 logging = loggers.getLogger(__name__)
@@ -167,7 +166,10 @@ class NeuralTrainer(object):
             try:
                 cost_matrix = []
                 for x in train_set:
-                    cost_matrix.append(self.learning_func(*x))
+                    cost_x = self.learning_func(*x)
+                    if np.isnan(cost_x[0]):
+                        import pdb;pdb.set_trace()
+                    cost_matrix.append(cost_x)
                     if training_callback:
                         self.network.training_callback()
                 costs = list(zip(self.training_names, np.mean(cost_matrix, axis=0)))
@@ -235,7 +237,8 @@ class GeneralNeuralTrainer(NeuralTrainer):
         self.learning_func = theano.function(
             network.input_variables + network.target_variables,
             self.training_variables,
-            updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
+            updates=update_list, allow_input_downcast=True,
+            mode=config.get("theano_mode", theano.Mode(linker=THEANO_LINKER)))
 
     def learning_updates(self):
         """
@@ -244,51 +247,6 @@ class GeneralNeuralTrainer(NeuralTrainer):
         params = self.network.parameters
         gradients = [T.grad(self.cost, param) for param in params]
         return optimize_updates(params, gradients, self.config)
-
-class BatchPureSGDTrainer(NeuralTrainer):
-    """
-    Batch SGD Trainer
-    """
-
-    def __init__(self, network, config=None, batch_size=20):
-        """
-        Create a SGD trainer.
-        :type network:
-        :type config: deepy.conf.TrainerConfig
-        :return:
-        """
-        super(BatchPureSGDTrainer, self).__init__(network, config)
-
-        self.learning_rate = self.config.learning_rate
-        self.batch_size = batch_size
-
-        logging.info('compiling %s learning function', self.__class__.__name__)
-
-        network_updates = list(network.updates) + list(network.learning_updates)
-        learning_updates = list(self.learning_updates())
-        update_list = network_updates + learning_updates
-        logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
-        logging.info("learning updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
-
-        self.learning_func = theano.function(
-            network.inputs,
-            self.training_variables,
-            updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
-
-
-    def learning_updates(self):
-        batch_counter = theano.shared(np.array(0, dtype="int32"), "batch_counter")
-        batch_size = self.batch_size
-        to_update = batch_counter >= batch_size
-
-        for param in self.network.parameters:
-            # delta = self.learning_rate * T.grad(self.J, param)
-            gsum = theano.shared(np.zeros(param.get_value().shape, dtype=FLOATX), "batch_gsum_%s" % param.name)
-            yield gsum, ifelse(to_update, T.zeros_like(gsum), gsum + T.grad(self.cost, param))
-            delta = self.learning_rate * gsum / batch_size
-            yield param, ifelse(to_update, param - delta, param)
-
-        yield batch_counter, ifelse(to_update, T.constant(0, dtype="int32"), batch_counter + 1)
 
 
 class SGDTrainer(GeneralNeuralTrainer):

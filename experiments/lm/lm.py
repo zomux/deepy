@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from deepy.networks import NeuralNetwork
-from deepy.util import FLOATX, dim_to_var
+from deepy.util import FLOATX, dim_to_var, EPSILON
 import theano.tensor as T
 
 class NeuralLM(NeuralNetwork):
@@ -19,7 +19,7 @@ class NeuralLM(NeuralNetwork):
     def _cost_func(self, y):
         y2 = y.reshape((-1, y.shape[-1]))
         k2 = self.k.reshape((-1,))
-        return -T.mean(T.log(y2)[T.arange(k2.shape[0]), k2])
+        return -T.mean(T.log(y2 + EPSILON)[T.arange(k2.shape[0]), k2])
 
     def _error_func(self, y):
         y2 = y.reshape((-1, y.shape[-1]))

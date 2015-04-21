@@ -13,11 +13,9 @@ class IRNN(RNN):
     RNN with weight initialization using identity matrix.
     """
 
-    def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden",
-                 output_activation="linear", weight_scale=0.9, steps=None):
+    def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden", weight_scale=0.9, steps=None):
         super(IRNN, self).__init__(hidden_size, output_size=output_size,
                                    input_type=input_type, output_type=output_type,
-                                   output_activation=output_activation,
                                    hidden_activation="relu",
                                    hidden_initializer=IdentityInitializer(scale=weight_scale),
                                    initializer=GaussianInitializer(deviation=0.001))

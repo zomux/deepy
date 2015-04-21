@@ -3,7 +3,7 @@
 
 
 from network import NeuralNetwork
-from deepy.util import FLOATX, dim_to_var
+from deepy.util import FLOATX, EPSILON
 import theano.tensor as T
 
 class NeuralClassifier(NeuralNetwork):
@@ -21,7 +21,7 @@ class NeuralClassifier(NeuralNetwork):
         self.target_variables.append(self.k)
 
     def _cost_func(self, y):
-        return -T.mean(T.log(y)[T.arange(self.k.shape[0]), self.k])
+        return -T.mean(T.log(y + EPSILON)[T.arange(self.k.shape[0]), self.k])
 
     def _error_func(self, y):
         return 100 * T.mean(T.neq(T.argmax(y, axis=1), self.k))
