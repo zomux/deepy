@@ -27,7 +27,7 @@ SEQUENCE_LEN = 100
 rand = np.random.RandomState(3)
 
 data = []
-for _ in range(10000):
+for _ in range(50000):
     sequence = []
     sum = 0.0
     selected_items = rand.choice(range(SEQUENCE_LEN), 2)
@@ -57,8 +57,9 @@ if __name__ == '__main__':
     ap.add_argument("model", default=os.path.join(os.path.dirname(__file__), "models", "sequence_adding_100_2.gz"))
     args = ap.parse_args()
 
-    model = NeuralRegressor(input_dim=2, input_tensor=3)
-    model.stack(IRNN(hidden_size=100, input_type="sequence", output_type="last_hidden", output_activation="linear"))
+    model = NeuralRegressor(input_dim=2, input_tensor=3, clip_value=3.)
+    model.stack(IRNN(hidden_size=100, output_size=1, input_type="sequence",
+                     output_type="last_output", output_activation="linear"))
 
     if os.path.exists(args.model):
         model.load_params(args.model)

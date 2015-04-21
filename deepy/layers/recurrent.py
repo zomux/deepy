@@ -86,7 +86,7 @@ class RNN(NeuralLayer):
 
     def _setup_functions(self):
         self._hidden_activation_func = build_activation(self._hidden_activation)
-        self._output_activation_func = build_activation(self._output_activation_func)
+        self._output_activation_func = build_activation(self._output_activation)
 
     def _setup_params(self):
         if not self._vector_core:

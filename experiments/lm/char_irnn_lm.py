@@ -28,7 +28,7 @@ model.stack_layers(
 
 if __name__ == '__main__':
     ap = ArgumentParser()
-    ap.add_argument("model", default=os.path.join(os.path.dirname(__file__), "models", "char_irnn_model1.gz"))
+    ap.add_argument("--model", default=os.path.join(os.path.dirname(__file__), "models", "char_irnn_model1.gz"))
     args = ap.parse_args()
 
     if os.path.exists(args.model):

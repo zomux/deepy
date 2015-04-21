@@ -10,7 +10,7 @@ class NeuralRegressor(NeuralNetwork):
     """
     Regression network.
     """
-    def __init__(self, input_dim, config=None, input_tensor=None, target_tensor=2, clip_value=3.):
+    def __init__(self, input_dim, config=None, input_tensor=None, target_tensor=2, clip_value=None):
         self.target_tensor = dim_to_var(target_tensor, "k") if type(target_tensor) == int else target_tensor
         self.clip_value = clip_value
         super(NeuralRegressor, self).__init__(input_dim, config=config, input_tensor=input_tensor)
@@ -21,7 +21,8 @@ class NeuralRegressor(NeuralNetwork):
         self.target_variables.append(self.k)
 
     def _cost_func(self, y):
-        y = T.clip(y, -self.clip_value, self.clip_value)
+        if self.clip_value:
+            y = T.clip(y, -self.clip_value, self.clip_value)
         err = y - self.k
         return T.mean((err * err).sum(axis=1))
 
