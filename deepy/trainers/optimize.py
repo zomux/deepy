@@ -25,7 +25,6 @@ def optimize_updates(params, gradients, config=None, shapes=None):
         Theano updates
     :type config: deepy.TrainerConfig
     """
-    original_gradients = gradients
     # Clipping
     if config:
         clip_value = config.get("max_norm", 5.0)
@@ -36,7 +35,7 @@ def optimize_updates(params, gradients, config=None, shapes=None):
             clipped_gradients = []
             for g in gradients:
                 grad_norm = g.norm(L=1) if clip == "l1" else g.norm(L=2)
-                g = (T.minimum(clip_constant, grad_norm)/ grad_norm) * g
+                g = ((T.minimum(clip_constant, grad_norm) + EPSILON )/ (grad_norm + EPSILON)) * g
                 clipped_gradients.append(g)
             gradients = clipped_gradients
     # Regularization
@@ -51,8 +50,8 @@ def optimize_updates(params, gradients, config=None, shapes=None):
     if config.avoid_nan:
         logging.info("avoid NaN gradients")
         new_gradients = []
-        for grad, original_grad in zip(gradients, original_gradients):
-            new_grad = ifelse(T.isnan(original_grad).any(), T.zeros_like(original_grad) + EPSILON, grad)
+        for grad in gradients:
+            new_grad = ifelse(T.isnan(grad).any(), T.zeros_like(grad) + EPSILON, grad)
             new_gradients.append(new_grad)
         gradients = new_gradients
 
