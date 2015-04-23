@@ -6,7 +6,7 @@ from vocab import Vocab
 from lmdataset import LMDataset
 from lm import NeuralLM
 from deepy.dataset import SequentialMiniBatches
-from deepy.trainers import MomentumTrainer, SGDTrainer, LearningRateAnnealer
+from deepy.trainers import SGDTrainer, LearningRateAnnealer
 from deepy.layers import RNN, IRNN
 
 
@@ -22,13 +22,13 @@ vocab.load(vocab_path, fixed_size=1000)
 
 model = NeuralLM(input_dim=vocab.size, input_tensor=3)
 model.stack_layers(
-    IRNN(hidden_size=100, output_size=vocab.size, output_type="all_hidden"),
-    IRNN(hidden_size=100, output_size=vocab.size, output_type="all_output"))
+    RNN(hidden_size=100, output_size=vocab.size, output_type="all_hidden"),
+    RNN(hidden_size=100, output_size=vocab.size, output_type="all_output"))
 
 
 if __name__ == '__main__':
     ap = ArgumentParser()
-    ap.add_argument("--model", default=os.path.join(os.path.dirname(__file__), "models", "char_irnn_model1.gz"))
+    ap.add_argument("--model", default=os.path.join(os.path.dirname(__file__), "models", "char_rnn_model1.gz"))
     ap.add_argument("--sample", default="")
     args = ap.parse_args()
 
