@@ -35,6 +35,8 @@ def optimize_updates(params, gradients, config=None, shapes=None):
             clipped_gradients = []
             for g in gradients:
                 grad_norm = g.norm(L=1) if clip == "l1" else g.norm(L=2)
+                if config.gradient_tolerance:
+                    g = ifelse(grad_norm > config.gradient_tolerance, T.zeros_like(g) + EPSILON, g)
                 g = ((T.minimum(clip_constant, grad_norm) + EPSILON )/ (grad_norm + EPSILON)) * g
                 clipped_gradients.append(g)
             gradients = clipped_gradients
