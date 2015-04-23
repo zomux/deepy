@@ -66,9 +66,9 @@ if __name__ == '__main__':
 
     conf = TrainerConfig()
     conf.learning_rate = LearningRateAnnealer.learning_rate(0.01)
-    conf.max_norm = 10
+    conf.max_norm = 1
     conf.patience = 50
-    conf.gradient_tolerance = 10
+    conf.gradient_tolerance = 5
     trainer = SGDTrainer(model, conf)
 
     annealer = LearningRateAnnealer(trainer, patience=20)

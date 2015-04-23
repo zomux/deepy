@@ -42,14 +42,7 @@ if __name__ == '__main__':
     lmdata = LMDataset(vocab, train_path, valid_path, history_len=-1, char_based=True, max_tokens=300)
     batch = SequentialMiniBatches(lmdata, batch_size=20)
 
-
-    from deepy.conf import TrainerConfig
-    from deepy.util import DETECT_NAN_MODE
-    conf = TrainerConfig()
-    conf.theano_mode = DETECT_NAN_MODE
-
-
-    trainer = SGDTrainer(model, conf)
+    trainer = SGDTrainer(model)
     annealer = LearningRateAnnealer(trainer)
 
     trainer.run(batch, controllers=[annealer])
