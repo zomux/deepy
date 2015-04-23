@@ -27,6 +27,7 @@ class TrainerConfig(GeneralConfig):
             # Optimization
             "method": "ADADELTA",
             "weight_bound": None,
+            "avoid_nan": True,
 
             # Regularization
             "update_l1": 0,

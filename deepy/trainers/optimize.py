@@ -6,8 +6,9 @@ import logging as loggers
 
 import theano
 import theano.tensor as T
+from theano.ifelse import ifelse
 
-from deepy.util import FLOATX, dim_to_var
+from deepy.util import FLOATX, dim_to_var, EPSILON
 from deepy.trainers.util import wrap_core
 
 
@@ -24,6 +25,7 @@ def optimize_updates(params, gradients, config=None, shapes=None):
         Theano updates
     :type config: deepy.TrainerConfig
     """
+    original_gradients = gradients
     # Clipping
     if config:
         clip_value = config.get("max_norm", 5.0)
@@ -44,6 +46,15 @@ def optimize_updates(params, gradients, config=None, shapes=None):
             grad = grad + (2 * config.weight_l2 * param)
             regularized_gradients.append(grad)
         gradients = regularized_gradients
+
+    # Avoid nan
+    if config.avoid_nan:
+        logging.info("avoid NaN gradients")
+        new_gradients = []
+        for grad, original_grad in zip(gradients, original_gradients):
+            new_grad = ifelse(T.isnan(original_grad).any(), T.zeros_like(original_grad) + EPSILON, grad)
+            new_gradients.append(new_grad)
+        gradients = new_gradients
 
 
     # Find method

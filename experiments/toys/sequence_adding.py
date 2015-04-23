@@ -54,7 +54,7 @@ batch_set = MiniBatches(dataset, batch_size=32)
 if __name__ == '__main__':
 
     ap = ArgumentParser()
-    ap.add_argument("model", default=os.path.join(os.path.dirname(__file__), "models", "sequence_adding_100_2.gz"))
+    ap.add_argument("--model", default=os.path.join(os.path.dirname(__file__), "models", "sequence_adding_100_2.gz"))
     args = ap.parse_args()
 
     model = NeuralRegressor(input_dim=2, input_tensor=3, clip_value=3.)
