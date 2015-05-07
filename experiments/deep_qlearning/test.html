@@ -1,0 +1,436 @@
+
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>DQN test</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <!-- jquery and jqueryui -->
+  <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+  <!-- bootstrap -->
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- d3js -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+  <!-- markdown -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+  <script type="text/javascript" src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <!-- mathjax: nvm now loaded dynamically
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  -->
+
+  <!-- rljs -->
+  <script type="text/javascript" src="lib/rl.js"></script>
+
+  <!-- flotjs -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
+
+
+  <style>
+  #wrap {
+    width:800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h2 {
+    text-align: center;
+  }
+  body {
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  }
+  #draw {
+    margin-left: 100px;
+  }
+  svg {
+    border: 1px solid black;
+  }
+  </style>
+  
+  <script type="application/javascript">
+    
+    var W = 600, H = 600;
+    var d3line = null;
+    var d3agent = null;
+    var d3target = null;
+    var d3target2 = null;
+    var d3target2_radius = null;
+    var initDraw = function() {
+      var d3elt = d3.select('#draw');
+      d3elt.html('');
+
+      var w = 600;
+      var h = 600;
+      svg = d3elt.append('svg').attr('width', w).attr('height', h)
+        .append('g').attr('transform', 'scale(1)');
+
+      // define a marker for drawing arrowheads
+      svg.append("defs").append("marker")
+        .attr("id", "arrowhead")
+        .attr("refX", 3)
+        .attr("refY", 2)
+        .attr("markerWidth", 3)
+        .attr("markerHeight", 4)
+        .attr("orient", "auto")
+        .append("path")
+          .attr("d", "M 0,0 V 4 L3,2 Z");
+
+      // draw the puck
+      d3agent = svg.append('circle')
+        .attr('cx', 100)
+        .attr('cy', 100)
+        .attr('r', env.rad * this.W)
+        .attr('fill', '#FF0')
+        .attr('stroke', '#000')
+        .attr('id', 'puck');
+
+      // draw the target
+      d3target = svg.append('circle')
+        .attr('cx', 200)
+        .attr('cy', 200)
+        .attr('r', 10)
+        .attr('fill', '#0F0')
+        .attr('stroke', '#000')
+        .attr('id', 'target');
+
+      // bad target
+      d3target2 = svg.append('circle')
+        .attr('cx', 300)
+        .attr('cy', 300)
+        .attr('r', 10)
+        .attr('fill', '#F00')
+        .attr('stroke', '#000')
+        .attr('id', 'target2');
+
+      d3target2_radius = svg.append('circle')
+        .attr('cx', 300)
+        .attr('cy', 300)
+        .attr('r', 10)
+        .attr('fill', 'rgba(255,0,0,0.1)')
+        .attr('stroke', '#000');
+
+      // draw line indicating forces
+      d3line = svg.append('line')
+        .attr('x1', 0)
+        .attr('y1', 0)
+        .attr('x2', 0)
+        .attr('y2', 0)
+        .attr('stroke', 'black')
+        .attr('stroke-width', '2')
+        .attr("marker-end", "url(#arrowhead)");
+
+
+    }
+
+    var updateDraw = function(a, s, r) {
+      // reflect puck world state on screen
+      var ppx = env.ppx; var ppy = env.ppy;
+      var tx = env.tx; var ty = env.ty;
+      var tx2 = env.tx2; var ty2 = env.ty2;
+
+      d3agent.attr('cx', ppx*W).attr('cy', ppy*H);
+      d3target.attr('cx', tx*W).attr('cy', ty*H);
+      d3target2.attr('cx', tx2*W).attr('cy', ty2*H);
+      d3target2_radius.attr('cx', tx2*W).attr('cy', ty2*H).attr('r', env.BADRAD * H);
+      d3line.attr('x1', ppx*W).attr('y1', ppy*H).attr('x2', ppx*W).attr('y2', ppy*H);
+      var af = 20;
+      d3line.attr('visibility', a === 4 ? 'hidden' : 'visible');
+      if(a === 0) {
+        d3line.attr('x2', ppx*W - af);
+      }
+      if(a === 1) {
+        d3line.attr('x2', ppx*W + af);
+      }
+      if(a === 2) {
+        d3line.attr('y2', ppy*H - af);
+      }
+      if(a === 3) {
+        d3line.attr('y2', ppy*H + af);
+      }
+
+      // color agent by reward
+      var vv = r + 0.5;
+      var ms = 255.0;
+      if(vv > 0) { g = 255; r = 255 - vv*ms; b = 255 - vv*ms; }
+      if(vv < 0) { g = 255 + vv*ms; r = 255; b = 255 + vv*ms; }
+      var vcol = 'rgb('+Math.floor(r)+','+Math.floor(g)+','+Math.floor(b)+')';
+      d3agent.attr('fill', vcol); 
+    }
+
+    var PuckWorld = function() { 
+      this.reset();
+    }
+    PuckWorld.prototype = {
+      reset: function() {
+        this.ppx = Math.random(); // puck x,y
+        this.ppy = Math.random();
+        this.pvx = Math.random()*0.05 -0.025; // velocity
+        this.pvy = Math.random()*0.05 -0.025;
+        this.tx = Math.random(); // target
+        this.ty = Math.random();
+        this.tx2 = Math.random(); // target
+        this.ty2 = Math.random(); // target
+        this.rad = 0.05;
+        this.t = 0;
+
+        this.BADRAD = 0.25;
+      },
+      getNumStates: function() {
+        return 8; // x,y,vx,vy, puck dx,dy
+      },
+      getMaxNumActions: function() {
+        return 5; // left, right, up, down, nothing
+      },
+      getState: function() {
+        var s = [this.ppx - 0.5, this.ppy - 0.5, this.pvx * 10, this.pvy * 10, this.tx-this.ppx, this.ty-this.ppy, this.tx2-this.ppx, this.ty2-this.ppy];
+        return s;
+      },
+      sampleNextState: function(a) {
+
+        // world dynamics
+        this.ppx += this.pvx; // newton
+        this.ppy += this.pvy;
+        this.pvx *= 0.95; // damping
+        this.pvy *= 0.95;
+
+        // agent action influences puck velocity
+        var accel = 0.002;
+        if(a === 0) this.pvx -= accel;
+        if(a === 1) this.pvx += accel;
+        if(a === 2) this.pvy -= accel;
+        if(a === 3) this.pvy += accel;
+
+        // handle boundary conditions and bounce
+        if(this.ppx < this.rad) {
+          this.pvx *= -0.5; // bounce!
+          this.ppx = this.rad;
+        }
+        if(this.ppx > 1 - this.rad) {
+          this.pvx *= -0.5;
+          this.ppx = 1 - this.rad;
+        }
+        if(this.ppy < this.rad) {
+          this.pvy *= -0.5; // bounce!
+          this.ppy = this.rad;
+        }
+        if(this.ppy > 1 - this.rad) {
+          this.pvy *= -0.5;
+          this.ppy = 1 - this.rad;
+        }
+
+        this.t += 1;
+        if(this.t % 100 === 0) {
+          this.tx = Math.random(); // reset the target location
+          this.ty = Math.random();
+        }
+
+        // if(this.t % 73 === 0) {
+        //   this.tx2 = Math.random(); // reset the target location
+        //   this.ty2 = Math.random();
+        // }
+
+        // compute distances
+        var dx = this.ppx - this.tx;
+        var dy = this.ppy - this.ty;
+        var d1 = Math.sqrt(dx*dx+dy*dy);
+
+        var dx = this.ppx - this.tx2;
+        var dy = this.ppy - this.ty2;
+        var d2 = Math.sqrt(dx*dx+dy*dy);
+
+        var dxnorm = dx/d2;
+        var dynorm = dy/d2;
+        var speed = 0.001;
+        this.tx2 += speed * dxnorm;
+        this.ty2 += speed * dynorm;
+
+        // compute reward
+        var r = -d1; // want to go close to green
+        if(d2 < this.BADRAD) {
+          // but if we're too close to red that's bad
+          r += 2*(d2 - this.BADRAD)/this.BADRAD;
+        }
+        
+        //if(a === 4) r += 0.05; // give bonus for gliding with no force
+
+        // evolve state in time
+        var ns = this.getState();
+        var out = {'ns':ns, 'r':r};
+        return out;
+      }
+    }
+    
+    function gofast() { steps_per_tick = 100; }
+    function gonormal() { steps_per_tick = 10; }
+    function goslow() { steps_per_tick = 1; }
+
+    // flot stuff
+    var nflot = 1000;
+    function initFlot() {
+      var container = $("#flotreward");
+      var res = getFlotRewards();
+      series = [{
+        data: res,
+        lines: {fill: true}
+      }];
+      var plot = $.plot(container, series, {
+        grid: {
+          borderWidth: 1,
+          minBorderMargin: 20,
+          labelMargin: 10,
+          backgroundColor: {
+            colors: ["#FFF", "#e4f4f4"]
+          },
+          margin: {
+            top: 10,
+            bottom: 10,
+            left: 10,
+          }
+        },
+        xaxis: {
+          min: 0,
+          max: nflot
+        },
+        yaxis: {
+          min: -2,
+          max: 1
+        }
+      });
+      setInterval(function(){
+        series[0].data = getFlotRewards();
+        plot.setData(series);
+        plot.draw();
+      }, 100);
+    }
+    function getFlotRewards() {
+      // zip rewards into flot data
+      var res = [];
+      for(var i=0,n=smooth_reward_history.length;i<n;i++) {
+        res.push([i, smooth_reward_history[i]]);
+      }
+      return res;
+    }
+
+    var steps_per_tick = 1;
+    var sid = -1;
+    var action, state;
+    var smooth_reward_history = [];
+    var smooth_reward = null;
+    var flott = 0;
+    function togglelearn() { 
+      if(sid === -1) {
+        sid = setInterval(function() {
+
+          for(var k=0;k<steps_per_tick;k++) {
+            state = env.getState();
+            action = 0;
+            var obs = env.sampleNextState(action);
+            if(smooth_reward == null) { smooth_reward = obs.r; }
+            smooth_reward = smooth_reward * 0.999 + obs.r * 0.001;
+            flott += 1;
+            if(flott === 200) {
+              // record smooth reward
+              if(smooth_reward_history.length >= nflot) {
+                smooth_reward_history = smooth_reward_history.slice(1);
+              }
+              smooth_reward_history.push(smooth_reward);
+              flott = 0;
+            }
+          }
+
+          updateDraw(action, state, obs.r);
+          //$("#tdest").html('tderror: ' + agent.tderror_estimator.getMean().toFixed(4) + ' +/- ' + agent.tderror_estimator.getStd().toFixed(4));
+
+        }, 20);
+      } else {
+        clearInterval(sid);
+        sid = -1;
+      }
+    }
+
+
+    var w; // global world object
+    var current_interval_id;
+    var skipdraw = false;
+    function start() {
+
+      env = new PuckWorld();
+
+      initDraw();      
+
+      initFlot();
+
+
+      togglelearn();
+
+      // render markdown
+      $(".md").each(function(){
+        $(this).html(marked($(this).html()));
+      });
+      renderJax();
+
+    }
+
+    var jaxrendered = false;
+    function renderJax() {
+      if(jaxrendered) { return; }
+      (function () {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src  = "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+        document.getElementsByTagName("head")[0].appendChild(script);
+        jaxrendered = true;
+      })();
+    }
+    
+  </script>
+  <style type="text/css">
+      canvas { border: 1px solid white; }
+    </style>
+
+ </head>
+ <body onload="start();">
+
+ <div id="wrap">
+
+ <h1>Python-backend DQN example with websocket</h1>
+ <h3>This simlulator was stolen from following example of REINFORCEjs. <br/>
+     <a href="http://cs.stanford.edu/people/karpathy/reinforcejs/puckworld.html">http://cs.stanford.edu/people/karpathy/reinforcejs/puckworld.html</a></h3>
+
+
+
+<button class="btn btn-primary" onclick="togglelearn()" style="width:150px;height:50px;margin-bottom:5px;">Toggle Run</button>
+<button class="btn btn-success" onclick="gofast()" style="width:150px;height:50px;margin-bottom:5px;">Go fast</button>
+<button class="btn btn-success" onclick="gonormal()" style="width:150px;height:50px;margin-bottom:5px;">Go normal</button>
+<button class="btn btn-success" onclick="goslow()" style="width:150px;height:50px;margin-bottom:5px;">Go slow</button>
+
+<br>
+Exploration epsilon: <span id="eps">0.15</span> <div id="slider"></div>
+<br>
+
+<div id="draw"></div>
+   
+
+<br>
+<textarea id="mysterybox" style="width:100%;display:none;">mystery text box</textarea>
+
+<div id="tdest"></div>
+
+<div>
+<div style="text-align:center">Average reward graph (high is good)</div>
+<div id="flotreward" style="width:800px; height: 400px;"></div>
+</div>
+
+   </div>
+ </body>
+</html>
