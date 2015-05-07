@@ -435,6 +435,7 @@
         <button class="btn btn-success" onclick="gofast()" style="margin-bottom:5px;">Go fast</button>
         <button class="btn btn-success" onclick="gonormal()" style="margin-bottom:5px;">Go normal</button>
         <button class="btn btn-success" onclick="goslow()" style="margin-bottom:5px;">Go slow</button>
+        <button class="btn btn-success" onclick="agent_save()" style="margin-bottom:5px;">Save model</button>
         <br>
 
         <div id="draw"></div>
@@ -468,6 +469,9 @@
                 'reward': reward,
                 'next_state': next_state
             });
+        };
+        var agent_save = function() {
+            socket.emit("save", {});
         };
         start();
     </script>

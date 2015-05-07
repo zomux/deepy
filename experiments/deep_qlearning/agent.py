@@ -48,4 +48,10 @@ class RLAgent(object):
         y[action] = reward + GAMMA * max_q
         self.trainer.learning_func([state], [y])
 
+    def save(self, path):
+        self.model.save_params(path)
+
+    def load(self, path):
+        self.model.load_params(path)
+
 
