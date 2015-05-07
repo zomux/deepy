@@ -10,8 +10,7 @@ from deepy.conf import TrainerConfig
 
 def get_model(state_num, action_num):
     model = NeuralRegressor(state_num)
-    model.stack_layers(
-                       Dense(100, activation='tanh'),
+    model.stack_layers(Dense(100, activation='tanh'),
                        Dense(action_num))
     return model
 
