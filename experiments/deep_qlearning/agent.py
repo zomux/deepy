@@ -11,13 +11,12 @@ from deepy.conf import TrainerConfig
 def get_model(state_num, action_num):
     model = NeuralRegressor(state_num)
     model.stack_layers(
-                       Dense(30, activation='tanh'),
-                       Dense(30, activation='tanh'),
-                       Dense(action_num),
-                       Softmax())
+                       Dense(100, activation='tanh'),
+                       Dense(action_num))
     return model
 
 GAMMA = 0.9
+EPSILON = 0.2
 
 class RLAgent(object):
     """
@@ -35,8 +34,11 @@ class RLAgent(object):
         self.trainer.training_variables = []
 
     def action(self, state):
-        action = self.model.compute([state])
-        return int(action[0].argmax())
+        if random.uniform(0, 1) < EPSILON:
+            return random.randint(0, self.action_num -1)
+        else:
+            action = self.model.compute([state])
+            return int(action[0].argmax())
 
     def learn(self, state, action, reward, next_state):
         next_q = self.model.compute([next_state])[0]
