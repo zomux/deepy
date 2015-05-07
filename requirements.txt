@@ -1,3 +1,4 @@
 numpy <= 1.9.2
 theano <= 0.7.0
 scipy <= 0.15.1
+Flask-SocketIO<=0.6.0
