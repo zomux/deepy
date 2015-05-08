@@ -45,7 +45,7 @@ class DQNAgent(object):
         self.tick = 0
 
     def action(self, state):
-        if random.uniform(0, 1) < EPSILON:
+        if random.uniform(0, 1) < self.epsilon:
             return random.randint(0, self.action_num -1)
         else:
             with self.thread_lock:

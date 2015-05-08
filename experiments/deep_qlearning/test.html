@@ -426,6 +426,8 @@
 
         <button class="btn btn-primary" onclick="toggle_simulation()" style="margin-bottom:5px;">Simulation</button>
         <button class="btn btn-primary" onclick="toggle_fast_learn()" style="margin-bottom:5px;">Fast learning</button>
+        <button class="btn btn-primary" onclick="agent_set_epsilon(0.2)" style="margin-bottom:5px;">Set epsilon to 0.2</button>
+        <button class="btn btn-primary" onclick="agent_set_epsilon(0.05)" style="margin-bottom:5px;">Set epsilon to 0.05</button>
         <button class="btn btn-success" onclick="agent_save()" style="margin-bottom:5px;">Save model</button>
         &nbsp;&nbsp;
         <strong>Current Mode:</strong> <span id="mode"></span>
@@ -461,6 +463,11 @@
                 'action': action,
                 'reward': reward,
                 'next_state': next_state
+            });
+        };
+        var agent_set_epsilon = function(epsilon) {
+            socket.emit("set_epsilon", {
+                'epsilon': epsilon
             });
         };
         var agent_save = function() {

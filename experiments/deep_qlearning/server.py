@@ -38,6 +38,10 @@ def test_learn(message):
 def test_learn(message):
     agent.save(model_path)
 
+@socketio.on('set_epsilon', namespace='/test')
+def test_set_epsilon(message):
+    agent.set_epsilon(message['epsilon'])
+
 @socketio.on('connect', namespace='/test')
 def test_connect():
     print "connected"
