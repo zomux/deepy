@@ -48,7 +48,8 @@ class DQNAgent(object):
         if random.uniform(0, 1) < EPSILON:
             return random.randint(0, self.action_num -1)
         else:
-            action = self.model.compute([state])
+            with self.thread_lock:
+                action = self.model.compute([state])
             return int(action[0].argmax())
 
     def learn(self, state, action, reward, next_state, enable_replay=True):
