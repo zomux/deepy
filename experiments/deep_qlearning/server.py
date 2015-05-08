@@ -17,6 +17,7 @@ import sys; sys.path.append(deepy_dir)
 from agent import RLAgent
 agent = RLAgent(8, 5)
 if os.path.exists(model_path):
+    print "Load model:", model_path
     agent.load(model_path)
 
 
