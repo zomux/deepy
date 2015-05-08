@@ -347,6 +347,7 @@
         var smooth_reward = null;
         var flott = 0;
         var iid = -1;
+        var busy = false;
 
 
         function togglelearn() {
@@ -359,10 +360,12 @@
                     }
                     iteration_count = steps_per_tick;
                     iid = setInterval(function() {
+                        if (busy) return;
                         /** One step is 1ms **/
                         if (iteration_count > 0) {
                             /** Get state **/
                             state = env.getState();
+                            busy = true;
                             agent_action(state, function(act) {
                                 /** Callback of agent action **/
                                 action = act;
@@ -383,6 +386,7 @@
                                     flott = 0;
                                 }
                                 iteration_count--;
+                                busy = false;
                             });
                         } else {
                             // Stop
