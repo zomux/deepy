@@ -10,7 +10,7 @@ from deepy.conf import TrainerConfig
 import threading
 
 GAMMA = 0.9
-EPSILON = 0.2
+EPSILON = 0.05
 EXPERIENCE_SIZE = 5000
 EXPERIENCE_RECORD_INTERVAL = 10
 REPLAY_TIMES = 20
