@@ -58,7 +58,7 @@ if __name__ == '__main__':
     args = ap.parse_args()
 
     model = NeuralRegressor(input_dim=2, input_tensor=3, clip_value=3.)
-    model.stack(IRNN(hidden_size=100, output_size=1, input_type="sequence",
+    model.stack_layer(IRNN(hidden_size=100, output_size=1, input_type="sequence",
                      output_type="last_output", output_activation="linear"))
 
     if os.path.exists(args.model):

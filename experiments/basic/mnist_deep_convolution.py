@@ -11,7 +11,7 @@ from deepy.trainers import MomentumTrainer, LearningRateAnnealer
 
 if __name__ == '__main__':
     model = NeuralClassifier(input_dim=28*28)
-    model.stack_layers(# Reshape to 3D tensor
+    model.stack(# Reshape to 3D tensor
                        Reshape((-1, 28, 28)),
                        # Add a new dimension for convolution
                        DimShuffle((0, 'x', 1, 2)),

@@ -48,7 +48,7 @@ batch_set = MiniBatches(dataset)
 
 if __name__ == '__main__':
     model = NeuralClassifier(input_dim=26, input_tensor=3)
-    model.stack_layers(RNN(hidden_size=30, input_type="sequence", output_type="all_hidden", vector_core=0.1),
+    model.stack(RNN(hidden_size=30, input_type="sequence", output_type="all_hidden", vector_core=0.1),
                        RNN(hidden_size=30, input_type="sequence", output_type="all_hidden", vector_core=0.3),
                        RNN(hidden_size=30, input_type="sequence", output_type="all_hidden", vector_core=0.6),
                        RNN(hidden_size=30, input_type="sequence", output_type="last_hidden", vector_core=0.9),

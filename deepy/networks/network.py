@@ -52,9 +52,9 @@ class NeuralNetwork(object):
         self.setup_variables()
 
         if self.network_config.layers:
-            self.stack_layers(self.network_config.layers)
+            self.stack(self.network_config.layers)
 
-    def stack(self, layer):
+    def stack_layer(self, layer):
         """
         Stack a neural layer.
         :type layer: NeuralLayer
@@ -88,12 +88,12 @@ class NeuralNetwork(object):
         """
         return self.layers[0] if self.layers else None
 
-    def stack_layers(self, *layers):
+    def stack(self, *layers):
         """
         Stack layers.
         """
         for layer in layers:
-            self.stack(layer)
+            self.stack_layer(layer)
 
     def prepare_training(self):
         """

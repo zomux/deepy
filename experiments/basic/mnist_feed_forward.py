@@ -11,7 +11,7 @@ from deepy.trainers import MomentumTrainer, LearningRateAnnealer
 
 if __name__ == '__main__':
     model = NeuralClassifier(input_dim=28*28)
-    model.stack_layers(Dense(256, 'relu'),
+    model.stack(Dense(256, 'relu'),
                        Dense(256, 'relu'),
                        Dense(10, 'linear'),
                        Softmax())
