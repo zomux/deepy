@@ -61,8 +61,8 @@ class RLAgent(object):
         # Back-propagate
         self.trainer.learning_func([state], [y])
         # Replay
-        self.record_experience(state, action, reward, next_state)
         if self.experience_replay and enable_replay:
+            self.record_experience(state, action, reward, next_state)
             self.replay()
 
     def replay(self):
