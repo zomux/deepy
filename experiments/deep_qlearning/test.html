@@ -277,18 +277,6 @@
             }
         };
 
-        function gofast() {
-            steps_per_tick = 100;
-        }
-
-        function gonormal() {
-            steps_per_tick = 10;
-        }
-
-        function goslow() {
-            steps_per_tick = 1;
-        }
-
         // flot stuff
         var nflot = 1000;
 
@@ -340,75 +328,79 @@
             return res;
         }
 
-        var steps_per_tick = 1;
         var sid = -1;
         var action, state, obs;
         var smooth_reward_history = [];
         var smooth_reward = null;
         var flott = 0;
-        var iid = -1;
         var busy = false;
+        var fast_learn_mode = false;
 
+        function run_one_step() {
+            console.log("step");
+            /** Get state **/
+            state = env.getState();
+            busy = true;
+            agent_action(state, function(act) {
+                /** Callback of agent action **/
+                action = act;
+                obs = env.sampleNextState(action);
+                agent_learn(state, action, obs.r, obs.ns);
 
-        function togglelearn() {
+                if (smooth_reward == null) {
+                    smooth_reward = obs.r;
+                }
+                smooth_reward = smooth_reward * 0.999 + obs.r * 0.001;
+                flott += 1;
+                if (flott === 200) {
+                    // record smooth reward
+                    if (smooth_reward_history.length >= nflot) {
+                        smooth_reward_history = smooth_reward_history.slice(1);
+                    }
+                    smooth_reward_history.push(smooth_reward);
+                    flott = 0;
+                }
+                busy = false;
+                if (fast_learn_mode)
+                    run_one_step();
+                else
+                    updateDraw(action, state, obs.r);
+            });
+        }
+
+        function toggle_simulation() {
+            if (fast_learn_mode) {
+                toggle_fast_learn();
+            }
             /** If not running, then run **/
             if (sid === -1) {
+                $("#mode").html("Simulation with learning");
                 sid = setInterval(function() {
-                    /** One iteration is 20ms **/
-                    if (iid != -1) {
-                        return;
-                    }
-                    iteration_count = steps_per_tick;
-                    iid = setInterval(function() {
-                        if (busy) return;
-                        /** One step is 1ms **/
-                        if (iteration_count > 0) {
-                            /** Get state **/
-                            state = env.getState();
-                            busy = true;
-                            agent_action(state, function(act) {
-                                /** Callback of agent action **/
-                                action = act;
-                                obs = env.sampleNextState(action);
-                                agent_learn(state, action, obs.r, obs.ns);
-
-                                if (smooth_reward == null) {
-                                    smooth_reward = obs.r;
-                                }
-                                smooth_reward = smooth_reward * 0.999 + obs.r * 0.001;
-                                flott += 1;
-                                if (flott === 200) {
-                                    // record smooth reward
-                                    if (smooth_reward_history.length >= nflot) {
-                                        smooth_reward_history = smooth_reward_history.slice(1);
-                                    }
-                                    smooth_reward_history.push(smooth_reward);
-                                    flott = 0;
-                                }
-                                iteration_count--;
-                                busy = false;
-                            });
-                        } else {
-                            // Stop
-                            updateDraw(action, state, obs.r);
-                            clearInterval(iid);
-                            iid = -1;
-                        }
-
-                    }, 1);
+                    if (busy) return;
+                    run_one_step();
                 }, 20);
 
             } else {
+                $("#mode").html("On hold");
                 clearInterval(sid);
                 sid = -1;
             }
         }
 
-        var iteration_count;
+        function toggle_fast_learn() {
+            if (sid != -1) {
+                toggle_simulation();
+            }
+            if (!fast_learn_mode) {
+                $("#mode").html("Fast learning (no simulation)");
+                fast_learn_mode = true;
+                run_one_step();
+            } else {
+                $("#mode").html("On hold");
+                fast_learn_mode = false;
+            }
+        }
 
-        var w; // global world object
-        var current_interval_id;
-        var skipdraw = false;
 
         function start() {
 
@@ -418,7 +410,7 @@
 
             initFlot();
 
-            togglelearn();
+            toggle_simulation();
 
         }
     </script>
@@ -433,11 +425,11 @@
         <h3>This simlulator was stolen from following example of REINFORCEjs. <br/>
          <a href="http://cs.stanford.edu/people/karpathy/reinforcejs/puckworld.html">http://cs.stanford.edu/people/karpathy/reinforcejs/puckworld.html</a></h3>
 
-        <button class="btn btn-primary" onclick="togglelearn()" style="margin-bottom:5px;">Toggle Run</button>
-        <button class="btn btn-success" onclick="gofast()" style="margin-bottom:5px;">Go fast</button>
-        <button class="btn btn-success" onclick="gonormal()" style="margin-bottom:5px;">Go normal</button>
-        <button class="btn btn-success" onclick="goslow()" style="margin-bottom:5px;">Go slow</button>
+        <button class="btn btn-primary" onclick="toggle_simulation()" style="margin-bottom:5px;">Simulation</button>
+        <button class="btn btn-primary" onclick="toggle_fast_learn()" style="margin-bottom:5px;">Fast learning</button>
         <button class="btn btn-success" onclick="agent_save()" style="margin-bottom:5px;">Save model</button>
+        &nbsp;&nbsp;
+        <strong>Current Mode:</strong> <span id="mode"></span>
         <br>
 
         <div id="draw"></div>
