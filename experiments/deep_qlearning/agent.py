@@ -69,7 +69,7 @@ class DQNAgent(object):
         y[action] = target
         # Back-propagate
         with self.thread_lock:
-         self.trainer.learning_func([state], [y])
+            self.trainer.learning_func([state], [y])
         # Replay
         if self.experience_replay and enable_replay:
             if self.tick % EXPERIENCE_RECORD_INTERVAL == 0:
