@@ -7,6 +7,7 @@ from deepy.networks import NeuralRegressor
 from deepy.layers import Dense
 from deepy.trainers import SGDTrainer
 from deepy.conf import TrainerConfig
+import threading
 
 def get_model(state_num, action_num):
     model = NeuralRegressor(state_num)
@@ -37,6 +38,7 @@ class RLAgent(object):
         self.trainer = SGDTrainer(self.model, train_conf)
         self.trainer.training_names = []
         self.trainer.training_variables = []
+        self.thread_lock = threading.Lock()
 
     def action(self, state):
         if random.uniform(0, 1) < EPSILON:
@@ -52,7 +54,8 @@ class RLAgent(object):
         max_q = next_q[best_a]
         target = reward + GAMMA * max_q
         # Forward
-        y = list(self.model.compute([state])[0])
+        with self.thread_lock:
+            y = list(self.model.compute([state])[0])
         y_action = y[action]
         half_clamp = TDERROR_CLAMP / 2
         if target > y_action + half_clamp:
@@ -61,7 +64,8 @@ class RLAgent(object):
             target = y_action - half_clamp
         y[action] = target
         # Back-propagate
-        self.trainer.learning_func([state], [y])
+        with self.thread_lock:
+         self.trainer.learning_func([state], [y])
         # Replay
         if self.experience_replay and enable_replay:
             self.record_experience(state, action, reward, next_state)
