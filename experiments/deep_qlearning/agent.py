@@ -15,10 +15,11 @@ def get_model(state_num, action_num):
     return model
 
 GAMMA = 0.9
-EPSILON = 0.2
+EPSILON = 0.05
 EXPERIENCE_SIZE = 5000
 REPLAY_TIMES = 10
 TDERROR_CLAMP = 1
+LEARNING_RATE = 0.01
 
 class RLAgent(object):
     """
@@ -32,7 +33,7 @@ class RLAgent(object):
         self.experience_pool = []
         self.model = get_model(state_num, action_num)
         train_conf = TrainerConfig()
-        train_conf.learning_rate = 0.01
+        train_conf.learning_rate = LEARNING_RATE
         self.trainer = SGDTrainer(self.model, train_conf)
         self.trainer.training_names = []
         self.trainer.training_variables = []
