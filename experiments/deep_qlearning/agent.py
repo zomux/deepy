@@ -18,7 +18,7 @@ GAMMA = 0.9
 EPSILON = 0.05
 EXPERIENCE_SIZE = 5000
 REPLAY_TIMES = 10
-TDERROR_CLAMP = 1
+TDERROR_CLAMP = 1.0
 LEARNING_RATE = 0.01
 
 class RLAgent(object):
@@ -54,10 +54,11 @@ class RLAgent(object):
         # Forward
         y = list(self.model.compute([state])[0])
         y_action = y[action]
-        if target > y_action + TDERROR_CLAMP:
-            target = y_action + TDERROR_CLAMP
-        elif target < y_action - TDERROR_CLAMP:
-            target = y_action - TDERROR_CLAMP
+        half_clamp = TDERROR_CLAMP / 2
+        if target > y_action + half_clamp:
+            target = y_action + half_clamp
+        elif target < y_action - half_clamp:
+            target = y_action - half_clamp
         y[action] = target
         # Back-propagate
         self.trainer.learning_func([state], [y])
