@@ -9,20 +9,22 @@ from deepy.trainers import SGDTrainer
 from deepy.conf import TrainerConfig
 import threading
 
-def get_model(state_num, action_num):
-    model = NeuralRegressor(state_num)
-    model.stack(Dense(100, activation='tanh'),
-                Dense(action_num))
-    return model
-
-GAMMA = 0.9
-EPSILON = 0.05
+GAMMA = 0.75
+EPSILON = 0.1
 EXPERIENCE_SIZE = 5000
+EXPERIENCE_RECORD_INTERVAL = 25
 REPLAY_TIMES = 10
 TDERROR_CLAMP = 1.0
 LEARNING_RATE = 0.01
+HIDDEN_UNITS = 100
 
-class RLAgent(object):
+def get_model(state_num, action_num):
+    model = NeuralRegressor(state_num)
+    model.stack(Dense(HIDDEN_UNITS, activation='tanh'),
+                Dense(action_num))
+    return model
+
+class DQNAgent(object):
     """
     Agent of deep Q learning.
     """
@@ -39,6 +41,8 @@ class RLAgent(object):
         self.trainer.training_names = []
         self.trainer.training_variables = []
         self.thread_lock = threading.Lock()
+        self.epsilon = EPSILON
+        self.tick = 0
 
     def action(self, state):
         if random.uniform(0, 1) < EPSILON:
@@ -68,7 +72,9 @@ class RLAgent(object):
          self.trainer.learning_func([state], [y])
         # Replay
         if self.experience_replay and enable_replay:
-            self.record_experience(state, action, reward, next_state)
+            if self.tick % EXPERIENCE_RECORD_INTERVAL == 0:
+                self.record_experience(state, action, reward, next_state)
+            self.tick += 1
             self.replay()
 
     def replay(self):
@@ -88,5 +94,8 @@ class RLAgent(object):
 
     def load(self, path):
         self.model.load_params(path)
+
+    def set_epsilon(self, value):
+        self.epsilon = value
 
 

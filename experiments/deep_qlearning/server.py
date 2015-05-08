@@ -14,8 +14,8 @@ deepy_dir = os.path.abspath(this_dir + os.sep + ".." + os.sep + "..")
 model_path = this_dir + os.sep + "models" + os.sep + "puckworld_model1.gz"
 
 import sys; sys.path.append(deepy_dir)
-from agent import RLAgent
-agent = RLAgent(8, 5)
+from agent import DQNAgent
+agent = DQNAgent(8, 5)
 if os.path.exists(model_path):
     print "Load model:", model_path
     agent.load(model_path)
