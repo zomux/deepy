@@ -36,6 +36,7 @@ def test_learn(message):
 
 @socketio.on('save', namespace='/test')
 def test_learn(message):
+    print "Save model:", model_path
     agent.save(model_path)
 
 @socketio.on('set_epsilon', namespace='/test')
