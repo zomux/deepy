@@ -6,6 +6,7 @@ random = Random(3)
 from deepy.networks import NeuralRegressor
 from deepy.layers import Dense
 from deepy.trainers import SGDTrainer
+from deepy.util import GaussianInitializer
 from deepy.conf import TrainerConfig
 import threading
 
@@ -20,8 +21,8 @@ HIDDEN_UNITS = 100
 
 def get_model(state_num, action_num):
     model = NeuralRegressor(state_num)
-    model.stack(Dense(HIDDEN_UNITS, activation='tanh'),
-                Dense(action_num))
+    model.stack(Dense(HIDDEN_UNITS, activation='tanh', initializer=GaussianInitializer(deviation=0.01)),
+                Dense(action_num, initializer=GaussianInitializer(deviation=0.01)))
     return model
 
 class DQNAgent(object):
@@ -37,6 +38,7 @@ class DQNAgent(object):
         self.model = get_model(state_num, action_num)
         train_conf = TrainerConfig()
         train_conf.learning_rate = LEARNING_RATE
+        train_conf.weight_l2 = 0
         self.trainer = SGDTrainer(self.model, train_conf)
         self.trainer.training_names = []
         self.trainer.training_variables = []
@@ -62,11 +64,10 @@ class DQNAgent(object):
         with self.thread_lock:
             y = list(self.model.compute([state])[0])
         y_action = y[action]
-        half_clamp = TDERROR_CLAMP / 2
-        if target > y_action + half_clamp:
-            target = y_action + half_clamp
-        elif target < y_action - half_clamp:
-            target = y_action - half_clamp
+        if target > y_action + TDERROR_CLAMP:
+            target = y_action + TDERROR_CLAMP
+        elif target < y_action - TDERROR_CLAMP:
+            target = y_action - TDERROR_CLAMP
         y[action] = target
         # Back-propagate
         with self.thread_lock:

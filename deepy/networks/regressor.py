@@ -24,7 +24,7 @@ class NeuralRegressor(NeuralNetwork):
         if self.clip_value:
             y = T.clip(y, -self.clip_value, self.clip_value)
         err = y - self.k
-        return T.mean((err * err).sum(axis=self.target_tensor.ndim - 1))
+        return T.mean((err * err).sum(axis=self.target_tensor.ndim - 1)) / 2
 
     @property
     def cost(self):

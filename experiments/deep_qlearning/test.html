@@ -335,6 +335,7 @@
         var flott = 0;
         var busy = false;
         var fast_learn_mode = false;
+        var lastReward = 0;
 
         function run_one_step() {
             /** Get state **/
@@ -344,7 +345,8 @@
                 /** Callback of agent action **/
                 action = act;
                 obs = env.sampleNextState(action);
-                agent_learn(state, action, obs.r, obs.ns);
+                agent_learn(state, action, lastReward, obs.ns);
+                lastReward = obs.r;
 
                 if (smooth_reward == null) {
                     smooth_reward = obs.r;
