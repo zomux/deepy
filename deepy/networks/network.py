@@ -122,7 +122,7 @@ class NeuralNetwork(object):
         """
         if self.input_tensor:
             if type(self.input_tensor) == int:
-                x = dim_to_var(self.input_tensor)
+                x = dim_to_var(self.input_tensor, name="x")
             else:
                 x = self.input_tensor
         else:
