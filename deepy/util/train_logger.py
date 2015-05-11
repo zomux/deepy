@@ -14,7 +14,7 @@ class TrainLogger(object):
     def load(self, model_path):
         log_path = self._log_path(model_path)
         if os.path.exists(log_path):
-            logging.info("Load training log from %s" % logging)
+            logging.info("Load training log from %s" % log_path)
             for line in open(log_path).xreadlines():
                 self.log_pool.append(line.strip())
 
@@ -24,7 +24,7 @@ class TrainLogger(object):
 
     def save(self, model_path):
         log_path = self._log_path(model_path)
-        logging.info("Save training log to %s" % logging)
+        logging.info("Save training log to %s" % log_path)
         with open(log_path, "w") as outf:
             for line in self.log_pool:
                 outf.write(line + "\n")
