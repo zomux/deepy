@@ -6,13 +6,14 @@
 import logging as loggers
 import gzip
 import cPickle as pickle
+import os
 
 import theano.tensor as T
 import theano
 
 from deepy.layers.layer import NeuralLayer
 from deepy.conf import NetworkConfig
-from deepy.util import dim_to_var
+from deepy.util import dim_to_var, TrainLogger
 
 logging = loggers.getLogger(__name__)
 
@@ -50,6 +51,7 @@ class NeuralNetwork(object):
         self.testing_monitors = []
 
         self.setup_variables()
+        self.train_logger = TrainLogger()
 
         if self.network_config.layers:
             self.stack(self.network_config.layers)
@@ -179,11 +181,13 @@ class NeuralNetwork(object):
         handle = opener(path, 'wb')
         pickle.dump([p.get_value().copy() for p in self.all_parameters], handle)
         handle.close()
+        self.train_logger.save(path)
 
     def load_params(self, path):
         """
         Load parameters from file.
         """
+        if not os.path.exists(path): return;
         logging.info("loading parameters from %s" % path)
         opener = gzip.open if path.lower().endswith('.gz') else open
         handle = opener(path, 'rb')
@@ -192,6 +196,7 @@ class NeuralNetwork(object):
             logging.info('%s: setting value %s', target.name, source.shape)
             target.set_value(source)
         handle.close()
+        self.train_logger.load(path)
 
     def report(self):
         """

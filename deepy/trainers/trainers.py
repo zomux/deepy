@@ -113,7 +113,9 @@ class NeuralTrainer(object):
             self.evaluation_names,
             np.mean([self.evaluation_func(*x) for x in test_set], axis=0)))
         info = ' '.join('%s=%.2f' % el for el in costs)
-        logging.info('test    (iter=%i) %s', iteration + 1, info)
+        message = 'test    (iter=%i) %s', iteration + 1, info
+        logging.info(message)
+        self.network.train_logger.record(message)
 
     def evaluate(self, iteration, valid_set):
         costs = list(zip(
@@ -128,7 +130,9 @@ class NeuralTrainer(object):
             self.best_params = [p.get_value().copy() for p in self.network.parameters]
             marker = ' *'
         info = ' '.join('%s=%.2f' % el for el in costs)
-        logging.info('valid   (iter=%i) %s%s', iteration + 1, info, marker)
+        message = 'valid   (iter=%i) %s%s', iteration + 1, info, marker
+        logging.info(message)
+        self.network.train_logger.record(message)
         return iteration - self.best_iter < self.patience
 
     def save_params(self, path):
@@ -186,7 +190,9 @@ class NeuralTrainer(object):
                 break
             if not iteration % self.config.monitor_frequency:
                 info = ' '.join('%s=%.2f' % el for el in costs)
-                logging.info('monitor (iter=%i) %s', iteration + 1, info)
+                message = 'monitor (iter=%i) %s', iteration + 1, info
+                logging.info(message)
+                self.network.train_logger.record(message)
 
             iteration += 1
             self.network.epoch_callback()
