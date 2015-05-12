@@ -30,5 +30,5 @@ if __name__ == '__main__':
 
     mnist = MiniBatches(MnistDataset(), batch_size=20)
 
-    trainer.run(mnist.train_set(), mnist.valid_set(), test_set=mnist.test_set(), controllers=[annealer])
+    trainer.run(mnist, controllers=[annealer])
 

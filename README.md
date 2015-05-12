@@ -9,14 +9,117 @@ deepy: Highly extensible deep learning framework based on Theano
 [![Coverage Status](https://coveralls.io/repos/uaca/deepy/badge.svg?branch=master)](https://coveralls.io/r/uaca/deepy?branch=master)
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/uaca/deepy/blob/master/LICENSE)
 
-Many codes are still not well documented.
+### Dependencies
 
-Raphael Shu, 2015
+- numpy
+- theano
+- scipy for L-BFGS
 
-Run with following commands
+Clean interface
+===
+```python
+# MNIST Multi-layer model with dropout.
+from deepy.dataset import MnistDataset, MiniBatches
+from deepy.networks import NeuralClassifier
+from deepy.layers import Dense, Softmax
+from deepy.trainers import MomentumTrainer, LearningRateAnnealer
+
+model = NeuralClassifier(input_dim=28*28)
+model.stack(Dense(256, 'relu'),
+            Dropout(0.2),
+            Dense(256, 'relu'),
+            Dropout(0.2),
+            Dense(10, 'linear'),
+            Softmax())
+
+trainer = MomentumTrainer(model)
+
+annealer = LearningRateAnnealer(trainer)
+
+mnist = MiniBatches(MnistDataset(), batch_size=20)
+
+trainer.run(mnist, controllers=[annealer])
+```
+
+Extensible model definition
+===
+```python
+
+```
+
+Extensible training procedure
+===
+```python
+
+```
+
+Examples
 ===
 
+### Enviroment setting
+
+- CPU
 ```
-source bin/theano_cpu_env.sh
-python experiments/basic/mnist_feed_forward.py
+source bin/cpu_env.sh
 ```
+- GPU
+```
+source bin/gpu_env.sh
+```
+
+### MNIST Handwriting task
+
+- Simple MLP
+```
+python experiments/mnist/mlp.py
+```
+- MLP with dropout
+```
+python experiments/mnist/mlp_dropout.py
+```
+- MLP with PReLU and dropout
+```
+python experiments/mnist/mlp_prelu_dropout.py
+```
+- Deep convolution
+```
+python experiments/mnist/deep_convolution.py
+```
+- Recurrent visual attention model
+   - [Result visualization](http://raphael.uaca.com/experiments/recurrent_visual_attention/Plot%20attentions.html)
+```
+python experiments/attention_models/baseline.py
+```
+
+### Language model
+
+- Char-based LM with LSTM
+```
+python experiments/lm/char_lstm.py
+```
+- Char-based LM with Deep RNN
+```
+python experiments/lm/char_rnn.py
+```
+
+### Deep Q learning
+
+- Start server
+```
+pip install Flask-SocketIO
+python experiments/deep_qlearning/server.py
+```
+- Open this address in browser
+```
+http://localhost:5003
+```
+
+### Recursive auto-encoder
+
+
+Other features
+===
+
+- Auto gradient correction
+
+Raphael Shu, 2015
