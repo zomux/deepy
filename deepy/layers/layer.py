@@ -40,6 +40,8 @@ class NeuralLayer(object):
         Connect to a previous layer.
         """
         self.input_dim = input_dim
+        if self.output_dim == 0:
+            self.output_dim = input_dim
         self.previous_layer = previous_layer
         self.network_config = network_config
         self.connected = True

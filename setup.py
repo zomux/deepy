@@ -1,25 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
+import deepy
 import sys, os
 
 if sys.version_info[:2] < (2, 6):
     raise Exception('This version needs Python 2.6 or later. ')
 
-
-from distutils.core import setup
-from distutils.util import convert_path
-from fnmatch import fnmatchcase
-from setuptools import setup, find_packages, Extension
-
-resource_dir = os.path.join(os.path.dirname(__file__), 'deepy', 'resources')
+from setuptools import setup, find_packages
 
 requirements = open(os.path.join(os.path.dirname(__file__), 'requirements.txt')).read().strip().split("\n")
 
 setup(
     name='deepy',
-    version='0.0.3',
+    version=deepy.__version__,
     description='Highly extensible deep learning framework based on Theano',
 
     author='Raphael Shu',
@@ -45,7 +39,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Topic :: Scientific/Engineering :: Information Analysis',
         'Topic :: Text Processing :: Linguistic',

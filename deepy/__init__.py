@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+__version__ = "0.0.4"
 
-from deepy.networks import *
-from deepy.conf.trainer_config import TrainerConfig
+from networks import *
+from conf import *

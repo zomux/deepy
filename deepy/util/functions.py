@@ -7,11 +7,13 @@ import theano.tensor as T
 import numpy as np
 import re
 import copy
+from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
 FLOATX = theano.config.floatX
 EPSILON = T.constant(1.0e-15, dtype=FLOATX)
 
 global_rand = np.random.RandomState(seed=3)
+global_theano_rand = RandomStreams(seed=3)
 
 def onehot(size, eye):
     return np.eye(1, size, eye, dtype=FLOATX)[0]
