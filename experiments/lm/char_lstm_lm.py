@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 resource_dir = os.path.abspath(os.path.dirname(__file__)) + os.sep + "resources"
 
 vocab_path = os.path.join(resource_dir, "ptb.train.txt")
-train_path = os.path.join(resource_dir, "ptb.train.10k.txt")
+train_path = os.path.join(resource_dir, "ptb.train.txt")
 valid_path = os.path.join(resource_dir, "ptb.valid.txt")
 vocab = Vocab(char_based=True)
 vocab.load(vocab_path, fixed_size=1000)
