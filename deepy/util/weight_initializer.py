@@ -63,3 +63,13 @@ class IdentityInitializer(WeightInitializer):
     def sample(self, shape):
         assert len(shape) == 2
         return np.eye(*shape) * self.scale
+
+class GlorotUniformInitializer(WeightInitializer):
+    """
+    Uniform weight sampler.
+    """
+
+    def sample(self, shape):
+        scale = np.sqrt(2. / sum(shape))
+        weight = rand.uniform(-1, 1, size=shape) * scale
+        return weight
