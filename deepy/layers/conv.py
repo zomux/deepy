@@ -9,7 +9,7 @@ import theano.tensor as T
 from theano.tensor.nnet import conv
 from theano.tensor.signal import downsample
 
-from deepy.util import build_activation
+from deepy.util import build_activation, UniformInitializer
 from deepy.layers.layer import NeuralLayer
 
 
@@ -22,15 +22,16 @@ class Convolution(NeuralLayer):
     """
 
     def __init__(self, filter_shape, pool_size=(2, 2),
-                 reshape_input=False, flatten_output=False, enable_pooling=True,
-                 activation='tanh'):
+                 reshape_input=False, border_mode="valid", flatten_output=False,
+                 disable_pooling=False,  activation='linear'):
         super(Convolution, self).__init__("convolution")
         self.filter_shape = filter_shape
         self.pool_size = pool_size
         self.reshape_input = reshape_input
         self.flatten_output = flatten_output
         self.activation = activation
-        self.enable_pooling = enable_pooling
+        self.disable_pooling = disable_pooling
+        self.border_mode = border_mode
 
     def setup(self):
         self._setup_params()
@@ -45,7 +46,8 @@ class Convolution(NeuralLayer):
             input=x,
             filters=self.W_conv,
             filter_shape=self.filter_shape,
-            image_shape=None
+            image_shape=None,
+            border_mode=self.border_mode
         )
 
         pooled_out = downsample.max_pool_2d(
@@ -54,7 +56,7 @@ class Convolution(NeuralLayer):
             ignore_border=True
         )
 
-        if not self.enable_pooling:
+        if self.disable_pooling:
             pooled_out = conv_out
 
         output = self._activation_func(pooled_out + self.B_conv.dimshuffle('x', 0, 'x', 'x'))
@@ -72,7 +74,7 @@ class Convolution(NeuralLayer):
                    np.prod(self.pool_size))
         weight_scale = np.sqrt(6. / (fan_in + fan_out))
 
-        self.W_conv = self.create_weight(suffix="conv", scale=weight_scale, shape=self.filter_shape)
+        self.W_conv = self.create_weight(suffix="conv", initializer=UniformInitializer(scale=weight_scale), shape=self.filter_shape)
         self.B_conv = self.create_bias(self.filter_shape[0], suffix="conv")
 
         self.register_parameters(self.W_conv, self.B_conv)
