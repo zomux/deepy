@@ -10,7 +10,7 @@ class BatchNormalization(NeuralLayer):
     http://arxiv.org/pdf/1502.03167v3.pdf
     """
     def __init__(self, epsilon=1e-6, mode="featurewise", weights=None):
-        super(BatchNormalization,self).__init__()
+        super(BatchNormalization,self).__init__("norm")
         self.epsilon = epsilon
         self.mode = mode
 
@@ -26,7 +26,6 @@ class BatchNormalization(NeuralLayer):
             # Prevent NaNs
             std = T.mean((x-m)**2 + self.epsilon, axis=0) ** 0.5
             x_normed = (x - m) / (std + self.epsilon)
-
         else:
             m = x.mean(axis=-1, keepdims=True)
             std = x.std(axis=-1, keepdims=True)
