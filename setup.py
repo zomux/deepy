@@ -29,7 +29,7 @@ setup(
     license='MIT',
     platforms='any',
 
-    packages=find_packages(),
+    packages=filter(lambda s: "secret" not in s, find_packages()),
 
     classifiers=[ # from http://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Development Status :: 2 - Pre-Alpha',
