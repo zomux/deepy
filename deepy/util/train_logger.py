@@ -27,7 +27,7 @@ class TrainLogger(object):
         log_path = self._log_path(model_path)
         logging.info("Save training log to %s" % log_path)
         with open(log_path, "w") as outf:
-            outf.write("# deepy version: %s" % deepy.__version__)
+            outf.write("# deepy version: %s\n" % deepy.__version__)
             for line in self.log_pool:
                 outf.write(line + "\n")
 

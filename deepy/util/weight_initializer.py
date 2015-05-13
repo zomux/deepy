@@ -4,12 +4,15 @@
 import numpy as np
 from . import FLOATX
 
-rand = np.random.RandomState(3)
-
 class WeightInitializer(object):
     """
     Initializer for creating weights.
     """
+
+    def __init__(self, seed=None):
+        if not seed:
+            seed = 3
+        self.rand = np.random.RandomState(seed)
 
     def sample(self, shape):
         """
@@ -22,7 +25,8 @@ class UniformInitializer(WeightInitializer):
     Uniform weight sampler.
     """
 
-    def __init__(self, scale=None, svd=False):
+    def __init__(self, scale=None, svd=False, seed=None):
+        super(UniformInitializer, self).__init__(seed)
         self.scale = scale
         self.svd = svd
 
@@ -31,7 +35,7 @@ class UniformInitializer(WeightInitializer):
             scale = np.sqrt(6. / sum(shape))
         else:
             scale = self.scale
-        weight = rand.uniform(-1, 1, size=shape) * scale
+        weight = self.rand.uniform(-1, 1, size=shape) * scale
         if self.svd:
             norm = np.sqrt((weight**2).sum())
             ws = scale * weight / norm
@@ -44,12 +48,13 @@ class GaussianInitializer(WeightInitializer):
     Gaussian weight sampler.
     """
 
-    def __init__(self, mean=0, deviation=0.001):
+    def __init__(self, mean=0, deviation=0.001, seed=None):
+        super(GaussianInitializer, self).__init__(seed)
         self.mean = mean
         self.deviation = deviation
 
     def sample(self, shape):
-        weight = rand.normal(self.mean, self.deviation, size=shape)
+        weight = self.rand.normal(self.mean, self.deviation, size=shape)
         return weight
 
 class IdentityInitializer(WeightInitializer):
@@ -58,6 +63,7 @@ class IdentityInitializer(WeightInitializer):
     """
 
     def __init__(self, scale=1):
+        super(IdentityInitializer, self).__init__()
         self.scale = 1
 
     def sample(self, shape):
@@ -69,7 +75,10 @@ class GlorotUniformInitializer(WeightInitializer):
     Uniform weight sampler.
     """
 
+    def __init__(self, seed=None):
+        super(GlorotUniformInitializer, self).__init__(seed)
+
     def sample(self, shape):
         scale = np.sqrt(2. / sum(shape))
-        weight = rand.uniform(-1, 1, size=shape) * scale
+        weight = self.rand.uniform(-1, 1, size=shape) * scale
         return weight
