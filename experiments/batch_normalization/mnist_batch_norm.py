@@ -4,7 +4,7 @@
 """
 This experiment setting is described in http://arxiv.org/pdf/1502.03167v3.pdf.
 MNIST MLP model with batch normalization.
-In my experiment, it seems the convergence stopped after 37 epochs. (See models/batch_norm1.log)
+In my experiment, it turns out the improvement of valid data stopped after 37 epochs. (See models/batch_norm1.log)
 """
 
 import logging, os
