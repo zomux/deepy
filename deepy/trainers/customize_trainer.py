@@ -24,7 +24,7 @@ class CustomizeTrainer(NeuralTrainer):
         super(CustomizeTrainer, self).__init__(network, config)
 
 
-    def train(self, train_set, valid_set=None, test_set=None):
+    def train(self, train_set, valid_set=None, test_set=None, train_size=None):
         '''We train over mini-batches and evaluate periodically.'''
         iteration = 0
         while True:

@@ -10,8 +10,8 @@ import theano.tensor as T
 import numpy as np
 from theano.ifelse import ifelse
 
-from deepy.trainers.ada_family import optimize_parameters
 from deepy.utils.functions import FLOATX
+from optimize import optimize_updates
 
 
 logging = loggers.getLogger(__name__)
@@ -47,7 +47,7 @@ class MiniBatchOptimizer(object):
                     for param in shapes]
         gcache_mean = [g / self.batch_counter for g in gcache]
 
-        optimize_updates = optimize_parameters(params, gcache_mean, shapes, max_norm, lr, eps, rho, method, beta,
+        optimize_updates = optimize_updates(params, gcache_mean, shapes, max_norm, lr, eps, rho, method, beta,
                                                gsum_regularization=0.0001, weight_l2 = weight_l2, clip=self.clip)
         self.updates.extend(optimize_updates)
         self.caches.extend(gcache)

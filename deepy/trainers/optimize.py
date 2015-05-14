@@ -65,16 +65,16 @@ def optimize_updates(params, gradients, config=None, shapes=None):
     # Get Function
     func = None
     if method in ["SGD", "ADAGRAD", "ADADELTA", "FINETUNING_ADAGRAD"]:
-        from ada_family import ada_family_core
+        from cores.ada_family import ada_family_core
         func = ada_family_core
     elif method == "ADAM":
-        from adam import adam_core
+        from cores.adam import adam_core
         func = adam_core
     elif method == "RMSPROP":
-        from rmsprop import rmsprop_core
+        from cores.rmsprop import rmsprop_core
         func = rmsprop_core
     elif method == "MOMENTUM":
-        from momentum import momentum_core
+        from cores.momentum import momentum_core
         func = momentum_core
 
     if not func:

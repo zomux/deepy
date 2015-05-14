@@ -1,4 +1,5 @@
-# deepy version: 0.0.4[2015/05/12 13:12:07] test    (iter=1) J=2.48 err=90.76
+# deepy version: 0.0.4
+[2015/05/12 13:12:07] test    (iter=1) J=2.48 err=90.76
 [2015/05/12 13:12:08] valid   (iter=1) J=2.49 err=91.87 *
 [2015/05/12 13:12:15] monitor (iter=1) J=0.37 err=11.60 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(convolution4)=0.61 mean(convolution5)=1.84 mean(flatten6)=1.84 mean(reveal_dimension7)=1.84 mean(dense8)=3.95 mean(softmax9)=0.10
 [2015/05/12 13:12:16] valid   (iter=2) J=0.20 err=6.24 *
