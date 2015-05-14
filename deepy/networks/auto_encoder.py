@@ -33,14 +33,14 @@ class AutoEncoder(NeuralNetwork):
     def test_cost(self):
         return self._cost_func(self.test_output)
 
-    def stack_encoding(self, *layers):
+    def stack_encoders(self, *layers):
         """
         Stack encoding layers, this must be done before stacking decoding layers.
         """
         self.stack(*layers)
         self.encoding_layes.extend(layers)
 
-    def stack_decoding(self, *layers):
+    def stack_decoders(self, *layers):
         """
         Stack decoding layers.
         """

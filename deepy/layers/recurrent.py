@@ -19,6 +19,7 @@ class RNN(NeuralLayer):
                  hidden_activation="tanh", hidden_init=None, input_init=None, steps=None):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
+        self.output_dim = self._hidden_size
         self._input_type = input_type
         self._output_type = output_type
         self._hidden_activation = hidden_activation
@@ -68,6 +69,10 @@ class RNN(NeuralLayer):
             return hs.dimshuffle((1,0,2))
 
     def setup(self):
+        print self.input_dim, self._hidden_size
+        if self._input_type == "one" and self.input_dim != self._hidden_size:
+            raise Exception("For RNN receives one vector as input, "
+                            "the hidden size should be same as last output dimension.")
         self._setup_params()
         self._setup_functions()
 
@@ -75,7 +80,6 @@ class RNN(NeuralLayer):
         self._hidden_act = build_activation(self._hidden_activation)
 
     def _setup_params(self):
-        self.output_dim = self._hidden_size
         if not self._vector_core:
             self.W_h = self.create_weight(self._hidden_size, self._hidden_size, suffix="h", initializer=self._hidden_init)
         else:

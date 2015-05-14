@@ -13,13 +13,7 @@ class MiniBatches(Dataset):
 
     def _yield_data(self, subset):
         for i in xrange(0, len(subset), self.size):
-            x_set, y_set = [], []
-            for x, y in subset[i:i + self.size]:
-                x_set.append(x)
-                y_set.append(y)
-            x_set = np.array(x_set)
-            y_set = np.array(y_set)
-            yield x_set, y_set
+            yield map(np.array, list(zip(*subset[i:i + self.size])))
 
     def train_set(self):
         if not self.origin.train_set():
