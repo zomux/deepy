@@ -21,10 +21,10 @@ vocab_path = os.path.join(resource_dir, "ptb.train.txt")
 train_path = os.path.join(resource_dir, "ptb.train.txt")
 valid_path = os.path.join(resource_dir, "ptb.valid.txt")
 vocab = Vocab(char_based=True)
-vocab.load(vocab_path, fixed_size=1000)
+vocab.load(vocab_path, max_size=1000)
 
 model = NeuralLM(input_dim=vocab.size, input_tensor=3)
-model.stack(LSTM(hidden_size=100, output_type="all_hidden"),
+model.stack(LSTM(hidden_size=100, output_type="sequence"),
             Dense(vocab.size, activation="softmax"))
 
 default_model = os.path.join(os.path.dirname(__file__), "models", "char_lstm_model1.gz")

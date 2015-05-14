@@ -9,7 +9,7 @@ import numpy as np
 
 from deepy.layers.recurrent import RecurrentLayer, RecurrentNetwork
 from deepy.conf import NetworkConfig, TrainerConfig
-from deepy.util.functions import FLOATX
+from deepy.utils.functions import FLOATX
 from deepy import SGDTrainer
 
 

@@ -7,7 +7,7 @@ from numpy import linalg as LA
 from theano import tensor as T
 import theano
 
-from deepy.util.functions import FLOATX
+from deepy.utils.functions import FLOATX
 from deepy.trainers import CustomizeTrainer
 from deepy.trainers.optimize import optimize_function
 

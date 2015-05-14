@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from deepy.util import build_activation, FLOATX
+from deepy.utils import build_activation, FLOATX
 import numpy as np
 import theano
 import theano.tensor as T
 
-OUTPUT_TYPES = ["last_hidden", "all_hidden", "last_output", "all_output"]
+OUTPUT_TYPES = ["sequence", "one"]
 INPUT_TYPES = ["sequence", "one"]
 
 class RNN(NeuralLayer):
@@ -15,18 +15,16 @@ class RNN(NeuralLayer):
     Recurrent neural network layer.
     """
 
-    def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden", vector_core=None,
-                 hidden_activation="tanh", output_activation="softmax", hidden_initializer=None, initializer=None, steps=None):
+    def __init__(self, hidden_size, input_type="sequence", output_type="sequence", vector_core=None,
+                 hidden_activation="tanh", hidden_init=None, input_init=None, steps=None):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
-        self._output_size = output_size
         self._input_type = input_type
         self._output_type = output_type
         self._hidden_activation = hidden_activation
-        self._output_activation = output_activation
-        self._hidden_initializer = hidden_initializer
+        self._hidden_init = hidden_init
         self._vector_core = vector_core
-        self._initializer = initializer
+        self._input_init = input_init
         self._steps = steps
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of RNN is wrong: %s" % input_type)
@@ -45,13 +43,8 @@ class RNN(NeuralLayer):
             h, = variables
             z = self._hidden_preact(h) + self.B_h
 
-        new_h = self._hidden_activation_func(z)
-        if "output" in self._output_type:
-            o = T.dot(new_h, self.W_o) + self.B_o
-            o = self._output_activation_func(o) # Normally softmax
-            return new_h, o
-        else:
-            return new_h
+        new_h = self._hidden_act(z)
+        return new_h
 
 
     def output(self, x):
@@ -66,31 +59,25 @@ class RNN(NeuralLayer):
         step_outputs = [h0]
         if "output" in self._output_type:
             step_outputs = [h0, None]
-        output_vars, _ = theano.scan(self._step, sequences=sequences, outputs_info=step_outputs, n_steps=self._steps)
-        if "output" in self._output_type:
-            _, os = output_vars
-            if self._output_type == "last_output":
-                return os[-1]
-            elif self._output_type == "all_output":
-                return os.dimshuffle((1,0,2))
-        else:
-            hs = output_vars
-            if self._output_type == "last_hidden":
-                return hs[-1]
-            elif self._output_type == "all_hidden":
-                return hs.dimshuffle((1,0,2))
+        hiddens, _ = theano.scan(self._step, sequences=sequences, outputs_info=step_outputs, n_steps=self._steps)
+
+        hs = hiddens
+        if self._output_type == "one":
+            return hs[-1]
+        elif self._output_type == "sequence":
+            return hs.dimshuffle((1,0,2))
 
     def setup(self):
         self._setup_params()
         self._setup_functions()
 
     def _setup_functions(self):
-        self._hidden_activation_func = build_activation(self._hidden_activation)
-        self._output_activation_func = build_activation(self._output_activation)
+        self._hidden_act = build_activation(self._hidden_activation)
 
     def _setup_params(self):
+        self.output_dim = self._hidden_size
         if not self._vector_core:
-            self.W_h = self.create_weight(self._hidden_size, self._hidden_size, suffix="h", initializer=self._hidden_initializer)
+            self.W_h = self.create_weight(self._hidden_size, self._hidden_size, suffix="h", initializer=self._hidden_init)
         else:
             self.W_h = self.create_bias(self._hidden_size, suffix="h")
             self.W_h.set_value(self.W_h.get_value() + self._vector_core)
@@ -99,15 +86,7 @@ class RNN(NeuralLayer):
         self.register_parameters(self.W_h, self.B_h)
 
         if self._input_type == "sequence":
-            self.W_i = self.create_weight(self.input_dim, self._hidden_size, suffix="i", initializer=self._initializer)
+            self.W_i = self.create_weight(self.input_dim, self._hidden_size, suffix="i", initializer=self._input_init)
             self.register_parameters(self.W_i)
 
-        if "output" in self._output_type:
-            assert self._output_size
-            self.W_o = self.create_weight(self._hidden_size, self._output_size, suffix="o",  initializer=self._initializer)
-            self.B_o = self.create_bias(self._output_size, suffix="o")
-            self.register_parameters(self.W_o, self.B_o)
-            self.output_dim = self._output_size
-        elif "hidden" in self._output_type:
-            self.output_dim = self._hidden_size
 

@@ -12,7 +12,7 @@ import theano.tensor as T
 from deepy.conf import TrainerConfig
 from deepy.dataset import Dataset
 from deepy.trainers.optimize import optimize_updates
-from deepy.util import Timer
+from deepy.utils import Timer
 
 
 logging = loggers.getLogger(__name__)

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from deepy.util import build_activation
+from deepy.utils import build_activation
 
 class Activation(NeuralLayer):
     """

@@ -3,7 +3,7 @@
 
 import theano
 import numpy as np
-from deepy.util import FLOATX
+from deepy.utils import FLOATX
 
 import logging as loggers
 logging = loggers.getLogger(__name__)

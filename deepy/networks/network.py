@@ -13,7 +13,7 @@ import theano
 
 from deepy.layers.layer import NeuralLayer
 from deepy.conf import NetworkConfig
-from deepy.util import dim_to_var, TrainLogger
+from deepy.utils import dim_to_var, TrainLogger
 
 logging = loggers.getLogger(__name__)
 

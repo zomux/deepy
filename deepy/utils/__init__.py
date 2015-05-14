@@ -3,7 +3,7 @@
 
 from functions import *
 from activations import *
-from weight_initializer import *
+from initializers import *
 from timer import Timer
 from fake_generator import FakeGenerator
 from line_iterator import LineIterator

@@ -8,7 +8,7 @@ import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
 
-from deepy.util import FLOATX, dim_to_var, EPSILON
+from deepy.utils import FLOATX, dim_to_var, EPSILON
 from deepy.trainers.util import wrap_core
 
 

@@ -8,7 +8,7 @@ import logging
 import numpy as np
 
 from deepy.conf import NetworkConfig, TrainerConfig
-from deepy.util.functions import FLOATX
+from deepy.utils.functions import FLOATX
 from deepy import NeuralLayer, SGDTrainer, AutoEncoder
 
 

@@ -3,7 +3,7 @@
 
 import logging as loggers
 from config import GeneralConfig
-from deepy.util import FLOATX
+from deepy.utils import FLOATX
 import theano
 import numpy as np
 logging = loggers.getLogger(__name__)

@@ -4,7 +4,7 @@
 
 import unittest
 
-from deepy.util.functions import VarMap
+from deepy.utils.functions import VarMap
 
 
 class FunctionsTest(unittest.TestCase):

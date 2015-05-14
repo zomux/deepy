@@ -7,7 +7,7 @@ import logging as loggers
 import numpy as np
 import theano
 
-from deepy.util import FLOATX, global_rand, UniformInitializer
+from deepy.utils import FLOATX, global_rand, UniformInitializer
 
 logging = loggers.getLogger(__name__)
 

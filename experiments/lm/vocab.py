@@ -50,21 +50,21 @@ class Vocab(object):
         v[index] = 1
         return v
 
-    def _load_fixed_size(self, path, fixed_size):
+    def _load_fixed_size(self, path, max_size):
         from collections import Counter
-        logging.info("fixed size: %d" % fixed_size)
+        logging.info("fixed size: %d" % max_size)
         counter = Counter()
         for line in open(path).readlines():
             line = line.strip()
             words = line.split(" ") if not self._char_based else line
             counter.update(words)
-        for w, _ in counter.most_common(fixed_size):
+        for w, _ in counter.most_common(max_size):
             self.add(w)
 
-    def load(self, path, fixed_size=-1):
+    def load(self, path, max_size=-1):
         logging.info("load data from %s" % path)
-        if fixed_size > 0:
-            self._load_fixed_size(path, fixed_size)
+        if max_size > 0:
+            self._load_fixed_size(path, max_size)
             return
         for line in open(path).xreadlines():
             line = line.strip()

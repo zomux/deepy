@@ -5,7 +5,7 @@
 Sequence adding problem.
 ---
 
-This problem is described in http://arxiv.org/abs/1504.00941 .
+This toy problem is described in http://arxiv.org/abs/1504.00941 .
 Each item of the sequence contains two units,
 the first one is real value, and the second-one 1 or 0.
 
@@ -21,7 +21,7 @@ from deepy.dataset import SequentialDataset, MiniBatches
 from deepy.networks import NeuralRegressor
 from deepy.layers import RNN, IRNN
 from deepy.trainers import SGDTrainer, LearningRateAnnealer
-from deepy.util import FLOATX
+from deepy.utils import FLOATX
 
 SEQUENCE_LEN = 100
 rand = np.random.RandomState(3)
@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     model = NeuralRegressor(input_dim=2, input_tensor=3, clip_value=3.)
     model.stack_layer(IRNN(hidden_size=100, output_size=1, input_type="sequence",
-                     output_type="last_output", output_activation="linear"))
+                     output_type="one", output_activation="linear"))
 
     if os.path.exists(args.model):
         model.load_params(args.model)

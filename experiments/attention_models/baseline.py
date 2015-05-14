@@ -6,7 +6,7 @@ from deepy import TrainerConfig
 from deepy.dataset import MnistDataset, MiniBatches
 from experiments.attention_models.baseline_trainer import AttentionTrainer
 from baseline_model import get_network
-from deepy.util import Timer
+from deepy.utils import Timer
 
 logging.basicConfig(level=logging.INFO)
 

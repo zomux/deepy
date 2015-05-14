@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from deepy.util.weight_initializer import UniformInitializer
+from deepy.utils.weight_initializer import UniformInitializer
 from config import GeneralConfig
 
 import logging as loggers

@@ -17,11 +17,11 @@ import theano
 import theano.tensor as T
 
 from deepy import NetworkConfig, TrainerConfig, AdaGradTrainer
-from deepy.util.functions import FLOATX
+from deepy.utils.functions import FLOATX
 from deepy.networks import NeuralLayer
 from deepy.layers.recursive import GeneralAutoEncoder
 from nlpy.util import LineIterator, FakeGenerator
-from deepy.util import build_activation
+from deepy.utils import build_activation
 
 
 logging.basicConfig(level=logging.INFO)

@@ -1,0 +1,30 @@
+# deepy version: 0.0.6
+[2015/05/14 09:21:53] valid   (iter=1) J=3.93 err=97.14 PPL=15.25 *
+[2015/05/14 09:22:10] monitor (iter=1) J=3.07 err=82.23 PPL=8.46 mean(irnn1)=0.48 mean(dense2)=0.02
+[2015/05/14 09:22:12] valid   (iter=2) J=3.09 err=83.84 PPL=8.70 *
+[2015/05/14 09:22:29] monitor (iter=2) J=2.91 err=81.65 PPL=7.58 mean(irnn1)=0.50 mean(dense2)=0.02
+[2015/05/14 09:22:31] valid   (iter=3) J=2.98 err=82.05 PPL=8.06 *
+[2015/05/14 09:22:48] monitor (iter=3) J=2.81 err=78.59 PPL=7.04 mean(irnn1)=0.52 mean(dense2)=0.02
+[2015/05/14 09:22:50] valid   (iter=4) J=2.86 err=78.42 PPL=7.44 *
+[2015/05/14 09:23:08] monitor (iter=4) J=2.69 err=75.60 PPL=6.50 mean(irnn1)=0.53 mean(dense2)=0.02
+[2015/05/14 09:23:10] valid   (iter=5) J=2.75 err=75.02 PPL=6.85 *
+[2015/05/14 09:23:27] monitor (iter=5) J=2.58 err=72.12 PPL=6.01 mean(irnn1)=0.52 mean(dense2)=0.02
+[2015/05/14 09:23:30] valid   (iter=6) J=2.64 err=71.80 PPL=6.37 *
+[2015/05/14 09:23:46] monitor (iter=6) J=2.50 err=69.80 PPL=5.66 mean(irnn1)=0.51 mean(dense2)=0.02
+[2015/05/14 09:23:48] valid   (iter=7) J=2.57 err=70.44 PPL=6.05 *
+[2015/05/14 09:24:05] monitor (iter=7) J=2.44 err=68.96 PPL=5.43 mean(irnn1)=0.49 mean(dense2)=0.02
+[2015/05/14 09:24:07] valid   (iter=8) J=2.52 err=69.94 PPL=5.84 *
+[2015/05/14 09:24:24] monitor (iter=8) J=2.40 err=68.68 PPL=5.28 mean(irnn1)=0.47 mean(dense2)=0.02
+[2015/05/14 09:24:26] valid   (iter=9) J=2.49 err=69.78 PPL=5.71 *
+[2015/05/14 09:24:43] monitor (iter=9) J=2.37 err=68.54 PPL=5.18 mean(irnn1)=0.45 mean(dense2)=0.02
+[2015/05/14 09:24:45] valid   (iter=10) J=2.46 err=69.52 PPL=5.60 *
+[2015/05/14 09:25:02] monitor (iter=10) J=2.35 err=68.24 PPL=5.09 mean(irnn1)=0.45 mean(dense2)=0.02
+[2015/05/14 09:25:05] valid   (iter=11) J=2.44 err=69.38 PPL=5.51 *
+[2015/05/14 09:25:23] monitor (iter=11) J=2.33 err=68.02 PPL=5.03 mean(irnn1)=0.44 mean(dense2)=0.02
+[2015/05/14 09:25:25] valid   (iter=12) J=2.42 err=69.27 PPL=5.44 *
+[2015/05/14 09:25:42] monitor (iter=12) J=2.31 err=67.73 PPL=4.96 mean(irnn1)=0.44 mean(dense2)=0.02
+[2015/05/14 09:25:45] valid   (iter=13) J=2.40 err=69.05 PPL=5.38 *
+[2015/05/14 09:26:02] monitor (iter=13) J=2.29 err=67.43 PPL=4.92 mean(irnn1)=0.43 mean(dense2)=0.02
+[2015/05/14 09:26:04] valid   (iter=14) J=2.39 err=68.60 PPL=5.32 *
+[2015/05/14 09:26:21] monitor (iter=14) J=2.28 err=67.10 PPL=4.87 mean(irnn1)=0.42 mean(dense2)=0.02
+[2015/05/14 09:26:23] valid   (iter=15) J=2.37 err=68.25 PPL=5.28 *

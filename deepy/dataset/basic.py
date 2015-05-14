@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import Dataset
-from deepy.util import FLOATX
+from deepy.utils import FLOATX
 import numpy as np
 
 import logging as loggers

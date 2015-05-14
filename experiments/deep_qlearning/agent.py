@@ -6,7 +6,7 @@ random = Random(3)
 from deepy.networks import NeuralRegressor
 from deepy.layers import Dense
 from deepy.trainers import SGDTrainer
-from deepy.util import GaussianInitializer
+from deepy.utils import GaussianInitializer
 from deepy.conf import TrainerConfig
 import threading
 
@@ -21,8 +21,8 @@ HIDDEN_UNITS = 100
 
 def get_model(state_num, action_num):
     model = NeuralRegressor(state_num)
-    model.stack(Dense(HIDDEN_UNITS, activation='tanh', initializer=GaussianInitializer(deviation=0.01)),
-                Dense(action_num, initializer=GaussianInitializer(deviation=0.01)))
+    model.stack(Dense(HIDDEN_UNITS, activation='tanh', init=GaussianInitializer(deviation=0.01)),
+                Dense(action_num, init=GaussianInitializer(deviation=0.01)))
     return model
 
 class DQNAgent(object):

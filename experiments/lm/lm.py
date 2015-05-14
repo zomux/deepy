@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from deepy.networks import NeuralNetwork
-from deepy.util import onehot, EPSILON
+from deepy.utils import onehot, EPSILON
 import theano.tensor as T
 
 class NeuralLM(NeuralNetwork):

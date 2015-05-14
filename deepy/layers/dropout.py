@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from deepy.util import global_theano_rand, FLOATX
+from deepy.utils import global_theano_rand, FLOATX
 
 class Dropout(NeuralLayer):
 

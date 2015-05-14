@@ -9,8 +9,8 @@ import theano
 from theano.tensor.shared_randomstreams import RandomStreams
 
 from deepy import NeuralClassifier, NetworkConfig
-from deepy.util import build_activation, disconnected_grad
-from deepy.util.functions import FLOATX
+from deepy.utils import build_activation, disconnected_grad
+from deepy.utils.functions import FLOATX
 from deepy.networks import NeuralLayer
 from experiments.attention_models.gaussian_sampler import SampleMultivariateGaussian
 import theano.tensor.signal.downsample

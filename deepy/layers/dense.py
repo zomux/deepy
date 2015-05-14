@@ -1,4 +1,4 @@
-from deepy.util import build_activation, FLOATX
+from deepy.utils import build_activation, FLOATX
 import theano.tensor as T
 from . import NeuralLayer
 
@@ -7,12 +7,12 @@ class Dense(NeuralLayer):
     Fully connected layer.
     """
 
-    def __init__(self, size, activation='linear', initializer=None, disable_bias=False):
+    def __init__(self, size, activation='linear', init=None, disable_bias=False):
         super(Dense, self).__init__("dense")
         self.activation = activation
         self.output_dim = size
         self.disable_bias = disable_bias
-        self.initializer = initializer
+        self.initializer = init
 
     def setup(self):
         self._setup_params()

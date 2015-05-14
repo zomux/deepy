@@ -9,7 +9,7 @@ from deepy.dataset import SequentialDataset, MiniBatches
 from deepy.networks import NeuralClassifier
 from deepy.layers import RNN, Dense, Softmax
 from deepy.trainers import SGDTrainer, LearningRateAnnealer
-from deepy.util import FLOATX
+from deepy.utils import FLOATX
 
 WORD_POS_RESOURCE = os.path.abspath(os.path.dirname(__file__)) + os.sep + "resources/word_pos.txt"
 CLASSES = ["N", "V", "ADJ", "ADV"]
@@ -48,10 +48,10 @@ batch_set = MiniBatches(dataset)
 
 if __name__ == '__main__':
     model = NeuralClassifier(input_dim=26, input_tensor=3)
-    model.stack(RNN(hidden_size=30, input_type="sequence", output_type="all_hidden", vector_core=0.1),
-                       RNN(hidden_size=30, input_type="sequence", output_type="all_hidden", vector_core=0.3),
-                       RNN(hidden_size=30, input_type="sequence", output_type="all_hidden", vector_core=0.6),
-                       RNN(hidden_size=30, input_type="sequence", output_type="last_hidden", vector_core=0.9),
+    model.stack(RNN(hidden_size=30, input_type="sequence", output_type="sequence", vector_core=0.1),
+                       RNN(hidden_size=30, input_type="sequence", output_type="sequence", vector_core=0.3),
+                       RNN(hidden_size=30, input_type="sequence", output_type="sequence", vector_core=0.6),
+                       RNN(hidden_size=30, input_type="sequence", output_type="one", vector_core=0.9),
                        Dense(4),
                        Softmax())
 

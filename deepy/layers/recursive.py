@@ -7,8 +7,8 @@ import logging as loggers
 import theano
 import theano.tensor as T
 
-from deepy.util.functions import FLOATX
-from deepy.util import build_activation
+from deepy.utils.functions import FLOATX
+from deepy.utils import build_activation
 from deepy.layers.layer import NeuralLayer
 from basic_nn import NeuralNetwork
 

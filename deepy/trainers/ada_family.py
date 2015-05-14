@@ -6,7 +6,7 @@ import numpy as np
 import theano
 from theano import tensor as T
 from deepy.trainers.optimize import logging
-from deepy.util import FLOATX
+from deepy.utils import FLOATX
 
 
 def ada_family_core(params, gparams, learning_rate = 0.01, eps= 1e-6, rho=0.95, method="ADADELTA",

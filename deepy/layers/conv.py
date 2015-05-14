@@ -9,7 +9,7 @@ import theano.tensor as T
 from theano.tensor.nnet import conv
 from theano.tensor.signal import downsample
 
-from deepy.util import build_activation, UniformInitializer
+from deepy.utils import build_activation, UniformInitializer
 from deepy.layers.layer import NeuralLayer
 
 

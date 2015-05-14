@@ -8,7 +8,7 @@ import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
 
-from deepy.util import FLOATX
+from deepy.utils import FLOATX
 from trainers import NeuralTrainer
 
 logging = loggers.getLogger(__name__)

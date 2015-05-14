@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import RNN
-from deepy.util import GaussianInitializer, IdentityInitializer, FLOATX
+from deepy.utils import GaussianInitializer, IdentityInitializer, FLOATX
 
 MAX_IDENTITY_VALUE = 0.99
 MIN_IDENTITY_VALUE = 0.0
@@ -13,14 +13,12 @@ class IRNN(RNN):
     RNN with weight initialization using identity matrix.
     """
 
-    def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="last_hidden",
-                 output_activation="softmax", weight_scale=0.9, steps=None):
-        super(IRNN, self).__init__(hidden_size, output_size=output_size,
+    def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="one", weight_scale=0.9, steps=None):
+        super(IRNN, self).__init__(hidden_size,
                                    input_type=input_type, output_type=output_type,
                                    hidden_activation="relu", steps=steps,
-                                   output_activation=output_activation,
-                                   hidden_initializer=IdentityInitializer(scale=weight_scale),
-                                   initializer=GaussianInitializer(deviation=0.001))
+                                   hidden_init=IdentityInitializer(scale=weight_scale),
+                                   input_init=GaussianInitializer(deviation=0.001))
         self.name = "irnn"
         self.register_training_callbacks(self.training_callback)
 

@@ -7,7 +7,7 @@ from lmdataset import LMDataset
 from lm import NeuralLM
 from deepy.dataset import SequentialMiniBatches
 from deepy.trainers import SGDTrainer, LearningRateAnnealer
-from deepy.layers import RNN, IRNN
+from deepy.layers import RNN, Dense
 
 
 logging.basicConfig(level=logging.INFO)
@@ -18,12 +18,13 @@ vocab_path = os.path.join(resource_dir, "ptb.train.txt")
 train_path = os.path.join(resource_dir, "ptb.train.txt")
 valid_path = os.path.join(resource_dir, "ptb.valid.txt")
 vocab = Vocab(char_based=True)
-vocab.load(vocab_path, fixed_size=1000)
+vocab.load(vocab_path, max_size=1000)
 
 model = NeuralLM(input_dim=vocab.size, input_tensor=3)
 model.stack(
-    RNN(hidden_size=100, output_size=vocab.size, output_type="all_hidden"),
-    RNN(hidden_size=100, output_size=vocab.size, output_type="all_output"))
+    RNN(hidden_size=100, output_type="sequence"),
+    RNN(hidden_size=100, output_type="sequence"),
+    Dense(vocab.size, "softmax"))
 
 
 if __name__ == '__main__':

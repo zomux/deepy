@@ -3,7 +3,7 @@
 
 
 from network import NeuralNetwork
-from deepy.util import FLOATX, EPSILON
+from deepy.utils import FLOATX, EPSILON
 import theano.tensor as T
 
 class NeuralClassifier(NeuralNetwork):

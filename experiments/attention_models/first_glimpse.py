@@ -6,7 +6,7 @@ from deepy.dataset import MnistDataset, MiniBatches
 from deepy.trainers import LearningRateAnnealer
 from first_glimpse_model import get_network
 from first_glimpse_trainer import FirstGlimpseTrainer
-from deepy.util import Timer
+from deepy.utils import Timer
 
 logging.basicConfig(level=logging.INFO)
 
