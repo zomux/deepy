@@ -62,14 +62,11 @@ class NeuralTrainer(object):
         self.evaluation_func = theano.function(
             network.input_variables + network.target_variables, self.evaluation_variables, updates=network.updates,
             allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
+        self.learning_func = None
 
         self.validation_frequency = self.config.validation_frequency
         self.min_improvement = self.config.min_improvement
         self.patience = self.config.patience
-
-        self.shapes = [p.get_value(borrow=True).shape for p in self.network.parameters]
-        self.counts = [np.prod(s) for s in self.shapes]
-        self.starts = np.cumsum([0] + self.counts)[:-1]
 
         self.best_cost = 1e100
         self.best_iter = 0
@@ -108,33 +105,6 @@ class NeuralTrainer(object):
         for param, target in zip(self.network.parameters, targets):
             param.set_value(target)
 
-    def test(self, iteration, test_set):
-        costs = list(zip(
-            self.evaluation_names,
-            np.mean([self.evaluation_func(*x) for x in test_set], axis=0)))
-        info = ' '.join('%s=%.2f' % el for el in costs)
-        message = "test    (iter=%i) %s" % (iteration + 1, info)
-        logging.info(message)
-        self.network.train_logger.record(message)
-
-    def evaluate(self, iteration, valid_set):
-        costs = list(zip(
-            self.evaluation_names,
-            np.mean([self.evaluation_func(*x) for x in valid_set], axis=0)))
-        marker = ''
-        # this is the same as: (J_i - J_f) / J_i > min improvement
-        _, J = costs[0]
-        if self.best_cost - J > self.best_cost * self.min_improvement:
-            self.best_cost = J
-            self.best_iter = iteration
-            self.best_params = [p.get_value().copy() for p in self.network.parameters]
-            marker = ' *'
-        info = ' '.join('%s=%.2f' % el for el in costs)
-        message = "valid   (iter=%i) %s%s" % (iteration + 1, info, marker)
-        logging.info(message)
-        self.network.train_logger.record(message)
-        return iteration - self.best_iter < self.patience
-
     def save_params(self, path):
         logging.info("saving parameters to %s" % path)
         opener = gzip.open if path.lower().endswith('.gz') else open
@@ -146,53 +116,33 @@ class NeuralTrainer(object):
         """
         Train the model and return costs.
         """
-        if not hasattr(self, 'learning_func'):
+        if not self.learning_func:
             raise NotImplementedError
         iteration = 0
         while True:
+            # Test
             if not iteration % self.config.test_frequency and test_set:
                 try:
-                    self.test(iteration, test_set)
+                    self._run_test(iteration, test_set)
                 except KeyboardInterrupt:
                     logging.info('interrupted!')
                     break
-
+            # Validate
             if not iteration % self.validation_frequency and valid_set:
                 try:
-                    if not self.evaluate(iteration, valid_set):
+
+                    if not self._run_valid(iteration, valid_set):
                         logging.info('patience elapsed, bailing out')
                         break
                 except KeyboardInterrupt:
                     logging.info('interrupted!')
                     break
-
-            training_callback = bool(self.network.training_callbacks)
+            # Train one step
             try:
-                cost_matrix = []
-                c = 0
-                for x in train_set:
-                    cost_x = self.learning_func(*x)
-                    # if np.isnan(cost_x[0]):
-                    #     import pdb;pdb.set_trace()
-                    cost_matrix.append(cost_x)
-                    if training_callback:
-                        self.network.training_callback()
-                    if train_size:
-                        c += 1
-                        sys.stdout.write("\r> %d%%" % (c * 100 / train_size))
-                        sys.stdout.flush()
-                if train_size:
-                    sys.stdout.write("\r")
-                    sys.stdout.flush()
-                costs = list(zip(self.training_names, np.mean(cost_matrix, axis=0)))
+                costs = self._run_train(iteration, train_set, train_size)
             except KeyboardInterrupt:
                 logging.info('interrupted!')
                 break
-            if not iteration % self.config.monitor_frequency:
-                info = ' '.join('%s=%.2f' % el for el in costs)
-                message = "monitor (iter=%i) %s" % (iteration + 1, info)
-                logging.info(message)
-                self.network.train_logger.record(message)
 
             iteration += 1
             self.network.epoch_callback()
@@ -202,7 +152,83 @@ class NeuralTrainer(object):
         if valid_set and self.config.get("save_best_parameters", True):
             self.set_params(self.best_params)
         if test_set:
-            self.test(0, test_set)
+            self._run_test(-1, test_set)
+
+    def _run_test(self, iteration, test_set):
+        """
+        Run on test iteration.
+        """
+        costs = self.test_step(test_set)
+        info = ' '.join('%s=%.2f' % el for el in costs)
+        message = "test    (iter=%i) %s" % (iteration + 1, info)
+        logging.info(message)
+        self.network.train_logger.record(message)
+
+    def _run_train(self, iteration, train_set, train_size=None):
+        """
+        Run one training iteration.
+        """
+        costs = self.train_step(train_set, train_size)
+
+        if not iteration % self.config.monitor_frequency:
+            info = " ".join("%s=%.2f" % item for item in costs)
+            message = "monitor (iter=%i) %s" % (iteration + 1, info)
+            logging.info(message)
+            self.network.train_logger.record(message)
+        return costs
+
+    def _run_valid(self, iteration, valid_set):
+        """
+        Run one valid iteration, return true if to continue training.
+        """
+        costs = self.valid_step(valid_set)
+        # this is the same as: (J_i - J_f) / J_i > min improvement
+        _, J = costs[0]
+        if self.best_cost - J > self.best_cost * self.min_improvement:
+            self.best_cost = J
+            self.best_iter = iteration
+            self.best_params = [p.get_value().copy() for p in self.network.parameters]
+            marker = ' *'
+        else:
+            marker = ""
+        info = ' '.join('%s=%.2f' % el for el in costs)
+        message = "valid   (iter=%i) %s%s" % (iteration + 1, info, marker)
+        logging.info(message)
+        self.network.train_logger.record(message)
+        return iteration - self.best_iter < self.patience
+
+    def test_step(self, test_set):
+        costs = list(zip(
+            self.evaluation_names,
+            np.mean([self.evaluation_func(*x) for x in test_set], axis=0)))
+        return costs
+
+    def valid_step(self, valid_set):
+        costs = list(zip(
+            self.evaluation_names,
+            np.mean([self.evaluation_func(*x) for x in valid_set], axis=0)))
+        return costs
+
+    def train_step(self, train_set, train_size=None):
+        training_callback = bool(self.network.training_callbacks)
+        cost_matrix = []
+        c = 0
+        for x in train_set:
+            cost_x = self.learning_func(*x)
+            # if np.isnan(cost_x[0]):
+            #     import pdb;pdb.set_trace()
+            cost_matrix.append(cost_x)
+            if training_callback:
+                self.network.training_callback()
+            if train_size:
+                c += 1
+                sys.stdout.write("\r> %d%%" % (c * 100 / train_size))
+                sys.stdout.flush()
+        if train_size:
+            sys.stdout.write("\r")
+            sys.stdout.flush()
+        costs = list(zip(self.training_names, np.mean(cost_matrix, axis=0)))
+        return costs
 
     def run(self, train_set, valid_set=None, test_set=None, train_size=None, controllers=None):
         """

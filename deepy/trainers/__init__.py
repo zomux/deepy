@@ -8,3 +8,4 @@ from annealers import *
 from customize_trainer import CustomizeTrainer
 from util import wrap_core
 from delayed_trainers import DelayedBatchSGDTrainer
+from scipy_trainer import ScipyTrainer

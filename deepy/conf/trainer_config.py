@@ -22,6 +22,7 @@ class TrainerConfig(GeneralConfig):
             "test_frequency": 10,
             "monitor_frequency": 1,
             "min_improvement": 0.001,
+            "max_iterations": 0,
             "patience": 20,
 
             # Optimization
