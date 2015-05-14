@@ -116,6 +116,17 @@ http://localhost:5003
 
 ### Recursive auto-encoder
 
+### Train with CG and L-BFGS
+
+- CG
+```
+python experiments/scipy_training/mnist_cg.py
+```
+- L-BFGS
+```
+python experiments/scipy_training/mnist_lbfgs.py
+```
+
 
 Other features
 ===
