@@ -4,3 +4,4 @@
 from network import NeuralNetwork
 from classifier import NeuralClassifier
 from regressor import NeuralRegressor
+from recursive_auto_encoder import RecursiveAutoEncoder
