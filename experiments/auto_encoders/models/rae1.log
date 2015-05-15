@@ -1,0 +1,128 @@
+# deepy version: 0.0.8
+[2015/05/15 09:42:21] valid   (iter=1) J=2354.45 mean(rep)=0.29 mean(rep)=0.29 *
+[2015/05/15 09:42:22] monitor (iter=1) J=1244.47 mean(rep)=0.21 mean(rep)=0.21 mean(RAE1)=1244.47
+[2015/05/15 09:42:22] valid   (iter=2) J=1018.64 mean(rep)=0.17 mean(rep)=0.17 *
+[2015/05/15 09:42:23] monitor (iter=2) J=995.98 mean(rep)=0.16 mean(rep)=0.16 mean(RAE1)=995.98
+[2015/05/15 09:42:23] valid   (iter=3) J=975.47 mean(rep)=0.16 mean(rep)=0.16 *
+[2015/05/15 09:42:23] monitor (iter=3) J=969.06 mean(rep)=0.16 mean(rep)=0.16 mean(RAE1)=969.06
+[2015/05/15 09:42:23] valid   (iter=4) J=962.47 mean(rep)=0.17 mean(rep)=0.17 *
+[2015/05/15 09:42:24] monitor (iter=4) J=957.72 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=957.72
+[2015/05/15 09:42:24] valid   (iter=5) J=954.90 mean(rep)=0.18 mean(rep)=0.18 *
+[2015/05/15 09:42:25] monitor (iter=5) J=950.21 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=950.21
+[2015/05/15 09:42:25] valid   (iter=6) J=949.22 mean(rep)=0.19 mean(rep)=0.19 *
+[2015/05/15 09:42:25] monitor (iter=6) J=944.73 mean(rep)=0.19 mean(rep)=0.19 mean(RAE1)=944.73
+[2015/05/15 09:42:25] valid   (iter=7) J=945.31 mean(rep)=0.19 mean(rep)=0.19 *
+[2015/05/15 09:42:26] monitor (iter=7) J=940.76 mean(rep)=0.19 mean(rep)=0.19 mean(RAE1)=940.76
+[2015/05/15 09:42:26] valid   (iter=8) J=942.46 mean(rep)=0.19 mean(rep)=0.19 *
+[2015/05/15 09:42:27] monitor (iter=8) J=937.66 mean(rep)=0.20 mean(rep)=0.20 mean(RAE1)=937.66
+[2015/05/15 09:42:27] valid   (iter=9) J=940.16 mean(rep)=0.20 mean(rep)=0.20 *
+[2015/05/15 09:42:27] monitor (iter=9) J=935.07 mean(rep)=0.20 mean(rep)=0.20 mean(RAE1)=935.07
+[2015/05/15 09:42:28] valid   (iter=10) J=938.20 mean(rep)=0.20 mean(rep)=0.20 *
+[2015/05/15 09:42:28] monitor (iter=10) J=932.76 mean(rep)=0.20 mean(rep)=0.20 mean(RAE1)=932.76
+[2015/05/15 09:42:28] valid   (iter=11) J=936.40 mean(rep)=0.20 mean(rep)=0.20 *
+[2015/05/15 09:42:29] monitor (iter=11) J=930.69 mean(rep)=0.20 mean(rep)=0.20 mean(RAE1)=930.69
+[2015/05/15 09:42:29] valid   (iter=12) J=934.73 mean(rep)=0.20 mean(rep)=0.20 *
+[2015/05/15 09:42:30] monitor (iter=12) J=928.87 mean(rep)=0.20 mean(rep)=0.20 mean(RAE1)=928.87
+[2015/05/15 09:42:30] valid   (iter=13) J=933.57 mean(rep)=0.20 mean(rep)=0.20 *
+[2015/05/15 09:42:30] monitor (iter=13) J=927.22 mean(rep)=0.20 mean(rep)=0.20 mean(RAE1)=927.22
+[2015/05/15 09:42:30] valid   (iter=14) J=932.34 mean(rep)=0.20 mean(rep)=0.20 *
+[2015/05/15 09:42:31] monitor (iter=14) J=925.77 mean(rep)=0.20 mean(rep)=0.20 mean(RAE1)=925.77
+[2015/05/15 09:42:31] valid   (iter=15) J=931.21 mean(rep)=0.19 mean(rep)=0.19 *
+[2015/05/15 09:42:32] monitor (iter=15) J=924.36 mean(rep)=0.20 mean(rep)=0.20 mean(RAE1)=924.36
+[2015/05/15 09:42:32] valid   (iter=16) J=930.30 mean(rep)=0.19 mean(rep)=0.19
+[2015/05/15 09:42:32] monitor (iter=16) J=923.04 mean(rep)=0.19 mean(rep)=0.19 mean(RAE1)=923.04
+[2015/05/15 09:42:32] valid   (iter=17) J=929.39 mean(rep)=0.19 mean(rep)=0.19 *
+[2015/05/15 09:42:33] monitor (iter=17) J=921.77 mean(rep)=0.19 mean(rep)=0.19 mean(RAE1)=921.77
+[2015/05/15 09:42:33] valid   (iter=18) J=928.50 mean(rep)=0.19 mean(rep)=0.19
+[2015/05/15 09:42:34] monitor (iter=18) J=920.58 mean(rep)=0.19 mean(rep)=0.19 mean(RAE1)=920.58
+[2015/05/15 09:42:34] valid   (iter=19) J=927.68 mean(rep)=0.19 mean(rep)=0.19 *
+[2015/05/15 09:42:34] monitor (iter=19) J=919.48 mean(rep)=0.19 mean(rep)=0.19 mean(RAE1)=919.48
+[2015/05/15 09:42:34] valid   (iter=20) J=926.96 mean(rep)=0.19 mean(rep)=0.19
+[2015/05/15 09:42:35] monitor (iter=20) J=918.47 mean(rep)=0.19 mean(rep)=0.19 mean(RAE1)=918.47
+[2015/05/15 09:42:35] valid   (iter=21) J=926.35 mean(rep)=0.19 mean(rep)=0.19 *
+[2015/05/15 09:42:36] monitor (iter=21) J=917.55 mean(rep)=0.19 mean(rep)=0.19 mean(RAE1)=917.55
+[2015/05/15 09:42:36] valid   (iter=22) J=925.83 mean(rep)=0.18 mean(rep)=0.18
+[2015/05/15 09:42:36] monitor (iter=22) J=916.73 mean(rep)=0.19 mean(rep)=0.19 mean(RAE1)=916.73
+[2015/05/15 09:42:36] valid   (iter=23) J=925.38 mean(rep)=0.18 mean(rep)=0.18 *
+[2015/05/15 09:42:37] monitor (iter=23) J=915.91 mean(rep)=0.19 mean(rep)=0.19 mean(RAE1)=915.91
+[2015/05/15 09:42:37] valid   (iter=24) J=924.98 mean(rep)=0.18 mean(rep)=0.18
+[2015/05/15 09:42:38] monitor (iter=24) J=915.11 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=915.11
+[2015/05/15 09:42:38] valid   (iter=25) J=924.61 mean(rep)=0.18 mean(rep)=0.18
+[2015/05/15 09:42:38] monitor (iter=25) J=914.33 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=914.33
+[2015/05/15 09:42:38] valid   (iter=26) J=924.26 mean(rep)=0.18 mean(rep)=0.18 *
+[2015/05/15 09:42:39] monitor (iter=26) J=913.55 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=913.55
+[2015/05/15 09:42:39] valid   (iter=27) J=923.93 mean(rep)=0.18 mean(rep)=0.18
+[2015/05/15 09:42:40] monitor (iter=27) J=912.79 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=912.79
+[2015/05/15 09:42:40] valid   (iter=28) J=923.62 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:40] monitor (iter=28) J=912.09 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=912.09
+[2015/05/15 09:42:40] valid   (iter=29) J=923.37 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:41] monitor (iter=29) J=911.35 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=911.35
+[2015/05/15 09:42:41] valid   (iter=30) J=923.15 mean(rep)=0.17 mean(rep)=0.17 *
+[2015/05/15 09:42:42] monitor (iter=30) J=910.68 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=910.68
+[2015/05/15 09:42:42] valid   (iter=31) J=922.96 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:43] monitor (iter=31) J=909.97 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=909.97
+[2015/05/15 09:42:43] valid   (iter=32) J=922.81 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:43] monitor (iter=32) J=909.33 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=909.33
+[2015/05/15 09:42:43] valid   (iter=33) J=922.67 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:44] monitor (iter=33) J=908.66 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=908.66
+[2015/05/15 09:42:44] valid   (iter=34) J=922.57 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:45] monitor (iter=34) J=908.06 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=908.06
+[2015/05/15 09:42:45] valid   (iter=35) J=922.48 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:45] monitor (iter=35) J=907.43 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=907.43
+[2015/05/15 09:42:45] valid   (iter=36) J=923.15 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:46] monitor (iter=36) J=905.87 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=905.87
+[2015/05/15 09:42:46] valid   (iter=37) J=918.74 mean(rep)=0.17 mean(rep)=0.17 *
+[2015/05/15 09:42:47] monitor (iter=37) J=905.20 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=905.20
+[2015/05/15 09:42:47] valid   (iter=38) J=918.72 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:47] monitor (iter=38) J=904.73 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=904.73
+[2015/05/15 09:42:47] valid   (iter=39) J=918.71 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:48] monitor (iter=39) J=904.29 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=904.29
+[2015/05/15 09:42:48] valid   (iter=40) J=918.69 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:49] monitor (iter=40) J=903.87 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=903.87
+[2015/05/15 09:42:49] valid   (iter=41) J=918.67 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:49] monitor (iter=41) J=903.47 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=903.47
+[2015/05/15 09:42:49] valid   (iter=42) J=918.66 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:50] monitor (iter=42) J=903.08 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=903.08
+[2015/05/15 09:42:50] valid   (iter=43) J=918.74 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:51] monitor (iter=43) J=903.17 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=903.17
+[2015/05/15 09:42:51] valid   (iter=44) J=917.43 mean(rep)=0.17 mean(rep)=0.17 *
+[2015/05/15 09:42:51] monitor (iter=44) J=902.74 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=902.74
+[2015/05/15 09:42:51] valid   (iter=45) J=917.45 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:52] monitor (iter=45) J=902.45 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=902.45
+[2015/05/15 09:42:52] valid   (iter=46) J=917.47 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:53] monitor (iter=46) J=902.18 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=902.18
+[2015/05/15 09:42:53] valid   (iter=47) J=917.48 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:54] monitor (iter=47) J=901.92 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=901.92
+[2015/05/15 09:42:54] valid   (iter=48) J=917.49 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:54] monitor (iter=48) J=901.68 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=901.68
+[2015/05/15 09:42:54] valid   (iter=49) J=917.50 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:55] monitor (iter=49) J=901.44 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=901.44
+[2015/05/15 09:42:55] valid   (iter=50) J=917.43 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:56] monitor (iter=50) J=901.77 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=901.77
+[2015/05/15 09:42:56] valid   (iter=51) J=917.05 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:56] monitor (iter=51) J=901.50 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=901.50
+[2015/05/15 09:42:56] valid   (iter=52) J=917.08 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:57] monitor (iter=52) J=901.33 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=901.33
+[2015/05/15 09:42:57] valid   (iter=53) J=917.10 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:58] monitor (iter=53) J=901.17 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=901.17
+[2015/05/15 09:42:58] valid   (iter=54) J=917.12 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:58] monitor (iter=54) J=901.02 mean(rep)=0.17 mean(rep)=0.17 mean(RAE1)=901.02
+[2015/05/15 09:42:58] valid   (iter=55) J=917.43 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:42:59] monitor (iter=55) J=901.33 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=901.33
+[2015/05/15 09:42:59] valid   (iter=56) J=916.95 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:43:00] monitor (iter=56) J=901.02 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=901.02
+[2015/05/15 09:43:00] valid   (iter=57) J=916.96 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:43:00] monitor (iter=57) J=900.90 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=900.90
+[2015/05/15 09:43:00] valid   (iter=58) J=916.99 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:43:01] monitor (iter=58) J=900.81 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=900.81
+[2015/05/15 09:43:01] valid   (iter=59) J=917.01 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:43:02] monitor (iter=59) J=900.72 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=900.72
+[2015/05/15 09:43:02] valid   (iter=60) J=917.43 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:43:02] monitor (iter=60) J=901.18 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=901.18
+[2015/05/15 09:43:02] valid   (iter=61) J=916.94 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:43:03] monitor (iter=61) J=900.81 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=900.81
+[2015/05/15 09:43:03] valid   (iter=62) J=916.93 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:43:04] monitor (iter=62) J=900.69 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=900.69
+[2015/05/15 09:43:04] valid   (iter=63) J=916.95 mean(rep)=0.17 mean(rep)=0.17
+[2015/05/15 09:43:05] monitor (iter=63) J=900.62 mean(rep)=0.18 mean(rep)=0.18 mean(RAE1)=900.62
+[2015/05/15 09:43:05] valid   (iter=64) J=916.97 mean(rep)=0.17 mean(rep)=0.17

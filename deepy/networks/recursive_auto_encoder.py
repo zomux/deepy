@@ -15,14 +15,16 @@ logging = loggers.getLogger(__name__)
 
 from network import NeuralNetwork
 
+# TODO: repair additional_h mode
 class RecursiveAutoEncoder(NeuralNetwork):
     """
     Recursive auto encoder (Recursively encode a sequence by combining two children).
     Parameters:
         rep_dim - dimension of representation
     """
-    def __init__(self, input_dim, rep_dim=None, activation='tanh', unfolding=True, additional_h=False, config=None):
-        super(RecursiveAutoEncoder, self).__init__(input_dim, config=config)
+    def __init__(self, input_dim, rep_dim=None, activation='tanh', unfolding=True, additional_h=False,
+                 config=None):
+        super(RecursiveAutoEncoder, self).__init__(input_dim, config=config, input_tensor=3)
 
         self.rep_dim = rep_dim
         self.stack(RecursiveAutoEncoderCore(rep_dim, unfolding=unfolding, additional_h=additional_h))
@@ -147,8 +149,10 @@ class RecursiveAutoEncoderCore(NeuralLayer):
         self._softmax_func = build_activation('softmax')
 
     def _setup_params(self):
-        if self.rep_dim < 0:
+        if not self.rep_dim or self.rep_dim < 0:
             self.rep_dim = self.input_dim
+        if not self.additional_h and self.rep_dim != self.input_dim:
+            raise Exception("rep_dim must be input_dim when additional_h is not used")
 
         self.W_e1 = self.create_weight(self.rep_dim, self.rep_dim, "enc1")
         self.W_e2 = self.create_weight(self.input_dim, self.rep_dim, "enc2")
