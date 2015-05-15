@@ -151,4 +151,8 @@ Other features
 
 - Auto gradient correction
 
+```
+Don't ask for a document, the code itself is so easy to understand,
+that it does not require a redundant document to explain.
+```
 Raphael Shu, 2015
