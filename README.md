@@ -114,7 +114,16 @@ python experiments/deep_qlearning/server.py
 http://localhost:5003
 ```
 
-### Recursive auto-encoder
+### Auto encoders
+
+- Recurrent NN based auto-encoder
+```
+python experiments/auto_encoders/rnn_auto_encoder.py
+```
+- Recursive auto-encoder
+```
+python experiments/auto_encoders/recursive_auto_encoder.py
+```
 
 ### Train with CG and L-BFGS
 
@@ -126,7 +135,16 @@ python experiments/scipy_training/mnist_cg.py
 ```
 python experiments/scipy_training/mnist_lbfgs.py
 ```
+Other experiments
+===
 
+### Highway networks
+
+- http://arxiv.org/abs/1505.00387
+```
+python experiments/highway_networks/mnist_baseline.py
+python experiments/highway_networks/mnist_highway.py
+```
 
 Other features
 ===
