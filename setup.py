@@ -19,7 +19,7 @@ setup(
     author='Raphael Shu',
     author_email='raphael@uaca.com',
 
-    url='http://nlpy.org',
+    url='https://github.com/uaca/deepy',
     download_url='http://pypi.python.org/pypi/deepy',
 
     keywords=' Deep learning '
