@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from . import FLOATX
 
 class WeightInitializer(object):
     """
@@ -48,7 +47,7 @@ class GaussianInitializer(WeightInitializer):
     Gaussian weight sampler.
     """
 
-    def __init__(self, mean=0, deviation=0.001, seed=None):
+    def __init__(self, mean=0, deviation=0.01, seed=None):
         super(GaussianInitializer, self).__init__(seed)
         self.mean = mean
         self.deviation = deviation
@@ -70,15 +69,66 @@ class IdentityInitializer(WeightInitializer):
         assert len(shape) == 2
         return np.eye(*shape) * self.scale
 
-class GlorotUniformInitializer(WeightInitializer):
+class XavierGlorotInitializer(WeightInitializer):
     """
-    Uniform weight sampler.
+    Xavier Glorot's weight initializer.
+    See http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf
     """
 
-    def __init__(self, seed=None):
-        super(GlorotUniformInitializer, self).__init__(seed)
+    def __init__(self, uniform=False, seed=None):
+        """
+        Parameters:
+            uniform - uniform distribution, default Gaussian
+            seed - random seed
+        """
+        super(XavierGlorotInitializer, self).__init__(seed)
+        self.uniform = uniform
 
     def sample(self, shape):
         scale = np.sqrt(2. / sum(shape))
-        weight = self.rand.uniform(-1, 1, size=shape) * scale
-        return weight
+        if self.uniform:
+            return self.rand.uniform(-1, 1, size=shape) * scale
+        else:
+            return self.rand.randn(*shape) * scale
+
+class KaimingHeInitializer(WeightInitializer):
+    """
+    Kaiming He's initialization scheme, especially made for ReLU.
+    See http://arxiv.org/abs/1502.01852.
+    """
+    def __init__(self, uniform=False, seed=None):
+        """
+        Parameters:
+            uniform - uniform distribution, default Gaussian
+            seed - random seed
+        """
+        super(KaimingHeInitializer, self).__init__(seed)
+        self.uniform = uniform
+
+    def sample(self, shape):
+        scale = np.sqrt(2. / shape[-2])
+        if self.uniform:
+            return self.rand.uniform(-1, 1, size=shape) * scale
+        else:
+            return self.rand.randn(*shape) * scale
+
+class OrthogonalInitializer(WeightInitializer):
+    """
+    Orthogonal weight initializer.
+    """
+    def __init__(self, scale=1.1, seed=None):
+        """
+        Parameters:
+            scale - scale
+            seed - random seed
+        """
+        super(OrthogonalInitializer, self).__init__(seed)
+        self.scale = scale
+
+    def sample(self, shape):
+        flat_shape = (shape[0], np.prod(shape[1:]))
+        a = np.random.normal(0.0, 1.0, flat_shape)
+        u, _, v = np.linalg.svd(a, full_matrices=False)
+        q = u if u.shape == flat_shape else v
+        q = q.reshape(shape)
+        return self.scale * q[:shape[0], :shape[1]]

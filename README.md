@@ -146,6 +146,15 @@ python experiments/highway_networks/mnist_baseline.py
 python experiments/highway_networks/mnist_highway.py
 ```
 
+### Effect of different initialization schemes
+
+```
+python experiments/initialization_schemes/gaussian.py
+python experiments/initialization_schemes/uniform.py
+python experiments/initialization_schemes/xavier_glorot.py
+python experiments/initialization_schemes/kaiming_he.py
+```
+
 Other features
 ===
 
