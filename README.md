@@ -13,7 +13,7 @@ deepy: Highly extensible deep learning framework based on Theano
 
 - numpy
 - theano
-- scipy for L-BFGS
+- scipy for L-BFGS and CG optimization
 
 Clean interface
 ===
