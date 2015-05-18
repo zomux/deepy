@@ -24,12 +24,14 @@ class AggregationLayer(NeuralLayer):
             self._inner_layers.append(Dense(self.size, self.activation, init=self.init).connect(self.size))
         self.register_inner_layers(*self._inner_layers)
 
-        self._eva1 = Dense(self.size, self.activation, init=self.init).connect(self.input_dim)
-        self._eva2 = Dense(self.layers, 'linear', init=self.init).connect(self.size)
-        self._softmax = Softmax().connect(self.layers)
-        self._dropout = Dropout(0.1)
+        self._chain2 = Chain(self.input_dim).stack(
+            Dense(self.size, self.activation, init=self.init).connect(self.input_dim),
+            Dense(self.layers, 'linear', init=self.init).connect(self.size),
+            Softmax()
+        )
 
-        self.register_inner_layers(self._eva1, self._eva2, self._softmax)
+        self.register_inner_layers(self._chain2)
+        self._dropout = Dropout(0.1)
 
     def _output(self, x, test=False):
         seq = []
@@ -41,9 +43,7 @@ class AggregationLayer(NeuralLayer):
 
         seq_v = T.concatenate(seq, axis=1)
 
-        eva = self._call(self._eva1, x, test)
-        eva = self._call(self._eva2, eva, test)
-        eva = self._call(self._softmax, eva, test)
+        eva = self._chain2.call(x, test)
 
         result = seq_v * eva.dimshuffle((0, 1, "x"))
         result = result.sum(axis=1)

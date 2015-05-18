@@ -66,6 +66,15 @@ class NeuralLayer(object):
         """
         return self.output(x)
 
+    def call(self, x, test=False):
+        """
+        Call this layer, with a parameter to switch test or not.
+        """
+        if test:
+            return self.test_output(x)
+        else:
+            return self.output(x)
+
     def register_inner_layers(self, *layers):
         for layer in layers:
             self.register_parameters(*layer.parameters)

@@ -95,6 +95,7 @@ class NeuralNetwork(object):
         """
         for layer in layers:
             self.stack_layer(layer)
+        return self
 
     def prepare_training(self):
         """
