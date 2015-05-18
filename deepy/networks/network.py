@@ -66,7 +66,6 @@ class NeuralNetwork(object):
             layer.connect(self.input_dim, network_config=self.network_config)
         else:
             layer.connect(self.layers[-1].output_dim, previous_layer=self.layers[-1], network_config=self.network_config)
-        layer.setup()
         self._output = layer.output(self._output)
         self._test_output = layer.test_output(self._test_output)
         self._hidden_outputs.append(self._output)

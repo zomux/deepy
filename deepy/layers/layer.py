@@ -45,6 +45,8 @@ class NeuralLayer(object):
         self.previous_layer = previous_layer
         self.network_config = network_config
         self.connected = True
+        self.setup()
+        return self
 
     def setup(self):
         """
@@ -63,6 +65,10 @@ class NeuralLayer(object):
         Output function in test time.
         """
         return self.output(x)
+
+    def register_inner_layers(self, *layers):
+        for layer in layers:
+            self.register_parameters(*layer.parameters)
 
     def register_parameters(self, *parameters):
         """
