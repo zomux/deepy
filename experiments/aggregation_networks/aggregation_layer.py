@@ -25,8 +25,8 @@ class AggregationLayer(NeuralLayer):
         self.register_inner_layers(*self._inner_layers)
 
         self._chain2 = Chain(self.input_dim).stack(
-            Dense(self.size, self.activation, init=self.init).connect(self.input_dim),
-            Dense(self.layers, 'linear', init=self.init).connect(self.size),
+            Dense(self.size, self.activation, init=self.init),
+            Dense(self.layers, 'linear', init=self.init),
             Softmax()
         )
 
@@ -37,8 +37,8 @@ class AggregationLayer(NeuralLayer):
         seq = []
         v = x
         for layer in self._inner_layers:
-            v = self._call(layer, v, test)
-            v = self._call(self._dropout, v, test)
+            v = layer.call(v, test)
+            v = self._dropout.call(v, test)
             seq.append(v.dimshuffle(0, "x", 1))
 
         seq_v = T.concatenate(seq, axis=1)
@@ -54,13 +54,6 @@ class AggregationLayer(NeuralLayer):
 
     def test_output(self, x):
         return self._output(x, True)
-
-    def _call(self, layer, x, test=False):
-        if test:
-            return layer.test_output(x)
-        else:
-            return layer.output(x)
-
 
 
 

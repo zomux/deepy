@@ -23,7 +23,7 @@ class Chain(NeuralLayer):
                 layer.connect(self.layers[-1].output_dim)
             self.layers.append(layer)
             self.output_dim = layer.output_dim
-        self.register_inner_layers(self.layers)
+        self.register_inner_layers(*self.layers)
         return self
 
     def output(self, x):
@@ -35,5 +35,5 @@ class Chain(NeuralLayer):
     def _output(self, x, test):
         y = x
         for layer in self.layers:
-            y = layer.call(x, test=test)
+            y = layer.call(y, test=test)
         return y

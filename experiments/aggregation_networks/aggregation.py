@@ -22,7 +22,7 @@ if __name__ == '__main__':
                 Dense(10, 'linear', init=KaimingHeInitializer()),
                 Softmax())
 
-    trainer = SGDTrainer(model)
+    trainer = MomentumTrainer(model)
 
     mnist = MiniBatches(MnistDataset(), batch_size=20)
 
