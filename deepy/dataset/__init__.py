@@ -8,3 +8,4 @@ from mnist import MnistDataset
 from mini_batch import MiniBatches
 from sequence import SequentialDataset
 from seq_mini_batch import SequentialMiniBatches
+from binarized_mnist import BinarizedMnistDataset

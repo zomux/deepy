@@ -6,9 +6,9 @@ from attention_reader import AttentionReader
 from attention_writer import AttentionWriter
 from qsampler import Qsampler
 
-ENCODER_HIDDEN_DIM = 100 # 256
-DECODER_HIDDEN_DIM = 100 # 256
-LATENT_VARIABLE_DIM = 50 # 100
+ENCODER_HIDDEN_DIM = 256 # 256
+DECODER_HIDDEN_DIM = 256 # 256
+LATENT_VARIABLE_DIM = 100 # 100
 READING_GLIMPSE_SIZE = 2
 WRITING_GLIMPSE_SIZE = 5
 
