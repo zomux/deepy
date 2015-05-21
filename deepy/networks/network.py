@@ -11,13 +11,14 @@ import os
 import theano.tensor as T
 import theano
 
+import deepy
 from deepy.layers.layer import NeuralLayer
 from deepy.conf import NetworkConfig
 from deepy.utils import dim_to_var, TrainLogger
 
 logging = loggers.getLogger(__name__)
 
-DEEPY_MESSAGE = "deepy =============================>"
+DEEPY_MESSAGE = "deepy version = %s" % deepy.__version__
 
 class NeuralNetwork(object):
     """

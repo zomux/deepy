@@ -9,7 +9,7 @@ from deepy.dataset import MnistDataset, MiniBatches
 
 from core import DrawModel
 
-model_path = os.path.join(os.path.dirname(__file__), "models", "aggregation1.gz")
+model_path = os.path.join(os.path.dirname(__file__), "models", "mnist1.gz")
 
 if __name__ == '__main__':
     model = DrawModel(image_width=28, image_height=28, attention_times=5)

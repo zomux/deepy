@@ -13,9 +13,9 @@ class Qsampler(NeuralLayer):
         self.size = size
 
     def setup(self):
-        self.mean_transform = Dense(self.size)
+        self.mean_transform = Dense(self.size).connect(self.input_dim)
 
-        self.log_sigma_transform = Dense(self.size)
+        self.log_sigma_transform = Dense(self.size).connect(self.input_dim)
 
         self.register_inner_layers(self.mean_transform, self.log_sigma_transform)
 

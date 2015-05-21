@@ -6,9 +6,9 @@ from attention_reader import AttentionReader
 from attention_writer import AttentionWriter
 from qsampler import Qsampler
 
-ENCODER_HIDDEN_DIM = 256
-DECODER_HIDDEN_DIM = 256
-LATENT_VARIABLE_DIM = 100
+ENCODER_HIDDEN_DIM = 100 # 256
+DECODER_HIDDEN_DIM = 100 # 256
+LATENT_VARIABLE_DIM = 50 # 100
 READING_GLIMPSE_SIZE = 2
 WRITING_GLIMPSE_SIZE = 5
 
@@ -24,7 +24,7 @@ class DrawLayer(NeuralLayer):
 
         self.reader = AttentionReader(img_width * img_height, ENCODER_HIDDEN_DIM, img_width, img_height, READING_GLIMPSE_SIZE)
         self.encoder_lstm = LSTM(ENCODER_HIDDEN_DIM).connect(input_dim=READER_OUTPUT_DIM + DECODER_HIDDEN_DIM)
-        self.sampler = Qsampler(LATENT_VARIABLE_DIM)
+        self.sampler = Qsampler(LATENT_VARIABLE_DIM).connect(input_dim=ENCODER_HIDDEN_DIM)
         self.decoder_lstm = LSTM(DECODER_HIDDEN_DIM).connect(input_dim=LATENT_VARIABLE_DIM)
         self.writer = AttentionWriter(DECODER_HIDDEN_DIM, img_width, img_height, WRITING_GLIMPSE_SIZE)
 
@@ -38,12 +38,14 @@ class DrawLayer(NeuralLayer):
         r = self.reader.read(x, x_hat, h_dec)
         # Equation (5); Encode it with history
         encoder_inputs = self.encoder_lstm.produce_input_sequences(T.concatenate([r, h_dec], axis=1))
-        h_enc, c_enc = self.encoder_lstm.step(encoder_inputs + [h_enc, c_enc])
+        encoder_inputs += [h_enc, c_enc]
+        h_enc, c_enc = self.encoder_lstm.step(*encoder_inputs)
         # Equation (6); Sample a latent sample
         z_t, kl = self.sampler.sample(h_enc, random_source)
         # Equation (7); Decode latent sample
         decoder_inputs = self.decoder_lstm.produce_input_sequences(z_t)
-        h_dec, c_dec = self.decoder_lstm.step(decoder_inputs + [h_dec, c_dec])
+        decoder_inputs += [h_dec, c_dec]
+        h_dec, c_dec = self.decoder_lstm.step(*decoder_inputs)
         # Equation (8); Further decode it to glimpse, and restore glimpse to full-size image
         canvas = canvas + self.writer.write(h_dec)
         return canvas, h_enc, c_enc, h_dec, c_dec, z_t, kl
@@ -62,7 +64,7 @@ class DrawLayer(NeuralLayer):
 
         [canvas, _, _, _, _, latent_var, kl], _ = theano.scan(self._core_step,
                                                               sequences=[random_sources],
-                                                              outputs_info=[T.zeros_like(x), h_enc0, h_enc0, h_dec0, h_enc0],
+                                                              outputs_info=[T.zeros_like(x), h_enc0, h_enc0, h_dec0, h_enc0, None, None],
                                                               non_sequences=[x],
                                                               n_steps=self.attention_times)
 
@@ -78,7 +80,7 @@ class DrawLayer(NeuralLayer):
         Directly output draw cost, Equation (12).
         """
         x_drawn, kl = self._get_outputs(x)
-        cost = T.nnet.binary_crossentropy(x_drawn, x) + kl.sum(axis=0).mean()
+        cost = T.nnet.binary_crossentropy(x_drawn, x).mean() + kl.sum(axis=0).mean()
         return cost
 
     def _decode_step(self, random_source, canvas, h_dec, c_dec):
@@ -86,7 +88,8 @@ class DrawLayer(NeuralLayer):
         z_t = self.sampler.sample_from_prior(random_source)
         # Equation (14)
         decoder_inputs = self.decoder_lstm.produce_input_sequences(z_t)
-        h_dec, c_dec = self.decoder_lstm.step(decoder_inputs + [h_dec, c_dec])
+        decoder_inputs += [h_dec, c_dec]
+        h_dec, c_dec = self.decoder_lstm.step(*decoder_inputs)
         # Equation (15)
         canvas = canvas + self.writer.write(h_dec)
         return canvas, h_dec, c_dec
