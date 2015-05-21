@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# TODO: Allow Plugging another network inside
-
 import logging as loggers
 import gzip
 import cPickle as pickle
