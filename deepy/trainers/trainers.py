@@ -286,7 +286,7 @@ class GeneralNeuralTrainer(NeuralTrainer):
         Return updates in the training.
         """
         params = self.network.parameters
-        gradients = [T.grad(self.cost, param) for param in params]
+        gradients = T.grad(self.cost, params)
         return optimize_updates(params, gradients, self.config)
 
 

@@ -21,7 +21,7 @@ Clean interface
 # MNIST Multi-layer model with dropout.
 from deepy.dataset import MnistDataset, MiniBatches
 from deepy.networks import NeuralClassifier
-from deepy.layers import Dense, Softmax
+from deepy.layers import Dense, Softmax, Dropout
 from deepy.trainers import MomentumTrainer, LearningRateAnnealer
 
 model = NeuralClassifier(input_dim=28*28)
