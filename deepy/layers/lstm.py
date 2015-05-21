@@ -33,7 +33,7 @@ class LSTM(NeuralLayer):
         if output_type not in OUTPUT_TYPES:
             raise Exception("Output type of LSTM is wrong: %s" % output_type)
 
-    def _step(self, *vars):
+    def step(self, *vars):
         if self._input_type == "sequence":
             xi_t, xf_t, xo_t, xc_t, h_tm1, c_tm1 = vars
             i_t = self._inner_act(xi_t + T.dot(h_tm1, self.U_i))
@@ -51,24 +51,32 @@ class LSTM(NeuralLayer):
 
         return h_t, c_t
 
-    def output(self, x):
-        sequences = []
+    def produce_input_sequences(self, x):
+        xi = T.dot(x, self.W_i) + self.b_i
+        xf = T.dot(x, self.W_f) + self.b_f
+        xc = T.dot(x, self.W_c) + self.b_c
+        xo = T.dot(x, self.W_o) + self.b_o
+        sequences = [xi, xf, xo, xc]
+        return sequences
+
+    def produce_initial_states(self, x):
         h0 = T.alloc(np.cast[FLOATX](0.), x.shape[0], self._hidden_size)
         m0 = h0
+        return h0, m0
+
+    def output(self, x):
+        h0, m0 = self.produce_initial_states(x)
         if self._input_type == "sequence":
             # Move middle dimension to left-most position
             # (sequence, batch, value)
             x = x.dimshuffle((1,0,2))
-            xi = T.dot(x, self.W_i) + self.b_i
-            xf = T.dot(x, self.W_f) + self.b_f
-            xc = T.dot(x, self.W_c) + self.b_c
-            xo = T.dot(x, self.W_o) + self.b_o
-            sequences = [xi, xf, xo, xc]
+            sequences = self.produce_input_sequences(x)
         else:
             h0 = x
+            sequences = []
 
         [hiddens, memories], _ = theano.scan(
-            self._step,
+            self.step,
             sequences=sequences,
             outputs_info=[h0, m0],
             # non_sequences=[self.U_i, self.U_f, self.U_o, self.U_c]

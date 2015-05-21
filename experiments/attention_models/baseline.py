@@ -4,7 +4,7 @@ from argparse import ArgumentParser
 
 from deepy import TrainerConfig
 from deepy.dataset import MnistDataset, MiniBatches
-from experiments.attention_models.baseline_trainer import AttentionTrainer
+from baseline_trainer import AttentionTrainer
 from baseline_model import get_network
 from deepy.utils import Timer
 
