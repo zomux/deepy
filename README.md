@@ -160,8 +160,9 @@ Other features
 
 - Auto gradient correction
 
-```
-Don't ask for a document, the code itself is so easy to understand,
-that it does not require a redundant document to explain.
-```
+---
+
+Sorry for that deepy is not well documented currently, but the framework is designed in the spirit of simplicity and readability.
+This will be improved if someone requires.
+``
 Raphael Shu, 2015
