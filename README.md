@@ -164,5 +164,5 @@ Other features
 
 Sorry for that deepy is not well documented currently, but the framework is designed in the spirit of simplicity and readability.
 This will be improved if someone requires.
-``
-Raphael Shu, 2015
+
+**Raphael Shu, 2015**
