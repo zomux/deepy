@@ -1,0 +1,188 @@
+# deepy version: 0.1.1
+[2015/05/22 17:18:54] test    (iter=1) J=2.34 err=85.90
+[2015/05/22 17:18:54] valid   (iter=1) J=2.34 err=86.53 *
+[2015/05/22 17:19:16] monitor (iter=1) J=0.28 err=8.77 mean(dense1)=0.21 mean(dense2)=0.28 mean(dense3)=2.81 mean(softmax4)=0.10
+[2015/05/22 17:19:16] valid   (iter=2) J=0.09 err=2.76 *
+[2015/05/22 17:19:40] monitor (iter=2) J=0.12 err=3.80 mean(dense1)=0.21 mean(dense2)=0.29 mean(dense3)=3.52 mean(softmax4)=0.10
+[2015/05/22 17:19:40] valid   (iter=3) J=0.07 err=2.05 *
+[2015/05/22 17:20:11] monitor (iter=3) J=0.09 err=2.69 mean(dense1)=0.21 mean(dense2)=0.30 mean(dense3)=3.84 mean(softmax4)=0.10
+[2015/05/22 17:20:12] valid   (iter=4) J=0.06 err=1.76 *
+[2015/05/22 17:20:34] monitor (iter=4) J=0.07 err=2.05 mean(dense1)=0.22 mean(dense2)=0.31 mean(dense3)=4.10 mean(softmax4)=0.10
+[2015/05/22 17:20:34] valid   (iter=5) J=0.06 err=1.63 *
+[2015/05/22 17:20:55] monitor (iter=5) J=0.05 err=1.68 mean(dense1)=0.22 mean(dense2)=0.31 mean(dense3)=4.29 mean(softmax4)=0.10
+[2015/05/22 17:20:55] valid   (iter=6) J=0.06 err=1.61 *
+[2015/05/22 17:21:17] monitor (iter=6) J=0.05 err=1.36 mean(dense1)=0.22 mean(dense2)=0.32 mean(dense3)=4.43 mean(softmax4)=0.10
+[2015/05/22 17:21:17] valid   (iter=7) J=0.06 err=1.60 *
+[2015/05/22 17:21:39] monitor (iter=7) J=0.04 err=1.11 mean(dense1)=0.22 mean(dense2)=0.32 mean(dense3)=4.55 mean(softmax4)=0.10
+[2015/05/22 17:21:39] valid   (iter=8) J=0.06 err=1.65 *
+[2015/05/22 17:22:00] monitor (iter=8) J=0.03 err=1.00 mean(dense1)=0.22 mean(dense2)=0.32 mean(dense3)=4.61 mean(softmax4)=0.10
+[2015/05/22 17:22:00] valid   (iter=9) J=0.06 err=1.60
+[2015/05/22 17:22:20] monitor (iter=9) J=0.03 err=0.88 mean(dense1)=0.22 mean(dense2)=0.32 mean(dense3)=4.69 mean(softmax4)=0.10
+[2015/05/22 17:22:20] valid   (iter=10) J=0.06 err=1.61
+[2015/05/22 17:22:41] monitor (iter=10) J=0.03 err=0.78 mean(dense1)=0.22 mean(dense2)=0.32 mean(dense3)=4.73 mean(softmax4)=0.10
+[2015/05/22 17:22:41] test    (iter=11) J=0.05 err=1.51
+[2015/05/22 17:22:41] valid   (iter=11) J=0.06 err=1.59
+[2015/05/22 17:23:02] monitor (iter=11) J=0.03 err=0.76 mean(dense1)=0.22 mean(dense2)=0.32 mean(dense3)=4.76 mean(softmax4)=0.10
+[2015/05/22 17:23:03] valid   (iter=12) J=0.05 err=1.43 *
+[2015/05/22 17:23:23] monitor (iter=12) J=0.03 err=0.71 mean(dense1)=0.21 mean(dense2)=0.32 mean(dense3)=4.74 mean(softmax4)=0.10
+[2015/05/22 17:23:23] valid   (iter=13) J=0.06 err=1.50
+[2015/05/22 17:23:44] monitor (iter=13) J=0.03 err=0.73 mean(dense1)=0.21 mean(dense2)=0.32 mean(dense3)=4.76 mean(softmax4)=0.10
+[2015/05/22 17:23:44] valid   (iter=14) J=0.06 err=1.62
+[2015/05/22 17:24:05] monitor (iter=14) J=0.02 err=0.69 mean(dense1)=0.21 mean(dense2)=0.32 mean(dense3)=4.73 mean(softmax4)=0.10
+[2015/05/22 17:24:05] valid   (iter=15) J=0.05 err=1.46 *
+[2015/05/22 17:24:25] monitor (iter=15) J=0.02 err=0.58 mean(dense1)=0.21 mean(dense2)=0.32 mean(dense3)=4.77 mean(softmax4)=0.10
+[2015/05/22 17:24:25] valid   (iter=16) J=0.05 err=1.56
+[2015/05/22 17:24:46] monitor (iter=16) J=0.02 err=0.60 mean(dense1)=0.21 mean(dense2)=0.32 mean(dense3)=4.77 mean(softmax4)=0.10
+[2015/05/22 17:24:47] valid   (iter=17) J=0.05 err=1.47 *
+[2015/05/22 17:25:09] monitor (iter=17) J=0.02 err=0.70 mean(dense1)=0.21 mean(dense2)=0.31 mean(dense3)=4.71 mean(softmax4)=0.10
+[2015/05/22 17:25:09] valid   (iter=18) J=0.06 err=1.58
+[2015/05/22 17:25:31] monitor (iter=18) J=0.02 err=0.66 mean(dense1)=0.21 mean(dense2)=0.31 mean(dense3)=4.71 mean(softmax4)=0.10
+[2015/05/22 17:25:31] valid   (iter=19) J=0.06 err=1.55
+[2015/05/22 17:25:53] monitor (iter=19) J=0.02 err=0.59 mean(dense1)=0.21 mean(dense2)=0.31 mean(dense3)=4.72 mean(softmax4)=0.10
+[2015/05/22 17:25:53] valid   (iter=20) J=0.06 err=1.57
+[2015/05/22 17:26:15] monitor (iter=20) J=0.02 err=0.48 mean(dense1)=0.21 mean(dense2)=0.31 mean(dense3)=4.71 mean(softmax4)=0.10
+[2015/05/22 17:26:15] test    (iter=21) J=0.05 err=1.25
+[2015/05/22 17:26:15] valid   (iter=21) J=0.05 err=1.22 *
+[2015/05/22 17:26:36] monitor (iter=21) J=0.02 err=0.49 mean(dense1)=0.21 mean(dense2)=0.31 mean(dense3)=4.62 mean(softmax4)=0.10
+[2015/05/22 17:26:36] valid   (iter=22) J=0.05 err=1.37
+[2015/05/22 17:26:57] monitor (iter=22) J=0.02 err=0.51 mean(dense1)=0.20 mean(dense2)=0.31 mean(dense3)=4.63 mean(softmax4)=0.10
+[2015/05/22 17:26:57] valid   (iter=23) J=0.06 err=1.46
+[2015/05/22 17:27:17] monitor (iter=23) J=0.02 err=0.54 mean(dense1)=0.20 mean(dense2)=0.31 mean(dense3)=4.63 mean(softmax4)=0.10
+[2015/05/22 17:27:18] valid   (iter=24) J=0.05 err=1.41 *
+[2015/05/22 17:27:40] monitor (iter=24) J=0.02 err=0.51 mean(dense1)=0.20 mean(dense2)=0.31 mean(dense3)=4.66 mean(softmax4)=0.10
+[2015/05/22 17:27:40] valid   (iter=25) J=0.05 err=1.44
+[2015/05/22 17:28:00] monitor (iter=25) J=0.02 err=0.66 mean(dense1)=0.20 mean(dense2)=0.30 mean(dense3)=4.63 mean(softmax4)=0.10
+[2015/05/22 17:28:01] valid   (iter=26) J=0.06 err=1.42
+[2015/05/22 17:28:23] monitor (iter=26) J=0.02 err=0.51 mean(dense1)=0.20 mean(dense2)=0.31 mean(dense3)=4.66 mean(softmax4)=0.10
+[2015/05/22 17:28:23] valid   (iter=27) J=0.05 err=1.49
+[2015/05/22 17:28:46] monitor (iter=27) J=0.02 err=0.45 mean(dense1)=0.20 mean(dense2)=0.31 mean(dense3)=4.66 mean(softmax4)=0.10
+[2015/05/22 17:28:46] valid   (iter=28) J=0.05 err=1.30 *
+[2015/05/22 17:29:09] monitor (iter=28) J=0.02 err=0.52 mean(dense1)=0.20 mean(dense2)=0.30 mean(dense3)=4.60 mean(softmax4)=0.10
+[2015/05/22 17:29:09] valid   (iter=29) J=0.05 err=1.48
+[2015/05/22 17:29:31] monitor (iter=29) J=0.02 err=0.40 mean(dense1)=0.20 mean(dense2)=0.31 mean(dense3)=4.62 mean(softmax4)=0.10
+[2015/05/22 17:29:31] valid   (iter=30) J=0.05 err=1.48
+[2015/05/22 17:29:55] monitor (iter=30) J=0.02 err=0.55 mean(dense1)=0.20 mean(dense2)=0.30 mean(dense3)=4.59 mean(softmax4)=0.10
+[2015/05/22 17:29:55] test    (iter=31) J=0.04 err=1.37
+[2015/05/22 17:29:55] valid   (iter=31) J=0.05 err=1.51
+[2015/05/22 17:30:18] monitor (iter=31) J=0.02 err=0.65 mean(dense1)=0.20 mean(dense2)=0.30 mean(dense3)=4.63 mean(softmax4)=0.10
+[2015/05/22 17:30:19] valid   (iter=32) J=0.06 err=1.71
+[2015/05/22 17:30:42] monitor (iter=32) J=0.02 err=0.49 mean(dense1)=0.20 mean(dense2)=0.30 mean(dense3)=4.62 mean(softmax4)=0.10
+[2015/05/22 17:30:42] valid   (iter=33) J=0.05 err=1.51
+[2015/05/22 17:31:02] monitor (iter=33) J=0.02 err=0.57 mean(dense1)=0.20 mean(dense2)=0.30 mean(dense3)=4.62 mean(softmax4)=0.10
+[2015/05/22 17:31:03] valid   (iter=34) J=0.05 err=1.30
+[2015/05/22 17:31:23] monitor (iter=34) J=0.01 err=0.18 mean(dense1)=0.21 mean(dense2)=0.32 mean(dense3)=4.66 mean(softmax4)=0.10
+[2015/05/22 17:31:23] valid   (iter=35) J=0.05 err=1.27 *
+[2015/05/22 17:31:44] monitor (iter=35) J=0.01 err=0.06 mean(dense1)=0.21 mean(dense2)=0.32 mean(dense3)=4.61 mean(softmax4)=0.10
+[2015/05/22 17:31:44] valid   (iter=36) J=0.05 err=1.19 *
+[2015/05/22 17:32:07] monitor (iter=36) J=0.01 err=0.03 mean(dense1)=0.21 mean(dense2)=0.32 mean(dense3)=4.54 mean(softmax4)=0.10
+[2015/05/22 17:32:07] valid   (iter=37) J=0.05 err=1.22 *
+[2015/05/22 17:32:30] monitor (iter=37) J=0.01 err=0.02 mean(dense1)=0.20 mean(dense2)=0.32 mean(dense3)=4.46 mean(softmax4)=0.10
+[2015/05/22 17:32:30] valid   (iter=38) J=0.04 err=1.19 *
+[2015/05/22 17:32:53] monitor (iter=38) J=0.01 err=0.02 mean(dense1)=0.20 mean(dense2)=0.32 mean(dense3)=4.40 mean(softmax4)=0.10
+[2015/05/22 17:32:53] valid   (iter=39) J=0.04 err=1.19 *
+[2015/05/22 17:33:14] monitor (iter=39) J=0.01 err=0.02 mean(dense1)=0.20 mean(dense2)=0.31 mean(dense3)=4.36 mean(softmax4)=0.10
+[2015/05/22 17:33:14] valid   (iter=40) J=0.04 err=1.22 *
+[2015/05/22 17:33:34] monitor (iter=40) J=0.01 err=0.01 mean(dense1)=0.19 mean(dense2)=0.31 mean(dense3)=4.33 mean(softmax4)=0.10
+[2015/05/22 17:33:35] test    (iter=41) J=0.04 err=1.24
+[2015/05/22 17:33:35] valid   (iter=41) J=0.04 err=1.21 *
+[2015/05/22 17:33:57] monitor (iter=41) J=0.01 err=0.01 mean(dense1)=0.19 mean(dense2)=0.31 mean(dense3)=4.31 mean(softmax4)=0.10
+[2015/05/22 17:33:57] valid   (iter=42) J=0.04 err=1.20 *
+[2015/05/22 17:34:19] monitor (iter=42) J=0.01 err=0.01 mean(dense1)=0.19 mean(dense2)=0.30 mean(dense3)=4.30 mean(softmax4)=0.10
+[2015/05/22 17:34:20] valid   (iter=43) J=0.04 err=1.21 *
+[2015/05/22 17:34:43] monitor (iter=43) J=0.01 err=0.01 mean(dense1)=0.19 mean(dense2)=0.30 mean(dense3)=4.29 mean(softmax4)=0.10
+[2015/05/22 17:34:44] valid   (iter=44) J=0.04 err=1.19
+[2015/05/22 17:35:07] monitor (iter=44) J=0.01 err=0.01 mean(dense1)=0.19 mean(dense2)=0.30 mean(dense3)=4.29 mean(softmax4)=0.10
+[2015/05/22 17:35:07] valid   (iter=45) J=0.04 err=1.19
+[2015/05/22 17:35:28] monitor (iter=45) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.29 mean(softmax4)=0.10
+[2015/05/22 17:35:29] valid   (iter=46) J=0.04 err=1.19
+[2015/05/22 17:35:50] monitor (iter=46) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.29 mean(softmax4)=0.10
+[2015/05/22 17:35:50] valid   (iter=47) J=0.04 err=1.20
+[2015/05/22 17:36:11] monitor (iter=47) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.29 mean(softmax4)=0.10
+[2015/05/22 17:36:12] valid   (iter=48) J=0.04 err=1.17
+[2015/05/22 17:36:33] monitor (iter=48) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.29 mean(softmax4)=0.10
+[2015/05/22 17:36:33] valid   (iter=49) J=0.04 err=1.21
+[2015/05/22 17:36:54] monitor (iter=49) J=0.01 err=0.01 mean(dense1)=0.19 mean(dense2)=0.30 mean(dense3)=4.29 mean(softmax4)=0.10
+[2015/05/22 17:36:54] valid   (iter=50) J=0.04 err=1.23
+[2015/05/22 17:37:14] monitor (iter=50) J=0.01 err=0.01 mean(dense1)=0.19 mean(dense2)=0.30 mean(dense3)=4.29 mean(softmax4)=0.10
+[2015/05/22 17:37:15] test    (iter=51) J=0.04 err=1.25
+[2015/05/22 17:37:15] valid   (iter=51) J=0.04 err=1.21 *
+[2015/05/22 17:37:35] monitor (iter=51) J=0.01 err=0.01 mean(dense1)=0.19 mean(dense2)=0.30 mean(dense3)=4.28 mean(softmax4)=0.10
+[2015/05/22 17:37:35] valid   (iter=52) J=0.04 err=1.21
+[2015/05/22 17:37:56] monitor (iter=52) J=0.01 err=0.01 mean(dense1)=0.19 mean(dense2)=0.30 mean(dense3)=4.27 mean(softmax4)=0.10
+[2015/05/22 17:37:56] valid   (iter=53) J=0.04 err=1.22
+[2015/05/22 17:38:16] monitor (iter=53) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.26 mean(softmax4)=0.10
+[2015/05/22 17:38:17] valid   (iter=54) J=0.04 err=1.23 *
+[2015/05/22 17:38:37] monitor (iter=54) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.26 mean(softmax4)=0.10
+[2015/05/22 17:38:37] valid   (iter=55) J=0.04 err=1.22
+[2015/05/22 17:38:58] monitor (iter=55) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.25 mean(softmax4)=0.10
+[2015/05/22 17:38:58] valid   (iter=56) J=0.04 err=1.22
+[2015/05/22 17:39:20] monitor (iter=56) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.25 mean(softmax4)=0.10
+[2015/05/22 17:39:21] valid   (iter=57) J=0.04 err=1.19
+[2015/05/22 17:39:43] monitor (iter=57) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.24 mean(softmax4)=0.10
+[2015/05/22 17:39:43] valid   (iter=58) J=0.04 err=1.17
+[2015/05/22 17:40:05] monitor (iter=58) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.24 mean(softmax4)=0.10
+[2015/05/22 17:40:05] valid   (iter=59) J=0.04 err=1.17
+[2015/05/22 17:40:27] monitor (iter=59) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.24 mean(softmax4)=0.10
+[2015/05/22 17:40:28] valid   (iter=60) J=0.04 err=1.23
+[2015/05/22 17:40:49] monitor (iter=60) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.26 mean(softmax4)=0.10
+[2015/05/22 17:40:50] test    (iter=61) J=0.04 err=1.27
+[2015/05/22 17:40:50] valid   (iter=61) J=0.04 err=1.16 *
+[2015/05/22 17:41:10] monitor (iter=61) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.26 mean(softmax4)=0.10
+[2015/05/22 17:41:10] valid   (iter=62) J=0.04 err=1.16 *
+[2015/05/22 17:41:30] monitor (iter=62) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.26 mean(softmax4)=0.10
+[2015/05/22 17:41:30] valid   (iter=63) J=0.04 err=1.16
+[2015/05/22 17:41:51] monitor (iter=63) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.25 mean(softmax4)=0.10
+[2015/05/22 17:41:51] valid   (iter=64) J=0.04 err=1.17 *
+[2015/05/22 17:42:12] monitor (iter=64) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.25 mean(softmax4)=0.10
+[2015/05/22 17:42:12] valid   (iter=65) J=0.04 err=1.15
+[2015/05/22 17:42:33] monitor (iter=65) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.24 mean(softmax4)=0.10
+[2015/05/22 17:42:33] valid   (iter=66) J=0.04 err=1.15
+[2015/05/22 17:42:54] monitor (iter=66) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.24 mean(softmax4)=0.10
+[2015/05/22 17:42:54] valid   (iter=67) J=0.04 err=1.15
+[2015/05/22 17:43:14] monitor (iter=67) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.23 mean(softmax4)=0.10
+[2015/05/22 17:43:15] valid   (iter=68) J=0.04 err=1.16 *
+[2015/05/22 17:43:35] monitor (iter=68) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.23 mean(softmax4)=0.10
+[2015/05/22 17:43:35] valid   (iter=69) J=0.04 err=1.16
+[2015/05/22 17:43:55] monitor (iter=69) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:43:55] valid   (iter=70) J=0.04 err=1.17
+[2015/05/22 17:44:18] monitor (iter=70) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:44:19] test    (iter=71) J=0.04 err=1.27
+[2015/05/22 17:44:19] valid   (iter=71) J=0.04 err=1.17
+[2015/05/22 17:44:40] monitor (iter=71) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:44:40] valid   (iter=72) J=0.04 err=1.17
+[2015/05/22 17:45:00] monitor (iter=72) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:45:01] valid   (iter=73) J=0.04 err=1.18
+[2015/05/22 17:45:21] monitor (iter=73) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.21 mean(softmax4)=0.10
+[2015/05/22 17:45:21] valid   (iter=74) J=0.04 err=1.16
+[2015/05/22 17:45:41] monitor (iter=74) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.23 mean(softmax4)=0.10
+[2015/05/22 17:45:41] valid   (iter=75) J=0.04 err=1.15 *
+[2015/05/22 17:46:02] monitor (iter=75) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.23 mean(softmax4)=0.10
+[2015/05/22 17:46:02] valid   (iter=76) J=0.04 err=1.15
+[2015/05/22 17:46:22] monitor (iter=76) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.23 mean(softmax4)=0.10
+[2015/05/22 17:46:23] valid   (iter=77) J=0.04 err=1.16 *
+[2015/05/22 17:46:43] monitor (iter=77) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.23 mean(softmax4)=0.10
+[2015/05/22 17:46:43] valid   (iter=78) J=0.04 err=1.16
+[2015/05/22 17:47:03] monitor (iter=78) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.23 mean(softmax4)=0.10
+[2015/05/22 17:47:04] valid   (iter=79) J=0.04 err=1.16
+[2015/05/22 17:47:24] monitor (iter=79) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:47:24] valid   (iter=80) J=0.04 err=1.15 *
+[2015/05/22 17:47:44] monitor (iter=80) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:47:44] test    (iter=81) J=0.04 err=1.26
+[2015/05/22 17:47:45] valid   (iter=81) J=0.04 err=1.15
+[2015/05/22 17:48:05] monitor (iter=81) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:48:05] valid   (iter=82) J=0.04 err=1.15
+[2015/05/22 17:48:26] monitor (iter=82) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:48:26] valid   (iter=83) J=0.04 err=1.15
+[2015/05/22 17:48:46] monitor (iter=83) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:48:47] valid   (iter=84) J=0.04 err=1.16
+[2015/05/22 17:49:07] monitor (iter=84) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:49:08] valid   (iter=85) J=0.04 err=1.17
+[2015/05/22 17:49:28] monitor (iter=85) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.21 mean(softmax4)=0.10
+[2015/05/22 17:49:28] valid   (iter=86) J=0.04 err=1.15
+[2015/05/22 17:49:48] monitor (iter=86) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:49:49] valid   (iter=87) J=0.04 err=1.19 *
+[2015/05/22 17:50:10] monitor (iter=87) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:50:11] valid   (iter=88) J=0.04 err=1.19
+[2015/05/22 17:50:33] monitor (iter=88) J=0.01 err=0.01 mean(dense1)=0.18 mean(dense2)=0.30 mean(dense3)=4.22 mean(softmax4)=0.10
+[2015/05/22 17:50:33] valid   (iter=89) J=0.04 err=1.19
+[2015/05/22 17:50:35] test    (iter=0) J=0.04 err=1.25

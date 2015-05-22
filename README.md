@@ -86,6 +86,10 @@ python experiments/mnist/mlp_prelu_dropout.py
 ```
 python experiments/mnist/deep_convolution.py
 ```
+- Elastic distortion
+```
+python experiments/mnist/mlp_elastic_distortion.py
+```
 - Recurrent visual attention model
    - [Result visualization](http://raphael.uaca.com/experiments/recurrent_visual_attention/Plot%20attentions.html)
 ```
