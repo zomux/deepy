@@ -11,3 +11,7 @@
 ```bash
 python experiments/draw/mnist_training.py
 ```
+
+### MNIST Animation (work in progress)
+
+![](https://github.com/uaca/deepy/raw/master/experiments/draw/plots/mnist-animation.gif)

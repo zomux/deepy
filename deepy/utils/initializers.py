@@ -3,6 +3,11 @@
 
 import numpy as np
 
+def get_fans(shape):
+    fan_in = shape[0] if len(shape) == 2 else np.prod(shape[1:])
+    fan_out = shape[1] if len(shape) == 2 else shape[0]
+    return fan_in, fan_out
+
 class WeightInitializer(object):
     """
     Initializer for creating weights.
@@ -31,7 +36,7 @@ class UniformInitializer(WeightInitializer):
 
     def sample(self, shape):
         if not self.scale:
-            scale = np.sqrt(6. / sum(shape))
+            scale = np.sqrt(6. / sum(get_fans(shape)))
         else:
             scale = self.scale
         weight = self.rand.uniform(-1, 1, size=shape) * scale
@@ -85,7 +90,7 @@ class XavierGlorotInitializer(WeightInitializer):
         self.uniform = uniform
 
     def sample(self, shape):
-        scale = np.sqrt(2. / sum(shape))
+        scale = np.sqrt(2. / sum(get_fans(shape)))
         if self.uniform:
             return self.rand.uniform(-1, 1, size=shape) * scale
         else:
@@ -106,7 +111,8 @@ class KaimingHeInitializer(WeightInitializer):
         self.uniform = uniform
 
     def sample(self, shape):
-        scale = np.sqrt(2. / shape[-2])
+        fan_in, fan_out = get_fans(shape)
+        scale = np.sqrt(2. / fan_in)
         if self.uniform:
             return self.rand.uniform(-1, 1, size=shape) * scale
         else:
