@@ -22,7 +22,7 @@ class DrawLayer(NeuralLayer):
         self.img_width = img_width
         self.img_height = img_height
 
-        self.reader = AttentionReader(img_width * img_height, ENCODER_HIDDEN_DIM, img_width, img_height, READING_GLIMPSE_SIZE)
+        self.reader = AttentionReader(DECODER_HIDDEN_DIM, img_width, img_height, READING_GLIMPSE_SIZE)
         self.encoder_lstm = LSTM(ENCODER_HIDDEN_DIM).connect(input_dim=READER_OUTPUT_DIM + DECODER_HIDDEN_DIM)
         self.sampler = Qsampler(LATENT_VARIABLE_DIM).connect(input_dim=ENCODER_HIDDEN_DIM)
         self.decoder_lstm = LSTM(DECODER_HIDDEN_DIM).connect(input_dim=LATENT_VARIABLE_DIM)
