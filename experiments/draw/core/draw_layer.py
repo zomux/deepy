@@ -14,6 +14,10 @@ WRITING_GLIMPSE_SIZE = 5
 
 READER_OUTPUT_DIM = 2 * READING_GLIMPSE_SIZE**2
 
+LSTM_INIT = GaussianInitializer(deviation=0.01)
+NORMAL_INIT = GaussianInitializer(deviation=0.01)
+
+
 class DrawLayer(NeuralLayer):
 
     def __init__(self, img_width, img_height, attention_times):
@@ -22,11 +26,11 @@ class DrawLayer(NeuralLayer):
         self.img_width = img_width
         self.img_height = img_height
 
-        self.reader = AttentionReader(DECODER_HIDDEN_DIM, img_width, img_height, READING_GLIMPSE_SIZE)
-        self.encoder_lstm = LSTM(ENCODER_HIDDEN_DIM).connect(input_dim=READER_OUTPUT_DIM + DECODER_HIDDEN_DIM)
-        self.sampler = Qsampler(LATENT_VARIABLE_DIM).connect(input_dim=ENCODER_HIDDEN_DIM)
-        self.decoder_lstm = LSTM(DECODER_HIDDEN_DIM).connect(input_dim=LATENT_VARIABLE_DIM)
-        self.writer = AttentionWriter(DECODER_HIDDEN_DIM, img_width, img_height, WRITING_GLIMPSE_SIZE)
+        self.reader = AttentionReader(DECODER_HIDDEN_DIM, img_width, img_height, READING_GLIMPSE_SIZE, init=NORMAL_INIT)
+        self.encoder_lstm = LSTM(ENCODER_HIDDEN_DIM, inner_init=LSTM_INIT, outer_init=NORMAL_INIT).connect(input_dim=READER_OUTPUT_DIM + DECODER_HIDDEN_DIM)
+        self.sampler = Qsampler(LATENT_VARIABLE_DIM, init=NORMAL_INIT).connect(input_dim=ENCODER_HIDDEN_DIM)
+        self.decoder_lstm = LSTM(DECODER_HIDDEN_DIM, inner_init=LSTM_INIT, outer_init=NORMAL_INIT).connect(input_dim=LATENT_VARIABLE_DIM)
+        self.writer = AttentionWriter(DECODER_HIDDEN_DIM, img_width, img_height, WRITING_GLIMPSE_SIZE, init=NORMAL_INIT)
 
         self.register_inner_layers(self.reader.director_model, self.writer.director_model, self.writer.decoding_model)
         self.register_inner_layers(self.encoder_lstm, self.sampler, self.decoder_lstm)

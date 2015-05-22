@@ -5,17 +5,18 @@ from deepy import *
 
 
 class Qsampler(NeuralLayer):
-    def __init__(self, size):
+    def __init__(self, size, init=None):
         super(Qsampler, self).__init__("qsampler")
 
         self.prior_mean = 0.
         self.prior_log_sigma = 0.
         self.size = size
+        self.init = init
 
     def setup(self):
-        self.mean_transform = Dense(self.size).connect(self.input_dim)
+        self.mean_transform = Dense(self.size, init=self.init).connect(self.input_dim)
 
-        self.log_sigma_transform = Dense(self.size).connect(self.input_dim)
+        self.log_sigma_transform = Dense(self.size, init=self.init).connect(self.input_dim)
 
         self.register_inner_layers(self.mean_transform, self.log_sigma_transform)
 

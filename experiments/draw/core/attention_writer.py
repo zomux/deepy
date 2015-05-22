@@ -6,7 +6,7 @@ from attention import *
 
 class AttentionWriter(object):
 
-    def __init__(self, input_dim, img_width, img_height, glimpse_size):
+    def __init__(self, input_dim, img_width, img_height, glimpse_size, init=None):
         """
         Parameters:
             input_dim - dim of h_dec
@@ -24,8 +24,8 @@ class AttentionWriter(object):
 
         self.zoomer = ZoomableAttentionWindow(self.img_height, self.img_width, self.glimpse_size)
 
-        self.director_model = Chain(self.input_dim).stack(Dense(5))
-        self.decoding_model = Chain(self.input_dim).stack(Dense(self.glimpse_size*self.glimpse_size))
+        self.director_model = Chain(self.input_dim).stack(Dense(5, init=init))
+        self.decoding_model = Chain(self.input_dim).stack(Dense(self.glimpse_size*self.glimpse_size, init=init))
 
 
     def write(self, h_dec):

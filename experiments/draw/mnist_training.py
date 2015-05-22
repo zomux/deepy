@@ -6,6 +6,7 @@ logging.basicConfig(level=logging.INFO)
 
 from deepy.trainers import AdamTrainer, LearningRateAnnealer
 from deepy.dataset import BinarizedMnistDataset, MiniBatches
+from deepy.conf import TrainerConfig
 
 from core import DrawModel
 
@@ -22,7 +23,9 @@ if __name__ == '__main__':
     if args.load:
         model.load_params(args.load)
 
-    trainer = AdamTrainer(model)
+    conf = TrainerConfig()
+    conf.learning_rate = LearningRateAnnealer.learning_rate(0.001)
+    trainer = AdamTrainer(model, conf)
 
     mnist = MiniBatches(BinarizedMnistDataset(), batch_size=100)
 
