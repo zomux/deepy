@@ -11,6 +11,7 @@ deepy: Highly extensible deep learning framework based on Theano
 
 ### Dependencies
 
+- Python 2.7 (Better on Linux)
 - numpy
 - theano
 - scipy for L-BFGS and CG optimization
