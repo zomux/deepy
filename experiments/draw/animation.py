@@ -8,6 +8,7 @@ from deepy import *
 from core import DrawModel
 
 from PIL import Image
+import tempfile
 
 def scale_norm(arr):
     arr = arr - arr.min()
@@ -52,6 +53,9 @@ def img_grid(arr, global_scale=True):
 ANIMATION_SAMPLES = 16*16
 
 plot_path = os.path.join(os.path.dirname(__file__), "plots")
+tmp_path = os.path.join(tempfile.gettempdir(), "draw_plots")
+if not os.path.exists(tmp_path):
+    os.mkdir(tmp_path)
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
@@ -77,10 +81,10 @@ if __name__ == '__main__':
 
     for i in xrange(attention_times):
         img = img_grid(samples[i,:,:,:])
-        img.save(plot_path + os.sep + "%s-%03d.png" % (args.task, i))
+        img.save(tmp_path + os.sep + "%s-%03d.png" % (args.task, i))
 
     # Compose all images to animation
-    os.system("convert -delay 5 -loop 0 %s/%s-*.png %s/%s-animation.gif" % (plot_path, args.task, plot_path, args.task))
+    os.system("convert -delay 5 -loop 0 %s/%s-*.png %s/%s-animation.gif" % (tmp_path, args.task, plot_path, args.task))
 
 
 
