@@ -16,7 +16,7 @@ class LSTM(NeuralLayer):
     """
 
     def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="sequence",
-                 inner_activation="tanh", outer_activation="tanh",
+                 inner_activation="sigmoid", outer_activation="tanh",
                  inner_init=None, outer_init=None, steps=None):
         super(LSTM, self).__init__("lstm")
         self._hidden_size = hidden_size

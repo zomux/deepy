@@ -27,7 +27,7 @@ class DrawLayer(NeuralLayer):
         self.img_height = img_height
 
         self.reader = AttentionReader(DECODER_HIDDEN_DIM, img_width, img_height, READING_GLIMPSE_SIZE, init=NORMAL_INIT)
-        self.encoder_lstm = LSTM(ENCODER_HIDDEN_DIM, inner_init=LSTM_INIT, outer_init=NORMAL_INIT).connect(input_dim=READER_OUTPUT_DIM + DECODER_HIDDEN_DIM)
+        self.encoder_lstm = LSTM(ENCODER_HIDDEN_DIM, inner_init=LSTM_INIT, outer_init=NORMAL_INIT, outer_activation='linear').connect(input_dim=READER_OUTPUT_DIM + DECODER_HIDDEN_DIM)
         self.sampler = Qsampler(LATENT_VARIABLE_DIM, init=NORMAL_INIT).connect(input_dim=ENCODER_HIDDEN_DIM)
         self.decoder_lstm = LSTM(DECODER_HIDDEN_DIM, inner_init=LSTM_INIT, outer_init=NORMAL_INIT).connect(input_dim=LATENT_VARIABLE_DIM)
         self.writer = AttentionWriter(DECODER_HIDDEN_DIM, img_width, img_height, WRITING_GLIMPSE_SIZE, init=NORMAL_INIT)
@@ -84,7 +84,10 @@ class DrawLayer(NeuralLayer):
         Directly output draw cost, Equation (12).
         """
         x_drawn, kl = self._get_outputs(x)
-        cost = T.nnet.binary_crossentropy(x_drawn, x).mean() + kl.sum(axis=0).mean()
+        kl_cost = kl.sum(axis=0).mean()
+        crossentropy = T.nnet.binary_crossentropy(x_drawn, x).sum(axis=1).mean()
+        # self.register_monitors(("kl", kl_cost))
+        cost =  crossentropy + kl_cost
         return cost
 
     def _decode_step(self, random_source, canvas, h_dec, c_dec):
