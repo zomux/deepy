@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+For reference, this model should achieve 1.50% error rate, in 10 mins with i7 CPU (8 threads).
+"""
+
 import logging, os
 logging.basicConfig(level=logging.INFO)
 

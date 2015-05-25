@@ -61,7 +61,7 @@ class NeuralTrainer(object):
         logging.info("compile evaluation function")
         self.evaluation_func = theano.function(
             network.input_variables + network.target_variables, self.evaluation_variables, updates=network.updates,
-            allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
+            allow_input_downcast=True, mode=self.config.get("theano_mode", None))
         self.learning_func = None
 
         self.validation_frequency = self.config.validation_frequency
@@ -279,7 +279,7 @@ class GeneralNeuralTrainer(NeuralTrainer):
             network.input_variables + network.target_variables,
             self.training_variables,
             updates=update_list, allow_input_downcast=True,
-            mode=config.get("theano_mode", theano.Mode(linker=THEANO_LINKER)))
+            mode=self.config.get("theano_mode", None))
 
     def learning_updates(self):
         """
@@ -362,7 +362,7 @@ class SSGD2Trainer(NeuralTrainer):
         self.learning_func = theano.function(
             network.inputs,
             self.training_variables,
-            updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
+            updates=update_list, allow_input_downcast=True, mode=self.config.get("theano_mode", None))
 
     def ssgd2(self, loss, all_params, learning_rate=0.01, chaos_energy=0.01, alpha=0.9):
         from theano.tensor.shared_randomstreams import RandomStreams
@@ -407,4 +407,4 @@ class FakeTrainer(NeuralTrainer):
         self.learning_func = theano.function(
             network.inputs,
             self.training_variables,
-            updates=update_list, allow_input_downcast=True, mode=theano.Mode(linker=THEANO_LINKER))
+            updates=update_list, allow_input_downcast=True, mode=self.config.get("theano_mode", None))
