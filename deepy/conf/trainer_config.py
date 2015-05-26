@@ -28,8 +28,10 @@ class TrainerConfig(GeneralConfig):
             # Optimization
             "method": "ADADELTA",
             "weight_bound": None,
-            "avoid_nan": True,
+            "avoid_nan": False,
             "gradient_tolerance": None,
+            "gradient_clipping": None, # l1 or l2
+            "max_norm": 10,
 
             # Regularization
             "update_l1": 0,
