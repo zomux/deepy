@@ -9,7 +9,7 @@ import theano.tensor as T
 from theano.ifelse import ifelse
 
 from deepy.utils import FLOATX, dim_to_var, EPSILON
-from deepy.trainers.util import wrap_core
+from deepy.trainers.util import wrap_core, multiple_l2_norm
 
 
 logging = loggers.getLogger(__name__)
@@ -27,18 +27,18 @@ def optimize_updates(params, gradients, config=None, shapes=None):
     """
     # Clipping
     if config:
-        clip_value = config.get("max_norm", 5.0)
-        clip = config.get("gradient_clipping", None)
+        clip_value = config.get("max_norm", 10.0)
+        clip = config.get("gradient_clipping", False)
 
         if clip_value and clip:
             clip_constant = T.constant(clip_value, dtype=FLOATX)
+            grad_norm = multiple_l2_norm(gradients)
+            multiplier = ifelse(grad_norm < clip_constant,
+                                    T.constant(1., dtype=FLOATX), clip_constant / (grad_norm + EPSILON))
             clipped_gradients = []
             for g in gradients:
-                grad_norm = g.norm(L=1) if clip == "l1" else g.norm(L=2)
                 if config.gradient_tolerance:
                     g = ifelse(grad_norm > config.gradient_tolerance, T.zeros_like(g) + EPSILON, g)
-                multiplier = ifelse(grad_norm < clip_constant,
-                                    T.constant(1., dtype=FLOATX), clip_constant / (grad_norm + EPSILON))
                 g = multiplier * g
                 clipped_gradients.append(g)
             gradients = clipped_gradients

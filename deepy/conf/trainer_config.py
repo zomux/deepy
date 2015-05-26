@@ -30,7 +30,7 @@ class TrainerConfig(GeneralConfig):
             "weight_bound": None,
             "avoid_nan": False,
             "gradient_tolerance": None,
-            "gradient_clipping": None, # l1 or l2
+            "gradient_clipping": False, # l1 or l2
             "max_norm": 10,
 
             # Regularization
