@@ -27,10 +27,9 @@ def optimize_updates(params, gradients, config=None, shapes=None):
     """
     # Clipping
     if config:
-        clip_value = config.get("max_norm", 10.0)
-        clip = config.get("gradient_clipping", False)
+        clip_value = config.get("gradient_clipping", None)
 
-        if clip_value and clip:
+        if clip_value:
             clip_constant = T.constant(clip_value, dtype=FLOATX)
             grad_norm = multiple_l2_norm(gradients)
             multiplier = ifelse(grad_norm < clip_constant,

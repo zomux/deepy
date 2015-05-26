@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     conf = TrainerConfig()
     conf.learning_rate = LearningRateAnnealer.learning_rate(0.01)
-    conf.max_norm = 1
+    conf.gradient_clipping = 1
     conf.patience = 50
     conf.gradient_tolerance = 5
     conf.avoid_nan = True
