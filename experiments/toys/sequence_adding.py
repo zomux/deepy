@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     model = NeuralRegressor(input_dim=2, input_tensor=3, clip_value=3.)
     model.stack_layer(IRNN(hidden_size=100, output_size=1, input_type="sequence",
-                     output_type="one", output_activation="linear"))
+                     output_type="one"))
 
     if os.path.exists(args.model):
         model.load_params(args.model)
@@ -69,6 +69,7 @@ if __name__ == '__main__':
     conf.max_norm = 1
     conf.patience = 50
     conf.gradient_tolerance = 5
+    conf.avoid_nan = True
     trainer = SGDTrainer(model, conf)
 
     annealer = LearningRateAnnealer(trainer, patience=20)

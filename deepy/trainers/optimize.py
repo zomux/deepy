@@ -37,7 +37,9 @@ def optimize_updates(params, gradients, config=None, shapes=None):
                 grad_norm = g.norm(L=1) if clip == "l1" else g.norm(L=2)
                 if config.gradient_tolerance:
                     g = ifelse(grad_norm > config.gradient_tolerance, T.zeros_like(g) + EPSILON, g)
-                g = ((T.minimum(clip_constant, grad_norm) + EPSILON )/ (grad_norm + EPSILON)) * g
+                multiplier = ifelse(grad_norm < clip_constant,
+                                    T.constant(1., dtype=FLOATX), clip_constant / (grad_norm + EPSILON))
+                g = multiplier * g
                 clipped_gradients.append(g)
             gradients = clipped_gradients
     # Regularization
@@ -53,7 +55,7 @@ def optimize_updates(params, gradients, config=None, shapes=None):
         logging.info("avoid NaN gradients")
         new_gradients = []
         for grad in gradients:
-            new_grad = ifelse(T.isnan(grad).any(), T.zeros_like(grad) + EPSILON, grad)
+            new_grad = ifelse(T.isnan(grad.max()), T.zeros_like(grad) + EPSILON, grad)
             new_gradients.append(new_grad)
         gradients = new_gradients
 

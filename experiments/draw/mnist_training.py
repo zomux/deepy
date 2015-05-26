@@ -24,6 +24,7 @@ if __name__ == '__main__':
         model.load_params(args.load)
 
     conf = TrainerConfig()
+    conf.max_norm = 10
     conf.learning_rate = LearningRateAnnealer.learning_rate(0.001)
     trainer = AdamTrainer(model, conf)
 
