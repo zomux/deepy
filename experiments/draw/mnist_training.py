@@ -4,7 +4,7 @@
 import logging, os
 logging.basicConfig(level=logging.INFO)
 
-from deepy.trainers import AdamTrainer, LearningRateAnnealer, MomentumTrainer
+from deepy.trainers import AdamTrainer, LearningRateAnnealer
 from deepy.dataset import BinarizedMnistDataset, MiniBatches
 from deepy.conf import TrainerConfig
 
@@ -26,6 +26,7 @@ if __name__ == '__main__':
     conf = TrainerConfig()
     conf.gradient_clipping = 10
     conf.learning_rate = LearningRateAnnealer.learning_rate(0.004)
+    conf.weight_l2 = 0
     trainer = AdamTrainer(model, conf)
 
     mnist = MiniBatches(BinarizedMnistDataset(), batch_size=100)

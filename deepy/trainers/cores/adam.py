@@ -5,7 +5,7 @@ import theano
 import theano.tensor as T
 import numpy as np
 
-def adam_core(params, gradients, learning_rate=0.0002, beta1=0.1, beta2=0.001,
+def adam_core(params, gradients, learning_rate=0.002, beta1=0.1, beta2=0.001,
          epsilon=1e-8, gamma=1-1e-8):
     updates = []
 
