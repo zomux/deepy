@@ -14,6 +14,7 @@ deepy: Highly extensible deep learning framework based on Theano
 - Python 2.7 (Better on Linux)
 - numpy
 - theano
+ - Theano 0.6.0 is surprisingly faster than 0.7.0 on AWS GPU intances and my local machines
 - scipy for L-BFGS and CG optimization
 
 Clean interface
