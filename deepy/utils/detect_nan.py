@@ -1,11 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+"""
+Detect the source which produces NaN.
+
+Usage
+---
+
+conf.theano_mode = DETECT_NAN_MODE
+
+Note
+---
+
+Be sure to use theano flag 'optimizer=None'.
+"""
+
 import theano
 import numpy as np
 
 def detect_nan(i, node, fn):
-    if str(node.op.__class__).endswith("GPU_mrg_uniform"):
+    if str(node.op).startswith("GPU_mrg_uniform"):
         return
     for output in fn.outputs:
         if (not isinstance(output[0], np.random.RandomState) and

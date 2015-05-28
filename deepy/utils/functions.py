@@ -11,6 +11,7 @@ from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
 FLOATX = theano.config.floatX
 EPSILON = T.constant(1.0e-15, dtype=FLOATX)
+BIG_EPSILON = T.constant(1.0e-7, dtype=FLOATX)
 
 global_rand = np.random.RandomState(seed=3)
 global_theano_rand = RandomStreams(seed=3)

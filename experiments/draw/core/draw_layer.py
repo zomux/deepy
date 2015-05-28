@@ -85,6 +85,10 @@ class DrawLayer(NeuralLayer):
         """
         x_drawn, kl = self._get_outputs(x)
         kl_cost = kl.sum(axis=0).mean()
+        # Clip to avoid NaN
+        x_drawn = T.clip(x_drawn, BIG_EPSILON, 1.0 - BIG_EPSILON)
+        x = T.clip(x, BIG_EPSILON, 1.0 - BIG_EPSILON)
+        
         crossentropy = T.nnet.binary_crossentropy(x_drawn, x).sum(axis=1).mean()
         # self.register_monitors(("kl", kl_cost))
         cost =  crossentropy + kl_cost
