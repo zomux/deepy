@@ -5,6 +5,8 @@ import theano
 import numpy as np
 
 def detect_nan(i, node, fn):
+    if str(node.op.__class__).endswith("GPU_mrg_uniform"):
+        return
     for output in fn.outputs:
         if (not isinstance(output[0], np.random.RandomState) and
             np.isnan(output[0]).any()):
