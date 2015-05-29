@@ -85,7 +85,7 @@ def optimize_updates(params, gradients, config=None, shapes=None):
 
     free_parameters = []
     return_vals = wrap_core(func, config, params, gradients)
-    if type(return_vals) == list:
+    if type(return_vals) == list and type(return_vals[0]) == list:
         updates, free_parameters = return_vals
     else:
         updates = return_vals

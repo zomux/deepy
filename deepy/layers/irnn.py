@@ -13,7 +13,7 @@ class IRNN(RNN):
     RNN with weight initialization using identity matrix.
     """
 
-    def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="one", weight_scale=0.9, steps=None):
+    def __init__(self, hidden_size, input_type="sequence", output_type="one", weight_scale=0.9, steps=None):
         super(IRNN, self).__init__(hidden_size,
                                    input_type=input_type, output_type=output_type,
                                    hidden_activation="relu", steps=steps,

@@ -19,7 +19,7 @@ from argparse import ArgumentParser
 from deepy.conf import TrainerConfig
 from deepy.dataset import SequentialDataset, MiniBatches
 from deepy.networks import NeuralRegressor
-from deepy.layers import RNN, IRNN
+from deepy.layers import RNN, IRNN, Dense
 from deepy.trainers import SGDTrainer, LearningRateAnnealer
 from deepy.utils import FLOATX
 
@@ -58,8 +58,9 @@ if __name__ == '__main__':
     args = ap.parse_args()
 
     model = NeuralRegressor(input_dim=2, input_tensor=3, clip_value=3.)
-    model.stack_layer(IRNN(hidden_size=100, output_size=1, input_type="sequence",
-                     output_type="one"))
+    model.stack(IRNN(hidden_size=100, output_size=1, input_type="sequence",
+                     output_type="one"),
+                      Dense(1))
 
     if os.path.exists(args.model):
         model.load_params(args.model)
