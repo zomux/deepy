@@ -143,6 +143,10 @@ class NeuralTrainer(object):
             except KeyboardInterrupt:
                 logging.info('interrupted!')
                 break
+            # Check costs
+            if np.isnan(costs.items()[0][1]):
+                logging.info("NaN detected rollback to last parameters")
+                self.set_params(self.checkpoint)
 
             iteration += 1
             self.network.epoch_callback()
@@ -195,6 +199,7 @@ class NeuralTrainer(object):
         message = "valid   (iter=%i) %s%s" % (iteration + 1, info, marker)
         logging.info(message)
         self.network.train_logger.record(message)
+        self.checkpoint = [p.get_value().copy() for p in self.network.parameters]
         return iteration - self.best_iter < self.patience
 
     def test_step(self, test_set):
@@ -215,8 +220,6 @@ class NeuralTrainer(object):
         c = 0
         for x in train_set:
             cost_x = self.learning_func(*x)
-            # if np.isnan(cost_x[0]):
-            #     import pdb;pdb.set_trace()
             cost_matrix.append(cost_x)
             if training_callback:
                 self.network.training_callback()
