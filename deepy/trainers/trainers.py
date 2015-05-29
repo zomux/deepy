@@ -70,7 +70,7 @@ class NeuralTrainer(object):
 
         self.best_cost = 1e100
         self.best_iter = 0
-        self.best_params = [p.get_value().copy() for p in self.network.parameters]
+        self.best_params = self._copy_network_params()
 
     def _setup_costs(self):
         self.cost = self._add_regularization(self.network.cost)
@@ -101,16 +101,28 @@ class NeuralTrainer(object):
 
         return cost
 
-    def set_params(self, targets):
+    def set_params(self, targets, free_params=None):
         for param, target in zip(self.network.parameters, targets):
             param.set_value(target)
+        if free_params:
+            for param, param_value in zip(self.network.free_parameters, free_params):
+                param.set_value(param_value)
 
     def save_params(self, path):
         logging.info("saving parameters to %s" % path)
         opener = gzip.open if path.lower().endswith('.gz') else open
         handle = opener(path, 'wb')
-        pickle.dump(self.best_params, handle)
+        final_params = []
+        for param_block in self.best_params:
+            final_params.extend(param_block)
+        pickle.dump(final_params, handle)
         handle.close()
+
+    def _copy_network_params(self):
+        checkpoint = (map(lambda p: p.get_value().copy(), self.network.parameters),
+                      map(lambda p: p.get_value().copy(), self.network.free_parameters))
+        return checkpoint
+
 
     def train(self, train_set, valid_set=None, test_set=None, train_size=None):
         """
@@ -146,7 +158,7 @@ class NeuralTrainer(object):
             # Check costs
             if np.isnan(costs[0][1]):
                 logging.info("NaN detected in costs, rollback to last parameters")
-                self.set_params(self.checkpoint)
+                self.set_params(*self.checkpoint)
 
             iteration += 1
             self.network.epoch_callback()
@@ -154,7 +166,7 @@ class NeuralTrainer(object):
             yield dict(costs)
 
         if valid_set and self.config.get("save_best_parameters", True):
-            self.set_params(self.best_params)
+            self.set_params(*self.best_params)
         if test_set:
             self._run_test(-1, test_set)
 
@@ -191,7 +203,7 @@ class NeuralTrainer(object):
         if self.best_cost - J > self.best_cost * self.min_improvement:
             self.best_cost = J
             self.best_iter = iteration
-            self.best_params = [p.get_value().copy() for p in self.network.parameters]
+            self.best_params = self._copy_network_params()
             marker = ' *'
         else:
             marker = ""
@@ -199,7 +211,7 @@ class NeuralTrainer(object):
         message = "valid   (iter=%i) %s%s" % (iteration + 1, info, marker)
         logging.info(message)
         self.network.train_logger.record(message)
-        self.checkpoint = [p.get_value().copy() for p in self.network.parameters]
+        self.checkpoint = self._copy_network_params()
         return iteration - self.best_iter < self.patience
 
     def test_step(self, test_set):
@@ -292,7 +304,10 @@ class GeneralNeuralTrainer(NeuralTrainer):
         """
         params = self.network.parameters
         gradients = T.grad(self.cost, params)
-        return optimize_updates(params, gradients, self.config)
+        updates, free_parameters = optimize_updates(params, gradients, self.config)
+        self.network.free_parameters.extend(free_parameters)
+        logging.info("Added %d free parameters for optimization" % len(free_parameters))
+        return updates
 
 
 class SGDTrainer(GeneralNeuralTrainer):

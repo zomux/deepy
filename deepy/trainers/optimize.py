@@ -54,7 +54,7 @@ def optimize_updates(params, gradients, config=None, shapes=None):
         logging.info("avoid NaN gradients")
         new_gradients = []
         for grad in gradients:
-            new_grad = ifelse(T.isnan(grad.max()), T.zeros_like(grad) + EPSILON, grad)
+            new_grad = ifelse(T.isnan(grad).any(), T.zeros_like(grad) + EPSILON, grad)
             new_gradients.append(new_grad)
         gradients = new_gradients
 
@@ -83,7 +83,13 @@ def optimize_updates(params, gradients, config=None, shapes=None):
 
     logging.info("optimize method=%s parameters=%s" % (method, str(params)))
 
-    updates = wrap_core(func, config, params, gradients)
+    free_parameters = []
+    return_vals = wrap_core(func, config, params, gradients)
+    if type(return_vals) == list:
+        updates, free_parameters = return_vals
+    else:
+        updates = return_vals
+
     # Weight bound
     if config.weight_bound:
         logging.info("apply weight bound of %.2f" % config.weight_bound)
@@ -94,7 +100,7 @@ def optimize_updates(params, gradients, config=None, shapes=None):
                              -config.weight_bound * (update_value < -config.weight_bound))
             new_updates.append((param, bounded_value))
         updates = new_updates
-    return updates
+    return updates, free_parameters
 
 def optimize_function(params, config=None):
     """
@@ -106,5 +112,5 @@ def optimize_function(params, config=None):
         updating function receives gradients
     """
     gs = [dim_to_var(p.ndim) for p in params]
-    updates = optimize_updates(params, gs, config)
+    updates, _ = optimize_updates(params, gs, config)
     return theano.function(gs, [], updates=updates)

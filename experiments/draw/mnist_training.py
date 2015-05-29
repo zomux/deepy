@@ -27,7 +27,7 @@ if __name__ == '__main__':
     conf.gradient_clipping = 10
     conf.learning_rate = LearningRateAnnealer.learning_rate(0.004)
     conf.weight_l2 = 0
-    #conf.avoid_nan = True
+    conf.avoid_nan = True
     # from deepy import DETECT_NAN_MODE
     # conf.theano_mode = DETECT_NAN_MODE
     # TODO: Find out the problem causing NaN
