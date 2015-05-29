@@ -218,6 +218,7 @@ class NeuralTrainer(object):
         training_callback = bool(self.network.training_callbacks)
         cost_matrix = []
         c = 0
+
         for x in train_set:
             cost_x = self.learning_func(*x)
             cost_matrix.append(cost_x)
@@ -227,6 +228,7 @@ class NeuralTrainer(object):
                 c += 1
                 sys.stdout.write("\r> %d%%" % (c * 100 / train_size))
                 sys.stdout.flush()
+
         if train_size:
             sys.stdout.write("\r")
             sys.stdout.flush()
@@ -280,7 +282,7 @@ class GeneralNeuralTrainer(NeuralTrainer):
 
         self.learning_func = theano.function(
             network.input_variables + network.target_variables,
-            self.training_variables,
+            map(lambda v: theano.Out(v, borrow=True), self.training_variables),
             updates=update_list, allow_input_downcast=True,
             mode=self.config.get("theano_mode", None))
 

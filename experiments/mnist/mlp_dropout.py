@@ -18,9 +18,9 @@ default_model = os.path.join(os.path.dirname(__file__), "models", "mlp_dropout1.
 if __name__ == '__main__':
     model = NeuralClassifier(input_dim=28*28)
     model.stack(Dense(256, 'relu'),
-                Dropout(0.2),
+                Dropout(0.5),
                 Dense(256, 'relu'),
-                Dropout(0.2),
+                Dropout(0.5),
                 Dense(10, 'linear'),
                 Softmax())
 
