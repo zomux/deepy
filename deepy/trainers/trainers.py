@@ -144,8 +144,8 @@ class NeuralTrainer(object):
                 logging.info('interrupted!')
                 break
             # Check costs
-            if np.isnan(costs.items()[0][1]):
-                logging.info("NaN detected rollback to last parameters")
+            if np.isnan(costs[0][1]):
+                logging.info("NaN detected in costs, rollback to last parameters")
                 self.set_params(self.checkpoint)
 
             iteration += 1
