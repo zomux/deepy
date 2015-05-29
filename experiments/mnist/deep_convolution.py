@@ -18,9 +18,12 @@ if __name__ == '__main__':
                 # Add a new dimension for convolution
                 DimShuffle((0, 'x', 1, 2)),
                 Convolution((4, 1, 5, 5), activation="relu"),
+                Dropout(0.15),
                 Convolution((8, 4, 5, 5), activation="relu"),
+                Dropout(0.1),
                 Convolution((16, 8, 3, 3), activation="relu"),
                 Flatten(),
+                Dropout(0.1),
                 # As dimension information was lost, reveal it to the pipe line
                 RevealDimension(16),
                 Dense(10, 'linear'),

@@ -1,125 +1,144 @@
-# deepy version: 0.0.4
-[2015/05/12 13:12:07] test    (iter=1) J=2.48 err=90.76
-[2015/05/12 13:12:08] valid   (iter=1) J=2.49 err=91.87 *
-[2015/05/12 13:12:15] monitor (iter=1) J=0.37 err=11.60 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(convolution4)=0.61 mean(convolution5)=1.84 mean(flatten6)=1.84 mean(reveal_dimension7)=1.84 mean(dense8)=3.95 mean(softmax9)=0.10
-[2015/05/12 13:12:16] valid   (iter=2) J=0.20 err=6.24 *
-[2015/05/12 13:12:23] monitor (iter=2) J=0.13 err=3.98 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(convolution4)=0.67 mean(convolution5)=2.18 mean(flatten6)=2.18 mean(reveal_dimension7)=2.18 mean(dense8)=4.89 mean(softmax9)=0.10
-[2015/05/12 13:12:23] valid   (iter=3) J=0.10 err=3.11 *
-[2015/05/12 13:12:31] monitor (iter=3) J=0.11 err=3.22 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(convolution4)=0.69 mean(convolution5)=2.29 mean(flatten6)=2.29 mean(reveal_dimension7)=2.29 mean(dense8)=5.17 mean(softmax9)=0.10
-[2015/05/12 13:12:31] valid   (iter=4) J=0.10 err=3.11 *
-[2015/05/12 13:12:39] monitor (iter=4) J=0.09 err=2.83 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(convolution4)=0.70 mean(convolution5)=2.39 mean(flatten6)=2.39 mean(reveal_dimension7)=2.39 mean(dense8)=5.33 mean(softmax9)=0.10
-[2015/05/12 13:12:39] valid   (iter=5) J=0.10 err=2.95 *
-[2015/05/12 13:12:47] monitor (iter=5) J=0.08 err=2.60 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(convolution4)=0.73 mean(convolution5)=2.46 mean(flatten6)=2.46 mean(reveal_dimension7)=2.46 mean(dense8)=5.41 mean(softmax9)=0.10
-[2015/05/12 13:12:47] valid   (iter=6) J=0.09 err=2.86 *
-[2015/05/12 13:12:55] monitor (iter=6) J=0.08 err=2.47 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(convolution4)=0.73 mean(convolution5)=2.54 mean(flatten6)=2.54 mean(reveal_dimension7)=2.54 mean(dense8)=5.49 mean(softmax9)=0.10
-[2015/05/12 13:12:55] valid   (iter=7) J=0.09 err=2.57 *
-[2015/05/12 13:13:03] monitor (iter=7) J=0.07 err=2.36 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(convolution4)=0.73 mean(convolution5)=2.58 mean(flatten6)=2.58 mean(reveal_dimension7)=2.58 mean(dense8)=5.51 mean(softmax9)=0.10
-[2015/05/12 13:13:03] valid   (iter=8) J=0.09 err=2.74
-[2015/05/12 13:13:10] monitor (iter=8) J=0.07 err=2.32 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(convolution4)=0.75 mean(convolution5)=2.56 mean(flatten6)=2.56 mean(reveal_dimension7)=2.56 mean(dense8)=5.51 mean(softmax9)=0.10
-[2015/05/12 13:13:11] valid   (iter=9) J=0.09 err=2.62
-[2015/05/12 13:13:18] monitor (iter=9) J=0.07 err=2.16 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(convolution4)=0.76 mean(convolution5)=2.60 mean(flatten6)=2.60 mean(reveal_dimension7)=2.60 mean(dense8)=5.59 mean(softmax9)=0.10
-[2015/05/12 13:13:19] valid   (iter=10) J=0.09 err=2.66
-[2015/05/12 13:13:26] monitor (iter=10) J=0.07 err=2.08 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(convolution4)=0.79 mean(convolution5)=2.67 mean(flatten6)=2.67 mean(reveal_dimension7)=2.67 mean(dense8)=5.74 mean(softmax9)=0.10
-[2015/05/12 13:13:27] test    (iter=11) J=0.09 err=2.76
-[2015/05/12 13:13:27] valid   (iter=11) J=0.10 err=2.82
-[2015/05/12 13:13:35] monitor (iter=11) J=0.07 err=2.17 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(convolution4)=0.79 mean(convolution5)=2.63 mean(flatten6)=2.63 mean(reveal_dimension7)=2.63 mean(dense8)=5.72 mean(softmax9)=0.10
-[2015/05/12 13:13:35] valid   (iter=12) J=0.09 err=2.59
-[2015/05/12 13:13:43] monitor (iter=12) J=0.07 err=2.15 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(convolution4)=0.78 mean(convolution5)=2.63 mean(flatten6)=2.63 mean(reveal_dimension7)=2.63 mean(dense8)=5.68 mean(softmax9)=0.10
-[2015/05/12 13:13:43] valid   (iter=13) J=0.09 err=2.57
-[2015/05/12 13:13:51] monitor (iter=13) J=0.06 err=1.75 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(convolution4)=0.76 mean(convolution5)=2.66 mean(flatten6)=2.66 mean(reveal_dimension7)=2.66 mean(dense8)=5.53 mean(softmax9)=0.10
-[2015/05/12 13:13:52] valid   (iter=14) J=0.07 err=2.30 *
-[2015/05/12 13:13:59] monitor (iter=14) J=0.05 err=1.57 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(convolution4)=0.80 mean(convolution5)=2.79 mean(flatten6)=2.79 mean(reveal_dimension7)=2.79 mean(dense8)=5.66 mean(softmax9)=0.10
-[2015/05/12 13:14:00] valid   (iter=15) J=0.07 err=2.12 *
-[2015/05/12 13:14:07] monitor (iter=15) J=0.05 err=1.48 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.31 mean(convolution4)=0.83 mean(convolution5)=2.87 mean(flatten6)=2.87 mean(reveal_dimension7)=2.87 mean(dense8)=5.78 mean(softmax9)=0.10
-[2015/05/12 13:14:08] valid   (iter=16) J=0.07 err=1.93 *
-[2015/05/12 13:14:15] monitor (iter=16) J=0.04 err=1.43 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.32 mean(convolution4)=0.86 mean(convolution5)=2.91 mean(flatten6)=2.91 mean(reveal_dimension7)=2.91 mean(dense8)=5.88 mean(softmax9)=0.10
-[2015/05/12 13:14:16] valid   (iter=17) J=0.07 err=1.97
-[2015/05/12 13:14:23] monitor (iter=17) J=0.04 err=1.37 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.33 mean(convolution4)=0.87 mean(convolution5)=2.96 mean(flatten6)=2.96 mean(reveal_dimension7)=2.96 mean(dense8)=5.97 mean(softmax9)=0.10
-[2015/05/12 13:14:24] valid   (iter=18) J=0.07 err=1.94
-[2015/05/12 13:14:32] monitor (iter=18) J=0.04 err=1.32 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.33 mean(convolution4)=0.89 mean(convolution5)=3.02 mean(flatten6)=3.02 mean(reveal_dimension7)=3.02 mean(dense8)=6.09 mean(softmax9)=0.10
-[2015/05/12 13:14:32] valid   (iter=19) J=0.07 err=1.91 *
-[2015/05/12 13:14:40] monitor (iter=19) J=0.04 err=1.29 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.34 mean(convolution4)=0.91 mean(convolution5)=3.04 mean(flatten6)=3.04 mean(reveal_dimension7)=3.04 mean(dense8)=6.17 mean(softmax9)=0.10
-[2015/05/12 13:14:40] valid   (iter=20) J=0.06 err=1.97 *
-[2015/05/12 13:14:47] monitor (iter=20) J=0.04 err=1.31 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.35 mean(convolution4)=0.93 mean(convolution5)=3.07 mean(flatten6)=3.07 mean(reveal_dimension7)=3.07 mean(dense8)=6.27 mean(softmax9)=0.10
-[2015/05/12 13:14:48] test    (iter=21) J=0.06 err=1.89
-[2015/05/12 13:14:48] valid   (iter=21) J=0.07 err=2.05
-[2015/05/12 13:14:56] monitor (iter=21) J=0.04 err=1.28 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.35 mean(convolution4)=0.94 mean(convolution5)=3.10 mean(flatten6)=3.10 mean(reveal_dimension7)=3.10 mean(dense8)=6.35 mean(softmax9)=0.10
-[2015/05/12 13:14:56] valid   (iter=22) J=0.07 err=2.14
-[2015/05/12 13:15:04] monitor (iter=22) J=0.04 err=1.27 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.36 mean(convolution4)=0.95 mean(convolution5)=3.14 mean(flatten6)=3.14 mean(reveal_dimension7)=3.14 mean(dense8)=6.44 mean(softmax9)=0.10
-[2015/05/12 13:15:04] valid   (iter=23) J=0.07 err=2.09
-[2015/05/12 13:15:12] monitor (iter=23) J=0.04 err=1.21 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.36 mean(convolution4)=0.96 mean(convolution5)=3.14 mean(flatten6)=3.14 mean(reveal_dimension7)=3.14 mean(dense8)=6.47 mean(softmax9)=0.10
-[2015/05/12 13:15:12] valid   (iter=24) J=0.07 err=2.01
-[2015/05/12 13:15:20] monitor (iter=24) J=0.04 err=1.24 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=0.97 mean(convolution5)=3.16 mean(flatten6)=3.16 mean(reveal_dimension7)=3.16 mean(dense8)=6.53 mean(softmax9)=0.10
-[2015/05/12 13:15:20] valid   (iter=25) J=0.07 err=1.96
-[2015/05/12 13:15:28] monitor (iter=25) J=0.04 err=1.19 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=0.97 mean(convolution5)=3.16 mean(flatten6)=3.16 mean(reveal_dimension7)=3.16 mean(dense8)=6.53 mean(softmax9)=0.10
-[2015/05/12 13:15:28] valid   (iter=26) J=0.06 err=1.97
-[2015/05/12 13:15:36] monitor (iter=26) J=0.03 err=1.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.35 mean(convolution4)=0.93 mean(convolution5)=3.11 mean(flatten6)=3.11 mean(reveal_dimension7)=3.11 mean(dense8)=6.26 mean(softmax9)=0.10
-[2015/05/12 13:15:36] valid   (iter=27) J=0.06 err=1.62 *
-[2015/05/12 13:15:43] monitor (iter=27) J=0.03 err=0.92 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.36 mean(convolution4)=0.95 mean(convolution5)=3.18 mean(flatten6)=3.18 mean(reveal_dimension7)=3.18 mean(dense8)=6.31 mean(softmax9)=0.10
-[2015/05/12 13:15:44] valid   (iter=28) J=0.06 err=1.62
-[2015/05/12 13:15:51] monitor (iter=28) J=0.03 err=0.86 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=0.97 mean(convolution5)=3.22 mean(flatten6)=3.22 mean(reveal_dimension7)=3.22 mean(dense8)=6.35 mean(softmax9)=0.10
-[2015/05/12 13:15:52] valid   (iter=29) J=0.06 err=1.65
-[2015/05/12 13:15:59] monitor (iter=29) J=0.03 err=0.85 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=0.99 mean(convolution5)=3.28 mean(flatten6)=3.28 mean(reveal_dimension7)=3.28 mean(dense8)=6.43 mean(softmax9)=0.10
-[2015/05/12 13:15:59] valid   (iter=30) J=0.06 err=1.64
-[2015/05/12 13:16:07] monitor (iter=30) J=0.03 err=0.84 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.00 mean(convolution5)=3.32 mean(flatten6)=3.32 mean(reveal_dimension7)=3.32 mean(dense8)=6.49 mean(softmax9)=0.10
-[2015/05/12 13:16:07] test    (iter=31) J=0.06 err=1.71
-[2015/05/12 13:16:08] valid   (iter=31) J=0.06 err=1.69
-[2015/05/12 13:16:15] monitor (iter=31) J=0.03 err=0.81 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.39 mean(convolution4)=1.01 mean(convolution5)=3.36 mean(flatten6)=3.36 mean(reveal_dimension7)=3.36 mean(dense8)=6.55 mean(softmax9)=0.10
-[2015/05/12 13:16:15] valid   (iter=32) J=0.06 err=1.62
-[2015/05/12 13:16:23] monitor (iter=32) J=0.03 err=0.80 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.39 mean(convolution4)=1.03 mean(convolution5)=3.38 mean(flatten6)=3.38 mean(reveal_dimension7)=3.38 mean(dense8)=6.58 mean(softmax9)=0.10
-[2015/05/12 13:16:23] valid   (iter=33) J=0.06 err=1.62
-[2015/05/12 13:16:31] monitor (iter=33) J=0.03 err=0.87 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.36 mean(convolution4)=0.96 mean(convolution5)=3.19 mean(flatten6)=3.19 mean(reveal_dimension7)=3.19 mean(dense8)=6.36 mean(softmax9)=0.10
-[2015/05/12 13:16:32] valid   (iter=34) J=0.06 err=1.60 *
-[2015/05/12 13:16:39] monitor (iter=34) J=0.03 err=0.82 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=0.98 mean(convolution5)=3.24 mean(flatten6)=3.24 mean(reveal_dimension7)=3.24 mean(dense8)=6.41 mean(softmax9)=0.10
-[2015/05/12 13:16:39] valid   (iter=35) J=0.06 err=1.60
-[2015/05/12 13:16:47] monitor (iter=35) J=0.03 err=0.79 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=0.99 mean(convolution5)=3.27 mean(flatten6)=3.27 mean(reveal_dimension7)=3.27 mean(dense8)=6.43 mean(softmax9)=0.10
-[2015/05/12 13:16:47] valid   (iter=36) J=0.06 err=1.59
-[2015/05/12 13:16:55] monitor (iter=36) J=0.03 err=0.76 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=1.00 mean(convolution5)=3.31 mean(flatten6)=3.31 mean(reveal_dimension7)=3.31 mean(dense8)=6.46 mean(softmax9)=0.10
-[2015/05/12 13:16:55] valid   (iter=37) J=0.06 err=1.57
-[2015/05/12 13:17:03] monitor (iter=37) J=0.03 err=0.76 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.01 mean(convolution5)=3.33 mean(flatten6)=3.33 mean(reveal_dimension7)=3.33 mean(dense8)=6.48 mean(softmax9)=0.10
-[2015/05/12 13:17:03] valid   (iter=38) J=0.06 err=1.52
-[2015/05/12 13:17:11] monitor (iter=38) J=0.03 err=0.75 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.02 mean(convolution5)=3.36 mean(flatten6)=3.36 mean(reveal_dimension7)=3.36 mean(dense8)=6.51 mean(softmax9)=0.10
-[2015/05/12 13:17:12] valid   (iter=39) J=0.06 err=1.53
-[2015/05/12 13:17:19] monitor (iter=39) J=0.02 err=0.73 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.39 mean(convolution4)=1.03 mean(convolution5)=3.38 mean(flatten6)=3.38 mean(reveal_dimension7)=3.38 mean(dense8)=6.53 mean(softmax9)=0.10
-[2015/05/12 13:17:20] valid   (iter=40) J=0.06 err=1.60
-[2015/05/12 13:17:27] monitor (iter=40) J=0.03 err=0.82 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.36 mean(convolution4)=0.97 mean(convolution5)=3.24 mean(flatten6)=3.24 mean(reveal_dimension7)=3.24 mean(dense8)=6.40 mean(softmax9)=0.10
-[2015/05/12 13:17:28] test    (iter=41) J=0.05 err=1.51
-[2015/05/12 13:17:29] valid   (iter=41) J=0.06 err=1.56 *
-[2015/05/12 13:17:36] monitor (iter=41) J=0.03 err=0.79 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=0.99 mean(convolution5)=3.27 mean(flatten6)=3.27 mean(reveal_dimension7)=3.27 mean(dense8)=6.44 mean(softmax9)=0.10
-[2015/05/12 13:17:37] valid   (iter=42) J=0.06 err=1.57 *
-[2015/05/12 13:17:44] monitor (iter=42) J=0.03 err=0.78 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=0.99 mean(convolution5)=3.29 mean(flatten6)=3.29 mean(reveal_dimension7)=3.29 mean(dense8)=6.45 mean(softmax9)=0.10
-[2015/05/12 13:17:44] valid   (iter=43) J=0.06 err=1.57 *
-[2015/05/12 13:17:52] monitor (iter=43) J=0.03 err=0.76 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=1.00 mean(convolution5)=3.31 mean(flatten6)=3.31 mean(reveal_dimension7)=3.31 mean(dense8)=6.45 mean(softmax9)=0.10
-[2015/05/12 13:17:52] valid   (iter=44) J=0.06 err=1.55
-[2015/05/12 13:17:59] monitor (iter=44) J=0.02 err=0.75 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=1.01 mean(convolution5)=3.32 mean(flatten6)=3.32 mean(reveal_dimension7)=3.32 mean(dense8)=6.46 mean(softmax9)=0.10
-[2015/05/12 13:18:00] valid   (iter=45) J=0.06 err=1.52
-[2015/05/12 13:18:07] monitor (iter=45) J=0.02 err=0.74 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.01 mean(convolution5)=3.34 mean(flatten6)=3.34 mean(reveal_dimension7)=3.34 mean(dense8)=6.47 mean(softmax9)=0.10
-[2015/05/12 13:18:08] valid   (iter=46) J=0.06 err=1.54
-[2015/05/12 13:18:15] monitor (iter=46) J=0.02 err=0.73 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.02 mean(convolution5)=3.35 mean(flatten6)=3.35 mean(reveal_dimension7)=3.35 mean(dense8)=6.48 mean(softmax9)=0.10
-[2015/05/12 13:18:15] valid   (iter=47) J=0.06 err=1.53
-[2015/05/12 13:18:23] monitor (iter=47) J=0.02 err=0.71 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.03 mean(convolution5)=3.37 mean(flatten6)=3.37 mean(reveal_dimension7)=3.37 mean(dense8)=6.50 mean(softmax9)=0.10
-[2015/05/12 13:18:23] valid   (iter=48) J=0.06 err=1.57
-[2015/05/12 13:18:31] monitor (iter=48) J=0.02 err=0.71 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.39 mean(convolution4)=1.03 mean(convolution5)=3.38 mean(flatten6)=3.38 mean(reveal_dimension7)=3.38 mean(dense8)=6.51 mean(softmax9)=0.10
-[2015/05/12 13:18:31] valid   (iter=49) J=0.06 err=1.57
-[2015/05/12 13:18:39] monitor (iter=49) J=0.02 err=0.74 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=1.00 mean(convolution5)=3.30 mean(flatten6)=3.30 mean(reveal_dimension7)=3.30 mean(dense8)=6.44 mean(softmax9)=0.10
-[2015/05/12 13:18:39] valid   (iter=50) J=0.06 err=1.55 *
-[2015/05/12 13:18:47] monitor (iter=50) J=0.02 err=0.73 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=1.01 mean(convolution5)=3.32 mean(flatten6)=3.32 mean(reveal_dimension7)=3.32 mean(dense8)=6.46 mean(softmax9)=0.10
-[2015/05/12 13:18:47] test    (iter=51) J=0.05 err=1.49
-[2015/05/12 13:18:48] valid   (iter=51) J=0.06 err=1.53
-[2015/05/12 13:18:55] monitor (iter=51) J=0.02 err=0.72 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.37 mean(convolution4)=1.01 mean(convolution5)=3.33 mean(flatten6)=3.33 mean(reveal_dimension7)=3.33 mean(dense8)=6.47 mean(softmax9)=0.10
-[2015/05/12 13:18:56] valid   (iter=52) J=0.06 err=1.54
-[2015/05/12 13:19:04] monitor (iter=52) J=0.02 err=0.72 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.01 mean(convolution5)=3.33 mean(flatten6)=3.33 mean(reveal_dimension7)=3.33 mean(dense8)=6.47 mean(softmax9)=0.10
-[2015/05/12 13:19:04] valid   (iter=53) J=0.06 err=1.52
-[2015/05/12 13:19:12] monitor (iter=53) J=0.02 err=0.71 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.02 mean(convolution5)=3.34 mean(flatten6)=3.34 mean(reveal_dimension7)=3.34 mean(dense8)=6.47 mean(softmax9)=0.10
-[2015/05/12 13:19:12] valid   (iter=54) J=0.06 err=1.53 *
-[2015/05/12 13:19:20] monitor (iter=54) J=0.02 err=0.71 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.02 mean(convolution5)=3.34 mean(flatten6)=3.34 mean(reveal_dimension7)=3.34 mean(dense8)=6.47 mean(softmax9)=0.10
-[2015/05/12 13:19:20] valid   (iter=55) J=0.06 err=1.53
-[2015/05/12 13:19:27] monitor (iter=55) J=0.02 err=0.71 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.02 mean(convolution5)=3.35 mean(flatten6)=3.35 mean(reveal_dimension7)=3.35 mean(dense8)=6.48 mean(softmax9)=0.10
-[2015/05/12 13:19:28] valid   (iter=56) J=0.06 err=1.53
-[2015/05/12 13:19:36] monitor (iter=56) J=0.02 err=0.70 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.03 mean(convolution5)=3.36 mean(flatten6)=3.36 mean(reveal_dimension7)=3.36 mean(dense8)=6.49 mean(softmax9)=0.10
-[2015/05/12 13:19:36] valid   (iter=57) J=0.06 err=1.51
-[2015/05/12 13:19:43] monitor (iter=57) J=0.02 err=0.70 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.38 mean(convolution4)=1.03 mean(convolution5)=3.37 mean(flatten6)=3.37 mean(reveal_dimension7)=3.37 mean(dense8)=6.50 mean(softmax9)=0.10
-[2015/05/12 13:19:44] valid   (iter=58) J=0.06 err=1.53
-[2015/05/12 13:19:51] monitor (iter=58) J=0.02 err=0.69 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.39 mean(convolution4)=1.03 mean(convolution5)=3.38 mean(flatten6)=3.38 mean(reveal_dimension7)=3.38 mean(dense8)=6.51 mean(softmax9)=0.10
-[2015/05/12 13:19:52] valid   (iter=59) J=0.06 err=1.52
-[2015/05/12 13:19:59] monitor (iter=59) J=0.02 err=0.68 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.39 mean(convolution4)=1.04 mean(convolution5)=3.39 mean(flatten6)=3.39 mean(reveal_dimension7)=3.39 mean(dense8)=6.52 mean(softmax9)=0.10
+# deepy version: 0.1.2
+[2015/05/29 13:04:05] test    (iter=1) J=2.37 err=93.93
+[2015/05/29 13:04:06] valid   (iter=1) J=2.38 err=94.09 *
+[2015/05/29 13:04:22] monitor (iter=1) J=0.52 err=10.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.61 mean(dropout6)=0.55 mean(convolution7)=1.38 mean(flatten8)=1.38 mean(dropout9)=1.24 mean(reveal_dimension10)=1.24 mean(dense11)=2.86 mean(softmax12)=0.10
+[2015/05/29 13:04:23] valid   (iter=2) J=0.17 err=4.75 *
+[2015/05/29 13:04:38] monitor (iter=2) J=0.53 err=15.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.69 mean(dropout6)=0.62 mean(convolution7)=1.59 mean(flatten8)=1.59 mean(dropout9)=1.43 mean(reveal_dimension10)=1.43 mean(dense11)=3.91 mean(softmax12)=0.10
+[2015/05/29 13:04:39] valid   (iter=3) J=0.13 err=3.82 *
+[2015/05/29 13:04:55] monitor (iter=3) J=0.29 err=10.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.69 mean(dropout6)=0.62 mean(convolution7)=1.61 mean(flatten8)=1.61 mean(dropout9)=1.45 mean(reveal_dimension10)=1.45 mean(dense11)=4.26 mean(softmax12)=0.10
+[2015/05/29 13:04:55] valid   (iter=4) J=0.11 err=3.34 *
+[2015/05/29 13:05:11] monitor (iter=4) J=0.33 err=10.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.69 mean(dropout6)=0.62 mean(convolution7)=1.63 mean(flatten8)=1.63 mean(dropout9)=1.47 mean(reveal_dimension10)=1.47 mean(dense11)=4.41 mean(softmax12)=0.10
+[2015/05/29 13:05:12] valid   (iter=5) J=0.10 err=3.00 *
+[2015/05/29 13:05:27] monitor (iter=5) J=0.21 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.69 mean(dropout6)=0.62 mean(convolution7)=1.66 mean(flatten8)=1.66 mean(dropout9)=1.50 mean(reveal_dimension10)=1.50 mean(dense11)=4.48 mean(softmax12)=0.10
+[2015/05/29 13:05:28] valid   (iter=6) J=0.11 err=3.58
+[2015/05/29 13:05:43] monitor (iter=6) J=0.18 err=10.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.68 mean(dropout6)=0.61 mean(convolution7)=1.72 mean(flatten8)=1.72 mean(dropout9)=1.54 mean(reveal_dimension10)=1.54 mean(dense11)=4.54 mean(softmax12)=0.10
+[2015/05/29 13:05:44] valid   (iter=7) J=0.09 err=2.65 *
+[2015/05/29 13:06:00] monitor (iter=7) J=0.03 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.72 mean(dropout6)=0.64 mean(convolution7)=1.79 mean(flatten8)=1.79 mean(dropout9)=1.61 mean(reveal_dimension10)=1.61 mean(dense11)=4.68 mean(softmax12)=0.10
+[2015/05/29 13:06:01] valid   (iter=8) J=0.09 err=2.48 *
+[2015/05/29 13:06:16] monitor (iter=8) J=0.23 err=10.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.71 mean(dropout6)=0.63 mean(convolution7)=1.76 mean(flatten8)=1.76 mean(dropout9)=1.59 mean(reveal_dimension10)=1.59 mean(dense11)=4.60 mean(softmax12)=0.10
+[2015/05/29 13:06:17] valid   (iter=9) J=0.09 err=2.77
+[2015/05/29 13:06:32] monitor (iter=9) J=0.16 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.71 mean(dropout6)=0.64 mean(convolution7)=1.79 mean(flatten8)=1.79 mean(dropout9)=1.61 mean(reveal_dimension10)=1.61 mean(dense11)=4.68 mean(softmax12)=0.10
+[2015/05/29 13:06:33] valid   (iter=10) J=0.09 err=2.39
+[2015/05/29 13:06:48] monitor (iter=10) J=0.11 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.72 mean(dropout6)=0.65 mean(convolution7)=1.79 mean(flatten8)=1.79 mean(dropout9)=1.61 mean(reveal_dimension10)=1.61 mean(dense11)=4.64 mean(softmax12)=0.10
+[2015/05/29 13:06:49] test    (iter=11) J=0.07 err=2.25
+[2015/05/29 13:06:50] valid   (iter=11) J=0.08 err=2.43 *
+[2015/05/29 13:07:06] monitor (iter=11) J=0.11 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.70 mean(dropout6)=0.63 mean(convolution7)=1.80 mean(flatten8)=1.80 mean(dropout9)=1.62 mean(reveal_dimension10)=1.62 mean(dense11)=4.63 mean(softmax12)=0.10
+[2015/05/29 13:07:07] valid   (iter=12) J=0.08 err=2.47
+[2015/05/29 13:07:22] monitor (iter=12) J=0.12 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.22 mean(convolution5)=0.71 mean(dropout6)=0.64 mean(convolution7)=1.78 mean(flatten8)=1.78 mean(dropout9)=1.60 mean(reveal_dimension10)=1.60 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:07:23] valid   (iter=13) J=0.09 err=2.64
+[2015/05/29 13:07:38] monitor (iter=13) J=0.24 err=10.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.72 mean(dropout6)=0.65 mean(convolution7)=1.82 mean(flatten8)=1.82 mean(dropout9)=1.64 mean(reveal_dimension10)=1.64 mean(dense11)=4.71 mean(softmax12)=0.10
+[2015/05/29 13:07:39] valid   (iter=14) J=0.09 err=2.59
+[2015/05/29 13:07:54] monitor (iter=14) J=0.02 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.26 mean(dropout4)=0.22 mean(convolution5)=0.72 mean(dropout6)=0.64 mean(convolution7)=1.82 mean(flatten8)=1.82 mean(dropout9)=1.63 mean(reveal_dimension10)=1.63 mean(dense11)=4.68 mean(softmax12)=0.10
+[2015/05/29 13:07:55] valid   (iter=15) J=0.08 err=2.33 *
+[2015/05/29 13:08:10] monitor (iter=15) J=0.11 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.26 mean(dropout4)=0.22 mean(convolution5)=0.73 mean(dropout6)=0.66 mean(convolution7)=1.82 mean(flatten8)=1.82 mean(dropout9)=1.64 mean(reveal_dimension10)=1.64 mean(dense11)=4.70 mean(softmax12)=0.10
+[2015/05/29 13:08:11] valid   (iter=16) J=0.08 err=2.37
+[2015/05/29 13:08:26] monitor (iter=16) J=0.06 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.72 mean(dropout6)=0.64 mean(convolution7)=1.82 mean(flatten8)=1.82 mean(dropout9)=1.63 mean(reveal_dimension10)=1.63 mean(dense11)=4.63 mean(softmax12)=0.10
+[2015/05/29 13:08:27] valid   (iter=17) J=0.08 err=2.17 *
+[2015/05/29 13:08:42] monitor (iter=17) J=0.02 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.73 mean(dropout6)=0.66 mean(convolution7)=1.82 mean(flatten8)=1.82 mean(dropout9)=1.64 mean(reveal_dimension10)=1.64 mean(dense11)=4.62 mean(softmax12)=0.10
+[2015/05/29 13:08:43] valid   (iter=18) J=0.08 err=2.34
+[2015/05/29 13:08:59] monitor (iter=18) J=0.10 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.22 mean(convolution5)=0.71 mean(dropout6)=0.63 mean(convolution7)=1.85 mean(flatten8)=1.85 mean(dropout9)=1.66 mean(reveal_dimension10)=1.66 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:08:59] valid   (iter=19) J=0.08 err=2.31
+[2015/05/29 13:09:15] monitor (iter=19) J=0.01 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.71 mean(dropout6)=0.64 mean(convolution7)=1.83 mean(flatten8)=1.83 mean(dropout9)=1.65 mean(reveal_dimension10)=1.65 mean(dense11)=4.57 mean(softmax12)=0.10
+[2015/05/29 13:09:16] valid   (iter=20) J=0.08 err=2.04
+[2015/05/29 13:09:31] monitor (iter=20) J=0.20 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.22 mean(convolution5)=0.72 mean(dropout6)=0.64 mean(convolution7)=1.86 mean(flatten8)=1.86 mean(dropout9)=1.67 mean(reveal_dimension10)=1.67 mean(dense11)=4.66 mean(softmax12)=0.10
+[2015/05/29 13:09:32] test    (iter=21) J=0.08 err=2.59
+[2015/05/29 13:09:33] valid   (iter=21) J=0.08 err=2.34
+[2015/05/29 13:09:48] monitor (iter=21) J=0.10 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.72 mean(dropout6)=0.65 mean(convolution7)=1.83 mean(flatten8)=1.83 mean(dropout9)=1.65 mean(reveal_dimension10)=1.65 mean(dense11)=4.55 mean(softmax12)=0.10
+[2015/05/29 13:09:49] valid   (iter=22) J=0.08 err=2.44
+[2015/05/29 13:10:04] monitor (iter=22) J=0.10 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.71 mean(dropout6)=0.64 mean(convolution7)=1.85 mean(flatten8)=1.85 mean(dropout9)=1.66 mean(reveal_dimension10)=1.66 mean(dense11)=4.60 mean(softmax12)=0.10
+[2015/05/29 13:10:05] valid   (iter=23) J=0.08 err=2.17
+[2015/05/29 13:10:20] monitor (iter=23) J=0.02 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.72 mean(dropout6)=0.65 mean(convolution7)=1.84 mean(flatten8)=1.84 mean(dropout9)=1.65 mean(reveal_dimension10)=1.65 mean(dense11)=4.62 mean(softmax12)=0.10
+[2015/05/29 13:10:21] valid   (iter=24) J=0.07 err=2.14 *
+[2015/05/29 13:10:36] monitor (iter=24) J=0.13 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.25 mean(dropout4)=0.21 mean(convolution5)=0.73 mean(dropout6)=0.66 mean(convolution7)=1.87 mean(flatten8)=1.87 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:10:37] valid   (iter=25) J=0.07 err=2.12 *
+[2015/05/29 13:10:52] monitor (iter=25) J=0.11 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.75 mean(dropout6)=0.67 mean(convolution7)=1.87 mean(flatten8)=1.87 mean(dropout9)=1.68 mean(reveal_dimension10)=1.68 mean(dense11)=4.63 mean(softmax12)=0.10
+[2015/05/29 13:10:53] valid   (iter=26) J=0.08 err=2.20
+[2015/05/29 13:11:08] monitor (iter=26) J=0.08 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.26 mean(dropout4)=0.22 mean(convolution5)=0.75 mean(dropout6)=0.67 mean(convolution7)=1.86 mean(flatten8)=1.86 mean(dropout9)=1.68 mean(reveal_dimension10)=1.68 mean(dense11)=4.62 mean(softmax12)=0.10
+[2015/05/29 13:11:09] valid   (iter=27) J=0.07 err=2.08 *
+[2015/05/29 13:11:24] monitor (iter=27) J=0.26 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.75 mean(dropout6)=0.67 mean(convolution7)=1.86 mean(flatten8)=1.86 mean(dropout9)=1.68 mean(reveal_dimension10)=1.68 mean(dense11)=4.57 mean(softmax12)=0.10
+[2015/05/29 13:11:25] valid   (iter=28) J=0.07 err=2.08
+[2015/05/29 13:11:41] monitor (iter=28) J=0.02 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.75 mean(dropout6)=0.67 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.59 mean(softmax12)=0.10
+[2015/05/29 13:11:41] valid   (iter=29) J=0.07 err=2.06
+[2015/05/29 13:11:57] monitor (iter=29) J=0.13 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.77 mean(dropout6)=0.69 mean(convolution7)=1.85 mean(flatten8)=1.85 mean(dropout9)=1.67 mean(reveal_dimension10)=1.67 mean(dense11)=4.57 mean(softmax12)=0.10
+[2015/05/29 13:11:58] valid   (iter=30) J=0.07 err=2.02 *
+[2015/05/29 13:12:13] monitor (iter=30) J=0.02 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.75 mean(dropout6)=0.68 mean(convolution7)=1.90 mean(flatten8)=1.90 mean(dropout9)=1.70 mean(reveal_dimension10)=1.70 mean(dense11)=4.62 mean(softmax12)=0.10
+[2015/05/29 13:12:14] test    (iter=31) J=0.06 err=1.75
+[2015/05/29 13:12:15] valid   (iter=31) J=0.06 err=1.85 *
+[2015/05/29 13:12:30] monitor (iter=31) J=0.01 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(dropout4)=0.24 mean(convolution5)=0.78 mean(dropout6)=0.70 mean(convolution7)=1.87 mean(flatten8)=1.87 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.57 mean(softmax12)=0.10
+[2015/05/29 13:12:31] valid   (iter=32) J=0.07 err=2.08
+[2015/05/29 13:12:46] monitor (iter=32) J=0.30 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(dropout4)=0.24 mean(convolution5)=0.78 mean(dropout6)=0.70 mean(convolution7)=1.87 mean(flatten8)=1.87 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:12:47] valid   (iter=33) J=0.07 err=2.16
+[2015/05/29 13:13:02] monitor (iter=33) J=0.19 err=10.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.27 mean(dropout4)=0.23 mean(convolution5)=0.78 mean(dropout6)=0.70 mean(convolution7)=1.86 mean(flatten8)=1.86 mean(dropout9)=1.67 mean(reveal_dimension10)=1.67 mean(dense11)=4.57 mean(softmax12)=0.10
+[2015/05/29 13:13:03] valid   (iter=34) J=0.07 err=2.19
+[2015/05/29 13:13:18] monitor (iter=34) J=0.06 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(dropout4)=0.24 mean(convolution5)=0.76 mean(dropout6)=0.68 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.70 mean(reveal_dimension10)=1.70 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:13:19] valid   (iter=35) J=0.07 err=1.91
+[2015/05/29 13:13:34] monitor (iter=35) J=0.11 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(dropout4)=0.24 mean(convolution5)=0.79 mean(dropout6)=0.71 mean(convolution7)=1.87 mean(flatten8)=1.87 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.64 mean(softmax12)=0.10
+[2015/05/29 13:13:35] valid   (iter=36) J=0.07 err=2.05
+[2015/05/29 13:13:50] monitor (iter=36) J=0.08 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.24 mean(convolution5)=0.78 mean(dropout6)=0.70 mean(convolution7)=1.85 mean(flatten8)=1.85 mean(dropout9)=1.67 mean(reveal_dimension10)=1.67 mean(dense11)=4.62 mean(softmax12)=0.10
+[2015/05/29 13:13:51] valid   (iter=37) J=0.06 err=1.85
+[2015/05/29 13:14:07] monitor (iter=37) J=0.04 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(dropout4)=0.23 mean(convolution5)=0.77 mean(dropout6)=0.69 mean(convolution7)=1.85 mean(flatten8)=1.85 mean(dropout9)=1.67 mean(reveal_dimension10)=1.67 mean(dense11)=4.54 mean(softmax12)=0.10
+[2015/05/29 13:14:07] valid   (iter=38) J=0.06 err=1.87 *
+[2015/05/29 13:14:23] monitor (iter=38) J=0.36 err=10.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(dropout4)=0.24 mean(convolution5)=0.78 mean(dropout6)=0.70 mean(convolution7)=1.86 mean(flatten8)=1.86 mean(dropout9)=1.68 mean(reveal_dimension10)=1.68 mean(dense11)=4.60 mean(softmax12)=0.10
+[2015/05/29 13:14:24] valid   (iter=39) J=0.06 err=1.83
+[2015/05/29 13:14:39] monitor (iter=39) J=0.04 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(dropout4)=0.24 mean(convolution5)=0.78 mean(dropout6)=0.71 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.70 mean(reveal_dimension10)=1.70 mean(dense11)=4.62 mean(softmax12)=0.10
+[2015/05/29 13:14:40] valid   (iter=40) J=0.06 err=1.84
+[2015/05/29 13:14:55] monitor (iter=40) J=0.09 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(dropout4)=0.24 mean(convolution5)=0.78 mean(dropout6)=0.70 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:14:56] test    (iter=41) J=0.06 err=1.79
+[2015/05/29 13:14:57] valid   (iter=41) J=0.06 err=1.83
+[2015/05/29 13:15:12] monitor (iter=41) J=0.09 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.25 mean(convolution5)=0.79 mean(dropout6)=0.71 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:15:13] valid   (iter=42) J=0.06 err=1.82 *
+[2015/05/29 13:15:28] monitor (iter=42) J=0.02 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.25 mean(convolution5)=0.79 mean(dropout6)=0.71 mean(convolution7)=1.87 mean(flatten8)=1.87 mean(dropout9)=1.68 mean(reveal_dimension10)=1.68 mean(dense11)=4.57 mean(softmax12)=0.10
+[2015/05/29 13:15:29] valid   (iter=43) J=0.06 err=1.82 *
+[2015/05/29 13:15:44] monitor (iter=43) J=0.01 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(dropout4)=0.24 mean(convolution5)=0.80 mean(dropout6)=0.72 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.59 mean(softmax12)=0.10
+[2015/05/29 13:15:45] valid   (iter=44) J=0.06 err=1.92
+[2015/05/29 13:16:00] monitor (iter=44) J=0.07 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.28 mean(dropout4)=0.24 mean(convolution5)=0.80 mean(dropout6)=0.72 mean(convolution7)=1.90 mean(flatten8)=1.90 mean(dropout9)=1.71 mean(reveal_dimension10)=1.71 mean(dense11)=4.68 mean(softmax12)=0.10
+[2015/05/29 13:16:01] valid   (iter=45) J=0.06 err=1.77 *
+[2015/05/29 13:16:16] monitor (iter=45) J=0.13 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.24 mean(convolution5)=0.80 mean(dropout6)=0.72 mean(convolution7)=1.89 mean(flatten8)=1.89 mean(dropout9)=1.70 mean(reveal_dimension10)=1.70 mean(dense11)=4.65 mean(softmax12)=0.10
+[2015/05/29 13:16:17] valid   (iter=46) J=0.06 err=1.76
+[2015/05/29 13:16:33] monitor (iter=46) J=0.02 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.25 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.89 mean(flatten8)=1.89 mean(dropout9)=1.70 mean(reveal_dimension10)=1.70 mean(dense11)=4.67 mean(softmax12)=0.10
+[2015/05/29 13:16:34] valid   (iter=47) J=0.07 err=1.96
+[2015/05/29 13:16:49] monitor (iter=47) J=0.04 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.24 mean(convolution5)=0.79 mean(dropout6)=0.71 mean(convolution7)=1.85 mean(flatten8)=1.85 mean(dropout9)=1.67 mean(reveal_dimension10)=1.67 mean(dense11)=4.57 mean(softmax12)=0.10
+[2015/05/29 13:16:50] valid   (iter=48) J=0.06 err=1.88
+[2015/05/29 13:17:05] monitor (iter=48) J=0.12 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.26 mean(convolution5)=0.80 mean(dropout6)=0.72 mean(convolution7)=1.87 mean(flatten8)=1.87 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:17:06] valid   (iter=49) J=0.06 err=1.76
+[2015/05/29 13:17:21] monitor (iter=49) J=0.05 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.25 mean(convolution5)=0.79 mean(dropout6)=0.71 mean(convolution7)=1.86 mean(flatten8)=1.86 mean(dropout9)=1.67 mean(reveal_dimension10)=1.67 mean(dense11)=4.55 mean(softmax12)=0.10
+[2015/05/29 13:17:22] valid   (iter=50) J=0.07 err=1.82
+[2015/05/29 13:17:37] monitor (iter=50) J=0.23 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.25 mean(convolution5)=0.78 mean(dropout6)=0.71 mean(convolution7)=1.84 mean(flatten8)=1.84 mean(dropout9)=1.65 mean(reveal_dimension10)=1.65 mean(dense11)=4.50 mean(softmax12)=0.10
+[2015/05/29 13:17:38] test    (iter=51) J=0.06 err=1.69
+[2015/05/29 13:17:39] valid   (iter=51) J=0.06 err=1.77
+[2015/05/29 13:17:54] monitor (iter=51) J=0.06 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.25 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.90 mean(flatten8)=1.90 mean(dropout9)=1.71 mean(reveal_dimension10)=1.71 mean(dense11)=4.67 mean(softmax12)=0.10
+[2015/05/29 13:17:55] valid   (iter=52) J=0.06 err=1.75 *
+[2015/05/29 13:18:10] monitor (iter=52) J=0.09 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.25 mean(convolution5)=0.80 mean(dropout6)=0.72 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.62 mean(softmax12)=0.10
+[2015/05/29 13:18:11] valid   (iter=53) J=0.06 err=1.77
+[2015/05/29 13:18:26] monitor (iter=53) J=0.08 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.25 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.89 mean(flatten8)=1.89 mean(dropout9)=1.70 mean(reveal_dimension10)=1.70 mean(dense11)=4.63 mean(softmax12)=0.10
+[2015/05/29 13:18:27] valid   (iter=54) J=0.06 err=1.80 *
+[2015/05/29 13:18:43] monitor (iter=54) J=0.11 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.25 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.85 mean(flatten8)=1.85 mean(dropout9)=1.67 mean(reveal_dimension10)=1.67 mean(dense11)=4.57 mean(softmax12)=0.10
+[2015/05/29 13:18:43] valid   (iter=55) J=0.06 err=1.77
+[2015/05/29 13:18:59] monitor (iter=55) J=0.05 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.25 mean(convolution5)=0.80 mean(dropout6)=0.72 mean(convolution7)=1.84 mean(flatten8)=1.84 mean(dropout9)=1.66 mean(reveal_dimension10)=1.66 mean(dense11)=4.53 mean(softmax12)=0.10
+[2015/05/29 13:19:00] valid   (iter=56) J=0.06 err=1.76
+[2015/05/29 13:19:15] monitor (iter=56) J=0.20 err=10.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.26 mean(convolution5)=0.80 mean(dropout6)=0.72 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:19:16] valid   (iter=57) J=0.06 err=1.78
+[2015/05/29 13:19:31] monitor (iter=57) J=0.05 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.25 mean(convolution5)=0.80 mean(dropout6)=0.72 mean(convolution7)=1.86 mean(flatten8)=1.86 mean(dropout9)=1.68 mean(reveal_dimension10)=1.68 mean(dense11)=4.60 mean(softmax12)=0.10
+[2015/05/29 13:19:32] valid   (iter=58) J=0.06 err=1.76
+[2015/05/29 13:19:47] monitor (iter=58) J=0.08 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.26 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.87 mean(flatten8)=1.87 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.60 mean(softmax12)=0.10
+[2015/05/29 13:19:48] valid   (iter=59) J=0.06 err=1.67
+[2015/05/29 13:20:03] monitor (iter=59) J=0.02 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.26 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.85 mean(flatten8)=1.85 mean(dropout9)=1.67 mean(reveal_dimension10)=1.67 mean(dense11)=4.55 mean(softmax12)=0.10
+[2015/05/29 13:20:04] valid   (iter=60) J=0.06 err=1.80
+[2015/05/29 13:20:19] monitor (iter=60) J=0.01 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.25 mean(convolution5)=0.80 mean(dropout6)=0.72 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:20:20] test    (iter=61) J=0.05 err=1.63
+[2015/05/29 13:20:21] valid   (iter=61) J=0.06 err=1.75 *
+[2015/05/29 13:20:36] monitor (iter=61) J=0.11 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.25 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.64 mean(softmax12)=0.10
+[2015/05/29 13:20:37] valid   (iter=62) J=0.06 err=1.72
+[2015/05/29 13:20:52] monitor (iter=62) J=0.02 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.25 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.87 mean(flatten8)=1.87 mean(dropout9)=1.68 mean(reveal_dimension10)=1.68 mean(dense11)=4.62 mean(softmax12)=0.10
+[2015/05/29 13:20:53] valid   (iter=63) J=0.06 err=1.67 *
+[2015/05/29 13:21:08] monitor (iter=63) J=0.03 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.25 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.88 mean(flatten8)=1.88 mean(dropout9)=1.69 mean(reveal_dimension10)=1.69 mean(dense11)=4.61 mean(softmax12)=0.10
+[2015/05/29 13:21:09] valid   (iter=64) J=0.06 err=1.83
+[2015/05/29 13:21:25] monitor (iter=64) J=0.14 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.25 mean(convolution5)=0.82 mean(dropout6)=0.73 mean(convolution7)=1.89 mean(flatten8)=1.89 mean(dropout9)=1.70 mean(reveal_dimension10)=1.70 mean(dense11)=4.64 mean(softmax12)=0.10
+[2015/05/29 13:21:25] valid   (iter=65) J=0.06 err=1.72
+[2015/05/29 13:21:41] monitor (iter=65) J=0.12 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.25 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.86 mean(flatten8)=1.86 mean(dropout9)=1.67 mean(reveal_dimension10)=1.67 mean(dense11)=4.59 mean(softmax12)=0.10
+[2015/05/29 13:21:42] valid   (iter=66) J=0.06 err=1.63
+[2015/05/29 13:21:57] monitor (iter=66) J=0.11 err=5.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.29 mean(dropout4)=0.25 mean(convolution5)=0.80 mean(dropout6)=0.72 mean(convolution7)=1.86 mean(flatten8)=1.86 mean(dropout9)=1.68 mean(reveal_dimension10)=1.68 mean(dense11)=4.56 mean(softmax12)=0.10
+[2015/05/29 13:21:58] valid   (iter=67) J=0.06 err=1.69
+[2015/05/29 13:22:13] monitor (iter=67) J=0.04 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.25 mean(convolution5)=0.81 mean(dropout6)=0.73 mean(convolution7)=1.87 mean(flatten8)=1.87 mean(dropout9)=1.68 mean(reveal_dimension10)=1.68 mean(dense11)=4.57 mean(softmax12)=0.10
+[2015/05/29 13:22:14] valid   (iter=68) J=0.06 err=1.69
+[2015/05/29 13:22:29] monitor (iter=68) J=0.01 err=0.00 mean(dimshuffle1)=0.13 mean(dimshuffle2)=0.13 mean(convolution3)=0.30 mean(dropout4)=0.26 mean(convolution5)=0.82 mean(dropout6)=0.74 mean(convolution7)=1.89 mean(flatten8)=1.89 mean(dropout9)=1.70 mean(reveal_dimension10)=1.70 mean(dense11)=4.65 mean(softmax12)=0.10
