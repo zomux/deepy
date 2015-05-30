@@ -1,0 +1,124 @@
+# deepy version: 0.1.2
+[2015/05/30 00:15:12] valid   (iter=1) J=0.66 *
+[2015/05/30 00:15:57] monitor (iter=1) J=0.72 mean(irnn1)=0.01 mean(dense2)=0.04
+[2015/05/30 00:15:57] valid   (iter=2) J=0.63 *
+[2015/05/30 00:16:41] monitor (iter=2) J=0.71 mean(irnn1)=0.01 mean(dense2)=0.03
+[2015/05/30 00:16:42] valid   (iter=3) J=0.62 *
+[2015/05/30 00:17:30] monitor (iter=3) J=0.71 mean(irnn1)=0.01 mean(dense2)=0.03
+[2015/05/30 00:17:30] valid   (iter=4) J=0.62 *
+[2015/05/30 00:18:20] monitor (iter=4) J=0.71 mean(irnn1)=0.01 mean(dense2)=0.02
+[2015/05/30 00:18:21] valid   (iter=5) J=0.62 *
+[2015/05/30 00:19:10] monitor (iter=5) J=0.70 mean(irnn1)=0.01 mean(dense2)=0.02
+[2015/05/30 00:19:10] valid   (iter=6) J=0.61 *
+[2015/05/30 00:19:58] monitor (iter=6) J=0.70 mean(irnn1)=0.01 mean(dense2)=0.02
+[2015/05/30 00:19:58] valid   (iter=7) J=0.61 *
+[2015/05/30 00:20:44] monitor (iter=7) J=0.70 mean(irnn1)=0.01 mean(dense2)=0.02
+[2015/05/30 00:20:45] valid   (iter=8) J=0.61 *
+[2015/05/30 00:21:37] monitor (iter=8) J=0.70 mean(irnn1)=0.01 mean(dense2)=0.02
+[2015/05/30 00:21:37] valid   (iter=9) J=0.61 *
+[2015/05/30 00:22:20] monitor (iter=9) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.02
+[2015/05/30 00:22:21] valid   (iter=10) J=0.61 *
+[2015/05/30 00:23:10] monitor (iter=10) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:23:11] valid   (iter=11) J=0.60 *
+[2015/05/30 00:23:57] monitor (iter=11) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:23:57] valid   (iter=12) J=0.60 *
+[2015/05/30 00:24:45] monitor (iter=12) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:24:45] valid   (iter=13) J=0.60 *
+[2015/05/30 00:25:28] monitor (iter=13) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:25:28] valid   (iter=14) J=0.60 *
+[2015/05/30 00:26:17] monitor (iter=14) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:26:17] valid   (iter=15) J=0.60 *
+[2015/05/30 00:26:58] monitor (iter=15) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:26:59] valid   (iter=16) J=0.60 *
+[2015/05/30 00:27:43] monitor (iter=16) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:27:44] valid   (iter=17) J=0.60 *
+[2015/05/30 00:28:29] monitor (iter=17) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:28:29] valid   (iter=18) J=0.60
+[2015/05/30 00:29:14] monitor (iter=18) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:29:15] valid   (iter=19) J=0.60 *
+[2015/05/30 00:30:00] monitor (iter=19) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:30:01] valid   (iter=20) J=0.60
+[2015/05/30 00:30:50] monitor (iter=20) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:30:51] valid   (iter=21) J=0.60 *
+[2015/05/30 00:31:44] monitor (iter=21) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:31:44] valid   (iter=22) J=0.60
+[2015/05/30 00:32:26] monitor (iter=22) J=0.69 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:32:27] valid   (iter=23) J=0.60 *
+[2015/05/30 00:33:09] monitor (iter=23) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:33:09] valid   (iter=24) J=0.60
+[2015/05/30 00:33:57] monitor (iter=24) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:33:57] valid   (iter=25) J=0.60 *
+[2015/05/30 00:34:39] monitor (iter=25) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:34:39] valid   (iter=26) J=0.60
+[2015/05/30 00:35:28] monitor (iter=26) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:35:29] valid   (iter=27) J=0.60
+[2015/05/30 00:36:19] monitor (iter=27) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:36:19] valid   (iter=28) J=0.60 *
+[2015/05/30 00:37:00] monitor (iter=28) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:37:00] valid   (iter=29) J=0.59
+[2015/05/30 00:37:45] monitor (iter=29) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:37:45] valid   (iter=30) J=0.59
+[2015/05/30 00:38:37] monitor (iter=30) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:38:37] valid   (iter=31) J=0.59 *
+[2015/05/30 00:39:25] monitor (iter=31) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:39:26] valid   (iter=32) J=0.59
+[2015/05/30 00:40:12] monitor (iter=32) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:40:12] valid   (iter=33) J=0.59
+[2015/05/30 00:40:57] monitor (iter=33) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.01
+[2015/05/30 00:40:57] valid   (iter=34) J=0.59
+[2015/05/30 00:41:46] monitor (iter=34) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.00
+[2015/05/30 00:41:47] valid   (iter=35) J=0.59 *
+[2015/05/30 00:42:28] monitor (iter=35) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.00
+[2015/05/30 00:42:28] valid   (iter=36) J=0.59
+[2015/05/30 00:43:12] monitor (iter=36) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.00
+[2015/05/30 00:43:13] valid   (iter=37) J=0.59
+[2015/05/30 00:43:52] monitor (iter=37) J=0.68 mean(irnn1)=0.00 mean(dense2)=0.00
+[2015/05/30 00:43:52] valid   (iter=38) J=0.59
+[2015/05/30 00:44:33] monitor (iter=38) J=0.05 mean(irnn1)=0.08 mean(dense2)=1.06
+[2015/05/30 00:44:33] valid   (iter=39) J=0.09 *
+[2015/05/30 00:45:18] monitor (iter=39) J=0.05 mean(irnn1)=0.08 mean(dense2)=1.04
+[2015/05/30 00:45:18] valid   (iter=40) J=0.09 *
+[2015/05/30 00:46:04] monitor (iter=40) J=0.05 mean(irnn1)=0.07 mean(dense2)=1.04
+[2015/05/30 00:46:04] valid   (iter=41) J=0.09 *
+[2015/05/30 00:46:44] monitor (iter=41) J=0.05 mean(irnn1)=0.07 mean(dense2)=1.03
+[2015/05/30 00:46:44] valid   (iter=42) J=0.09 *
+[2015/05/30 00:47:24] monitor (iter=42) J=0.05 mean(irnn1)=0.07 mean(dense2)=1.03
+[2015/05/30 00:47:24] valid   (iter=43) J=0.09 *
+[2015/05/30 00:48:06] monitor (iter=43) J=0.05 mean(irnn1)=0.07 mean(dense2)=1.03
+[2015/05/30 00:48:07] valid   (iter=44) J=0.09 *
+[2015/05/30 00:48:51] monitor (iter=44) J=0.05 mean(irnn1)=0.07 mean(dense2)=1.02
+[2015/05/30 00:48:52] valid   (iter=45) J=0.09 *
+[2015/05/30 00:49:39] monitor (iter=45) J=0.05 mean(irnn1)=0.07 mean(dense2)=1.02
+[2015/05/30 00:49:40] valid   (iter=46) J=0.09 *
+[2015/05/30 00:50:40] monitor (iter=46) J=0.05 mean(irnn1)=0.07 mean(dense2)=1.02
+[2015/05/30 00:50:41] valid   (iter=47) J=0.09 *
+[2015/05/30 00:51:33] monitor (iter=47) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.02
+[2015/05/30 00:51:33] valid   (iter=48) J=0.09 *
+[2015/05/30 00:52:23] monitor (iter=48) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.02
+[2015/05/30 00:52:23] valid   (iter=49) J=0.09 *
+[2015/05/30 00:53:08] monitor (iter=49) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.02
+[2015/05/30 00:53:08] valid   (iter=50) J=0.09
+[2015/05/30 00:53:49] monitor (iter=50) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.02
+[2015/05/30 00:53:49] valid   (iter=51) J=0.09 *
+[2015/05/30 00:54:44] monitor (iter=51) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 00:54:44] valid   (iter=52) J=0.09
+[2015/05/30 00:55:26] monitor (iter=52) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 00:55:26] valid   (iter=53) J=0.09 *
+[2015/05/30 00:56:05] monitor (iter=53) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 00:56:06] valid   (iter=54) J=0.09
+[2015/05/30 00:56:47] monitor (iter=54) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 00:56:48] valid   (iter=55) J=0.09
+[2015/05/30 00:57:29] monitor (iter=55) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 00:57:29] valid   (iter=56) J=0.09 *
+[2015/05/30 00:58:14] monitor (iter=56) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 00:58:14] valid   (iter=57) J=0.09
+[2015/05/30 00:58:56] monitor (iter=57) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 00:58:56] valid   (iter=58) J=0.09
+[2015/05/30 00:59:41] monitor (iter=58) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 00:59:41] valid   (iter=59) J=0.09
+[2015/05/30 01:00:28] monitor (iter=59) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 01:00:29] valid   (iter=60) J=0.09 *
+[2015/05/30 01:01:21] monitor (iter=60) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 01:01:21] valid   (iter=61) J=0.09
+[2015/05/30 01:02:07] monitor (iter=61) J=0.05 mean(irnn1)=0.06 mean(dense2)=1.01
+[2015/05/30 01:02:08] valid   (iter=62) J=0.08

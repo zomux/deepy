@@ -58,7 +58,7 @@ if __name__ == '__main__':
     args = ap.parse_args()
 
     model = NeuralRegressor(input_dim=2, input_tensor=3, clip_value=3.)
-    model.stack(IRNN(hidden_size=100, output_size=1, input_type="sequence",
+    model.stack(IRNN(hidden_size=100, input_type="sequence",
                      output_type="one"),
                       Dense(1))
 
@@ -67,10 +67,10 @@ if __name__ == '__main__':
 
     conf = TrainerConfig()
     conf.learning_rate = LearningRateAnnealer.learning_rate(0.01)
-    conf.gradient_clipping = 1
+    conf.gradient_clipping = 3
     conf.patience = 50
     conf.gradient_tolerance = 5
-    conf.avoid_nan = True
+    conf.avoid_nan = False
     trainer = SGDTrainer(model, conf)
 
     annealer = LearningRateAnnealer(trainer, patience=20)
