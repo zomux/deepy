@@ -54,7 +54,6 @@ class MyJointTrainingModel(NeuralLayer):
 
         classification_cost = CrossEntropyCost(classification_output, self.target_input).get()
 
-
         final_cost = 0.001 * auto_encoder_cost + classification_cost
 
         error_rate = ErrorRateCost(classification_output, self.target_input).get()
