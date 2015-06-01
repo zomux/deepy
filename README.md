@@ -144,6 +144,19 @@ python experiments/scipy_training/mnist_lbfgs.py
 Other experiments
 ===
 
+### DRAW
+
+- http://arxiv.org/pdf/1502.04623
+
+```
+# Train the model
+python experiments/draw/mnist_training.py
+# Create animation
+python experiments/draw/animation.py experiments/draw/mnist1.gz
+```
+
+![](https://github.com/uaca/deepy/raw/master/experiments/draw/plots/mnist-animation.gif)
+
 ### Highway networks
 
 - http://arxiv.org/abs/1505.00387
