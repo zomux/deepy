@@ -49,7 +49,7 @@ class Qsampler(NeuralLayer):
             self.prior_log_sigma - log_sigma
             + 0.5 * (
                 T.exp(2 * log_sigma) + (mean - self.prior_mean) ** 2
-                ) / T.exp(2 * self.prior_log_sigma)
+                ) / T.exp(2 * self.prior_log_sigma + EPSILON)
             - 0.5
         ).sum(axis=-1)
 

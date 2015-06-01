@@ -20,9 +20,6 @@ if __name__ == '__main__':
 
     model = DrawModel(image_width=28, image_height=28, attention_times=64)
 
-    if args.load:
-        model.load_params(args.load)
-
     conf = TrainerConfig()
     conf.gradient_clipping = 10
     conf.learning_rate = LearningRateAnnealer.learning_rate(0.004)
@@ -32,6 +29,9 @@ if __name__ == '__main__':
     # conf.theano_mode = DETECT_NAN_MODE
     # TODO: Find out the problem causing NaN
     trainer = AdamTrainer(model, conf)
+
+    if args.load:
+        trainer.load_params(args.load)
 
     mnist = MiniBatches(BinarizedMnistDataset(), batch_size=100)
 
