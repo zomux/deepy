@@ -34,4 +34,13 @@ class AutoEncoderCost(Cost):
         self.target_tensor = target_tensor
 
     def get(self):
-        T.sum((self.result_tensor - self.target_tensor)**2)
+        return T.sum((self.result_tensor - self.target_tensor)**2)
+
+class ErrorRateCost(Cost):
+
+    def __init__(self, result_tensor, index_tensor):
+        self.result_tensor = result_tensor
+        self.index_tensor = index_tensor
+
+    def get(self):
+        return 100 * T.mean(T.neq(T.argmax(self.result_tensor, axis=1), self.index_tensor))

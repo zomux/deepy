@@ -6,3 +6,4 @@ from classifier import NeuralClassifier
 from regressor import NeuralRegressor
 from auto_encoder import AutoEncoder
 from recursive_auto_encoder import RecursiveAutoEncoder
+from basic import BasicNetwork

@@ -28,6 +28,7 @@ class NeuralLayer(object):
         self.parameters = []
         self.training_monitors = []
         self.testing_monitors = []
+        self._registered_monitors = set()
         self.external_inputs = []
         self.parameter_count = 0
         self.epoch_callbacks = []
@@ -109,8 +110,11 @@ class NeuralLayer(object):
         """
         Register monitors they should be tuple of name and Theano variable.
         """
-        self.training_monitors.extend(monitors)
-        self.testing_monitors.extend(monitors)
+        for key, node in monitors:
+            if key not in self._registered_monitors:
+                self.training_monitors.append((key, node))
+                self.testing_monitors.append((key, node))
+                self._registered_monitors.add(key)
 
     def register_external_inputs(self, *variables):
         """

@@ -1,0 +1,201 @@
+# deepy version: 0.1.2
+[2015/06/01 15:54:36] test    (iter=1) J=4.78 err=92.61 encoder_cost=2301.27 classify_cost=2.48
+[2015/06/01 15:54:36] valid   (iter=1) J=4.70 err=92.34 encoder_cost=2234.13 classify_cost=2.47 *
+[2015/06/01 15:54:39] monitor (iter=1) J=0.67 err=5.00 encoder_cost=372.14 classify_cost=0.30 mean(my joint-training model1)=0.67
+[2015/06/01 15:54:39] valid   (iter=2) J=0.54 err=5.93 encoder_cost=334.79 classify_cost=0.21 *
+[2015/06/01 15:54:42] monitor (iter=2) J=0.46 err=10.00 encoder_cost=283.51 classify_cost=0.18 mean(my joint-training model1)=0.46
+[2015/06/01 15:54:42] valid   (iter=3) J=0.41 err=4.64 encoder_cost=255.07 classify_cost=0.16 *
+[2015/06/01 15:54:46] monitor (iter=3) J=0.37 err=0.00 encoder_cost=241.70 classify_cost=0.13 mean(my joint-training model1)=0.37
+[2015/06/01 15:54:46] valid   (iter=4) J=0.35 err=3.87 encoder_cost=217.97 classify_cost=0.13 *
+[2015/06/01 15:54:49] monitor (iter=4) J=0.32 err=0.00 encoder_cost=216.58 classify_cost=0.10 mean(my joint-training model1)=0.32
+[2015/06/01 15:54:49] valid   (iter=5) J=0.32 err=3.51 encoder_cost=195.77 classify_cost=0.12 *
+[2015/06/01 15:54:52] monitor (iter=5) J=0.28 err=0.00 encoder_cost=201.94 classify_cost=0.08 mean(my joint-training model1)=0.28
+[2015/06/01 15:54:52] valid   (iter=6) J=0.30 err=3.29 encoder_cost=182.04 classify_cost=0.11 *
+[2015/06/01 15:54:55] monitor (iter=6) J=0.26 err=0.00 encoder_cost=192.20 classify_cost=0.07 mean(my joint-training model1)=0.26
+[2015/06/01 15:54:55] valid   (iter=7) J=0.28 err=3.20 encoder_cost=173.25 classify_cost=0.11 *
+[2015/06/01 15:54:58] monitor (iter=7) J=0.25 err=0.00 encoder_cost=184.53 classify_cost=0.07 mean(my joint-training model1)=0.25
+[2015/06/01 15:54:59] valid   (iter=8) J=0.27 err=3.13 encoder_cost=166.79 classify_cost=0.11 *
+[2015/06/01 15:55:02] monitor (iter=8) J=0.24 err=0.00 encoder_cost=177.97 classify_cost=0.06 mean(my joint-training model1)=0.24
+[2015/06/01 15:55:02] valid   (iter=9) J=0.27 err=3.05 encoder_cost=161.51 classify_cost=0.11 *
+[2015/06/01 15:55:05] monitor (iter=9) J=0.22 err=0.00 encoder_cost=172.26 classify_cost=0.05 mean(my joint-training model1)=0.22
+[2015/06/01 15:55:05] valid   (iter=10) J=0.26 err=2.99 encoder_cost=157.09 classify_cost=0.10 *
+[2015/06/01 15:55:08] monitor (iter=10) J=0.21 err=0.00 encoder_cost=167.80 classify_cost=0.04 mean(my joint-training model1)=0.21
+[2015/06/01 15:55:08] test    (iter=11) J=0.25 err=2.90 encoder_cost=152.63 classify_cost=0.10
+[2015/06/01 15:55:08] valid   (iter=11) J=0.26 err=3.08 encoder_cost=153.63 classify_cost=0.10 *
+[2015/06/01 15:55:11] monitor (iter=11) J=0.20 err=0.00 encoder_cost=164.24 classify_cost=0.04 mean(my joint-training model1)=0.20
+[2015/06/01 15:55:12] valid   (iter=12) J=0.25 err=3.06 encoder_cost=150.77 classify_cost=0.10 *
+[2015/06/01 15:55:15] monitor (iter=12) J=0.19 err=0.00 encoder_cost=161.10 classify_cost=0.03 mean(my joint-training model1)=0.19
+[2015/06/01 15:55:15] valid   (iter=13) J=0.25 err=3.03 encoder_cost=148.06 classify_cost=0.10 *
+[2015/06/01 15:55:18] monitor (iter=13) J=0.19 err=0.00 encoder_cost=158.30 classify_cost=0.03 mean(my joint-training model1)=0.19
+[2015/06/01 15:55:18] valid   (iter=14) J=0.25 err=3.06 encoder_cost=145.54 classify_cost=0.10 *
+[2015/06/01 15:55:21] monitor (iter=14) J=0.18 err=0.00 encoder_cost=156.01 classify_cost=0.03 mean(my joint-training model1)=0.18
+[2015/06/01 15:55:21] valid   (iter=15) J=0.25 err=3.03 encoder_cost=143.49 classify_cost=0.10 *
+[2015/06/01 15:55:24] monitor (iter=15) J=0.18 err=0.00 encoder_cost=154.17 classify_cost=0.02 mean(my joint-training model1)=0.18
+[2015/06/01 15:55:25] valid   (iter=16) J=0.24 err=3.06 encoder_cost=141.84 classify_cost=0.10 *
+[2015/06/01 15:55:28] monitor (iter=16) J=0.18 err=0.00 encoder_cost=152.53 classify_cost=0.02 mean(my joint-training model1)=0.18
+[2015/06/01 15:55:28] valid   (iter=17) J=0.24 err=3.08 encoder_cost=140.38 classify_cost=0.10 *
+[2015/06/01 15:55:31] monitor (iter=17) J=0.17 err=0.00 encoder_cost=151.05 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:55:31] valid   (iter=18) J=0.24 err=3.04 encoder_cost=139.05 classify_cost=0.10 *
+[2015/06/01 15:55:34] monitor (iter=18) J=0.17 err=0.00 encoder_cost=149.73 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:55:34] valid   (iter=19) J=0.24 err=3.04 encoder_cost=137.90 classify_cost=0.10 *
+[2015/06/01 15:55:37] monitor (iter=19) J=0.17 err=0.00 encoder_cost=148.62 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:55:38] valid   (iter=20) J=0.24 err=3.00 encoder_cost=136.99 classify_cost=0.10 *
+[2015/06/01 15:55:41] monitor (iter=20) J=0.17 err=0.00 encoder_cost=147.61 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:55:41] test    (iter=21) J=0.23 err=2.89 encoder_cost=135.11 classify_cost=0.09
+[2015/06/01 15:55:41] valid   (iter=21) J=0.24 err=2.99 encoder_cost=136.23 classify_cost=0.10 *
+[2015/06/01 15:55:44] monitor (iter=21) J=0.17 err=0.00 encoder_cost=146.65 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:55:44] valid   (iter=22) J=0.24 err=2.95 encoder_cost=135.49 classify_cost=0.10 *
+[2015/06/01 15:55:47] monitor (iter=22) J=0.17 err=0.00 encoder_cost=145.76 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:55:48] valid   (iter=23) J=0.24 err=2.95 encoder_cost=134.85 classify_cost=0.10 *
+[2015/06/01 15:55:51] monitor (iter=23) J=0.17 err=0.00 encoder_cost=144.83 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:55:51] valid   (iter=24) J=0.24 err=2.91 encoder_cost=134.07 classify_cost=0.10 *
+[2015/06/01 15:55:56] monitor (iter=24) J=0.17 err=0.00 encoder_cost=144.14 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:55:56] valid   (iter=25) J=0.24 err=2.97 encoder_cost=133.63 classify_cost=0.10
+[2015/06/01 15:55:59] monitor (iter=25) J=0.17 err=0.00 encoder_cost=143.31 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:56:00] valid   (iter=26) J=0.24 err=2.91 encoder_cost=132.86 classify_cost=0.10 *
+[2015/06/01 15:56:03] monitor (iter=26) J=0.16 err=0.00 encoder_cost=143.09 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:03] valid   (iter=27) J=0.24 err=2.97 encoder_cost=132.92 classify_cost=0.10
+[2015/06/01 15:56:07] monitor (iter=27) J=0.16 err=0.00 encoder_cost=142.38 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:07] valid   (iter=28) J=0.23 err=2.97 encoder_cost=132.11 classify_cost=0.10 *
+[2015/06/01 15:56:11] monitor (iter=28) J=0.16 err=0.00 encoder_cost=143.20 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:11] valid   (iter=29) J=0.24 err=3.04 encoder_cost=133.55 classify_cost=0.11
+[2015/06/01 15:56:14] monitor (iter=29) J=0.16 err=0.00 encoder_cost=142.43 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:14] valid   (iter=30) J=0.24 err=2.86 encoder_cost=132.54 classify_cost=0.10
+[2015/06/01 15:56:17] monitor (iter=30) J=0.17 err=0.00 encoder_cost=145.58 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:56:18] test    (iter=31) J=0.23 err=2.80 encoder_cost=135.44 classify_cost=0.10
+[2015/06/01 15:56:18] valid   (iter=31) J=0.24 err=3.07 encoder_cost=136.29 classify_cost=0.11
+[2015/06/01 15:56:21] monitor (iter=31) J=0.16 err=0.00 encoder_cost=143.77 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:21] valid   (iter=32) J=0.24 err=2.73 encoder_cost=134.02 classify_cost=0.10
+[2015/06/01 15:56:25] monitor (iter=32) J=0.16 err=0.00 encoder_cost=142.41 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:26] valid   (iter=33) J=0.23 err=2.84 encoder_cost=132.86 classify_cost=0.10 *
+[2015/06/01 15:56:29] monitor (iter=33) J=0.17 err=0.00 encoder_cost=141.25 classify_cost=0.03 mean(my joint-training model1)=0.17
+[2015/06/01 15:56:30] valid   (iter=34) J=0.24 err=2.86 encoder_cost=132.29 classify_cost=0.10
+[2015/06/01 15:56:33] monitor (iter=34) J=0.16 err=0.00 encoder_cost=139.83 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:34] valid   (iter=35) J=0.23 err=2.79 encoder_cost=130.51 classify_cost=0.10 *
+[2015/06/01 15:56:37] monitor (iter=35) J=0.16 err=0.00 encoder_cost=139.24 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:37] valid   (iter=36) J=0.23 err=2.82 encoder_cost=130.24 classify_cost=0.10
+[2015/06/01 15:56:40] monitor (iter=36) J=0.16 err=0.00 encoder_cost=140.24 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:41] valid   (iter=37) J=0.24 err=2.92 encoder_cost=132.04 classify_cost=0.10
+[2015/06/01 15:56:44] monitor (iter=37) J=0.17 err=0.00 encoder_cost=144.10 classify_cost=0.02 mean(my joint-training model1)=0.17
+[2015/06/01 15:56:44] valid   (iter=38) J=0.24 err=2.94 encoder_cost=135.27 classify_cost=0.11
+[2015/06/01 15:56:47] monitor (iter=38) J=0.16 err=0.00 encoder_cost=143.06 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:47] valid   (iter=39) J=0.24 err=2.86 encoder_cost=133.09 classify_cost=0.10
+[2015/06/01 15:56:51] monitor (iter=39) J=0.16 err=0.00 encoder_cost=141.97 classify_cost=0.01 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:51] valid   (iter=40) J=0.24 err=2.86 encoder_cost=134.31 classify_cost=0.10
+[2015/06/01 15:56:54] monitor (iter=40) J=0.16 err=0.00 encoder_cost=138.37 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:54] test    (iter=41) J=0.22 err=2.76 encoder_cost=129.47 classify_cost=0.09
+[2015/06/01 15:56:54] valid   (iter=41) J=0.23 err=2.79 encoder_cost=130.51 classify_cost=0.10
+[2015/06/01 15:56:58] monitor (iter=41) J=0.16 err=0.00 encoder_cost=134.62 classify_cost=0.02 mean(my joint-training model1)=0.16
+[2015/06/01 15:56:58] valid   (iter=42) J=0.22 err=2.73 encoder_cost=126.53 classify_cost=0.10 *
+[2015/06/01 15:57:01] monitor (iter=42) J=0.15 err=0.00 encoder_cost=133.39 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:02] valid   (iter=43) J=0.22 err=2.79 encoder_cost=125.50 classify_cost=0.10 *
+[2015/06/01 15:57:06] monitor (iter=43) J=0.15 err=0.00 encoder_cost=132.56 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:06] valid   (iter=44) J=0.22 err=2.78 encoder_cost=124.71 classify_cost=0.10 *
+[2015/06/01 15:57:09] monitor (iter=44) J=0.15 err=0.00 encoder_cost=131.91 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:09] valid   (iter=45) J=0.22 err=2.78 encoder_cost=124.12 classify_cost=0.10 *
+[2015/06/01 15:57:12] monitor (iter=45) J=0.15 err=0.00 encoder_cost=131.39 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:12] valid   (iter=46) J=0.22 err=2.78 encoder_cost=123.65 classify_cost=0.10 *
+[2015/06/01 15:57:16] monitor (iter=46) J=0.15 err=0.00 encoder_cost=130.97 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:16] valid   (iter=47) J=0.22 err=2.81 encoder_cost=123.28 classify_cost=0.10 *
+[2015/06/01 15:57:19] monitor (iter=47) J=0.15 err=0.00 encoder_cost=130.62 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:19] valid   (iter=48) J=0.22 err=2.80 encoder_cost=122.97 classify_cost=0.10 *
+[2015/06/01 15:57:22] monitor (iter=48) J=0.15 err=0.00 encoder_cost=130.32 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:23] valid   (iter=49) J=0.22 err=2.80 encoder_cost=122.71 classify_cost=0.10
+[2015/06/01 15:57:26] monitor (iter=49) J=0.15 err=0.00 encoder_cost=130.06 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:26] valid   (iter=50) J=0.22 err=2.78 encoder_cost=122.49 classify_cost=0.10 *
+[2015/06/01 15:57:29] monitor (iter=50) J=0.15 err=0.00 encoder_cost=129.83 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:29] test    (iter=51) J=0.21 err=2.60 encoder_cost=121.01 classify_cost=0.09
+[2015/06/01 15:57:30] valid   (iter=51) J=0.22 err=2.79 encoder_cost=122.31 classify_cost=0.10
+[2015/06/01 15:57:33] monitor (iter=51) J=0.15 err=0.00 encoder_cost=129.62 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:33] valid   (iter=52) J=0.22 err=2.76 encoder_cost=122.15 classify_cost=0.10 *
+[2015/06/01 15:57:36] monitor (iter=52) J=0.15 err=0.00 encoder_cost=129.44 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:36] valid   (iter=53) J=0.22 err=2.75 encoder_cost=122.01 classify_cost=0.10
+[2015/06/01 15:57:39] monitor (iter=53) J=0.15 err=0.00 encoder_cost=129.27 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:39] valid   (iter=54) J=0.22 err=2.76 encoder_cost=121.89 classify_cost=0.10
+[2015/06/01 15:57:43] monitor (iter=54) J=0.15 err=0.00 encoder_cost=129.11 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:43] valid   (iter=55) J=0.22 err=2.74 encoder_cost=121.78 classify_cost=0.10
+[2015/06/01 15:57:46] monitor (iter=55) J=0.15 err=0.00 encoder_cost=128.97 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:47] valid   (iter=56) J=0.22 err=2.75 encoder_cost=121.68 classify_cost=0.10
+[2015/06/01 15:57:50] monitor (iter=56) J=0.15 err=0.00 encoder_cost=128.83 classify_cost=0.02 mean(my joint-training model1)=0.15
+[2015/06/01 15:57:50] valid   (iter=57) J=0.22 err=2.74 encoder_cost=121.59 classify_cost=0.10 *
+[2015/06/01 15:57:53] monitor (iter=57) J=0.14 err=0.00 encoder_cost=128.70 classify_cost=0.02 mean(my joint-training model1)=0.14
+[2015/06/01 15:57:53] valid   (iter=58) J=0.22 err=2.73 encoder_cost=121.51 classify_cost=0.10
+[2015/06/01 15:57:57] monitor (iter=58) J=0.14 err=0.00 encoder_cost=128.58 classify_cost=0.02 mean(my joint-training model1)=0.14
+[2015/06/01 15:57:57] valid   (iter=59) J=0.22 err=2.74 encoder_cost=121.44 classify_cost=0.10
+[2015/06/01 15:58:00] monitor (iter=59) J=0.14 err=0.00 encoder_cost=128.47 classify_cost=0.02 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:00] valid   (iter=60) J=0.22 err=2.74 encoder_cost=121.37 classify_cost=0.10
+[2015/06/01 15:58:04] monitor (iter=60) J=0.14 err=0.00 encoder_cost=128.36 classify_cost=0.02 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:04] test    (iter=61) J=0.21 err=2.60 encoder_cost=120.04 classify_cost=0.09
+[2015/06/01 15:58:04] valid   (iter=61) J=0.22 err=2.73 encoder_cost=121.30 classify_cost=0.10
+[2015/06/01 15:58:08] monitor (iter=61) J=0.14 err=0.00 encoder_cost=128.25 classify_cost=0.02 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:08] valid   (iter=62) J=0.22 err=2.71 encoder_cost=121.24 classify_cost=0.10
+[2015/06/01 15:58:11] monitor (iter=62) J=0.14 err=0.00 encoder_cost=128.15 classify_cost=0.02 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:12] valid   (iter=63) J=0.22 err=2.74 encoder_cost=121.59 classify_cost=0.10
+[2015/06/01 15:58:15] monitor (iter=63) J=0.14 err=0.00 encoder_cost=126.91 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:15] valid   (iter=64) J=0.21 err=2.61 encoder_cost=119.51 classify_cost=0.09 *
+[2015/06/01 15:58:18] monitor (iter=64) J=0.14 err=0.00 encoder_cost=126.67 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:18] valid   (iter=65) J=0.21 err=2.56 encoder_cost=119.30 classify_cost=0.09
+[2015/06/01 15:58:22] monitor (iter=65) J=0.14 err=0.00 encoder_cost=126.46 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:22] valid   (iter=66) J=0.21 err=2.53 encoder_cost=119.12 classify_cost=0.09 *
+[2015/06/01 15:58:25] monitor (iter=66) J=0.14 err=0.00 encoder_cost=126.27 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:26] valid   (iter=67) J=0.21 err=2.54 encoder_cost=118.95 classify_cost=0.09
+[2015/06/01 15:58:29] monitor (iter=67) J=0.14 err=0.00 encoder_cost=126.10 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:30] valid   (iter=68) J=0.21 err=2.55 encoder_cost=118.81 classify_cost=0.09 *
+[2015/06/01 15:58:33] monitor (iter=68) J=0.14 err=0.00 encoder_cost=125.94 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:33] valid   (iter=69) J=0.21 err=2.56 encoder_cost=118.68 classify_cost=0.09
+[2015/06/01 15:58:37] monitor (iter=69) J=0.14 err=0.00 encoder_cost=125.80 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:37] valid   (iter=70) J=0.21 err=2.56 encoder_cost=118.56 classify_cost=0.09
+[2015/06/01 15:58:40] monitor (iter=70) J=0.14 err=0.00 encoder_cost=125.67 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:41] test    (iter=71) J=0.20 err=2.48 encoder_cost=117.14 classify_cost=0.08
+[2015/06/01 15:58:41] valid   (iter=71) J=0.21 err=2.57 encoder_cost=118.45 classify_cost=0.09 *
+[2015/06/01 15:58:44] monitor (iter=71) J=0.14 err=0.00 encoder_cost=125.54 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:44] valid   (iter=72) J=0.21 err=2.58 encoder_cost=118.35 classify_cost=0.09
+[2015/06/01 15:58:47] monitor (iter=72) J=0.14 err=0.00 encoder_cost=125.43 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:48] valid   (iter=73) J=0.21 err=2.60 encoder_cost=118.26 classify_cost=0.09
+[2015/06/01 15:58:51] monitor (iter=73) J=0.14 err=0.00 encoder_cost=125.32 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:51] valid   (iter=74) J=0.21 err=2.60 encoder_cost=118.17 classify_cost=0.09
+[2015/06/01 15:58:55] monitor (iter=74) J=0.14 err=0.00 encoder_cost=125.22 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:55] valid   (iter=75) J=0.21 err=2.60 encoder_cost=118.10 classify_cost=0.09 *
+[2015/06/01 15:58:58] monitor (iter=75) J=0.14 err=0.00 encoder_cost=125.13 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:58:58] valid   (iter=76) J=0.21 err=2.59 encoder_cost=118.02 classify_cost=0.09
+[2015/06/01 15:59:01] monitor (iter=76) J=0.14 err=0.00 encoder_cost=125.04 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:01] valid   (iter=77) J=0.21 err=2.59 encoder_cost=117.95 classify_cost=0.09
+[2015/06/01 15:59:05] monitor (iter=77) J=0.14 err=0.00 encoder_cost=124.95 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:05] valid   (iter=78) J=0.21 err=2.59 encoder_cost=117.89 classify_cost=0.09
+[2015/06/01 15:59:08] monitor (iter=78) J=0.14 err=0.00 encoder_cost=124.87 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:08] valid   (iter=79) J=0.21 err=2.58 encoder_cost=117.83 classify_cost=0.09
+[2015/06/01 15:59:11] monitor (iter=79) J=0.14 err=0.00 encoder_cost=124.79 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:11] valid   (iter=80) J=0.21 err=2.58 encoder_cost=117.77 classify_cost=0.09 *
+[2015/06/01 15:59:14] monitor (iter=80) J=0.14 err=0.00 encoder_cost=124.72 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:15] test    (iter=81) J=0.20 err=2.54 encoder_cost=116.43 classify_cost=0.08
+[2015/06/01 15:59:15] valid   (iter=81) J=0.21 err=2.61 encoder_cost=117.72 classify_cost=0.09
+[2015/06/01 15:59:18] monitor (iter=81) J=0.14 err=0.00 encoder_cost=124.65 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:18] valid   (iter=82) J=0.21 err=2.64 encoder_cost=117.67 classify_cost=0.09
+[2015/06/01 15:59:21] monitor (iter=82) J=0.14 err=0.00 encoder_cost=124.58 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:21] valid   (iter=83) J=0.21 err=2.65 encoder_cost=117.62 classify_cost=0.09
+[2015/06/01 15:59:24] monitor (iter=83) J=0.14 err=0.00 encoder_cost=124.51 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:25] valid   (iter=84) J=0.21 err=2.66 encoder_cost=117.57 classify_cost=0.09
+[2015/06/01 15:59:28] monitor (iter=84) J=0.14 err=0.00 encoder_cost=124.45 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:28] valid   (iter=85) J=0.21 err=2.65 encoder_cost=117.53 classify_cost=0.09
+[2015/06/01 15:59:31] monitor (iter=85) J=0.14 err=0.00 encoder_cost=124.39 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:31] valid   (iter=86) J=0.21 err=2.58 encoder_cost=117.77 classify_cost=0.09
+[2015/06/01 15:59:34] monitor (iter=86) J=0.14 err=0.00 encoder_cost=124.04 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:34] valid   (iter=87) J=0.21 err=2.56 encoder_cost=117.08 classify_cost=0.09 *
+[2015/06/01 15:59:37] monitor (iter=87) J=0.14 err=0.00 encoder_cost=123.99 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:37] valid   (iter=88) J=0.21 err=2.55 encoder_cost=116.99 classify_cost=0.09
+[2015/06/01 15:59:40] monitor (iter=88) J=0.14 err=0.00 encoder_cost=123.92 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:41] valid   (iter=89) J=0.21 err=2.53 encoder_cost=116.91 classify_cost=0.09 *
+[2015/06/01 15:59:44] monitor (iter=89) J=0.14 err=0.00 encoder_cost=123.85 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:44] valid   (iter=90) J=0.21 err=2.53 encoder_cost=116.84 classify_cost=0.09
+[2015/06/01 15:59:47] monitor (iter=90) J=0.14 err=0.00 encoder_cost=123.78 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:47] test    (iter=91) J=0.20 err=2.52 encoder_cost=115.47 classify_cost=0.08
+[2015/06/01 15:59:48] valid   (iter=91) J=0.21 err=2.53 encoder_cost=116.78 classify_cost=0.09
+[2015/06/01 15:59:51] monitor (iter=91) J=0.14 err=0.00 encoder_cost=123.71 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:51] valid   (iter=92) J=0.21 err=2.54 encoder_cost=116.72 classify_cost=0.09 *
+[2015/06/01 15:59:54] monitor (iter=92) J=0.14 err=0.00 encoder_cost=123.64 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:54] valid   (iter=93) J=0.21 err=2.53 encoder_cost=116.66 classify_cost=0.09
+[2015/06/01 15:59:57] monitor (iter=93) J=0.14 err=0.00 encoder_cost=123.58 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 15:59:58] valid   (iter=94) J=0.21 err=2.54 encoder_cost=116.61 classify_cost=0.09
+[2015/06/01 16:00:01] monitor (iter=94) J=0.14 err=0.00 encoder_cost=123.52 classify_cost=0.01 mean(my joint-training model1)=0.14
+[2015/06/01 16:00:01] valid   (iter=95) J=0.21 err=2.54 encoder_cost=116.55 classify_cost=0.09
+[2015/06/01 16:00:03] test    (iter=0) J=0.20 err=2.53 encoder_cost=115.41 classify_cost=0.08
