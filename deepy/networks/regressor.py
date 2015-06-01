@@ -3,7 +3,7 @@
 
 from theano import tensor as T
 from . import NeuralNetwork
-from deepy.utils import dim_to_var
+from deepy.utils import dim_to_var, RegressionCost
 
 
 class NeuralRegressor(NeuralNetwork):
@@ -23,8 +23,7 @@ class NeuralRegressor(NeuralNetwork):
     def _cost_func(self, y):
         if self.clip_value:
             y = T.clip(y, -self.clip_value, self.clip_value)
-        err = y - self.k
-        return T.mean((err * err).sum(axis=self.target_tensor.ndim - 1)) / 2
+        return RegressionCost(y, self.k).get()
 
     @property
     def cost(self):
