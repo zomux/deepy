@@ -18,8 +18,6 @@ model_path = os.path.join(os.path.dirname(__file__), "models", "tutorial3.gz")
 
 if __name__ == '__main__':
 
-    mnist = MiniBatches(MnistDataset(), batch_size=20)
-
     model = BasicNetwork(input_dim=28*28, model=MyJointTrainingModel())
 
     parameters = model.parameters
@@ -45,6 +43,8 @@ if __name__ == '__main__':
                                      allow_input_downcast=True)
 
     max_epochs = 10
+
+    mnist = MiniBatches(MnistDataset(), batch_size=20)
 
     for i in range(max_epochs):
         # Training
