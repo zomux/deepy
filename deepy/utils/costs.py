@@ -11,7 +11,7 @@ class Cost(object):
 class CrossEntropyCost(Cost):
 
     def __init__(self, result_tensor, index_tensor):
-        self.result_tensor = index_tensor
+        self.result_tensor = result_tensor
         self.index_tensor = index_tensor
 
     def get(self):
