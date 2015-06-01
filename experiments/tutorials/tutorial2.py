@@ -67,7 +67,6 @@ class MyJointTrainingModel(NeuralLayer):
 
 if __name__ == '__main__':
     model = BasicNetwork(input_dim=28*28, model=MyJointTrainingModel())
-    model.load_params(model_path)
 
     mnist = MiniBatches(MnistDataset(), batch_size=20)
 

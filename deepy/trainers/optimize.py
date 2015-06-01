@@ -10,7 +10,7 @@ from theano.ifelse import ifelse
 
 from deepy.utils import FLOATX, dim_to_var, EPSILON
 from deepy.trainers.util import wrap_core, multiple_l2_norm
-
+from deepy.conf import TrainerConfig
 
 logging = loggers.getLogger(__name__)
 
@@ -23,8 +23,11 @@ def optimize_updates(params, gradients, config=None, shapes=None):
         config - training config
     Returns:
         Theano updates
-    :type config: deepy.TrainerConfig
+    :type config: deepy.TrainerConfig or dict
     """
+    if config and isinstance(config, dict):
+        config = TrainerConfig(config)
+
     # Clipping
     if config:
         clip_value = config.get("gradient_clipping", None)
