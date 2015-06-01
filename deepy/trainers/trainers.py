@@ -159,9 +159,9 @@ class NeuralTrainer(object):
             if np.isnan(costs[0][1]):
                 logging.info("NaN detected in costs, rollback to last parameters")
                 self.set_params(*self.checkpoint)
-
-            iteration += 1
-            self.network.epoch_callback()
+            else:
+                iteration += 1
+                self.network.epoch_callback()
 
             yield dict(costs)
 

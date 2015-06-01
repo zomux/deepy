@@ -15,11 +15,10 @@ def scale_norm(arr):
     scale = (arr.max() - arr.min())
     return arr / scale
 
-def img_grid(arr, global_scale=True):
+def img_grid(arr, shape, global_scale=True):
     N, height, width = arr.shape
 
-    rows = int(np.sqrt(N))
-    cols = int(np.sqrt(N))
+    rows, cols = shape
 
     if rows*cols < N:
         cols = cols + 1
@@ -50,7 +49,7 @@ def img_grid(arr, global_scale=True):
     I = (255*I).astype(np.uint8)
     return Image.fromarray(I)
 
-ANIMATION_SAMPLES = 16*16
+GRID_SHAPE = (1, 16)
 
 plot_path = os.path.join(os.path.dirname(__file__), "plots")
 tmp_path = os.path.join(tempfile.gettempdir(), "draw_plots")
@@ -74,13 +73,13 @@ if __name__ == '__main__':
     model = DrawModel(image_width=img_size, image_height=img_size, attention_times=attention_times)
     model.load_params(args.model)
 
-    sample_function = theano.function([], outputs=model.sample(ANIMATION_SAMPLES), allow_input_downcast=True)
+    sample_function = theano.function([], outputs=model.sample(np.prod(GRID_SHAPE)), allow_input_downcast=True)
     samples = sample_function()
 
-    samples = samples.reshape( (attention_times, ANIMATION_SAMPLES, img_size, img_size) )
+    samples = samples.reshape( (attention_times, np.prod(GRID_SHAPE), img_size, img_size) )
 
     for i in xrange(attention_times):
-        img = img_grid(samples[i,:,:,:])
+        img = img_grid(samples[i,:,:,:], GRID_SHAPE)
         img.save(tmp_path + os.sep + "%s-%03d.png" % (args.task, i))
 
     # Compose all images to animation
