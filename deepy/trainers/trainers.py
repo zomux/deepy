@@ -51,7 +51,13 @@ class NeuralTrainer(object):
         """
         super(NeuralTrainer, self).__init__()
 
-        self.config = config if config else TrainerConfig()
+        self.config = None
+        if isinstance(config, TrainerConfig):
+            self.config = config
+        elif isinstance(config, dict):
+            self.config = TrainerConfig(config)
+        else:
+            self.config = TrainerConfig()
         self.network = network
 
         self.network.prepare_training()
@@ -278,6 +284,8 @@ class GeneralNeuralTrainer(NeuralTrainer):
             logging.info("changing optimization method to '%s'" % method)
             if not config:
                 config = TrainerConfig()
+            elif isinstance(config, dict):
+                config = TrainerConfig(config)
             config.method = method
 
         super(GeneralNeuralTrainer, self).__init__(network, config)

@@ -18,7 +18,7 @@ if __name__ == '__main__':
                 Dense(10, 'linear'),
                 Softmax())
 
-    trainer = MomentumTrainer(model)
+    trainer = MomentumTrainer(model, {"weight_l2": 0.001})
 
     annealer = LearningRateAnnealer(trainer)
 

@@ -6,7 +6,6 @@ logging.basicConfig(level=logging.INFO)
 
 from deepy.trainers import AdamTrainer, LearningRateAnnealer
 from deepy.dataset import BinarizedMnistDataset, MiniBatches
-from deepy.conf import TrainerConfig
 
 from core import DrawModel
 
@@ -20,10 +19,11 @@ if __name__ == '__main__':
 
     model = DrawModel(image_width=28, image_height=28, attention_times=64)
 
-    conf = TrainerConfig()
-    conf.gradient_clipping = 10
-    conf.learning_rate = LearningRateAnnealer.learning_rate(0.004)
-    conf.weight_l2 = 0
+    conf = {
+        "gradient_clipping": 10,
+        "learning_rate": LearningRateAnnealer.learning_rate(0.004),
+        "weight_l2": 0
+    }
     # conf.avoid_nan = True
     # from deepy import DETECT_NAN_MODE
     # conf.theano_mode = DETECT_NAN_MODE
