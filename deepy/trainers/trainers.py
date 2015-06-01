@@ -109,14 +109,12 @@ class NeuralTrainer(object):
                 param.set_value(param_value)
 
     def save_params(self, path):
-        logging.info("saving parameters to %s" % path)
-        opener = gzip.open if path.lower().endswith('.gz') else open
-        handle = opener(path, 'wb')
-        final_params = []
-        for param_block in self.best_params:
-            final_params.extend(param_block)
-        pickle.dump(final_params, handle)
-        handle.close()
+        self.set_params(*self.best_params)
+        self.network.save_params(path)
+
+    def load_params(self, path):
+        self.network.load_params(path)
+        self.best_params = self._copy_network_params()
 
     def _copy_network_params(self):
         checkpoint = (map(lambda p: p.get_value().copy(), self.network.parameters),
