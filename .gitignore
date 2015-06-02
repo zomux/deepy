@@ -55,6 +55,7 @@ secrets
 
 # For mkdocs
 site/
+docs/site/
 
 # For tutorial
 my_experiments/
