@@ -19,6 +19,7 @@ deepy: Highly extensible deep learning framework based on Theano
 
 ### Tutorials
 
+[http://deepy.readthedocs.org/en/latest/](http://deepy.readthedocs.org/en/latest/)
 
 Clean interface
 ===
