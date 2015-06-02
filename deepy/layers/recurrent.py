@@ -58,8 +58,6 @@ class RNN(NeuralLayer):
         else:
             h0 = x
         step_outputs = [h0]
-        if "output" in self._output_type:
-            step_outputs = [h0, None]
         hiddens, _ = theano.scan(self._step, sequences=sequences, outputs_info=step_outputs, n_steps=self._steps)
 
         hs = hiddens
