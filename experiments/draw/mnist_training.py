@@ -4,7 +4,7 @@
 import logging, os
 logging.basicConfig(level=logging.INFO)
 
-from deepy.trainers import AdamTrainer, LearningRateAnnealer
+from deepy.trainers import AdamTrainer, LearningRateAnnealer, FineTuningAdaGradTrainer
 from deepy.dataset import BinarizedMnistDataset, MiniBatches
 from deepy.conf import TrainerConfig
 
@@ -16,9 +16,13 @@ if __name__ == '__main__':
     from argparse import ArgumentParser
     ap = ArgumentParser()
     ap.add_argument("--load", default="", help="pre-trained model path")
+    ap.add_argument("--finetune", action="store_true")
     args = ap.parse_args()
 
     model = DrawModel(image_width=28, image_height=28, attention_times=64)
+
+    if args.load:
+        model.load_params(args.load)
 
     conf = TrainerConfig()
     conf.gradient_clipping = 10
@@ -28,13 +32,13 @@ if __name__ == '__main__':
     # from deepy import DETECT_NAN_MODE
     # conf.theano_mode = DETECT_NAN_MODE
     # TODO: Find out the problem causing NaN
-    trainer = AdamTrainer(model, conf)
-
-    if args.load:
-        trainer.load_params(args.load)
+    if args.finetune:
+        trainer = FineTuningAdaGradTrainer(model, conf)
+    else:
+        trainer = AdamTrainer(model, conf)
 
     mnist = MiniBatches(BinarizedMnistDataset(), batch_size=100)
 
-    trainer.run(mnist, controllers=[LearningRateAnnealer(trainer)])
+    trainer.run(mnist, controllers=[])
 
     model.save_params(model_path)
