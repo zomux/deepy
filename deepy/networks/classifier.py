@@ -3,7 +3,7 @@
 
 
 from network import NeuralNetwork
-from deepy.utils import FLOATX, EPSILON
+from deepy.utils import FLOATX, EPSILON, CrossEntropyCost
 import theano.tensor as T
 
 class NeuralClassifier(NeuralNetwork):
@@ -22,7 +22,7 @@ class NeuralClassifier(NeuralNetwork):
 
     def _cost_func(self, y):
         y = T.clip(y, EPSILON, 1.0 - EPSILON)
-        return -T.mean(T.log(y)[T.arange(self.k.shape[0]), self.k])
+        return CrossEntropyCost(y, self.k).get()
 
     def _error_func(self, y):
         return 100 * T.mean(T.neq(T.argmax(y, axis=1), self.k))
