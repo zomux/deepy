@@ -40,9 +40,9 @@ If you are using a multi-core CPU machine, execute this command:
 source bin/cpu_env.sh
 ```
 
-From now one, don't change directory.
+From now on, don't change your directory.
  
-Run this to create a directory and your first code.
+Run this to create a directory for experiments and your first code.
 
 ```bash
 mkdir my_experiments
