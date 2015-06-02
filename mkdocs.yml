@@ -1,1 +1,9 @@
 site_name: Deepy Documents
+pages:
+- Overview: index.md
+- "Tutorial 1: Your first deepy experiment": tutorial1.md
+- "Tutorial 2: Creat your own model": tutorial2.md
+- "Tutorial 3: Customize training process": tutorial3.md
+- "Tutorial 4: Just use deepy as a toolbox": tutorial4.md
+- How to make documents: mkdocs.md
+theme: readthedocs

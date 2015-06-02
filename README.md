@@ -17,6 +17,9 @@ deepy: Highly extensible deep learning framework based on Theano
  - Theano 0.6.0 is surprisingly faster than 0.7.0 on AWS GPU intances and my local machines
 - scipy for L-BFGS and CG optimization
 
+### Tutorials
+
+
 Clean interface
 ===
 ```python
@@ -41,18 +44,6 @@ annealer = LearningRateAnnealer(trainer)
 mnist = MiniBatches(MnistDataset(), batch_size=20)
 
 trainer.run(mnist, controllers=[annealer])
-```
-
-Extensible model definition
-===
-```python
-
-```
-
-Extensible training procedure
-===
-```python
-
 ```
 
 Examples

@@ -53,4 +53,8 @@ target/
 .idea
 secrets
 
+# For mkdocs
 site/
+
+# For tutorial
+my_experiments/
