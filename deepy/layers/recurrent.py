@@ -36,7 +36,7 @@ class RNN(NeuralLayer):
         return T.dot(h, self.W_h) if not self._vector_core else h * self.W_h
 
 
-    def _step(self, *variables):
+    def step(self, *variables):
         if self._input_type == "sequence":
             x, h = variables
             z = T.dot(x, self.W_i) + self._hidden_preact(h) + self.B_h
@@ -58,7 +58,7 @@ class RNN(NeuralLayer):
         else:
             h0 = x
         step_outputs = [h0]
-        hiddens, _ = theano.scan(self._step, sequences=sequences, outputs_info=step_outputs, n_steps=self._steps)
+        hiddens, _ = theano.scan(self.step, sequences=sequences, outputs_info=step_outputs, n_steps=self._steps)
 
         hs = hiddens
         if self._output_type == "one":
