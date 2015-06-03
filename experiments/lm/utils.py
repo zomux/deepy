@@ -19,7 +19,7 @@ def load_data(small=True, char_based=False, batch_size=20, vocab_size=10000, his
     if small:
         train_path = os.path.join(resource_dir, "ptb.train.10k.txt")
     else:
-        train_path = os.path.join(resource_dir)
+        train_path = os.path.join(resource_dir, "ptb.train.txt")
     vocab = Vocab(char_based=char_based)
     vocab.load(vocab_path, max_size=vocab_size)
 
