@@ -67,7 +67,6 @@ class LMDataset(Dataset):
         assert len(seq) >= 2
         input_indices = seq[:-1]
         target_indices = seq[1:]
-        input_data = np.array(map(self.vocab.transform_index, input_indices), dtype=FLOATX)
-        return input_data, target_indices
+        return input_indices, target_indices
 
 

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from deepy.networks import NeuralNetwork
+from deepy.layers import OneHotEmbedding
 from deepy.utils import onehot, EPSILON
 import theano.tensor as T
 
@@ -9,6 +10,10 @@ class NeuralLM(NeuralNetwork):
     """
     LM Network.
     """
+
+    def __init__(self, vocab_size, config=None):
+        super(NeuralLM, self).__init__(0, config)
+        self.stack(OneHotEmbedding(vocab_size))
 
     def setup_variables(self):
         super(NeuralLM, self).setup_variables()

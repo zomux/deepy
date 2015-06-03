@@ -16,4 +16,5 @@ from prelu import PRelu
 from irnn import IRNN
 from lstm import LSTM
 from batch_norm import BatchNormalization
+from onehot_embed import OneHotEmbedding
 from chain import Chain

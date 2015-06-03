@@ -18,12 +18,11 @@ default_model = os.path.join(os.path.dirname(__file__), "models", "word_rnn1.gz"
 if __name__ == '__main__':
     ap = ArgumentParser()
     ap.add_argument("--model", default=default_model)
-    ap.add_argument("--small", action="store_ture")
+    ap.add_argument("--small", action="store_true")
     args = ap.parse_args()
 
     vocab, lmdata = load_data(small=args.small, history_len=-1)
-    #import pdb;pdb.set_trace()
-    model = NeuralLM(input_dim=vocab.size, input_tensor=3)
+    model = NeuralLM(vocab.size)
     model.stack(RNN(hidden_size=100, output_type="sequence", hidden_activation='tanh'),
                 Dense(vocab.size, activation="softmax"))
 
