@@ -43,7 +43,6 @@ class LMDataset(Dataset):
             if wc < self.min_tokens or wc > self.max_tokens:
                 continue
             sent_count += 1
-
             sequence = [self.vocab.sent_index]
             tokens = line if self.char_based else line.split(" ")
             for w in tokens:
