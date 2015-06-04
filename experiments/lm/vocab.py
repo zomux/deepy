@@ -3,6 +3,7 @@
 
 
 SENT_MARK = "</s>"
+NULL_MARK = "<null>"
 UNK_MARK = "<unk>"
 
 import numpy as np
@@ -19,6 +20,7 @@ class Vocab(object):
         self.size = 0
         self._char_based = char_based
         if is_lang:
+            self.add(NULL_MARK)
             self.add(SENT_MARK)
             self.add(UNK_MARK)
 
@@ -74,7 +76,7 @@ class Vocab(object):
 
     @property
     def sent_index(self):
-        return 0
+        return self.index(SENT_MARK)
 
     @property
     def sent_vector(self):
