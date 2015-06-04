@@ -17,13 +17,13 @@ default_model = os.path.join(os.path.dirname(__file__), "models", "word_rnn1.gz"
 
 if __name__ == '__main__':
     ap = ArgumentParser()
-    ap.add_argument("--model", default=default_model)
+    ap.add_argument("--model", default="")
     ap.add_argument("--small", action="store_true")
     args = ap.parse_args()
 
     vocab, lmdata = load_data(small=args.small, history_len=-1)
-    model = NeuralLM(vocab.size)
-    model.stack(RNN(hidden_size=100, output_type="sequence", hidden_activation='tanh'),
+    model = NeuralLM(vocab.size, test_data=lmdata.valid_set())
+    model.stack(RNN(hidden_size=50, output_type="sequence", hidden_activation='sigmoid'),
                 Dense(vocab.size, activation="softmax"))
 
     if os.path.exists(args.model):
@@ -34,4 +34,4 @@ if __name__ == '__main__':
 
     trainer.run(lmdata, controllers=[annealer])
 
-    model.save_params(args.model)
+    model.save_params(default_model)

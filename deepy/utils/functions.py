@@ -19,19 +19,9 @@ global_theano_rand = RandomStreams(seed=3)
 def onehot(size, eye):
     return np.eye(1, size, eye, dtype=FLOATX)[0]
 
-def onehot_tensor(t, r=None):
-    """
-    given a tensor t of dimension d with integer values from range(r), return a
-    new tensor of dimension d + 1 with values 0/1, where the last dimension
-    gives a one-hot representation of the values in t.
-
-    if r is not given, r is set to max(t) + 1
-    """
-    if r is None:
-        r = T.max(t) + 1
-
-    ranges = T.shape_padleft(T.arange(r), t.ndim)
-    return T.eq(ranges, T.shape_padright(t, 1))
+def onehot_tensor(i_matrix, vocab_size):
+    hot_matrix, _ = theano.map(lambda d: T.extra_ops.to_one_hot(d, vocab_size), sequences=[i_matrix])
+    return hot_matrix
 
 def make_float_matrices(*names):
     ret = []
