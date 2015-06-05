@@ -14,4 +14,4 @@ class Softmax3D(NeuralLayer):
         x = x.dimshuffle(1, 0, 2)
         softmax_tensor3, _ = theano.scan(lambda matrix: T.nnet.softmax(matrix), sequences=[x])
         softmax_tensor3.name = "softmax_loop"
-        return softmax_tensor3.dimshuffle(0, 1, 2)
+        return softmax_tensor3.dimshuffle(1, 0, 2)
