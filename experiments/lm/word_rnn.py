@@ -21,9 +21,11 @@ if __name__ == '__main__':
     ap.add_argument("--small", action="store_true")
     args = ap.parse_args()
 
-    vocab, lmdata = load_data(small=args.small, history_len=-1)
+    vocab, lmdata = load_data(small=args.small, history_len=5)
     model = NeuralLM(vocab.size, test_data=lmdata.valid_set())
-    model.stack(RNN(hidden_size=50, output_type="sequence", hidden_activation='sigmoid'),
+    model.stack(RNN(hidden_size=50, output_type="sequence", hidden_activation='sigmoid',
+                    persistent_state=True, batch_size=lmdata.size,
+                    reset_state_for_input=1),
                 Dense(vocab.size, activation="softmax"))
 
     if os.path.exists(args.model):

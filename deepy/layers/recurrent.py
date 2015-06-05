@@ -16,7 +16,8 @@ class RNN(NeuralLayer):
     """
 
     def __init__(self, hidden_size, input_type="sequence", output_type="sequence", vector_core=None,
-                 hidden_activation="tanh", hidden_init=None, input_init=None, steps=None):
+                 hidden_activation="tanh", hidden_init=None, input_init=None, steps=None,
+                 persistent_state=False, reset_state_for_input=None, batch_size=None):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
         self.output_dim = self._hidden_size
@@ -26,11 +27,16 @@ class RNN(NeuralLayer):
         self._hidden_init = hidden_init
         self._vector_core = vector_core
         self._input_init = input_init
+        self.persistent_state = persistent_state
+        self.reset_state_for_input = reset_state_for_input
+        self.batch_size = batch_size
         self._steps = steps
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of RNN is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
             raise Exception("Output type of RNN is wrong: %s" % output_type)
+        if self.persistent_state and not self.batch_size:
+            raise Exception("Batch size must be set for persistent state mode")
 
     def _hidden_preact(self, h):
         return T.dot(h, self.W_h) if not self._vector_core else h * self.W_h
@@ -39,6 +45,9 @@ class RNN(NeuralLayer):
     def step(self, *variables):
         if self._input_type == "sequence":
             x, h = variables
+            # Reset part of the state on condition
+            if self.reset_state_for_input != None:
+                h = h * T.neq(x[:, self.reset_state_for_input], 1).dimshuffle(0, 'x')
             z = T.dot(x, self.W_i) + self._hidden_preact(h) + self.B_h
         else:
             h, = variables
@@ -55,16 +64,22 @@ class RNN(NeuralLayer):
             # Move middle dimension to left-most position
             # (sequence, batch, value)
             sequences = [x.dimshuffle((1,0,2))]
+            # Set initial state
+            if self.persistent_state:
+                h0 = self.state
         else:
             h0 = x
         step_outputs = [h0]
         hiddens, _ = theano.scan(self.step, sequences=sequences, outputs_info=step_outputs, n_steps=self._steps)
 
-        hs = hiddens
+        # Save persistent state
+        if self.persistent_state:
+            self.register_updates((self.state, hiddens[-1]))
+
         if self._output_type == "one":
-            return hs[-1]
+            return hiddens[-1]
         elif self._output_type == "sequence":
-            return hs.dimshuffle((1,0,2))
+            return hiddens.dimshuffle((1,0,2))
 
     def setup(self):
         print self.input_dim, self._hidden_size
@@ -86,6 +101,12 @@ class RNN(NeuralLayer):
         self.B_h = self.create_bias(self._hidden_size, suffix="h")
 
         self.register_parameters(self.W_h, self.B_h)
+
+        if self.persistent_state:
+            self.state = self.create_matrix(self.batch_size, self._hidden_size, "rnn_state")
+            self.register_free_parameters(self.state)
+        else:
+            self.state = None
 
         if self._input_type == "sequence":
             self.W_i = self.create_weight(self.input_dim, self._hidden_size, suffix="i", initializer=self._input_init)

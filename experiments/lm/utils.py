@@ -6,7 +6,7 @@ import logging
 
 from vocab import Vocab
 from lmdataset import LMDataset
-from deepy.dataset import SequentialMiniBatches
+from deepy.dataset import BunchSequences
 
 
 logging.basicConfig(level=logging.INFO)
@@ -23,6 +23,6 @@ def load_data(small=True, char_based=False, batch_size=20, vocab_size=10000, his
     vocab = Vocab(char_based=char_based)
     vocab.load(vocab_path, max_size=vocab_size)
 
-    lmdata = LMDataset(vocab, train_path, valid_path, history_len=history_len, char_based=char_based, max_tokens=max_tokens)
-    batch = SequentialMiniBatches(lmdata, batch_size=20)
+    lmdata = LMDataset(vocab, train_path, valid_path, history_len=-1, char_based=char_based, max_tokens=max_tokens)
+    batch = BunchSequences(lmdata, batch_size=batch_size, fragment_length=history_len)
     return vocab, batch

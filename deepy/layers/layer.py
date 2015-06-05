@@ -29,6 +29,8 @@ class NeuralLayer(object):
         self.training_monitors = []
         self.testing_monitors = []
         self._registered_monitors = set()
+        self._registered_updates = set()
+        self._registered_training_updates = set()
         self.external_inputs = []
         self.parameter_count = 0
         self.epoch_callbacks = []
@@ -98,13 +100,19 @@ class NeuralLayer(object):
         """
         Register updates that will be executed in each iteration.
         """
-        self.updates.extend(updates)
+        for key, node in updates:
+            if key not in self._registered_updates:
+                self.updates.append((key, node))
+                self._registered_updates.add(key)
 
     def register_training_updates(self, *updates):
         """
         Register updates that will only be executed in training phase.
         """
-        self.training_updates.extend(updates)
+        for key, node in updates:
+            if key not in self._registered_training_updates:
+                self.training_updates.append((key, node))
+                self._registered_training_updates.add(key)
 
     def register_monitors(self, *monitors):
         """
