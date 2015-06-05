@@ -8,7 +8,7 @@ from argparse import ArgumentParser
 from utils import load_data
 from lm import NeuralLM
 from deepy.trainers import SGDTrainer, LearningRateAnnealer
-from deepy.layers import LSTM, Dense, RNN
+from deepy.layers import LSTM, Dense, RNN, Softmax3D
 
 
 logging.basicConfig(level=logging.INFO)
@@ -26,12 +26,14 @@ if __name__ == '__main__':
     model.stack(RNN(hidden_size=50, output_type="sequence", hidden_activation='sigmoid',
                     persistent_state=True, batch_size=lmdata.size,
                     reset_state_for_input=1),
-                Dense(vocab.size, activation="softmax"))
+                Dense(vocab.size, activation="linear"),
+                Softmax3D())
 
     if os.path.exists(args.model):
         model.load_params(args.model)
 
-    trainer = SGDTrainer(model, {"learning_rate": LearningRateAnnealer.learning_rate(0.1)})
+    trainer = SGDTrainer(model, {"learning_rate": LearningRateAnnealer.learning_rate(0.1),
+                                 "weight_l2": 1e-4})
     annealer = LearningRateAnnealer(trainer)
 
     trainer.run(lmdata, controllers=[annealer])

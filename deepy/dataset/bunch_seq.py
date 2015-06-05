@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging as loggers
+logging = loggers.getLogger(__name__)
+
 from . import MiniBatches
 import numpy as np
 
@@ -35,7 +38,9 @@ class BunchSequences(MiniBatches):
         return zip(pieces_x, pieces_y)
 
     def train_size(self):
-        return len(self.train_set())
+        size = len(list(self.train_set()))
+        logging.info("%d pieces in all" % size)
+        return size
 
     def _cut_to_pieces(self, bunch_stack):
         """
