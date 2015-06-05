@@ -73,21 +73,31 @@ class NeuralLM(NeuralNetwork):
 
     def _report_ppl(self):
         if not self.test_data: return
-        logp_sum  = 0
-        word_count = 0
-        for x_batch, y_batch in self.test_data:
-            yhat_batch = self.compute(x_batch)
-            for x_seq, y_seq, yhat_seq in zip(x_batch, y_batch, yhat_batch):
-                for x, y, yhat in  zip(x_seq, y_seq, yhat_seq):
-                    logp = - np.log2(yhat[y])
-                    logp_sum += logp
-                    word_count += 1
-                    if y == 0:
-                        # End of the sentence
-                        break
-        ppl = 0
-        mean_logp = 0
-        if word_count > 0:
-            mean_logp = logp_sum / word_count
-            ppl = 2 ** mean_logp
-        logging.info("Accurate test PPL: %.2f, Entropy: %.2f" % (ppl, mean_logp))
+        import numpy as np
+        costs = []
+        train_set = list(self.test_data)
+        for i in range(len(train_set)):
+            k2 =train_set[i][1].reshape((-1,))
+            y2 = self.compute(train_set[i][0]).reshape((-1, 10001))
+            c = -np.log2(y2[np.arange(k2.shape[0]), k2]).mean()
+            costs.append(c)
+        print np.array(costs).mean()
+        # return
+        # logp_sum  = 0
+        # word_count = 0
+        # for x_batch, y_batch in self.test_data:
+        #     yhat_batch = self.compute(x_batch)
+        #     for x_seq, y_seq, yhat_seq in zip(x_batch, y_batch, yhat_batch):
+        #         for x, y, yhat in  zip(x_seq, y_seq, yhat_seq):
+        #             logp = - np.log2(yhat[y])
+        #             logp_sum += logp
+        #             word_count += 1
+        #             if y == 0:
+        #                 # End of the sentence
+        #                 break
+        # ppl = 0
+        # mean_logp = 0
+        # if word_count > 0:
+        #     mean_logp = logp_sum / word_count
+        #     ppl = 2 ** mean_logp
+        # logging.info("Accurate test PPL: %.2f, Entropy: %.2f" % (ppl, mean_logp))

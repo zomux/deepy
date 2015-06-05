@@ -6,6 +6,7 @@ logging = loggers.getLogger(__name__)
 
 from . import MiniBatches
 import numpy as np
+from deepy.utils import global_rand, FakeGenerator
 
 class BunchSequences(MiniBatches):
     """
@@ -21,7 +22,7 @@ class BunchSequences(MiniBatches):
 
     def _yield_data(self, subset):
         subset = list(subset)
-        subset.sort(key=lambda x: len(x[0]), reverse=True)
+        global_rand.shuffle(subset)
 
         bunch_stack_x = [[] for _ in range(self.size)]
         bunch_stack_y = [[] for _ in range(self.size)]
@@ -35,11 +36,20 @@ class BunchSequences(MiniBatches):
         self._pad_zeros(bunch_stack_y)
         pieces_x = self._cut_to_pieces(bunch_stack_x)
         pieces_y = self._cut_to_pieces(bunch_stack_y)
-        return zip(pieces_x, pieces_y)
+        logging.info("%d pieces this time" % int(float(len(bunch_stack_x[0])) / self.fragment_length))
+        for piece in zip(pieces_x, pieces_y):
+            yield piece
+
+    def _train_set(self):
+        if not self.origin.train_set():
+            return None
+        return self._yield_data(self.origin.train_set())
+
+    def train_set(self):
+        return FakeGenerator(self, "_train_set")
 
     def train_size(self):
-        size = len(list(self.train_set()))
-        logging.info("%d pieces in all" % size)
+        size = len([_ for _ in self.train_set()])
         return size
 
     def _cut_to_pieces(self, bunch_stack):
@@ -54,7 +64,9 @@ class BunchSequences(MiniBatches):
         """
         :type bunch_stack: list of list
         """
-        max_len = max(map(len, bunch_stack))
-        for stack in bunch_stack:
-            for _ in range(max_len - len(stack)):
-                stack.append(0)
+        min_len = min(map(len, bunch_stack))
+        for i in range(len(bunch_stack)):
+            bunch_stack[i] = bunch_stack[i][:min_len]
+        # for stack in bunch_stack:
+        #     for _ in range(max_len - len(stack)):
+        #         stack.append(0)
