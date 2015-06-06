@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 
 resource_dir = os.path.abspath(os.path.dirname(__file__)) + os.sep + "resources"
 
-def load_data(small=True, char_based=False, batch_size=20, vocab_size=10000, history_len=5, max_tokens=30):
+def load_data(small=True, char_based=False, batch_size=20, vocab_size=10000, history_len=5, max_tokens=50):
     vocab_path = os.path.join(resource_dir, "ptb.train.txt")
     valid_path = os.path.join(resource_dir, "ptb.valid.txt")
     if small:
