@@ -37,6 +37,5 @@ if __name__ == '__main__':
     annealer = LearningRateAnnealer(trainer)
 
     trainer.run(lmdata, controllers=[annealer])
-
-    default_model = default_model.replace("[ACTIVATION]", args.activation)
+    
     model.save_params(default_model)
