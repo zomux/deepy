@@ -10,12 +10,15 @@ from deepy.layers import OneHotEmbedding
 from deepy.utils import onehot, EPSILON
 import theano.tensor as T
 
+from cost import LMCost
+
 class NeuralLM(NeuralNetwork):
     """
     LM Network.
     """
 
-    def __init__(self, vocab_size, test_data=None, config=None):
+    def __init__(self, vocab_size, class_based=False, test_data=None, config=None):
+        self.class_based = class_based
         super(NeuralLM, self).__init__(0, config, input_tensor=T.imatrix('x'))
         self.stack(OneHotEmbedding(vocab_size))
         self.test_data = test_data
@@ -24,15 +27,15 @@ class NeuralLM(NeuralNetwork):
 
     def setup_variables(self):
         super(NeuralLM, self).setup_variables()
-
-        self.k = T.imatrix('k')
-        self.target_variables.append(self.k)
+        if not self.class_based:
+            self.k = T.imatrix('k')
+            self.target_variables.append(self.k)
 
     def _cost_func(self, y):
-        y = T.clip(y, EPSILON, 1.0 - EPSILON)
-        y2 = y.reshape((-1, y.shape[-1]))
-        k2 = self.k.reshape((-1,))
-        return -T.mean(T.log2(y2[T.arange(k2.shape[0]), k2]))
+        if self.class_based:
+            return y
+        else:
+            return LMCost(y, self.k).get()
 
     def _error_func(self, y):
         y2 = y.reshape((-1, y.shape[-1]))
@@ -65,8 +68,9 @@ class NeuralLM(NeuralNetwork):
         return input
 
     def prepare_training(self):
-        self.training_monitors.append(("err", self._error_func(self.output)))
-        self.testing_monitors.append(("err", self._error_func(self.test_output)))
+        if not self.class_based:
+            self.training_monitors.append(("err", self._error_func(self.output)))
+            self.testing_monitors.append(("err", self._error_func(self.test_output)))
         self.training_monitors.append(("approx_PPL", self._perplexity_func(self.output)))
         self.testing_monitors.append(("approx_PPL", self._perplexity_func(self.test_output)))
         super(NeuralLM, self).prepare_training()

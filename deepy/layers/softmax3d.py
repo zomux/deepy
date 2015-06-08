@@ -11,7 +11,8 @@ class Softmax3D(NeuralLayer):
         super(Softmax3D, self).__init__("softmax")
 
     def output(self, x):
-        x = x.dimshuffle(1, 0, 2)
-        softmax_tensor3, _ = theano.scan(lambda matrix: T.nnet.softmax(matrix), sequences=[x])
-        softmax_tensor3.name = "softmax_loop"
-        return softmax_tensor3.dimshuffle(1, 0, 2)
+        shape = x.shape
+        x = x.reshape((-1, shape[-1]))
+        softmax_tensor = T.nnet.softmax(x)
+
+        return softmax_tensor.reshape(shape)

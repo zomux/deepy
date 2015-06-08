@@ -76,6 +76,7 @@ class NeuralNetwork(object):
         self.updates.extend(layer.updates)
         self.training_updates.extend(layer.training_updates)
         self.input_variables.extend(layer.external_inputs)
+        self.target_variables.extend(layer.external_targets)
 
         self.training_callbacks.extend(layer.training_callbacks)
         self.testing_callbacks.extend(layer.testing_callbacks)

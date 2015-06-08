@@ -14,13 +14,15 @@ logging = loggers.getLogger(__name__)
 
 class Vocab(object):
 
-    def __init__(self, is_lang=True, char_based=False):
+    def __init__(self, is_lang=True, char_based=False, null_mark=False):
         self.vocab_map = {}
         self.reversed_map = None
         self.size = 0
         self._char_based = char_based
-        if is_lang:
+        self.null_mark = null_mark
+        if null_mark:
             self.add(NULL_MARK)
+        if is_lang:
             self.add(SENT_MARK)
             self.add(UNK_MARK)
 

@@ -32,6 +32,7 @@ class NeuralLayer(object):
         self._registered_updates = set()
         self._registered_training_updates = set()
         self.external_inputs = []
+        self.external_targets = []
         self.parameter_count = 0
         self.epoch_callbacks = []
         self.training_callbacks = []
@@ -129,6 +130,12 @@ class NeuralLayer(object):
         Register external input variables.
         """
         self.external_inputs.extend(variables)
+
+    def register_external_targets(self, *variables):
+        """
+        Register extenal target variables.
+        """
+        self.external_targets.extend(variables)
 
     def register_training_callbacks(self, *callbacks):
         """

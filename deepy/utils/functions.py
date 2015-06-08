@@ -19,17 +19,21 @@ global_theano_rand = RandomStreams(seed=3)
 def onehot(size, eye):
     return np.eye(1, size, eye, dtype=FLOATX)[0]
 
-#def onehot_tensor(i_matrix, vocab_size):
-#    hot_matrix, _ = theano.map(lambda d: #T.extra_ops.to_one_hot(d, vocab_size), #sequences=[i_matrix])
-  #  return hot_matrix
+def onehot_tensor(i_matrix, vocab_size):
+    """
+    # batch x time
+    """
+    dim0, dim1 = i_matrix.shape
+    i_vector = i_matrix.reshape((-1,))
+    hot_matrix = T.extra_ops.to_one_hot(i_vector, vocab_size).reshape((dim0, dim1, vocab_size))
+    return hot_matrix
 
-
-def onehot_tensor(t, r=None):
-    if r is None:
-        r = T.max(t) + 1
-
-    ranges = T.shape_padleft(T.arange(r), t.ndim)
-    return T.eq(ranges, T.shape_padright(t, 1))
+# def onehot_tensor(t, r=None):
+#     if r is None:
+#         r = T.max(t) + 1
+#
+#     ranges = T.shape_padleft(T.arange(r), t.ndim)
+#     return T.eq(ranges, T.shape_padright(t, 1))
 
 
 def make_float_matrices(*names):
