@@ -58,9 +58,9 @@ class ClassOutputLayer(NeuralLayer):
         # Input matrix
         input_matrix = x.reshape((-1, self.input_dim))
         # Output matrix
-        output_matrix = self.output_layer.output(input_matrix)
-        sub_output_matrix, _ = theano.map(self._output_step,
-                                      sequences=[output_matrix, class_vector])
+        output_tensor3d = self.output_layer.output(x)
+        output_matrix = output_tensor3d.reshape((-1, self.class_size, self.output_size))
+        sub_output_matrix = output_matrix[:, class_vector][:, 0]
         # Softmax
         softmax_output_matrix = self.softmax_layer.output(sub_output_matrix)
         # Class prediction
