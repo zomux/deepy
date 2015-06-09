@@ -26,7 +26,7 @@ if __name__ == '__main__':
     model = NeuralLM(vocab.size, test_data=None)
     model.stack(RNN(hidden_size=100, output_type="sequence", hidden_activation="sigmoid",
                     persistent_state=True, batch_size=lmdata.size,
-                    reset_state_for_input=1),
+                    reset_state_for_input=0),
                 FullOutputLayer(vocab.size))
 
     if os.path.exists(args.model):

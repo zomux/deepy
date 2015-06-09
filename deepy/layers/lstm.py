@@ -15,12 +15,13 @@ class LSTM(NeuralLayer):
     Long short-term memory layer.
     """
 
-    def __init__(self, hidden_size, output_size=None, input_type="sequence", output_type="sequence",
+    def __init__(self, hidden_size, input_type="sequence", output_type="sequence",
                  inner_activation="sigmoid", outer_activation="tanh",
-                 inner_init=None, outer_init=None, steps=None):
+                 inner_init=None, outer_init=None, steps=None,
+                 persistent_state=False, batch_size=0,
+                 reset_state_for_input=None):
         super(LSTM, self).__init__("lstm")
         self._hidden_size = hidden_size
-        self._output_size = output_size
         self._input_type = input_type
         self._output_type = output_type
         self._inner_activation = inner_activation
@@ -28,14 +29,37 @@ class LSTM(NeuralLayer):
         self._inner_init = inner_init
         self._outer_init = outer_init
         self._steps = steps
+        self.persistent_state = persistent_state
+        self.reset_state_for_input = reset_state_for_input
+        self.batch_size = batch_size
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of LSTM is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
             raise Exception("Output type of LSTM is wrong: %s" % output_type)
+        if self.persistent_state and not self.batch_size:
+            raise Exception("Batch size must be set for persistent state mode")
+
+    def _auto_reset_memories(self, x, h, m):
+        reset_matrix = T.neq(x[:, self.reset_state_for_input], 1).dimshuffle(0, 'x')
+        h = h * reset_matrix
+        m = m * reset_matrix
+        return h, m
+
+    def _parse_sequential_vars(self, vars):
+        # Get raw input
+        if self.reset_state_for_input != None:
+            x = vars[0]
+            vars = vars[1:]
+        # Unpack varables
+        xi_t, xf_t, xo_t, xc_t, h_tm1, c_tm1 = vars
+        # Auto reset states
+        if self.reset_state_for_input != None:
+            h_tm1, c_tm1 = self._auto_reset_memories(x, h_tm1, c_tm1)
+        return xi_t, xf_t, xo_t, xc_t, h_tm1, c_tm1
 
     def step(self, *vars):
         if self._input_type == "sequence":
-            xi_t, xf_t, xo_t, xc_t, h_tm1, c_tm1 = vars
+            xi_t, xf_t, xo_t, xc_t, h_tm1, c_tm1 = self._parse_sequential_vars(vars)
             i_t = self._inner_act(xi_t + T.dot(h_tm1, self.U_i))
             f_t = self._inner_act(xf_t + T.dot(h_tm1, self.U_f))
             c_t = f_t * c_tm1 + i_t * self._outer_act(xc_t + T.dot(h_tm1, self.U_c))
@@ -57,12 +81,17 @@ class LSTM(NeuralLayer):
         xc = T.dot(x, self.W_c) + self.b_c
         xo = T.dot(x, self.W_o) + self.b_o
         sequences = [xi, xf, xo, xc]
+        if self.reset_state_for_input != None:
+            sequences.insert(0, x)
         return sequences
 
     def produce_initial_states(self, x):
-        h0 = T.alloc(np.cast[FLOATX](0.), x.shape[0], self._hidden_size)
-        m0 = h0
-        return h0, m0
+        if self.persistent_state:
+            return self.state_h, self.state_m
+        else:
+            h0 = T.alloc(np.cast[FLOATX](0.), x.shape[0], self._hidden_size)
+            m0 = h0
+            return h0, m0
 
     def output(self, x):
         h0, m0 = self.produce_initial_states(x)
@@ -81,6 +110,11 @@ class LSTM(NeuralLayer):
             outputs_info=[h0, m0],
             # non_sequences=[self.U_i, self.U_f, self.U_o, self.U_c]
         )
+
+        # Save persistent state
+        if self.persistent_state:
+            self.register_updates((self.state_h, hiddens[-1]))
+            self.register_updates((self.state_m, memories[-1]))
 
         if self._output_type == "one":
             return hiddens[-1]
@@ -126,3 +160,11 @@ class LSTM(NeuralLayer):
                                      self.U_c, self.b_c,
                                      self.U_f, self.b_f,
                                      self.U_o, self.b_o)
+        # Create persistent state
+        if self.persistent_state:
+            self.state_h = self.create_matrix(self.batch_size, self._hidden_size, "lstm_state_h")
+            self.state_m = self.create_matrix(self.batch_size, self._hidden_size, "lstm_state_m")
+            self.register_free_parameters(self.state_h, self.state_m)
+        else:
+            self.state_h = None
+            self.state_m = None

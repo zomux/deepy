@@ -90,6 +90,23 @@ python experiments/attention_models/baseline.py
 
 ### Language model
 
+#### Penn Treebank benchmark
+
+- Baseline RNNLM (Full-output layer)
+```
+python experiments/lm/baseline_rnnlm.py
+```
+- Class-based RNNLM
+```
+python experiments/lm/class_based_rnnlm.py
+```
+- LSTM based LM (Full-output layer)
+```
+python experiments/lm/lstm_rnnlm.py
+```
+
+#### Char-based language models
+
 - Char-based LM with LSTM
 ```
 python experiments/lm/char_lstm.py

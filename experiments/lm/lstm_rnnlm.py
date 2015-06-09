@@ -8,13 +8,13 @@ from argparse import ArgumentParser
 from utils import load_data
 from lm import NeuralLM
 from deepy.trainers import SGDTrainer, LearningRateAnnealer, AdamTrainer
-from deepy.layers import LSTM, RNN
-from layers import ClassOutputLayer
+from deepy.layers import LSTM
+from layers import FullOutputLayer
 
 
 logging.basicConfig(level=logging.INFO)
 
-default_model = os.path.join(os.path.dirname(__file__), "models", "class_based_rnnlm.gz")
+default_model = os.path.join(os.path.dirname(__file__), "models", "lstm_rnnlm.gz")
 
 if __name__ == '__main__':
     ap = ArgumentParser()
@@ -23,12 +23,11 @@ if __name__ == '__main__':
     args = ap.parse_args()
 
     vocab, lmdata = load_data(small=args.small, history_len=5, batch_size=64)
-    import pdb; pdb.set_trace()
-    model = NeuralLM(vocab.size, class_based=True)
-    model.stack(RNN(hidden_size=100, output_type="sequence", hidden_activation='sigmoid',
+    model = NeuralLM(vocab.size, test_data=None)
+    model.stack(LSTM(hidden_size=100, output_type="sequence",
                     persistent_state=True, batch_size=lmdata.size,
                     reset_state_for_input=0),
-                ClassOutputLayer(output_size=100, class_size=100))
+                FullOutputLayer(vocab.size))
 
     if os.path.exists(args.model):
         model.load_params(args.model)
