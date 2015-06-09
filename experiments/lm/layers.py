@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from deepy.layers import NeuralLayer, Softmax3D, Softmax, Dense, Chain
-from deepy.utils import CrossEntropyCost
-
+import numpy as np
 import theano
 import theano.tensor as T
+from deepy.layers import NeuralLayer, Softmax3D, Softmax, Dense, Chain
+from deepy.utils import CrossEntropyCost
 
 from cost import LMCost
 
@@ -32,18 +32,19 @@ class ClassOutputLayer(NeuralLayer):
         self.class_size = class_size
 
     def setup(self):
+        # Output layers
         self.output_layer = Chain(self.input_dim).stack(Dense(self.output_size * self.class_size))
         self.softmax_layer = Softmax().connect(input_dim=self.output_size)
 
         self.class_layer = Chain(self.input_dim).stack(Dense(self.class_size),
                                                         Softmax3D())
         self.register_inner_layers(self.class_layer, self.output_layer)
+        # Target tensor
         self.target_tensor = T.imatrix('target')
         self.register_external_targets(self.target_tensor)
+        # arange cache
+        self.arange_cache = theano.shared(np.arange(10*64), name="arange_cache")
 
-    def _output_step(self, output_vec, class_scalar):
-        start_index = class_scalar * self.output_size
-        return output_vec[start_index: start_index + self.output_size]
 
     def output(self, x):
         """
@@ -60,7 +61,8 @@ class ClassOutputLayer(NeuralLayer):
         # Output matrix
         output_tensor3d = self.output_layer.output(x)
         output_matrix = output_tensor3d.reshape((-1, self.class_size, self.output_size))
-        sub_output_matrix = output_matrix[:, class_vector][:, 0]
+        arange_vec = self.arange_cache[:output_matrix.shape[0]]
+        sub_output_matrix = output_matrix[arange_vec, class_vector]
         # Softmax
         softmax_output_matrix = self.softmax_layer.output(sub_output_matrix)
         # Class prediction
