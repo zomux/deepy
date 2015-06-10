@@ -1,141 +1,163 @@
 # deepy version: 0.1.3
-[2015/06/08 13:11:18] valid   (iter=1) J=13.29 err=99.96 approx_PPL=10047.07 *
-[2015/06/08 13:15:48] monitor (iter=1) J=8.15 err=87.50 approx_PPL=283.56 mean(onehot1)=0.00 mean(rnn2)=0.32 mean(full_output3)=0.00
-[2015/06/08 13:15:55] valid   (iter=2) J=9.06 err=90.30 approx_PPL=542.82 *
-[2015/06/08 13:20:38] monitor (iter=2) J=8.79 err=84.38 approx_PPL=441.75 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
-[2015/06/08 13:20:45] valid   (iter=3) J=8.76 err=87.22 approx_PPL=440.30 *
-[2015/06/08 13:25:25] monitor (iter=3) J=8.85 err=85.94 approx_PPL=462.78 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 13:25:32] valid   (iter=4) J=8.53 err=84.85 approx_PPL=375.29 *
-[2015/06/08 13:30:16] monitor (iter=4) J=7.98 err=85.94 approx_PPL=253.19 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 13:30:23] valid   (iter=5) J=8.60 err=87.54 approx_PPL=395.72
-[2015/06/08 13:35:08] monitor (iter=5) J=8.83 err=89.06 approx_PPL=454.24 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 13:35:15] valid   (iter=6) J=8.40 err=84.35 approx_PPL=342.10 *
-[2015/06/08 13:40:00] monitor (iter=6) J=8.06 err=84.69 approx_PPL=266.16 mean(onehot1)=0.00 mean(rnn2)=0.21 mean(full_output3)=0.00
-[2015/06/08 13:40:07] valid   (iter=7) J=8.21 err=83.39 approx_PPL=301.54 *
-[2015/06/08 13:44:52] monitor (iter=7) J=8.86 err=95.31 approx_PPL=464.76 mean(onehot1)=0.00 mean(rnn2)=0.21 mean(full_output3)=0.00
-[2015/06/08 13:44:59] valid   (iter=8) J=8.14 err=82.56 approx_PPL=286.94 *
-[2015/06/08 13:49:48] monitor (iter=8) J=8.03 err=82.81 approx_PPL=261.11 mean(onehot1)=0.00 mean(rnn2)=0.21 mean(full_output3)=0.00
-[2015/06/08 13:49:54] valid   (iter=9) J=8.07 err=82.13 approx_PPL=274.15 *
-[2015/06/08 13:54:42] monitor (iter=9) J=7.80 err=85.42 approx_PPL=222.94 mean(onehot1)=0.00 mean(rnn2)=0.21 mean(full_output3)=0.00
-[2015/06/08 13:54:49] valid   (iter=10) J=7.99 err=82.05 approx_PPL=258.45 *
-[2015/06/08 13:59:29] monitor (iter=10) J=7.71 err=84.38 approx_PPL=210.06 mean(onehot1)=0.00 mean(rnn2)=0.21 mean(full_output3)=0.00
-[2015/06/08 13:59:35] valid   (iter=11) J=8.42 err=85.29 approx_PPL=349.91
-[2015/06/08 14:04:19] monitor (iter=11) J=7.58 err=80.21 approx_PPL=191.43 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:04:25] valid   (iter=12) J=7.90 err=81.39 approx_PPL=243.93 *
-[2015/06/08 14:09:08] monitor (iter=12) J=8.29 err=81.64 approx_PPL=311.98 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:09:14] valid   (iter=13) J=7.85 err=80.79 approx_PPL=235.28 *
-[2015/06/08 14:13:57] monitor (iter=13) J=7.72 err=80.62 approx_PPL=211.40 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:14:03] valid   (iter=14) J=7.84 err=80.85 approx_PPL=233.19 *
-[2015/06/08 14:18:41] monitor (iter=14) J=8.17 err=81.25 approx_PPL=287.84 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:18:48] valid   (iter=15) J=7.83 err=81.00 approx_PPL=232.33
-[2015/06/08 14:23:32] monitor (iter=15) J=7.55 err=79.38 approx_PPL=187.84 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:23:39] valid   (iter=16) J=7.73 err=80.05 approx_PPL=216.40 *
-[2015/06/08 14:28:22] monitor (iter=16) J=7.36 err=79.69 approx_PPL=163.74 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:28:29] valid   (iter=17) J=7.85 err=81.21 approx_PPL=235.32
-[2015/06/08 14:33:09] monitor (iter=17) J=6.84 err=74.22 approx_PPL=114.62 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:33:16] valid   (iter=18) J=7.75 err=81.34 approx_PPL=219.65
-[2015/06/08 14:37:57] monitor (iter=18) J=7.88 err=78.52 approx_PPL=235.82 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:38:04] valid   (iter=19) J=7.65 err=79.79 approx_PPL=205.12 *
-[2015/06/08 14:42:47] monitor (iter=19) J=7.59 err=79.69 approx_PPL=192.94 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:42:54] valid   (iter=20) J=7.65 err=79.75 approx_PPL=204.45
-[2015/06/08 14:47:34] monitor (iter=20) J=7.37 err=76.17 approx_PPL=165.36 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:47:40] valid   (iter=21) J=7.65 err=80.16 approx_PPL=204.89
-[2015/06/08 14:52:21] monitor (iter=21) J=7.87 err=82.81 approx_PPL=233.81 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:52:28] valid   (iter=22) J=7.73 err=81.66 approx_PPL=217.00
-[2015/06/08 14:57:07] monitor (iter=22) J=7.00 err=71.88 approx_PPL=127.75 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 14:57:14] valid   (iter=23) J=7.70 err=79.93 approx_PPL=211.65
-[2015/06/08 15:01:54] monitor (iter=23) J=7.57 err=84.38 approx_PPL=190.15 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 15:02:01] valid   (iter=24) J=7.66 err=80.80 approx_PPL=206.20
-[2015/06/08 15:06:41] monitor (iter=24) J=6.98 err=76.56 approx_PPL=126.38 mean(onehot1)=0.00 mean(rnn2)=0.20 mean(full_output3)=0.00
-[2015/06/08 15:06:48] valid   (iter=25) J=7.65 err=79.79 approx_PPL=205.10
-[2015/06/08 15:11:30] monitor (iter=25) J=7.50 err=89.06 approx_PPL=181.10 mean(onehot1)=0.00 mean(rnn2)=0.21 mean(full_output3)=0.00
-[2015/06/08 15:11:37] valid   (iter=26) J=7.66 err=79.77 approx_PPL=206.03
-[2015/06/08 15:16:21] monitor (iter=26) J=6.91 err=75.00 approx_PPL=120.31 mean(onehot1)=0.00 mean(rnn2)=0.21 mean(full_output3)=0.00
-[2015/06/08 15:16:28] valid   (iter=27) J=7.63 err=79.63 approx_PPL=201.34 *
-[2015/06/08 15:21:06] monitor (iter=27) J=7.40 err=78.75 approx_PPL=169.13 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 15:21:13] valid   (iter=28) J=7.60 err=79.34 approx_PPL=197.83 *
-[2015/06/08 15:25:55] monitor (iter=28) J=7.16 err=76.95 approx_PPL=142.81 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 15:26:02] valid   (iter=29) J=7.57 err=79.00 approx_PPL=194.23 *
-[2015/06/08 15:30:44] monitor (iter=29) J=7.27 err=74.22 approx_PPL=154.04 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 15:30:51] valid   (iter=30) J=7.59 err=79.41 approx_PPL=196.97
-[2015/06/08 15:35:34] monitor (iter=30) J=7.28 err=78.12 approx_PPL=155.87 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 15:35:41] valid   (iter=31) J=7.61 err=79.55 approx_PPL=198.88
-[2015/06/08 15:40:23] monitor (iter=31) J=6.78 err=77.19 approx_PPL=109.87 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 15:40:30] valid   (iter=32) J=7.56 err=79.19 approx_PPL=193.18 *
-[2015/06/08 15:45:13] monitor (iter=32) J=7.35 err=79.69 approx_PPL=163.35 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 15:45:20] valid   (iter=33) J=7.54 err=78.96 approx_PPL=190.11 *
-[2015/06/08 15:50:03] monitor (iter=33) J=6.82 err=67.97 approx_PPL=112.99 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 15:50:10] valid   (iter=34) J=7.53 err=78.86 approx_PPL=188.16 *
-[2015/06/08 15:54:57] monitor (iter=34) J=6.61 err=75.00 approx_PPL=97.38 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 15:55:04] valid   (iter=35) J=7.55 err=79.23 approx_PPL=191.54
-[2015/06/08 15:59:54] monitor (iter=35) J=7.61 err=76.56 approx_PPL=195.18 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 16:00:01] valid   (iter=36) J=7.53 err=78.99 approx_PPL=189.04
-[2015/06/08 16:04:44] monitor (iter=36) J=7.27 err=75.00 approx_PPL=154.69 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 16:04:51] valid   (iter=37) J=7.69 err=81.08 approx_PPL=210.85
-[2015/06/08 16:09:37] monitor (iter=37) J=7.16 err=77.34 approx_PPL=143.20 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 16:09:44] valid   (iter=38) J=7.53 err=78.95 approx_PPL=188.50
-[2015/06/08 16:14:28] monitor (iter=38) J=6.36 err=76.56 approx_PPL=81.96 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 16:14:35] valid   (iter=39) J=7.59 err=79.57 approx_PPL=197.25
-[2015/06/08 16:19:21] monitor (iter=39) J=7.89 err=84.38 approx_PPL=237.22 mean(onehot1)=0.00 mean(rnn2)=0.22 mean(full_output3)=0.00
-[2015/06/08 16:19:28] valid   (iter=40) J=7.53 err=78.86 approx_PPL=188.16
-[2015/06/08 16:24:06] monitor (iter=40) J=7.78 err=81.25 approx_PPL=219.41 mean(onehot1)=0.00 mean(rnn2)=0.23 mean(full_output3)=0.00
-[2015/06/08 16:24:13] valid   (iter=41) J=7.53 err=78.72 approx_PPL=188.15
-[2015/06/08 16:29:00] monitor (iter=41) J=6.72 err=78.12 approx_PPL=105.78 mean(onehot1)=0.00 mean(rnn2)=0.23 mean(full_output3)=0.00
-[2015/06/08 16:29:07] valid   (iter=42) J=7.52 err=78.67 approx_PPL=186.64 *
-[2015/06/08 16:33:47] monitor (iter=42) J=7.34 err=77.73 approx_PPL=161.66 mean(onehot1)=0.00 mean(rnn2)=0.23 mean(full_output3)=0.00
-[2015/06/08 16:33:54] valid   (iter=43) J=7.50 err=78.48 approx_PPL=184.50 *
-[2015/06/08 16:38:39] monitor (iter=43) J=7.87 err=81.25 approx_PPL=234.48 mean(onehot1)=0.00 mean(rnn2)=0.23 mean(full_output3)=0.00
-[2015/06/08 16:38:46] valid   (iter=44) J=7.50 err=78.44 approx_PPL=184.03
-[2015/06/08 16:43:27] monitor (iter=44) J=7.63 err=84.77 approx_PPL=198.31 mean(onehot1)=0.00 mean(rnn2)=0.23 mean(full_output3)=0.00
-[2015/06/08 16:43:34] valid   (iter=45) J=7.49 err=78.45 approx_PPL=182.84 *
-[2015/06/08 16:48:06] monitor (iter=45) J=6.98 err=75.78 approx_PPL=126.08 mean(onehot1)=0.00 mean(rnn2)=0.23 mean(full_output3)=0.00
-[2015/06/08 16:48:11] valid   (iter=46) J=7.49 err=78.41 approx_PPL=183.02
-[2015/06/08 16:52:04] monitor (iter=46) J=7.01 err=77.19 approx_PPL=129.32 mean(onehot1)=0.00 mean(rnn2)=0.23 mean(full_output3)=0.00
-[2015/06/08 16:52:09] valid   (iter=47) J=7.49 err=78.35 approx_PPL=183.02
-[2015/06/08 16:56:01] monitor (iter=47) J=6.55 err=78.12 approx_PPL=93.53 mean(onehot1)=0.00 mean(rnn2)=0.23 mean(full_output3)=0.00
-[2015/06/08 16:56:06] valid   (iter=48) J=7.50 err=78.70 approx_PPL=184.85
-[2015/06/08 16:59:57] monitor (iter=48) J=7.02 err=85.94 approx_PPL=130.22 mean(onehot1)=0.00 mean(rnn2)=0.23 mean(full_output3)=0.00
-[2015/06/08 17:00:02] valid   (iter=49) J=7.47 err=78.50 approx_PPL=181.42 *
-[2015/06/08 17:03:55] monitor (iter=49) J=7.17 err=80.47 approx_PPL=143.67 mean(onehot1)=0.00 mean(rnn2)=0.23 mean(full_output3)=0.00
-[2015/06/08 17:04:00] valid   (iter=50) J=7.46 err=78.23 approx_PPL=180.08 *
-[2015/06/08 17:07:55] monitor (iter=50) J=7.15 err=76.56 approx_PPL=142.12 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:08:00] valid   (iter=51) J=7.48 err=78.46 approx_PPL=181.58
-[2015/06/08 17:11:56] monitor (iter=51) J=7.05 err=75.78 approx_PPL=132.87 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:12:01] valid   (iter=52) J=7.45 err=78.14 approx_PPL=178.81 *
-[2015/06/08 17:15:55] monitor (iter=52) J=7.36 err=79.69 approx_PPL=164.47 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:16:00] valid   (iter=53) J=7.45 err=78.16 approx_PPL=178.72
-[2015/06/08 17:19:54] monitor (iter=53) J=7.36 err=78.12 approx_PPL=164.59 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:19:59] valid   (iter=54) J=7.46 err=78.27 approx_PPL=179.00
-[2015/06/08 17:23:55] monitor (iter=54) J=6.62 err=68.75 approx_PPL=98.41 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:24:00] valid   (iter=55) J=7.49 err=78.99 approx_PPL=183.57
-[2015/06/08 17:27:55] monitor (iter=55) J=6.47 err=73.44 approx_PPL=88.45 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:28:00] valid   (iter=56) J=7.46 err=78.44 approx_PPL=179.55
-[2015/06/08 17:31:55] monitor (iter=56) J=7.46 err=79.69 approx_PPL=176.67 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:32:00] valid   (iter=57) J=7.46 err=78.36 approx_PPL=180.06
-[2015/06/08 17:35:52] monitor (iter=57) J=6.55 err=78.12 approx_PPL=93.93 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:35:57] valid   (iter=58) J=7.45 err=78.14 approx_PPL=178.81
-[2015/06/08 17:39:48] monitor (iter=58) J=6.69 err=73.44 approx_PPL=103.17 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:39:53] valid   (iter=59) J=7.45 err=78.17 approx_PPL=178.10
-[2015/06/08 17:43:43] monitor (iter=59) J=6.69 err=77.19 approx_PPL=102.94 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:43:48] valid   (iter=60) J=7.44 err=78.20 approx_PPL=177.28 *
-[2015/06/08 17:47:41] monitor (iter=60) J=6.67 err=75.00 approx_PPL=101.89 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:47:46] valid   (iter=61) J=7.45 err=78.20 approx_PPL=178.58
-[2015/06/08 17:51:39] monitor (iter=61) J=6.66 err=75.00 approx_PPL=101.28 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:51:44] valid   (iter=62) J=7.44 err=78.02 approx_PPL=176.63
-[2015/06/08 17:55:34] monitor (iter=62) J=7.85 err=87.50 approx_PPL=231.04 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:55:39] valid   (iter=63) J=7.44 err=78.18 approx_PPL=176.98
-[2015/06/08 17:59:32] monitor (iter=63) J=7.55 err=75.00 approx_PPL=187.27 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 17:59:37] valid   (iter=64) J=7.44 err=77.95 approx_PPL=176.68
-[2015/06/08 18:03:28] monitor (iter=64) J=7.24 err=78.12 approx_PPL=150.78 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 18:03:33] valid   (iter=65) J=7.44 err=78.04 approx_PPL=177.11
-[2015/06/08 18:07:24] monitor (iter=65) J=7.11 err=77.73 approx_PPL=138.19 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 18:07:29] valid   (iter=66) J=7.44 err=78.20 approx_PPL=177.25
-[2015/06/08 18:11:19] monitor (iter=66) J=6.58 err=70.31 approx_PPL=95.66 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 18:11:23] valid   (iter=67) J=7.44 err=77.94 approx_PPL=176.94
-[2015/06/08 18:15:16] monitor (iter=67) J=7.76 err=75.00 approx_PPL=216.29 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 18:15:21] valid   (iter=68) J=7.44 err=77.98 approx_PPL=176.78
-[2015/06/08 18:19:14] monitor (iter=68) J=7.89 err=79.69 approx_PPL=237.82 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 18:19:19] valid   (iter=69) J=7.44 err=78.09 approx_PPL=176.94
-[2015/06/08 18:23:11] monitor (iter=69) J=6.94 err=71.88 approx_PPL=122.91 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
-[2015/06/08 18:23:16] valid   (iter=70) J=7.44 err=77.91 approx_PPL=176.49
-[2015/06/08 18:27:06] monitor (iter=70) J=5.77 err=67.19 approx_PPL=54.45 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 09:33:48] valid   (iter=1) J=13.29 err=100.00 approx_PPL=10018.59 *
+[2015/06/09 09:37:30] monitor (iter=1) J=8.19 err=87.50 approx_PPL=291.41 mean(onehot1)=0.00 mean(rnn2)=0.37 mean(full_output3)=0.00
+[2015/06/09 09:37:35] valid   (iter=2) J=9.06 err=88.35 approx_PPL=540.63 *
+[2015/06/09 09:41:41] monitor (iter=2) J=8.73 err=80.47 approx_PPL=423.40 mean(onehot1)=0.00 mean(rnn2)=0.30 mean(full_output3)=0.00
+[2015/06/09 09:41:48] valid   (iter=3) J=8.69 err=86.41 approx_PPL=418.94 *
+[2015/06/09 09:45:57] monitor (iter=3) J=8.81 err=84.06 approx_PPL=449.71 mean(onehot1)=0.00 mean(rnn2)=0.28 mean(full_output3)=0.00
+[2015/06/09 09:46:03] valid   (iter=4) J=8.50 err=84.52 approx_PPL=366.85 *
+[2015/06/09 09:50:12] monitor (iter=4) J=7.95 err=87.50 approx_PPL=247.04 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 09:50:18] valid   (iter=5) J=8.60 err=87.36 approx_PPL=394.64
+[2015/06/09 09:54:30] monitor (iter=5) J=8.76 err=88.28 approx_PPL=433.98 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 09:54:36] valid   (iter=6) J=8.33 err=83.46 approx_PPL=327.65 *
+[2015/06/09 09:58:49] monitor (iter=6) J=8.01 err=84.06 approx_PPL=256.94 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 09:58:55] valid   (iter=7) J=8.17 err=82.97 approx_PPL=293.45 *
+[2015/06/09 10:03:08] monitor (iter=7) J=8.70 err=92.19 approx_PPL=416.31 mean(onehot1)=0.00 mean(rnn2)=0.25 mean(full_output3)=0.00
+[2015/06/09 10:03:14] valid   (iter=8) J=8.12 err=82.47 approx_PPL=283.38 *
+[2015/06/09 10:07:25] monitor (iter=8) J=8.00 err=83.44 approx_PPL=255.76 mean(onehot1)=0.00 mean(rnn2)=0.25 mean(full_output3)=0.00
+[2015/06/09 10:07:31] valid   (iter=9) J=8.02 err=81.60 approx_PPL=264.17 *
+[2015/06/09 10:11:44] monitor (iter=9) J=7.76 err=82.81 approx_PPL=217.29 mean(onehot1)=0.00 mean(rnn2)=0.25 mean(full_output3)=0.00
+[2015/06/09 10:11:50] valid   (iter=10) J=7.97 err=82.05 approx_PPL=255.05 *
+[2015/06/09 10:16:02] monitor (iter=10) J=7.61 err=76.56 approx_PPL=196.03 mean(onehot1)=0.00 mean(rnn2)=0.25 mean(full_output3)=0.00
+[2015/06/09 10:16:08] valid   (iter=11) J=8.26 err=84.45 approx_PPL=313.43
+[2015/06/09 10:20:17] monitor (iter=11) J=7.49 err=81.77 approx_PPL=179.85 mean(onehot1)=0.00 mean(rnn2)=0.25 mean(full_output3)=0.00
+[2015/06/09 10:20:23] valid   (iter=12) J=7.84 err=81.10 approx_PPL=233.94 *
+[2015/06/09 10:24:31] monitor (iter=12) J=8.25 err=82.42 approx_PPL=303.51 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 10:24:38] valid   (iter=13) J=7.80 err=80.57 approx_PPL=227.06 *
+[2015/06/09 10:28:49] monitor (iter=13) J=7.68 err=79.69 approx_PPL=205.16 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 10:28:56] valid   (iter=14) J=7.82 err=80.73 approx_PPL=230.60
+[2015/06/09 10:33:08] monitor (iter=14) J=8.06 err=82.81 approx_PPL=266.53 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 10:33:14] valid   (iter=15) J=7.84 err=81.04 approx_PPL=233.35
+[2015/06/09 10:37:25] monitor (iter=15) J=7.54 err=77.81 approx_PPL=186.36 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 10:37:31] valid   (iter=16) J=7.70 err=80.03 approx_PPL=212.23 *
+[2015/06/09 10:41:42] monitor (iter=16) J=7.38 err=76.56 approx_PPL=167.11 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 10:41:48] valid   (iter=17) J=7.79 err=80.71 approx_PPL=226.07
+[2015/06/09 10:45:56] monitor (iter=17) J=6.78 err=74.22 approx_PPL=110.03 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 10:46:02] valid   (iter=18) J=7.74 err=81.66 approx_PPL=217.79
+[2015/06/09 10:50:10] monitor (iter=18) J=7.95 err=78.91 approx_PPL=247.54 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 10:50:16] valid   (iter=19) J=7.62 err=79.46 approx_PPL=200.02 *
+[2015/06/09 10:54:25] monitor (iter=19) J=7.59 err=80.62 approx_PPL=192.27 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 10:54:31] valid   (iter=20) J=7.59 err=79.31 approx_PPL=196.76 *
+[2015/06/09 10:58:39] monitor (iter=20) J=7.35 err=75.39 approx_PPL=163.48 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 10:58:46] valid   (iter=21) J=7.63 err=80.30 approx_PPL=201.50
+[2015/06/09 11:02:55] monitor (iter=21) J=7.90 err=85.94 approx_PPL=239.01 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:03:01] valid   (iter=22) J=7.77 err=82.80 approx_PPL=222.90
+[2015/06/09 11:07:11] monitor (iter=22) J=7.03 err=75.00 approx_PPL=130.33 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:07:18] valid   (iter=23) J=7.73 err=80.03 approx_PPL=215.69
+[2015/06/09 11:11:25] monitor (iter=23) J=7.58 err=81.25 approx_PPL=191.68 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:11:32] valid   (iter=24) J=7.61 err=80.06 approx_PPL=199.52
+[2015/06/09 11:15:41] monitor (iter=24) J=6.96 err=76.25 approx_PPL=124.72 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:15:47] valid   (iter=25) J=7.56 err=79.14 approx_PPL=192.72 *
+[2015/06/09 11:19:56] monitor (iter=25) J=7.40 err=90.62 approx_PPL=168.53 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:20:03] valid   (iter=26) J=7.69 err=81.17 approx_PPL=209.79
+[2015/06/09 11:24:12] monitor (iter=26) J=6.80 err=76.56 approx_PPL=111.74 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:24:17] valid   (iter=27) J=7.53 err=79.36 approx_PPL=188.62 *
+[2015/06/09 11:28:25] monitor (iter=27) J=7.26 err=78.75 approx_PPL=152.76 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:28:31] valid   (iter=28) J=7.51 err=79.41 approx_PPL=185.29 *
+[2015/06/09 11:32:38] monitor (iter=28) J=7.01 err=75.00 approx_PPL=128.96 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:32:44] valid   (iter=29) J=7.45 err=78.64 approx_PPL=177.87 *
+[2015/06/09 11:36:51] monitor (iter=29) J=7.11 err=78.12 approx_PPL=138.05 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:36:57] valid   (iter=30) J=7.48 err=78.98 approx_PPL=182.61
+[2015/06/09 11:41:05] monitor (iter=30) J=6.94 err=75.00 approx_PPL=122.82 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:41:11] valid   (iter=31) J=7.58 err=79.70 approx_PPL=195.04
+[2015/06/09 11:45:20] monitor (iter=31) J=6.53 err=75.62 approx_PPL=92.57 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:45:26] valid   (iter=32) J=7.45 err=78.94 approx_PPL=178.09
+[2015/06/09 11:49:35] monitor (iter=32) J=7.14 err=78.12 approx_PPL=141.38 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:49:41] valid   (iter=33) J=7.45 err=78.59 approx_PPL=177.84
+[2015/06/09 11:53:51] monitor (iter=33) J=6.67 err=71.48 approx_PPL=101.48 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:53:57] valid   (iter=34) J=7.42 err=78.66 approx_PPL=175.07 *
+[2015/06/09 11:58:05] monitor (iter=34) J=6.45 err=73.44 approx_PPL=87.13 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 11:58:11] valid   (iter=35) J=7.48 err=79.60 approx_PPL=182.75
+[2015/06/09 12:02:20] monitor (iter=35) J=7.36 err=75.00 approx_PPL=164.46 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 12:02:26] valid   (iter=36) J=7.42 err=78.60 approx_PPL=174.69
+[2015/06/09 12:06:35] monitor (iter=36) J=7.08 err=76.56 approx_PPL=135.35 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 12:06:42] valid   (iter=37) J=7.72 err=81.66 approx_PPL=216.22
+[2015/06/09 12:10:50] monitor (iter=37) J=6.94 err=79.69 approx_PPL=122.79 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 12:10:56] valid   (iter=38) J=7.45 err=78.59 approx_PPL=178.44
+[2015/06/09 12:15:07] monitor (iter=38) J=6.07 err=70.31 approx_PPL=67.10 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 12:15:13] valid   (iter=39) J=7.60 err=79.95 approx_PPL=198.19
+[2015/06/09 12:19:23] monitor (iter=39) J=7.57 err=82.81 approx_PPL=190.08 mean(onehot1)=0.00 mean(rnn2)=0.24 mean(full_output3)=0.00
+[2015/06/09 12:19:29] valid   (iter=40) J=7.42 err=78.66 approx_PPL=175.07
+[2015/06/09 12:23:44] monitor (iter=40) J=7.39 err=79.69 approx_PPL=167.50 mean(onehot1)=0.00 mean(rnn2)=0.25 mean(full_output3)=0.00
+[2015/06/09 12:23:50] valid   (iter=41) J=7.37 err=78.32 approx_PPL=168.98 *
+[2015/06/09 12:27:58] monitor (iter=41) J=6.42 err=73.44 approx_PPL=85.50 mean(onehot1)=0.00 mean(rnn2)=0.25 mean(full_output3)=0.00
+[2015/06/09 12:28:04] valid   (iter=42) J=7.37 err=78.14 approx_PPL=168.26
+[2015/06/09 12:32:11] monitor (iter=42) J=7.15 err=75.00 approx_PPL=141.82 mean(onehot1)=0.00 mean(rnn2)=0.25 mean(full_output3)=0.00
+[2015/06/09 12:32:17] valid   (iter=43) J=7.34 err=77.83 approx_PPL=164.61 *
+[2015/06/09 12:36:27] monitor (iter=43) J=7.60 err=81.25 approx_PPL=193.55 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 12:36:34] valid   (iter=44) J=7.34 err=77.86 approx_PPL=165.39
+[2015/06/09 12:40:41] monitor (iter=44) J=7.42 err=83.59 approx_PPL=170.84 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 12:40:47] valid   (iter=45) J=7.32 err=77.86 approx_PPL=163.42 *
+[2015/06/09 12:44:55] monitor (iter=45) J=6.78 err=75.78 approx_PPL=110.25 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 12:45:01] valid   (iter=46) J=7.32 err=77.73 approx_PPL=163.34
+[2015/06/09 12:49:31] monitor (iter=46) J=6.80 err=75.00 approx_PPL=111.11 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 12:49:37] valid   (iter=47) J=7.32 err=77.63 approx_PPL=162.77
+[2015/06/09 12:53:56] monitor (iter=47) J=6.25 err=73.44 approx_PPL=76.05 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 12:54:02] valid   (iter=48) J=7.36 err=78.30 approx_PPL=167.94
+[2015/06/09 12:58:15] monitor (iter=48) J=6.67 err=79.69 approx_PPL=102.06 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 12:58:21] valid   (iter=49) J=7.33 err=77.92 approx_PPL=163.91
+[2015/06/09 13:02:29] monitor (iter=49) J=6.94 err=79.30 approx_PPL=123.19 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:02:36] valid   (iter=50) J=7.30 err=77.55 approx_PPL=160.89 *
+[2015/06/09 13:06:42] monitor (iter=50) J=7.03 err=78.52 approx_PPL=130.50 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:06:49] valid   (iter=51) J=7.32 err=77.80 approx_PPL=163.53
+[2015/06/09 13:10:55] monitor (iter=51) J=6.93 err=76.56 approx_PPL=121.67 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:11:01] valid   (iter=52) J=7.32 err=77.70 approx_PPL=163.23
+[2015/06/09 13:15:08] monitor (iter=52) J=7.08 err=77.50 approx_PPL=135.01 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:15:15] valid   (iter=53) J=7.29 err=77.50 approx_PPL=160.01 *
+[2015/06/09 13:19:22] monitor (iter=53) J=7.18 err=76.88 approx_PPL=145.39 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:19:29] valid   (iter=54) J=7.32 err=77.66 approx_PPL=162.51
+[2015/06/09 13:23:37] monitor (iter=54) J=6.63 err=76.56 approx_PPL=99.05 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:23:43] valid   (iter=55) J=7.45 err=80.14 approx_PPL=177.83
+[2015/06/09 13:27:53] monitor (iter=55) J=6.30 err=68.75 approx_PPL=78.70 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:27:59] valid   (iter=56) J=7.33 err=77.83 approx_PPL=163.60
+[2015/06/09 13:32:08] monitor (iter=56) J=7.07 err=81.25 approx_PPL=134.50 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:32:14] valid   (iter=57) J=7.33 err=78.02 approx_PPL=164.15
+[2015/06/09 13:36:23] monitor (iter=57) J=6.35 err=78.12 approx_PPL=81.52 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:36:29] valid   (iter=58) J=7.39 err=78.87 approx_PPL=171.18
+[2015/06/09 13:40:37] monitor (iter=58) J=6.42 err=70.31 approx_PPL=85.78 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:40:43] valid   (iter=59) J=7.29 err=77.50 approx_PPL=160.01
+[2015/06/09 13:44:55] monitor (iter=59) J=6.50 err=75.31 approx_PPL=90.24 mean(onehot1)=0.00 mean(rnn2)=0.26 mean(full_output3)=0.00
+[2015/06/09 13:45:01] valid   (iter=60) J=7.28 err=77.44 approx_PPL=158.10 *
+[2015/06/09 13:49:10] monitor (iter=60) J=6.79 err=78.12 approx_PPL=110.97 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 13:49:16] valid   (iter=61) J=7.30 err=77.53 approx_PPL=160.53
+[2015/06/09 13:53:23] monitor (iter=61) J=6.51 err=75.39 approx_PPL=90.97 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 13:53:29] valid   (iter=62) J=7.28 err=77.37 approx_PPL=158.20
+[2015/06/09 13:57:37] monitor (iter=62) J=7.68 err=84.38 approx_PPL=205.78 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 13:57:43] valid   (iter=63) J=7.28 err=77.64 approx_PPL=158.40
+[2015/06/09 14:01:56] monitor (iter=63) J=7.14 err=75.00 approx_PPL=141.18 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:02:02] valid   (iter=64) J=7.27 err=77.30 approx_PPL=157.50
+[2015/06/09 14:06:12] monitor (iter=64) J=6.88 err=76.56 approx_PPL=118.10 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:06:18] valid   (iter=65) J=7.28 err=77.47 approx_PPL=158.06
+[2015/06/09 14:10:28] monitor (iter=65) J=6.89 err=76.95 approx_PPL=118.60 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:10:34] valid   (iter=66) J=7.28 err=77.44 approx_PPL=158.10
+[2015/06/09 14:14:42] monitor (iter=66) J=6.33 err=71.88 approx_PPL=80.40 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:14:48] valid   (iter=67) J=7.28 err=77.35 approx_PPL=158.37
+[2015/06/09 14:18:56] monitor (iter=67) J=7.24 err=78.12 approx_PPL=151.05 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:19:02] valid   (iter=68) J=7.27 err=77.30 approx_PPL=157.23 *
+[2015/06/09 14:23:13] monitor (iter=68) J=7.68 err=79.69 approx_PPL=204.52 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:23:19] valid   (iter=69) J=7.28 err=77.41 approx_PPL=158.32
+[2015/06/09 14:27:27] monitor (iter=69) J=6.84 err=73.44 approx_PPL=114.94 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:27:33] valid   (iter=70) J=7.27 err=77.23 approx_PPL=157.36
+[2015/06/09 14:31:40] monitor (iter=70) J=5.40 err=67.19 approx_PPL=42.31 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:31:47] valid   (iter=71) J=7.27 err=77.32 approx_PPL=157.03
+[2015/06/09 14:35:56] monitor (iter=71) J=7.02 err=73.44 approx_PPL=129.62 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:36:02] valid   (iter=72) J=7.26 err=77.23 approx_PPL=156.55
+[2015/06/09 14:40:09] monitor (iter=72) J=6.83 err=74.38 approx_PPL=114.14 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:40:15] valid   (iter=73) J=7.26 err=77.34 approx_PPL=156.75
+[2015/06/09 14:44:22] monitor (iter=73) J=6.23 err=67.19 approx_PPL=75.15 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:44:28] valid   (iter=74) J=7.27 err=77.30 approx_PPL=157.23
+[2015/06/09 14:48:35] monitor (iter=74) J=6.60 err=70.31 approx_PPL=97.20 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:48:42] valid   (iter=75) J=7.26 err=77.30 approx_PPL=156.83
+[2015/06/09 14:52:49] monitor (iter=75) J=7.05 err=75.00 approx_PPL=132.59 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:52:55] valid   (iter=76) J=7.26 err=77.28 approx_PPL=156.38 *
+[2015/06/09 14:57:02] monitor (iter=76) J=6.96 err=77.19 approx_PPL=124.41 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 14:57:08] valid   (iter=77) J=7.26 err=77.28 approx_PPL=156.02
+[2015/06/09 15:01:16] monitor (iter=77) J=6.75 err=74.61 approx_PPL=107.53 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 15:01:22] valid   (iter=78) J=7.26 err=77.21 approx_PPL=156.01
+[2015/06/09 15:05:32] monitor (iter=78) J=6.71 err=71.88 approx_PPL=104.92 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 15:05:38] valid   (iter=79) J=7.26 err=77.28 approx_PPL=156.08
+[2015/06/09 15:09:46] monitor (iter=79) J=7.04 err=82.03 approx_PPL=131.15 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 15:09:53] valid   (iter=80) J=7.26 err=77.20 approx_PPL=156.38
+[2015/06/09 15:13:59] monitor (iter=80) J=6.73 err=75.62 approx_PPL=105.84 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
+[2015/06/09 15:14:06] valid   (iter=81) J=7.26 err=77.23 approx_PPL=155.99
+[2015/06/09 15:18:12] monitor (iter=81) J=6.27 err=73.44 approx_PPL=77.05 mean(onehot1)=0.00 mean(rnn2)=0.27 mean(full_output3)=0.00
