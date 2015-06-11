@@ -4,8 +4,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import logging, os
-logging.basicConfig(level=logging.INFO)
+c
 
 from deepy.networks import AutoEncoder
 from deepy.layers import RNN, Dense

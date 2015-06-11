@@ -41,7 +41,7 @@ class ScipyTrainer(NeuralTrainer):
         res = scipy.optimize.minimize(
             fun=self._function_at,
             jac=self._gradient_at,
-            x0=self._arrays_to_flat(self.best_params),
+            x0=self._arrays_to_flat(self.best_params[0]),
             args=(train_set, ),
             method=self.method,
             options=dict(maxiter=self.scipy_updates),
