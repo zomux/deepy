@@ -9,7 +9,7 @@ if sys.version_info[:2] < (2, 6):
 
 from setuptools import setup, find_packages
 
-requirements = open(os.path.join(os.path.dirname(__file__), 'requirements.txt')).read().strip().split("\n")
+requirements = ["numpy", "theano", "scipy"]
 
 setup(
     name='deepy',
@@ -48,6 +48,7 @@ setup(
     install_requires=requirements,
 
     extras_require={
+
     },
 
     include_package_data=True,
