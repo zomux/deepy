@@ -164,7 +164,7 @@ python mnist_training.py
 python animation.py experiments/draw/mnist1.gz
 ```
 
-![](https://github.com/uaca/deepy-draw/raw/master/experiments/draw/plots/mnist-animation.gif)
+![](https://github.com/uaca/deepy-draw/raw/master/plots/mnist-animation.gif)
 
 ### Highway networks
 
