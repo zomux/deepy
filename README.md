@@ -16,7 +16,7 @@ deepy: Highly extensible deep learning framework based on Theano
 - theano
 - scipy for L-BFGS and CG optimization
 
-### Tutorials
+### Tutorials (Work in progress)
 
 [http://deepy.readthedocs.org/en/latest/](http://deepy.readthedocs.org/en/latest/)
 
