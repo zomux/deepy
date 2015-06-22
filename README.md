@@ -154,8 +154,7 @@ Other experiments
 
 ### DRAW
 
-- https://github.com/uaca/deepy-draw
- - http://arxiv.org/pdf/1502.04623
+See https://github.com/uaca/deepy-draw
 
 ```
 # Train the model
