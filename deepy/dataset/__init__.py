@@ -10,3 +10,4 @@ from sequence import SequentialDataset
 from seq_mini_batch import SequentialMiniBatches
 from binarized_mnist import BinarizedMnistDataset
 from bunch_seq import BunchSequences
+from ondisk_dataset import OnDiskDataset
