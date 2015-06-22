@@ -154,16 +154,17 @@ Other experiments
 
 ### DRAW
 
-- http://arxiv.org/pdf/1502.04623
+- https://github.com/uaca/deepy-draw
+-- http://arxiv.org/pdf/1502.04623
 
 ```
 # Train the model
-python experiments/draw/mnist_training.py
+python mnist_training.py
 # Create animation
-python experiments/draw/animation.py experiments/draw/mnist1.gz
+python animation.py experiments/draw/mnist1.gz
 ```
 
-![](https://github.com/uaca/deepy/raw/master/experiments/draw/plots/mnist-animation.gif)
+![](https://github.com/uaca/deepy-draw/raw/master/experiments/draw/plots/mnist-animation.gif)
 
 ### Highway networks
 
