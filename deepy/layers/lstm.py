@@ -109,6 +109,7 @@ class LSTM(NeuralLayer):
             sequences=sequences,
             outputs_info=[h0, m0],
             # non_sequences=[self.U_i, self.U_f, self.U_o, self.U_c]
+            n_steps=self._steps,
         )
 
         # Save persistent state
