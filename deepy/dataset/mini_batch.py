@@ -35,7 +35,7 @@ class MiniBatches(Dataset):
     def valid_set(self):
         if not self.origin.valid_set():
             return None
-        if not self.valid_set():
+        if not self._valid_set:
             self._valid_set = list(self._yield_data(self.origin.valid_set()))
         return self._valid_set
 
