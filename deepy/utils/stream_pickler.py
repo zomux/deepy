@@ -44,6 +44,10 @@ class StreamPickler(object):
 
           if line == '\n':
             pickled_elt_str = ''.join(cur_elt)
-            elt = loads(pickled_elt_str)
             cur_elt = []
+            try:
+                elt = loads(pickled_elt_str)
+            except ValueError:
+                continue
+
             yield elt
