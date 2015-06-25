@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import unittest
 import os
 import subprocess, threading
 import logging as loggers
+loggers.basicConfig(level=loggers.INFO)
 logging = loggers.getLogger(__name__)
+
 
 class ParallelExecutor(object):
     def __init__(self, cmd):
@@ -33,32 +34,24 @@ class ParallelExecutor(object):
 
 ERROR_KEYWORD = "Traceback (most recent call last)"
 
-class ExperimentTest(unittest.TestCase):
+def test_experiment(path, timeout=60):
+    path = os.path.join("experiments", path)
+    executor = ParallelExecutor("python %s" % path)
+    executor.run(timeout=timeout)
+    if ERROR_KEYWORD in executor.stderr_output or ERROR_KEYWORD in executor.stdout_output:
+        logging.info("stdout:")
+        logging.info(executor.stdout_output)
+        logging.info("stderr:")
+        logging.info(executor.stderr_output)
+    assert ERROR_KEYWORD not in executor.stderr_output
+    assert ERROR_KEYWORD not in executor.stdout_output
 
-    def _test(self, path, timeout=60):
-        path = os.path.join("experiments", path)
-        executor = ParallelExecutor("python %s" % path)
-        executor.run(timeout=timeout)
-        if ERROR_KEYWORD in executor.stderr_output or ERROR_KEYWORD in executor.stdout_output:
-            logging.info("stdout:")
-            logging.info(executor.stdout_output)
-            logging.info("stderr:")
-            logging.info(executor.stderr_output)
-        self.assertTrue(ERROR_KEYWORD not in executor.stderr_output)
-        self.assertTrue(ERROR_KEYWORD not in executor.stdout_output)
 
+if __name__ == '__main__':
     # MNIST
-    def test_mnist_mlp_dropout(self):
-        self._test("mnist/mlp_dropout.py", timeout=30)
-
-    def test_mnist_deep_conv(self):
-        self._test("mnist/deep_convolution.py", timeout=30)
-
-    # Language models
-    def test_baseline_rnnlm(self):
-        self._test("lm/baseline_rnnlm.py")
-
+    test_experiment("mnist/mlp_dropout.py", timeout=30)
+    test_experiment("mnist/deep_convolution.py", timeout=30)
+    # LMs
+    test_experiment("lm/baseline_rnnlm.py")
     # Highway networks
-    def test_highway(self):
-        self._test("highway_networks/mnist_highway.py")
-
+    test_experiment("highway_networks/mnist_highway.py")

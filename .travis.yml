@@ -29,7 +29,7 @@ install:
 script:
   - source bin/cpu_env.sh
   # - export THEANO_FLAGS="$THEANO_FLAGS,blas.ldflags='-lblas -lgfortran'"
-  - nosetests --logging-level=INFO
+  - python bin/experiment_test.py
   # Coverage test
   # - nosetests --with-cov --cover-tests deepy --logging-level=INFO
 
