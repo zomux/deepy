@@ -18,7 +18,7 @@ class ParallelExecutor(object):
     def run(self, timeout):
         def target():
             logging.info(self.cmd)
-            self.process = subprocess.Popen(self.cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            self.process = subprocess.Popen(self.cmd, shell=True, stderr=subprocess.PIPE)
             self.stdout_output, self.stderr_output = self.process.communicate()
             logging.info("Thread finished")
 
