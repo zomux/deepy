@@ -14,8 +14,10 @@ before_install:
   # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
+
 # Install packages
 install:
+  - sudo apt-get install libatlas-base-dev
   - conda install --yes python=$TRAVIS_PYTHON_VERSION atlas numpy scipy theano matplotlib nose dateutil
   # Coverage packages are on my binstar channel
   - conda install --yes -c dan_blanchard python-coveralls nose-cov
@@ -24,7 +26,7 @@ install:
 # Run test
 script:
   - source bin/cpu_env.sh
-  - export THEANO_FLAGS="$THEANO_FLAGS,blas.ldflags='-lblas -lgfortran'"
+  # - export THEANO_FLAGS="$THEANO_FLAGS,blas.ldflags='-lblas -lgfortran'"
   - nosetests --logging-level=INFO
   # Coverage test
   # - nosetests --with-cov --cover-tests deepy --logging-level=INFO
