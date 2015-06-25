@@ -24,6 +24,7 @@ install:
 # Run test
 script:
   - source bin/cpu_env.sh
+  - export THEANO_FLAGS="$THEANO_FLAGS,blas.ldflags='-L/usr/lib/ -lblas'"
   - nosetests --logging-level=INFO
   # Coverage test
   # - nosetests --with-cov --cover-tests deepy --logging-level=INFO
