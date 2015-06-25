@@ -23,7 +23,10 @@ install:
  
 # Run test
 script:
-  - nosetests --with-cov --cover-tests deepy --logging-level=INFO
+  - source bin/cpu_env.sh
+  - nosetests --logging-level=INFO
+  # Coverage test
+  # - nosetests --with-cov --cover-tests deepy --logging-level=INFO
 
 # Calculate coverage
 after_success:
