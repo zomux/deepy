@@ -4,6 +4,7 @@
 import os
 import subprocess, threading
 import logging as loggers
+import time
 loggers.basicConfig(level=loggers.INFO)
 logging = loggers.getLogger(__name__)
 
@@ -18,7 +19,7 @@ class ParallelExecutor(object):
     def run(self, timeout):
         def target():
             logging.info(self.cmd)
-            self.process = subprocess.Popen(self.cmd, shell=True, stderr=subprocess.PIPE)
+            self.process = subprocess.Popen(self.cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             self.stdout_output, self.stderr_output = self.process.communicate()
             logging.info("Thread finished")
 
@@ -29,6 +30,11 @@ class ParallelExecutor(object):
         if thread.is_alive():
             logging.info("Time out, terminating process")
             self.process.terminate()
+            time.sleep(1)
+            try:
+                self.process.kill()
+            except OSError:
+                pass
             thread.join()
         return self.process.returncode
 
@@ -38,13 +44,15 @@ def test_experiment(path, timeout=60):
     path = os.path.join("experiments", path)
     executor = ParallelExecutor("python %s" % path)
     executor.run(timeout=timeout)
-    if ERROR_KEYWORD in executor.stderr_output or ERROR_KEYWORD in executor.stdout_output:
+    if executor.stderr_output == None:
+        logging.info("stderr is none")
+        return
+    if ERROR_KEYWORD in executor.stderr_output:
         logging.info("stdout:")
         logging.info(executor.stdout_output)
         logging.info("stderr:")
         logging.info(executor.stderr_output)
     assert ERROR_KEYWORD not in executor.stderr_output
-    assert ERROR_KEYWORD not in executor.stdout_output
 
 
 if __name__ == '__main__':
