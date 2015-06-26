@@ -35,7 +35,7 @@ class ParallelExecutor(object):
                 self.process.kill()
             except OSError:
                 pass
-            thread.join()
+            # thread.join()
         return self.process.returncode
 
 ERROR_KEYWORD = "Traceback (most recent call last)"
