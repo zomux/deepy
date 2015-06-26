@@ -4,7 +4,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-c
 
 from deepy.networks import AutoEncoder
 from deepy.layers import RNN, Dense
