@@ -4,7 +4,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
+import os
 from deepy.networks import AutoEncoder
 from deepy.layers import RNN, Dense
 from deepy.trainers import SGDTrainer, LearningRateAnnealer
