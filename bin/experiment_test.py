@@ -52,13 +52,14 @@ def test_experiment(path, timeout=60):
     if executor.stderr_output == None:
         logging.info("stderr is none")
         return
-    logging.info("stdout:")
     logging.info(executor.stdout_output)
+    logging.info(executor.stderr_output)
     if ERROR_KEYWORD in executor.stderr_output:
-        logging.info("stderr:")
+        logging.info("------ Error was found ------")
         logging.info(executor.stderr_output)
+        logging.info("-----------------------------")
     else:
-        logging.info("No error was found")
+        logging.info("------ No error was found ------")
     assert ERROR_KEYWORD not in executor.stderr_output
 
 
