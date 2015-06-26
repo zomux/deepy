@@ -17,25 +17,17 @@ class ParallelExecutor(object):
         self.stderr_output = ""
 
     def run(self, timeout):
-        def target():
-            logging.info(self.cmd)
-            self.process = subprocess.Popen(self.cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            self.stdout_output, self.stderr_output = self.process.communicate()
-            logging.info("Thread finished")
+        logging.info(self.cmd)
+        self.process = subprocess.Popen(self.cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.stdout_output, self.stderr_output = self.process.communicate(timeout=timeout)
+        logging.info("Process finished")
 
-        thread = threading.Thread(target=target)
-        thread.start()
-
-        thread.join(timeout)
-        if thread.is_alive():
-            logging.info("Time out, terminating process")
-            self.process.terminate()
-            time.sleep(1)
-            try:
-                self.process.kill()
-            except OSError:
-                pass
-            # thread.join()
+        self.process.terminate()
+        time.sleep(1)
+        try:
+            self.process.kill()
+        except OSError:
+            pass
         return self.process.returncode
 
 ERROR_KEYWORD = "Traceback (most recent call last)"
