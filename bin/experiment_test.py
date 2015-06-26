@@ -52,9 +52,9 @@ def test_experiment(path, timeout=60):
     if executor.stderr_output == None:
         logging.info("stderr is none")
         return
+    logging.info("stdout:")
+    logging.info(executor.stdout_output)
     if ERROR_KEYWORD in executor.stderr_output:
-        logging.info("stdout:")
-        logging.info(executor.stdout_output)
         logging.info("stderr:")
         logging.info(executor.stderr_output)
     else:
