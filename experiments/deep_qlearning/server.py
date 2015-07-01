@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging
+logging.basicConfig(level=logging.INFO)
 import os
 from flask import Flask, render_template_string
 from flask.ext.socketio import SocketIO, emit
@@ -12,7 +14,6 @@ socketio = SocketIO(app)
 this_dir = os.path.abspath(os.path.dirname(__file__))
 deepy_dir = os.path.abspath(this_dir + os.sep + ".." + os.sep + "..")
 model_path = this_dir + os.sep + "models" + os.sep + "puckworld_model1.gz"
-
 import sys; sys.path.append(deepy_dir)
 from agent import DQNAgent
 agent = DQNAgent(8, 5)
