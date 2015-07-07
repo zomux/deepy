@@ -13,14 +13,19 @@ class IRNN(RNN):
     RNN with weight initialization using identity matrix.
     """
 
-    def __init__(self, hidden_size, input_type="sequence", output_type="one", weight_scale=0.9, steps=None):
+    def __init__(self, hidden_size, input_type="sequence", output_type="one", steps=None, go_backwards=False,
+                 weight_scale=0.9, bound_recurrent_weight=True,
+                 persistent_state=False, reset_state_for_input=None, batch_size=None):
         super(IRNN, self).__init__(hidden_size,
                                    input_type=input_type, output_type=output_type,
                                    hidden_activation="relu", steps=steps,
                                    hidden_init=IdentityInitializer(scale=weight_scale),
-                                   input_init=GaussianInitializer(deviation=0.001))
+                                   input_init=GaussianInitializer(deviation=0.001),
+                                   persistent_state=persistent_state, reset_state_for_input=reset_state_for_input,
+                                   batch_size=batch_size, go_backwards=go_backwards)
         self.name = "irnn"
-        self.register_training_callbacks(self.training_callback)
+        if bound_recurrent_weight:
+            self.register_training_callbacks(self.training_callback)
 
     def training_callback(self):
         w_value = self.W_h.get_value(borrow=True)

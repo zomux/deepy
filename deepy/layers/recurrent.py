@@ -17,7 +17,8 @@ class RNN(NeuralLayer):
 
     def __init__(self, hidden_size, input_type="sequence", output_type="sequence", vector_core=None,
                  hidden_activation="tanh", hidden_init=None, input_init=None, steps=None,
-                 persistent_state=False, reset_state_for_input=None, batch_size=None):
+                 persistent_state=False, reset_state_for_input=None, batch_size=None,
+                 go_backwards=False):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
         self.output_dim = self._hidden_size
@@ -31,6 +32,7 @@ class RNN(NeuralLayer):
         self.reset_state_for_input = reset_state_for_input
         self.batch_size = batch_size
         self._steps = steps
+        self._go_backwards = go_backwards
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of RNN is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
@@ -70,7 +72,8 @@ class RNN(NeuralLayer):
         else:
             h0 = x
         step_outputs = [h0]
-        hiddens, _ = theano.scan(self.step, sequences=sequences, outputs_info=step_outputs, n_steps=self._steps)
+        hiddens, _ = theano.scan(self.step, sequences=sequences, outputs_info=step_outputs,
+                                 n_steps=self._steps, go_backwards=self._go_backwards)
 
         # Save persistent state
         if self.persistent_state:

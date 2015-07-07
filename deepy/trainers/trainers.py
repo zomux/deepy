@@ -209,6 +209,8 @@ class NeuralTrainer(object):
             self.best_iter = iteration
             self.best_params = self._copy_network_params()
             marker = ' *'
+            if self.config.auto_save:
+                self.network.save_params(self.config.auto_save)
         else:
             marker = ""
         info = ' '.join('%s=%.2f' % el for el in costs)
@@ -239,6 +241,7 @@ class NeuralTrainer(object):
             cost_x = self.learning_func(*x)
             cost_matrix.append(cost_x)
             if training_callback:
+                self.last_score = cost_x[0]
                 self.network.training_callback()
             if train_size:
                 c += 1
