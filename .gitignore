@@ -52,6 +52,7 @@ target/
 
 .idea
 secrets
+.remote-sync.json
 
 # For mkdocs
 site/
