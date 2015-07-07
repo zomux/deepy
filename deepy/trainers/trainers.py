@@ -38,6 +38,9 @@ def ipcluster_mapper(client):
         return view.map(ff, dataset).get()
     return mapper
 
+def save_network_params(network, path):
+    network.save_params(path)
+
 
 class NeuralTrainer(object):
     '''This is a base class for all trainers.'''
@@ -210,7 +213,7 @@ class NeuralTrainer(object):
             self.best_params = self._copy_network_params()
             marker = ' *'
             if self.config.auto_save:
-                self.network.save_params(self.config.auto_save)
+                self.network.save_params(self.config.auto_save, new_thread=True)
         else:
             marker = ""
         info = ' '.join('%s=%.2f' % el for el in costs)

@@ -17,11 +17,16 @@ class OnDiskDataset(Dataset):
     You must convert the data to mini-batches before dump it to a file.
     """
 
-    def __init__(self, train_path, valid_path=None, test_path=None, train_size=None):
+    def __init__(self, train_path, valid_path=None, test_path=None, train_size=None, cache_on_memory=False):
         self._train_path = train_path
         self._valid_path = valid_path
         self._test_path = test_path
         self._train_size = train_size
+        self._cache_on_memory = cache_on_memory
+        self._cached_train_data = None
+        if self._cache_on_memory:
+            logging.info("Cache on memory")
+            self._cached_train_data = list(StreamPickler.load(open(self._train_path)))
 
     def generate_train_data(self):
         for data in StreamPickler.load(open(self._train_path)):
@@ -36,6 +41,8 @@ class OnDiskDataset(Dataset):
             yield data
 
     def train_set(self):
+        if self._cache_on_memory:
+            return self._cached_train_data
         if not self._train_path:
             return None
         return FakeGenerator(self, "generate_train_data")

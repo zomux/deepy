@@ -5,6 +5,7 @@ import logging as loggers
 import gzip
 import cPickle as pickle
 import os
+from threading import Thread
 
 import theano.tensor as T
 import theano
@@ -17,6 +18,12 @@ from deepy.utils import dim_to_var, TrainLogger
 logging = loggers.getLogger(__name__)
 
 DEEPY_MESSAGE = "deepy version = %s" % deepy.__version__
+
+def save_network_params(params, path):
+    opener = gzip.open if path.lower().endswith('.gz') else open
+    handle = opener(path, 'wb')
+    pickle.dump(params, handle)
+    handle.close()
 
 class NeuralNetwork(object):
     """
@@ -172,15 +179,20 @@ class NeuralNetwork(object):
         """
         return self.cost
 
-    def save_params(self, path):
+    def save_params(self, path, new_thread=False):
         """
         Save parameters to file.
         """
         logging.info("saving parameters to %s" % path)
-        opener = gzip.open if path.lower().endswith('.gz') else open
-        handle = opener(path, 'wb')
-        pickle.dump([p.get_value().copy() for p in self.all_parameters], handle)
-        handle.close()
+        if new_thread:
+            params = [p.get_value().copy() for p in self.all_parameters]
+            thread = Thread(target=save_network_params, args=(params, path))
+            thread.start()
+        else:
+            opener = gzip.open if path.lower().endswith('.gz') else open
+            handle = opener(path, 'wb')
+            pickle.dump([p.get_value().copy() for p in self.all_parameters], handle)
+            handle.close()
         self.train_logger.save(path)
 
     def load_params(self, path):

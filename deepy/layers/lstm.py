@@ -18,6 +18,7 @@ class LSTM(NeuralLayer):
     def __init__(self, hidden_size, input_type="sequence", output_type="sequence",
                  inner_activation="sigmoid", outer_activation="tanh",
                  inner_init=None, outer_init=None, steps=None,
+                 go_backwards=False,
                  persistent_state=False, batch_size=0,
                  reset_state_for_input=None):
         super(LSTM, self).__init__("lstm")
@@ -32,6 +33,7 @@ class LSTM(NeuralLayer):
         self.persistent_state = persistent_state
         self.reset_state_for_input = reset_state_for_input
         self.batch_size = batch_size
+        self.go_backwards = go_backwards
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of LSTM is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
@@ -110,6 +112,7 @@ class LSTM(NeuralLayer):
             outputs_info=[h0, m0],
             # non_sequences=[self.U_i, self.U_f, self.U_o, self.U_c]
             n_steps=self._steps,
+            go_backwards=self.go_backwards
         )
 
         # Save persistent state
