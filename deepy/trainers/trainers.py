@@ -241,7 +241,11 @@ class NeuralTrainer(object):
         c = 0
 
         for x in train_set:
-            cost_x = self.learning_func(*x)
+            try:
+                cost_x = self.learning_func(*x)
+            except MemoryError:
+                logging.info("MemoryError detected")
+                continue
             cost_matrix.append(cost_x)
             if training_callback:
                 self.last_score = cost_x[0]
