@@ -109,6 +109,12 @@ class NeuralNetwork(object):
         This function will be called before training.
         """
         self.report()
+
+    def monitor_layer_outputs(self):
+        """
+        Monitoring the outputs of each layer.
+        Useful for troubleshooting convergence problems.
+        """
         for layer, hidden in zip(self.layers, self._hidden_outputs):
             self.training_monitors.append(('mean(%s)' % (layer.name), abs(hidden).mean()))
 
