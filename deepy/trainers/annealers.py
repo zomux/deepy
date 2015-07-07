@@ -52,4 +52,22 @@ class LearningRateAnnealer(object):
         return theano.shared(np.array(value, dtype=FLOATX), name="learning_rate")
 
 
+class ScheduledLearningRateAnnealer(object):
 
+    def __init__(self, trainer, iter_start_halving=5, max_iters=10):
+        self.iter_start_halving = iter_start_halving
+        self.max_iters = max_iters
+        self._trainer = trainer
+        self._learning_rate = self._trainer.config.learning_rate
+        self._iter = -1
+
+    def invoke(self):
+        self._iter += 1
+        if self._iter >= self.iter_start_halving:
+            self._trainer.set_params(*self._trainer.best_params)
+            self._learning_rate.set_value(self._learning_rate.get_value() * 0.5)
+            logging.info("halving learning rate to %f" % self._learning_rate.get_value())
+        if self._iter >= self.max_iters - 1:
+            logging.info("ending")
+            return True
+        return False
