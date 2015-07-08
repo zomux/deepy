@@ -308,11 +308,19 @@ class GeneralNeuralTrainer(NeuralTrainer):
         logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
         logging.info("learning updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
 
+        if config.data_transmitter:
+            variables = [config.data_transmitter.get_iterator()]
+            givens = config.data_transmitter.get_givens()
+        else:
+            variables = network.input_variables + network.target_variables
+            givens = None
+
         self.learning_func = theano.function(
-            network.input_variables + network.target_variables,
+            variables,
             map(lambda v: theano.Out(v, borrow=True), self.training_variables),
             updates=update_list, allow_input_downcast=True,
-            mode=self.config.get("theano_mode", None))
+            mode=self.config.get("theano_mode", None),
+            givens=givens)
 
     def learning_updates(self):
         """

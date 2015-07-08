@@ -18,6 +18,7 @@ DEFAULT_TRAINER_SETTING = {
     "max_iterations": 0,
     "patience": 20,
     "auto_save": None,
+    "data_transmitter": None,
 
     # Optimization
     "method": "ADADELTA",
