@@ -17,5 +17,6 @@ from irnn import IRNN
 from lstm import LSTM
 from batch_norm import BatchNormalization
 from onehot_embed import OneHotEmbedding
+from word_embed import WordEmbedding
 from chain import Chain
 from softmax3d import Softmax3D
