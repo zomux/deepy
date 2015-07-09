@@ -12,7 +12,7 @@ class WordEmbedding(NeuralLayer):
     The word embeddings are randomly initialized, and are learned over the time.
     """
     def __init__(self, size, vocab_size, zero_index=None):
-        super(OneHotEmbedding, self).__init__("onehot")
+        super(WordEmbedding, self).__init__("word_embed")
         self.size = size
         self.vocab_size = vocab_size
         self.output_dim = size
