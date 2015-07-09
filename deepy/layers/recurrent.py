@@ -85,7 +85,6 @@ class RNN(NeuralLayer):
             return hiddens.dimshuffle((1,0,2))
 
     def setup(self):
-        print self.input_dim, self._hidden_size
         if self._input_type == "one" and self.input_dim != self._hidden_size:
             raise Exception("For RNN receives one vector as input, "
                             "the hidden size should be same as last output dimension.")
@@ -114,5 +113,3 @@ class RNN(NeuralLayer):
         if self._input_type == "sequence":
             self.W_i = self.create_weight(self.input_dim, self._hidden_size, suffix="i", initializer=self._input_init)
             self.register_parameters(self.W_i)
-
-
