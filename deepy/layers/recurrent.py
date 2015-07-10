@@ -18,7 +18,7 @@ class RNN(NeuralLayer):
     def __init__(self, hidden_size, input_type="sequence", output_type="sequence", vector_core=None,
                  hidden_activation="tanh", hidden_init=None, input_init=None, steps=None,
                  persistent_state=False, reset_state_for_input=None, batch_size=None,
-                 go_backwards=False):
+                 go_backwards=False, mask=None):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
         self.output_dim = self._hidden_size
@@ -33,20 +33,26 @@ class RNN(NeuralLayer):
         self.batch_size = batch_size
         self._steps = steps
         self._go_backwards = go_backwards
+        self._mask = mask
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of RNN is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
             raise Exception("Output type of RNN is wrong: %s" % output_type)
         if self.persistent_state and not self.batch_size:
             raise Exception("Batch size must be set for persistent state mode")
+        if mask and input_type = "one":
+            raise Exception("Mask only works with sequence input")
 
     def _hidden_preact(self, h):
         return T.dot(h, self.W_h) if not self._vector_core else h * self.W_h
 
 
     def step(self, *variables):
+        mask = None
         if self._input_type == "sequence":
-            x, h = variables
+            x, h = variables[-2:]
+            if self._mask:
+                mask = variables[0]
             # Reset part of the state on condition
             if self.reset_state_for_input != None:
                 h = h * T.neq(x[:, self.reset_state_for_input], 1).dimshuffle(0, 'x')
@@ -56,8 +62,11 @@ class RNN(NeuralLayer):
             z = self._hidden_preact(h) + self.B_h
 
         new_h = self._hidden_act(z)
+        # Apply mask
+        if mask:
+            mask = mask.dimshuffle(0,'x')
+            new_h = mask * new_h + (1 - mask) * h
         return new_h
-
 
     def output(self, x):
         sequences = []
@@ -66,6 +75,10 @@ class RNN(NeuralLayer):
             # Move middle dimension to left-most position
             # (sequence, batch, value)
             sequences = [x.dimshuffle((1,0,2))]
+            # Mask
+            #  (batch, time)
+            if self._mask:
+                sequences.insert(0, self._mask.dimshuffle((1,0))
             # Set initial state
             if self.persistent_state:
                 h0 = self.state
