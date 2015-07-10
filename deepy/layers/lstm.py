@@ -6,6 +6,7 @@ from deepy.utils import build_activation, FLOATX
 import numpy as np
 import theano
 import theano.tensor as T
+from collections import OrderedDict
 
 OUTPUT_TYPES = ["sequence", "one"]
 INPUT_TYPES = ["sequence", "one"]
@@ -20,7 +21,8 @@ class LSTM(NeuralLayer):
                  inner_init=None, outer_init=None, steps=None,
                  go_backwards=False,
                  persistent_state=False, batch_size=0,
-                 reset_state_for_input=None):
+                 reset_state_for_input=None,
+                 mask=mask):
         super(LSTM, self).__init__("lstm")
         self._hidden_size = hidden_size
         self._input_type = input_type
@@ -34,12 +36,16 @@ class LSTM(NeuralLayer):
         self.reset_state_for_input = reset_state_for_input
         self.batch_size = batch_size
         self.go_backwards = go_backwards
+        self.mask = mask.dimshuffle((1,0))
+        self._sequence_map = OrderedDict()
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of LSTM is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
             raise Exception("Output type of LSTM is wrong: %s" % output_type)
         if self.persistent_state and not self.batch_size:
             raise Exception("Batch size must be set for persistent state mode")
+        if mask and input_type == "one":
+            raise Exception("Mask only works with sequence input")
 
     def _auto_reset_memories(self, x, h, m):
         reset_matrix = T.neq(x[:, self.reset_state_for_input], 1).dimshuffle(0, 'x')
@@ -47,28 +53,27 @@ class LSTM(NeuralLayer):
         m = m * reset_matrix
         return h, m
 
-    def _parse_sequential_vars(self, vars):
-        # Get raw input
-        if self.reset_state_for_input != None:
-            x = vars[0]
-            vars = vars[1:]
-        # Unpack varables
-        xi_t, xf_t, xo_t, xc_t, h_tm1, c_tm1 = vars
-        # Auto reset states
-        if self.reset_state_for_input != None:
-            h_tm1, c_tm1 = self._auto_reset_memories(x, h_tm1, c_tm1)
-        return xi_t, xf_t, xo_t, xc_t, h_tm1, c_tm1
-
     def step(self, *vars):
+        # Parse sequence
+        sequence_map = dict(zip(self._sequence_map.keys(), vars[:len(self._sequence_map)]))
+        h_tm1, c_tm1 = vars[-2:]
+        # Reset state
+        if self.reset_state_for_input != None:
+            h_tm1, c_tm1 = self._auto_reset_memories(sequence_map["x"], h_tm1, c_tm1)
+
         if self._input_type == "sequence":
-            xi_t, xf_t, xo_t, xc_t, h_tm1, c_tm1 = self._parse_sequential_vars(vars)
+            xi_t, xf_t, xo_t, xc_t = map(sequence_map.get, ["xi", "xf", "xo", "xc"])
             i_t = self._inner_act(xi_t + T.dot(h_tm1, self.U_i))
             f_t = self._inner_act(xf_t + T.dot(h_tm1, self.U_f))
             c_t = f_t * c_tm1 + i_t * self._outer_act(xc_t + T.dot(h_tm1, self.U_c))
             o_t = self._inner_act(xo_t + T.dot(h_tm1, self.U_o))
             h_t = o_t * self._outer_act(c_t)
+            # Apply mask
+            if "mask" in sequence_map:
+                mask = sequence_map["mask"].dimshuffle(0, 'x')
+                h_t = h_t * mask + h_tm1 * (1 - mask)
+                c_t = c_t * mask + c_tm1 * (1 - mask)
         else:
-            h_tm1, c_tm1 = vars
             i_t = self._inner_act(T.dot(h_tm1, self.U_i) + self.b_i)
             f_t = self._inner_act(T.dot(h_tm1, self.U_f) + self.b_f)
             c_t = f_t * c_tm1 + i_t * self._outer_act(T.dot(h_tm1, self.U_c) + self.b_c)
@@ -82,10 +87,12 @@ class LSTM(NeuralLayer):
         xf = T.dot(x, self.W_f) + self.b_f
         xc = T.dot(x, self.W_c) + self.b_c
         xo = T.dot(x, self.W_o) + self.b_o
-        sequences = [xi, xf, xo, xc]
+        self._sequence_map = OrderedDict([("xi", xi), ("xf", xf), ("xc", xc), ("xo", xo)])
         if self.reset_state_for_input != None:
-            sequences.insert(0, x)
-        return sequences
+            self._sequence_map["x"] = x
+        if self.mask:
+            self._sequence_map["mask"] = mask
+        return self._sequence_map.values()
 
     def produce_initial_states(self, x):
         if self.persistent_state:
@@ -110,7 +117,6 @@ class LSTM(NeuralLayer):
             self.step,
             sequences=sequences,
             outputs_info=[h0, m0],
-            # non_sequences=[self.U_i, self.U_f, self.U_o, self.U_c]
             n_steps=self._steps,
             go_backwards=self.go_backwards
         )
