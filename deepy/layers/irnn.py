@@ -22,7 +22,7 @@ class IRNN(RNN):
                                    hidden_init=IdentityInitializer(scale=weight_scale),
                                    input_init=GaussianInitializer(deviation=0.001),
                                    persistent_state=persistent_state, reset_state_for_input=reset_state_for_input,
-                                   batch_size=batch_size, go_backwards=go_backwards
+                                   batch_size=batch_size, go_backwards=go_backwards,
                                    mask=mask)
         self.name = "irnn"
         if bound_recurrent_weight:

@@ -40,7 +40,7 @@ class RNN(NeuralLayer):
             raise Exception("Output type of RNN is wrong: %s" % output_type)
         if self.persistent_state and not self.batch_size:
             raise Exception("Batch size must be set for persistent state mode")
-        if mask and input_type = "one":
+        if mask and input_type == "one":
             raise Exception("Mask only works with sequence input")
 
     def _hidden_preact(self, h):
@@ -64,7 +64,7 @@ class RNN(NeuralLayer):
         new_h = self._hidden_act(z)
         # Apply mask
         if mask:
-            mask = mask.dimshuffle(0,'x')
+            mask = mask.dimshuffle(0, 'x')
             new_h = mask * new_h + (1 - mask) * h
         return new_h
 
@@ -78,7 +78,7 @@ class RNN(NeuralLayer):
             # Mask
             #  (batch, time)
             if self._mask:
-                sequences.insert(0, self._mask.dimshuffle((1,0))
+                sequences.insert(0, self._mask.dimshuffle((1,0)))
             # Set initial state
             if self.persistent_state:
                 h0 = self.state
