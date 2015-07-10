@@ -22,6 +22,7 @@ class Concatenate(NeuralLayer):
         self.layer1.connect(self.input_dim)
         self.layer2.connect(self.input_dim)
         self.output_dim = self.layer1.output_dim + self.layer2.output_dim
+        self.register_inner_layers(self.layer1, self.layer2)
 
     def output(self, x):
         tensor1 = self.layer1.output(x)
