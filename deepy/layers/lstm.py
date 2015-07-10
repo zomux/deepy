@@ -22,7 +22,7 @@ class LSTM(NeuralLayer):
                  go_backwards=False,
                  persistent_state=False, batch_size=0,
                  reset_state_for_input=None,
-                 mask=mask):
+                 mask=None):
         super(LSTM, self).__init__("lstm")
         self._hidden_size = hidden_size
         self._input_type = input_type
@@ -36,7 +36,7 @@ class LSTM(NeuralLayer):
         self.reset_state_for_input = reset_state_for_input
         self.batch_size = batch_size
         self.go_backwards = go_backwards
-        self.mask = mask.dimshuffle((1,0))
+        self.mask = mask.dimshuffle((1,0)) if mask else None
         self._sequence_map = OrderedDict()
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of LSTM is wrong: %s" % input_type)
