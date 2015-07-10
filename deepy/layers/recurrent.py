@@ -33,7 +33,7 @@ class RNN(NeuralLayer):
         self.batch_size = batch_size
         self._steps = steps
         self._go_backwards = go_backwards
-        self._mask = mask
+        self._mask = mask.dimshuffle((1,0) if mask else None
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of RNN is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
@@ -68,23 +68,34 @@ class RNN(NeuralLayer):
             new_h = mask * new_h + (1 - mask) * h
         return new_h
 
-    def output(self, x):
-        sequences = []
+    def produce_input_sequences(self, x, mask=None):
+        sequences = [x]
+        # Mask
+        if mask:
+            # (batch)
+            sequences.insert(0, mask)
+        elif self._mask:
+            # (time, batch)
+            sequences.insert(0, self._mask))
+        return sequences
+
+    def produce_initial_states(x):
         h0 = T.alloc(np.cast[FLOATX](0.), x.shape[0], self._hidden_size)
         if self._input_type == "sequence":
-            # Move middle dimension to left-most position
-            # (sequence, batch, value)
-            sequences = [x.dimshuffle((1,0,2))]
-            # Mask
-            #  (batch, time)
-            if self._mask:
-                sequences.insert(0, self._mask.dimshuffle((1,0)))
-            # Set initial state
             if self.persistent_state:
                 h0 = self.state
         else:
             h0 = x
-        step_outputs = [h0]
+        return [h0]
+
+    def output(self, x):
+        if self._input_type == "sequence":
+            # Move middle dimension to left-most position
+            # (sequence, batch, value)
+            sequences = self.produce_input_sequences(x.dimshuffle((1,0,2)))
+        else:
+            sequences = []
+        step_outputs = self.produce_initial_states(x)
         hiddens, _ = theano.scan(self.step, sequences=sequences, outputs_info=step_outputs,
                                  n_steps=self._steps, go_backwards=self._go_backwards)
 
