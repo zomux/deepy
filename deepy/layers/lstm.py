@@ -91,7 +91,7 @@ class LSTM(NeuralLayer):
         if self.reset_state_for_input != None:
             self._sequence_map["x"] = x
         if self.mask:
-            self._sequence_map["mask"] = mask
+            self._sequence_map["mask"] = self.mask
         return self._sequence_map.values()
 
     def produce_initial_states(self, x):
