@@ -33,7 +33,7 @@ class RNN(NeuralLayer):
         self.batch_size = batch_size
         self._steps = steps
         self._go_backwards = go_backwards
-        self._mask = mask.dimshuffle((1,0) if mask else None
+        self._mask = mask.dimshuffle((1,0)) if mask else None
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of RNN is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
@@ -76,10 +76,10 @@ class RNN(NeuralLayer):
             sequences.insert(0, mask)
         elif self._mask:
             # (time, batch)
-            sequences.insert(0, self._mask))
+            sequences.insert(0, self._mask)
         return sequences
 
-    def produce_initial_states(x):
+    def produce_initial_states(self, x):
         h0 = T.alloc(np.cast[FLOATX](0.), x.shape[0], self._hidden_size)
         if self._input_type == "sequence":
             if self.persistent_state:

@@ -82,7 +82,7 @@ class LSTM(NeuralLayer):
 
         return h_t, c_t
 
-    def produce_input_sequences(self, x):
+    def produce_input_sequences(self, x, mask=None):
         xi = T.dot(x, self.W_i) + self.b_i
         xf = T.dot(x, self.W_f) + self.b_f
         xc = T.dot(x, self.W_c) + self.b_c
@@ -90,7 +90,9 @@ class LSTM(NeuralLayer):
         self._sequence_map = OrderedDict([("xi", xi), ("xf", xf), ("xc", xc), ("xo", xo)])
         if self.reset_state_for_input != None:
             self._sequence_map["x"] = x
-        if self.mask:
+        if mask:
+            self._sequence_map["mask"] = mask
+        elif self.mask:
             self._sequence_map["mask"] = self.mask
         return self._sequence_map.values()
 
