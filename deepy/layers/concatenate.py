@@ -8,7 +8,7 @@ class Concatenate(NeuralLayer):
     They should have identical dimensions except the last one.
     """
 
-    def __init__(self, layer1, layer2, axis=-1):
+    def __init__(self, layer1, layer2, axis=2):
         """
         :type layer1: NeuralLayer
         :type layer2: NeuralLayer
@@ -17,6 +17,8 @@ class Concatenate(NeuralLayer):
         self.layer1 = layer1
         self.layer2 = layer2
         self.axis = axis
+        if axis < 0:
+            raise Exception("There are some bugs in T.concatenate, that axis can not lower than 0")
 
     def setup(self):
         self.layer1.connect(self.input_dim)
