@@ -23,8 +23,13 @@ class WordEmbedding(NeuralLayer):
         self.register_parameters(self.embed_matrix)
 
     def output(self, x):
-        ret_tensor = self.embed_matrix[x.flatten()].reshape((x.shape[0], x.shape[1], self.size))
         if self.zero_index != None:
             mask = T.neq(x, self.zero_index)
+            # To avoid negative index
+            x *= mask
+
+        ret_tensor = self.embed_matrix[x.flatten()].reshape((x.shape[0], x.shape[1], self.size))
+
+        if self.zero_index != None:
             ret_tensor *= mask[:, :, None]
         return ret_tensor
