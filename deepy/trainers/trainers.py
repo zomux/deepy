@@ -241,11 +241,7 @@ class NeuralTrainer(object):
         c = 0
 
         for x in train_set:
-            try:
-                cost_x = self.learning_func(*x)
-            except MemoryError:
-                logging.info("MemoryError detected")
-                continue
+            cost_x = self.learning_func(*x)
             cost_matrix.append(cost_x)
             if training_callback:
                 self.last_score = cost_x[0]
@@ -308,7 +304,7 @@ class GeneralNeuralTrainer(NeuralTrainer):
         logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
         logging.info("learning updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
 
-        if config.data_transmitter:
+        if False and config.data_transmitter:
             variables = [config.data_transmitter.get_iterator()]
             givens = config.data_transmitter.get_givens()
         else:
