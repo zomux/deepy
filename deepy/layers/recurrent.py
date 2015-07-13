@@ -62,7 +62,7 @@ class RNN(NeuralLayer):
             # RNN core step
             z = x + self._hidden_preact(h) + self.B_h
         else:
-            h, = vars
+            h = vars[-1]
             z = self._hidden_preact(h) + self.B_h
         # Second input
         if "second_input" in sequence_map:
@@ -77,19 +77,20 @@ class RNN(NeuralLayer):
 
     def produce_input_sequences(self, x, mask=None, second_input=None):
         self._sequence_map.clear()
-        self._sequence_map["x"] = T.dot(x, self.W_i)
+        if self._input_type == "sequence":
+            self._sequence_map["x"] = T.dot(x, self.W_i)
+            # Mask
+            if mask:
+                # (batch)
+                self._sequence_map["mask"] = mask
+            elif self._mask:
+                # (time, batch)
+                self._sequence_map["mask"] = self._mask
         # Second input
         if second_input:
             self._sequence_map["second_input"] = T.dot(second_input, self.W_i2)
         elif self._second_input:
             self._sequence_map["second_input"] = T.dot(self._second_input, self.W_i2)
-        # Mask
-        if mask:
-            # (batch)
-            self._sequence_map["mask"] = mask
-        elif self._mask:
-            # (time, batch)
-            self._sequence_map["mask"] = self._mask
         return self._sequence_map.values()
 
     def produce_initial_states(self, x):
@@ -107,7 +108,8 @@ class RNN(NeuralLayer):
             # (sequence, batch, value)
             sequences = self.produce_input_sequences(x.dimshuffle((1,0,2)))
         else:
-            sequences = []
+            sequences = self.produce_input_sequences(None)
+
         step_outputs = self.produce_initial_states(x)
         hiddens, _ = theano.scan(self.step, sequences=sequences, outputs_info=step_outputs,
                                  n_steps=self._steps, go_backwards=self._go_backwards)
