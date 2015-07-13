@@ -22,7 +22,8 @@ class LSTM(NeuralLayer):
                  go_backwards=False,
                  persistent_state=False, batch_size=0,
                  reset_state_for_input=None,
-                 mask=None):
+                 mask=None,
+                 second_input=None, second_input_size=None):
         super(LSTM, self).__init__("lstm")
         self._hidden_size = hidden_size
         self._input_type = input_type
@@ -38,6 +39,8 @@ class LSTM(NeuralLayer):
         self.go_backwards = go_backwards
         self.mask = mask.dimshuffle((1,0)) if mask else None
         self._sequence_map = OrderedDict()
+        self.second_input = second_input
+        self.second_input_size = second_input_size
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of LSTM is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
@@ -63,6 +66,14 @@ class LSTM(NeuralLayer):
 
         if self._input_type == "sequence":
             xi_t, xf_t, xo_t, xc_t = map(sequence_map.get, ["xi", "xf", "xo", "xc"])
+            # Add second input
+            if "xi2" in sequence_map:
+                xi2, xf2, xo2, xc2 = map(sequence_map.get, ["xi2", "xf2", "xo2", "xc2"])
+                xi_t += xi2
+                xf_t += xf2
+                xo_t += xo2
+                xc_t += xc2
+            # LSTM core step
             i_t = self._inner_act(xi_t + T.dot(h_tm1, self.U_i))
             f_t = self._inner_act(xf_t + T.dot(h_tm1, self.U_f))
             c_t = f_t * c_tm1 + i_t * self._outer_act(xc_t + T.dot(h_tm1, self.U_c))
@@ -82,18 +93,32 @@ class LSTM(NeuralLayer):
 
         return h_t, c_t
 
-    def produce_input_sequences(self, x, mask=None):
+    def produce_input_sequences(self, x, mask=None, second_input=None):
+        # Input vars
         xi = T.dot(x, self.W_i) + self.b_i
         xf = T.dot(x, self.W_f) + self.b_f
         xc = T.dot(x, self.W_c) + self.b_c
         xo = T.dot(x, self.W_o) + self.b_o
-        self._sequence_map = OrderedDict([("xi", xi), ("xf", xf), ("xc", xc), ("xo", xo)])
+        # Create sequence map
+        self._sequence_map.clear()
+        self._sequence_map.update([("xi", xi), ("xf", xf), ("xc", xc), ("xo", xo)])
+        # Reset state
         if self.reset_state_for_input != None:
             self._sequence_map["x"] = x
+        # Add mask
         if mask:
             self._sequence_map["mask"] = mask
         elif self.mask:
             self._sequence_map["mask"] = self.mask
+        # Add second input
+        if self.second_input and not second_input:
+            second_input = self.second_input
+        if second_input:
+            xi2 = T.dot(second_input, self.W_i2)
+            xf2 = T.dot(second_input, self.W_f2)
+            xc2 = T.dot(second_input, self.W_c2)
+            xo2 = T.dot(second_input, self.W_o2)
+            self._sequence_map.update([("xi2", xi2), ("xf2", xf2), ("xc2", xc2), ("xo2", xo2)])
         return self._sequence_map.values()
 
     def produce_initial_states(self, x):
@@ -172,6 +197,14 @@ class LSTM(NeuralLayer):
                                      self.U_c, self.b_c,
                                      self.U_f, self.b_f,
                                      self.U_o, self.b_o)
+        # Second input
+        if self.second_input_size:
+            self.W_i2 = self.create_weight(self.second_input_size, self._hidden_size, "wi2", initializer=self._outer_init)
+            self.W_f2 = self.create_weight(self.second_input_size, self._hidden_size, "wf2", initializer=self._outer_init)
+            self.W_c2 = self.create_weight(self.second_input_size, self._hidden_size, "wc2", initializer=self._outer_init)
+            self.W_o2 = self.create_weight(self.second_input_size, self._hidden_size, "wo2", initializer=self._outer_init)
+            self.register_parameters(self.W_i2, self.W_f2, self.W_c2, self.W_o2)
+
         # Create persistent state
         if self.persistent_state:
             self.state_h = self.create_matrix(self.batch_size, self._hidden_size, "lstm_state_h")

@@ -6,6 +6,7 @@ from deepy.utils import build_activation, FLOATX
 import numpy as np
 import theano
 import theano.tensor as T
+from collections import OrderedDict
 
 OUTPUT_TYPES = ["sequence", "one"]
 INPUT_TYPES = ["sequence", "one"]
@@ -36,6 +37,7 @@ class RNN(NeuralLayer):
         self._mask = mask.dimshuffle((1,0)) if mask else None
         self._second_input_size = second_input_size
         self._second_input = second_input
+        self._sequence_map = OrderedDict()
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of RNN is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
@@ -48,49 +50,47 @@ class RNN(NeuralLayer):
     def _hidden_preact(self, h):
         return T.dot(h, self.W_h) if not self._vector_core else h * self.W_h
 
-
-    def step(self, *variables):
-        mask = None
+    def step(self, *vars):
+        # Parse sequence
+        sequence_map = dict(zip(self._sequence_map.keys(), vars[:len(self._sequence_map)]))
         if self._input_type == "sequence":
-            x, h = variables[-2:]
-            if self._second_input_size:
-                second_input = variables[0]
-                second_z = T.dot(second_input, self.W_i2)
-                variables = variables[1:]
-            else:
-                second_z = 0
-            if self._mask:
-                mask = variables[0]
+            x = sequence_map["x"]
+            h = vars[-1]
             # Reset part of the state on condition
             if self.reset_state_for_input != None:
                 h = h * T.neq(x[:, self.reset_state_for_input], 1).dimshuffle(0, 'x')
-            z = T.dot(x, self.W_i) + self._hidden_preact(h) + self.B_h + second_z
+            # RNN core step
+            z = x + self._hidden_preact(h) + self.B_h
+            # Second input
+            if "second_input" in sequence_map:
+                z += sequence_map["second_input"]
         else:
-            h, = variables
+            h, = vars
             z = self._hidden_preact(h) + self.B_h
 
         new_h = self._hidden_act(z)
         # Apply mask
-        if mask:
-            mask = mask.dimshuffle(0, 'x')
+        if "mask" in sequence_map:
+            mask = sequence_map["mask"].dimshuffle(0, 'x')
             new_h = mask * new_h + (1 - mask) * h
         return new_h
 
     def produce_input_sequences(self, x, mask=None, second_input=None):
-        sequences = [x]
+        self._sequence_map.clear()
+        self._sequence_map["x"] = T.dot(x, self.W_i)
         # Second input
         if second_input:
-            sequences.insert(0, second_input)
+            self._sequence_map["second_input"] = T.dot(second_input, self.W_i2)
         elif self._second_input:
-            sequences.insert(0, self._second_input)
+            self._sequence_map["second_input"] = T.dot(self._second_input, self.W_i2)
         # Mask
         if mask:
             # (batch)
-            sequences.insert(0, mask)
+            self._sequence_map["mask"] = mask
         elif self._mask:
             # (time, batch)
-            sequences.insert(0, self._mask)
-        return sequences
+            self._sequence_map["mask"] = self._mask
+        return self._sequence_map.values()
 
     def produce_initial_states(self, x):
         h0 = T.alloc(np.cast[FLOATX](0.), x.shape[0], self._hidden_size)
