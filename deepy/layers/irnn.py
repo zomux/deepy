@@ -15,7 +15,8 @@ class IRNN(RNN):
 
     def __init__(self, hidden_size, input_type="sequence", output_type="one", steps=None, go_backwards=False,
                  weight_scale=0.9, bound_recurrent_weight=True, mask=None,
-                 persistent_state=False, reset_state_for_input=None, batch_size=None):
+                 persistent_state=False, reset_state_for_input=None, batch_size=None,
+                 second_input=None, second_input_size=None):
         super(IRNN, self).__init__(hidden_size,
                                    input_type=input_type, output_type=output_type,
                                    hidden_activation="relu", steps=steps,
@@ -23,7 +24,7 @@ class IRNN(RNN):
                                    input_init=GaussianInitializer(deviation=0.001),
                                    persistent_state=persistent_state, reset_state_for_input=reset_state_for_input,
                                    batch_size=batch_size, go_backwards=go_backwards,
-                                   mask=mask)
+                                   mask=mask, second_input=second_input, second_input_size=second_input_size)
         self.name = "irnn"
         if bound_recurrent_weight:
             self.register_training_callbacks(self.training_callback)

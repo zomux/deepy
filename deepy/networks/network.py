@@ -75,6 +75,14 @@ class NeuralNetwork(object):
         self._output = layer.output(self._output)
         self._test_output = layer.test_output(self._test_output)
         self._hidden_outputs.append(self._output)
+        self.register_layer(layer)
+        self.layers.append(layer)
+
+    def register_layer(self, layer):
+        """
+        Register the layer so that it's param will be trained.
+        But the output of the layer will not be stacked.
+        """
         self.parameter_count += layer.parameter_count
         self.parameters.extend(layer.parameters)
         self.free_parameters.extend(layer.free_parameters)
@@ -88,7 +96,6 @@ class NeuralNetwork(object):
         self.training_callbacks.extend(layer.training_callbacks)
         self.testing_callbacks.extend(layer.testing_callbacks)
         self.epoch_callbacks.extend(layer.epoch_callbacks)
-        self.layers.append(layer)
 
     def first_layer(self):
         """

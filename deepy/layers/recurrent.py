@@ -18,7 +18,7 @@ class RNN(NeuralLayer):
     def __init__(self, hidden_size, input_type="sequence", output_type="sequence", vector_core=None,
                  hidden_activation="tanh", hidden_init=None, input_init=None, steps=None,
                  persistent_state=False, reset_state_for_input=None, batch_size=None,
-                 go_backwards=False, mask=None):
+                 go_backwards=False, mask=None, second_input_size=None, second_input=None):
         super(RNN, self).__init__("rnn")
         self._hidden_size = hidden_size
         self.output_dim = self._hidden_size
@@ -34,6 +34,8 @@ class RNN(NeuralLayer):
         self._steps = steps
         self._go_backwards = go_backwards
         self._mask = mask.dimshuffle((1,0)) if mask else None
+        self._second_input_size = second_input_size
+        self._second_input = second_input
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of RNN is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
@@ -51,12 +53,18 @@ class RNN(NeuralLayer):
         mask = None
         if self._input_type == "sequence":
             x, h = variables[-2:]
+            if self._second_input_size:
+                second_input = variables[0]
+                second_z = T.dot(second_input, self.W_i2)
+                variables = variables[1:]
+            else:
+                second_z = 0
             if self._mask:
                 mask = variables[0]
             # Reset part of the state on condition
             if self.reset_state_for_input != None:
                 h = h * T.neq(x[:, self.reset_state_for_input], 1).dimshuffle(0, 'x')
-            z = T.dot(x, self.W_i) + self._hidden_preact(h) + self.B_h
+            z = T.dot(x, self.W_i) + self._hidden_preact(h) + self.B_h + second_z
         else:
             h, = variables
             z = self._hidden_preact(h) + self.B_h
@@ -68,8 +76,13 @@ class RNN(NeuralLayer):
             new_h = mask * new_h + (1 - mask) * h
         return new_h
 
-    def produce_input_sequences(self, x, mask=None):
+    def produce_input_sequences(self, x, mask=None, second_input=None):
         sequences = [x]
+        # Second input
+        if second_input:
+            sequences.insert(0, second_input)
+        elif self._second_input:
+            sequences.insert(0, self._second_input)
         # Mask
         if mask:
             # (batch)
@@ -137,3 +150,6 @@ class RNN(NeuralLayer):
         if self._input_type == "sequence":
             self.W_i = self.create_weight(self.input_dim, self._hidden_size, suffix="i", initializer=self._input_init)
             self.register_parameters(self.W_i)
+        if self._second_input_size:
+            self.W_i2 = self.create_weight(self._second_input_size, self._hidden_size, suffix="i2", initializer=self._input_init)
+            self.register_parameters(self.W_i2)
