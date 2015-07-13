@@ -66,42 +66,39 @@ class LSTM(NeuralLayer):
 
         if self._input_type == "sequence":
             xi_t, xf_t, xo_t, xc_t = map(sequence_map.get, ["xi", "xf", "xo", "xc"])
-            # Add second input
-            if "xi2" in sequence_map:
-                xi2, xf2, xo2, xc2 = map(sequence_map.get, ["xi2", "xf2", "xo2", "xc2"])
-                xi_t += xi2
-                xf_t += xf2
-                xo_t += xo2
-                xc_t += xc2
-            # LSTM core step
-            i_t = self._inner_act(xi_t + T.dot(h_tm1, self.U_i))
-            f_t = self._inner_act(xf_t + T.dot(h_tm1, self.U_f))
-            c_t = f_t * c_tm1 + i_t * self._outer_act(xc_t + T.dot(h_tm1, self.U_c))
-            o_t = self._inner_act(xo_t + T.dot(h_tm1, self.U_o))
-            h_t = o_t * self._outer_act(c_t)
-            # Apply mask
-            if "mask" in sequence_map:
-                mask = sequence_map["mask"].dimshuffle(0, 'x')
-                h_t = h_t * mask + h_tm1 * (1 - mask)
-                c_t = c_t * mask + c_tm1 * (1 - mask)
         else:
-            i_t = self._inner_act(T.dot(h_tm1, self.U_i) + self.b_i)
-            f_t = self._inner_act(T.dot(h_tm1, self.U_f) + self.b_f)
-            c_t = f_t * c_tm1 + i_t * self._outer_act(T.dot(h_tm1, self.U_c) + self.b_c)
-            o_t = self._inner_act(T.dot(h_tm1, self.U_o) + self.b_o)
-            h_t = o_t * self._outer_act(c_t)
-
+            xi_t, xf_t, xo_t, xc_t = 0, 0, 0, 0
+        
+        # Add second input
+        if "xi2" in sequence_map:
+            xi2, xf2, xo2, xc2 = map(sequence_map.get, ["xi2", "xf2", "xo2", "xc2"])
+            xi_t += xi2
+            xf_t += xf2
+            xo_t += xo2
+            xc_t += xc2
+        # LSTM core step
+        i_t = self._inner_act(xi_t + T.dot(h_tm1, self.U_i) + self.b_i)
+        f_t = self._inner_act(xf_t + T.dot(h_tm1, self.U_f) + self.b_f)
+        c_t = f_t * c_tm1 + i_t * self._outer_act(xc_t + T.dot(h_tm1, self.U_c) + self.b_c)
+        o_t = self._inner_act(xo_t + T.dot(h_tm1, self.U_o) + self.b_o)
+        h_t = o_t * self._outer_act(c_t)
+        # Apply mask
+        if "mask" in sequence_map:
+            mask = sequence_map["mask"].dimshuffle(0, 'x')
+            h_t = h_t * mask + h_tm1 * (1 - mask)
+            c_t = c_t * mask + c_tm1 * (1 - mask)
         return h_t, c_t
 
     def produce_input_sequences(self, x, mask=None, second_input=None):
-        # Input vars
-        xi = T.dot(x, self.W_i) + self.b_i
-        xf = T.dot(x, self.W_f) + self.b_f
-        xc = T.dot(x, self.W_c) + self.b_c
-        xo = T.dot(x, self.W_o) + self.b_o
         # Create sequence map
         self._sequence_map.clear()
-        self._sequence_map.update([("xi", xi), ("xf", xf), ("xc", xc), ("xo", xo)])
+        if self._input_type == "sequence":
+            # Input vars
+            xi = T.dot(x, self.W_i)
+            xf = T.dot(x, self.W_f)
+            xc = T.dot(x, self.W_c)
+            xo = T.dot(x, self.W_o)
+            self._sequence_map.update([("xi", xi), ("xf", xf), ("xc", xc), ("xo", xo)])
         # Reset state
         if self.reset_state_for_input != None:
             self._sequence_map["x"] = x
@@ -138,7 +135,7 @@ class LSTM(NeuralLayer):
             sequences = self.produce_input_sequences(x)
         else:
             h0 = x
-            sequences = []
+            sequences = self.produce_input_sequences(None)
 
         [hiddens, memories], _ = theano.scan(
             self.step,
