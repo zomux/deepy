@@ -61,12 +61,12 @@ class RNN(NeuralLayer):
                 h = h * T.neq(x[:, self.reset_state_for_input], 1).dimshuffle(0, 'x')
             # RNN core step
             z = x + self._hidden_preact(h) + self.B_h
-            # Second input
-            if "second_input" in sequence_map:
-                z += sequence_map["second_input"]
         else:
             h, = vars
             z = self._hidden_preact(h) + self.B_h
+        # Second input
+        if "second_input" in sequence_map:
+            z += sequence_map["second_input"]
 
         new_h = self._hidden_act(z)
         # Apply mask
