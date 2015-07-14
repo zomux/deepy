@@ -19,6 +19,7 @@ DEFAULT_TRAINER_SETTING = {
     "patience": 20,
     "auto_save": None,
     "data_transmitter": None,
+    "record_free_params": True,
 
     # Optimization
     "method": "ADADELTA",

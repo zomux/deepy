@@ -53,7 +53,7 @@ def optimize_updates(params, gradients, config=None, shapes=None):
         gradients = regularized_gradients
 
     # Avoid nan
-    if config.avoid_nan:
+    if config and config.avoid_nan:
         logging.info("avoid NaN gradients")
         new_gradients = []
         for grad in gradients:
@@ -92,6 +92,10 @@ def optimize_updates(params, gradients, config=None, shapes=None):
         updates, free_parameters = return_vals
     else:
         updates = return_vals
+
+    # No free param recording
+    if config and not config.record_free_params:
+        free_parameters = []
 
     # Weight bound
     if config.weight_bound:

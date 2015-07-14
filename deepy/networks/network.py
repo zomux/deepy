@@ -197,14 +197,15 @@ class NeuralNetwork(object):
         Save parameters to file.
         """
         logging.info("saving parameters to %s" % path)
+        param_variables = self.all_parameters
         if new_thread:
-            params = [p.get_value().copy() for p in self.all_parameters]
+            params = [p.get_value().copy() for p in param_variables]
             thread = Thread(target=save_network_params, args=(params, path))
             thread.start()
         else:
             opener = gzip.open if path.lower().endswith('.gz') else open
             handle = opener(path, 'wb')
-            pickle.dump([p.get_value().copy() for p in self.all_parameters], handle)
+            pickle.dump([p.get_value().copy() for p in param_variables], handle)
             handle.close()
         self.train_logger.save(path)
 
