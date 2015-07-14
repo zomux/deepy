@@ -18,6 +18,7 @@ def ada_family_core(params, gparams, learning_rate = 0.01, eps= 1e-6, rho=0.95, 
 
     _, _, _, args = inspect.getargvalues(inspect.currentframe())
     logging.info("ada_family_core: %s" % str(args.items()))
+    free_parameters = []
 
     if method == "FINETUNING_ADAGRAD":
         method = "ADAGRAD"
@@ -42,10 +43,12 @@ def ada_family_core(params, gparams, learning_rate = 0.01, eps= 1e-6, rho=0.95, 
             dparam = -T.sqrt((xsum + eps) / (updates[gsum] + eps)) * gparam
             updates[xsum] =rho * xsum + (1. - rho) * (dparam **2)
             updates[param] = param * oneMinusBeta + dparam
+            free_parameters.extend(gsums + xsums)
         elif method == 'ADAGRAD':
             updates[gsum] = gsum + (gparam **2) - gsum_regularization * gsum
             updates[param] =  param * oneMinusBeta - learning_rate * (gparam / (T.sqrt(updates[gsum] + eps)))
+            free_parameters.extend(gsums)
         else:
             updates[param] = param * oneMinusBeta - gparam * learning_rate
 
-    return updates.items()
+    return updates.items(), free_parameters
