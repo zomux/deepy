@@ -51,4 +51,4 @@ def ada_family_core(params, gparams, learning_rate = 0.01, eps= 1e-6, rho=0.95, 
         else:
             updates[param] = param * oneMinusBeta - gparam * learning_rate
 
-    return updates.items(), free_parameters
+    return updates.items()
