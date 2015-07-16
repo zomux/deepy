@@ -27,7 +27,7 @@ DEFAULT_TRAINER_SETTING = {
     "avoid_nan": False,
     "gradient_tolerance": None,
     "gradient_clipping": None, # L2 clipping value
-    "avoid_compute_embed_norm": False,
+    "avoid_compute_embed_norm": True,
 
     # Regularization
     "update_l1": 0,

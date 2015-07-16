@@ -318,6 +318,7 @@ class GeneralNeuralTrainer(NeuralTrainer):
             mode=self.config.get("theano_mode", None),
             givens=givens)
 
+
     def learning_updates(self):
         """
         Return updates in the training.
