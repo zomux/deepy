@@ -4,6 +4,7 @@
 
 import logging as loggers
 
+import numpy as np
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
@@ -35,19 +36,22 @@ def optimize_updates(params, gradients, config=None, shapes=None):
         if clip_value:
             clip_constant = T.constant(clip_value, dtype=FLOATX)
 
-            # A dirty trick to prevent computing L2 norm on embedding weights,
-            # Because they are too large
-            gradients_without_embed = [t[1] for t in zip(params, gradients) if t[0].name != 'W_embed']
+            if config.avoid_compute_embed_norm:
+                grad_norm = multiple_l2_norm([t[1] for t in zip(params, gradients) if not t[0].name.startswith("W_embed")])
+            else:
+                grad_norm = multiple_l2_norm(gradients)
+            isnan = T.or_(T.isnan(grad_norm), T.isinf(grad_norm))
 
-            grad_norm = multiple_l2_norm(gradients_without_embed)
-            multiplier = ifelse(grad_norm < clip_constant,
-                                    T.constant(1., dtype=FLOATX), clip_constant / (grad_norm + EPSILON))
+            # Clip
             clipped_gradients = []
-            for g in gradients:
+            for param, g in zip(params, gradients):
+                g = T.switch(grad_norm < clip_constant, g, g * clip_constant / (grad_norm + EPSILON))
+                if config.avoid_nan:
+                    g = T.switch(isnan, np.float32(0.1) * param, g)
                 if config.gradient_tolerance:
                     g = ifelse(grad_norm > config.gradient_tolerance, T.zeros_like(g) + EPSILON, g)
-                g = multiplier * g
                 clipped_gradients.append(g)
+
             gradients = clipped_gradients
     # Regularization
     if config and config.weight_l2:
@@ -57,8 +61,9 @@ def optimize_updates(params, gradients, config=None, shapes=None):
             regularized_gradients.append(grad)
         gradients = regularized_gradients
 
-    # Avoid nan
-    if config and config.avoid_nan:
+    # Avoid nan but not computing the norm
+    # This is not recommended
+    if config and config.avoid_nan and not config.gradient_clipping:
         logging.info("avoid NaN gradients")
         new_gradients = []
         for grad in gradients:
