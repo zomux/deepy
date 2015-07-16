@@ -34,7 +34,12 @@ def optimize_updates(params, gradients, config=None, shapes=None):
 
         if clip_value:
             clip_constant = T.constant(clip_value, dtype=FLOATX)
-            grad_norm = multiple_l2_norm(gradients)
+
+            # A dirty trick to prevent computing L2 norm on embedding weights,
+            # Because they are too large
+            gradients_without_embed = [t[1] for t in zip(params, gradients) if t[0].name != 'W_embed']
+
+            grad_norm = multiple_l2_norm(gradients_without_embed)
             multiplier = ifelse(grad_norm < clip_constant,
                                     T.constant(1., dtype=FLOATX), clip_constant / (grad_norm + EPSILON))
             clipped_gradients = []
