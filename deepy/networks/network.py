@@ -7,6 +7,7 @@ import cPickle as pickle
 import os
 from threading import Thread
 
+import numpy as np
 import theano.tensor as T
 import theano
 
@@ -20,10 +21,17 @@ logging = loggers.getLogger(__name__)
 DEEPY_MESSAGE = "deepy version = %s" % deepy.__version__
 
 def save_network_params(params, path):
-    opener = gzip.open if path.lower().endswith('.gz') else open
-    handle = opener(path, 'wb')
-    pickle.dump(params, handle)
-    handle.close()
+    if path.endswith('gz'):
+        opener = gzip.open if path.lower().endswith('.gz') else open
+        handle = opener(path, 'wb')
+        pickle.dump(params, handle)
+        handle.close()
+    elif path.endswith('uncompressed.npz'):
+        np.savez(path, *params)
+    elif path.endswith('.npz'):
+        np.savez_compressed(path, *params)
+    else:
+        raise Exception("File format of %s is not supported, use '.gz' or '.npz' or '.uncompressed.gz'" % path)
 
 class NeuralNetwork(object):
     """
@@ -198,15 +206,12 @@ class NeuralNetwork(object):
         """
         logging.info("saving parameters to %s" % path)
         param_variables = self.all_parameters
+        params = [p.get_value().copy() for p in param_variables]
         if new_thread:
-            params = [p.get_value().copy() for p in param_variables]
             thread = Thread(target=save_network_params, args=(params, path))
             thread.start()
         else:
-            opener = gzip.open if path.lower().endswith('.gz') else open
-            handle = opener(path, 'wb')
-            pickle.dump([p.get_value().copy() for p in param_variables], handle)
-            handle.close()
+            save_network_params(params, path)
         self.train_logger.save(path)
 
     def load_params(self, path):
@@ -215,13 +220,26 @@ class NeuralNetwork(object):
         """
         if not os.path.exists(path): return;
         logging.info("loading parameters from %s" % path)
-        opener = gzip.open if path.lower().endswith('.gz') else open
-        handle = opener(path, 'rb')
-        saved = pickle.load(handle)
-        for target, source in zip(self.all_parameters, saved):
-            logging.info('%s: setting value %s', target.name, source.shape)
-            target.set_value(source)
-        handle.close()
+        # Load parameters
+        if path.endswith(".gz"):
+            opener = gzip.open if path.lower().endswith('.gz') else open
+            handle = opener(path, 'rb')
+            saved_params = pickle.load(handle)
+            handle.close()
+            # Write parameters
+            for target, source in zip(self.all_parameters, saved_params):
+                logging.info('%s: setting value %s', target.name, source.shape)
+                target.set_value(source)
+        elif path.endswith(".npz"):
+            arrs = np.load(path)
+            # Write parameters
+            for target, idx in zip(self.all_parameters, range(len(arrs.keys()))):
+                source = arrs['arr_%d' % idx]
+                logging.info('%s: setting value %s', target.name, source.shape)
+                target.set_value(source)
+        else:
+            raise Exception("File format of %s is not supported, use '.gz' or '.npz' or '.uncompressed.gz'" % path)
+
         self.train_logger.load(path)
 
     def report(self):

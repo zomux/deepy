@@ -35,7 +35,7 @@ def ada_family_core(params, gparams, learning_rate = 0.01, eps= 1e-6, rho=0.95, 
             gsum.set_value(gsum.get_value() ** 0)
 
     updates = OrderedDict()
-
+    # Updates
     for gparam, param, gsum, xsum in zip(gparams, params, gsums, xsums):
 
         if method == 'ADADELTA':
@@ -43,12 +43,16 @@ def ada_family_core(params, gparams, learning_rate = 0.01, eps= 1e-6, rho=0.95, 
             dparam = -T.sqrt((xsum + eps) / (updates[gsum] + eps)) * gparam
             updates[xsum] =rho * xsum + (1. - rho) * (dparam **2)
             updates[param] = param * oneMinusBeta + dparam
-            free_parameters.extend(gsums + xsums)
         elif method == 'ADAGRAD':
             updates[gsum] = gsum + (gparam **2) - gsum_regularization * gsum
             updates[param] =  param * oneMinusBeta - learning_rate * (gparam / (T.sqrt(updates[gsum] + eps)))
-            free_parameters.extend(gsums)
+
         else:
             updates[param] = param * oneMinusBeta - gparam * learning_rate
+    # Add free parameters
+    if method == 'ADADELTA':
+        free_parameters.extend(gsums + xsums)
+    elif method == 'ADAGRAD':
+        free_parameters.extend(gsums)
 
     return updates.items(), free_parameters
