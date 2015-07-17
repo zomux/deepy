@@ -237,19 +237,27 @@ class NeuralTrainer(object):
         return costs
 
     def train_step(self, train_set, train_size=None):
+        dirty_trick_times = 0
         training_callback = bool(self.network.training_callbacks)
         cost_matrix = []
         c = 0
 
         for x in train_set:
-            try:
-                cost_x = self.learning_func(*x)
-            except MemoryError:
-                logging.info("Memory error was detected, sleep for 5 seconds, and use a dirty trick to fix it")
-                time.sleep(5)
-                # Dirty trick
-                _ = self.learning_func(*[t[:(t.shape[0]/2)] for t in x])
+            if dirty_trick_times > 0:
+                cost_x = self.learning_func(*[t[:(t.shape[0]/2)] for t in x])
+                cost_matrix.append(cost_x)
                 cost_x = self.learning_func(*[t[(t.shape[0]/2):] for t in x])
+                dirty_trick_times -= 1
+            else:
+                try:
+                    cost_x = self.learning_func(*x)
+                except MemoryError:
+                    logging.info("Memory error was detected, perform dirty trick 30 times")
+                    dirty_trick_times = 30
+                    # Dirty trick
+                    cost_x = self.learning_func(*[t[:(t.shape[0]/2)] for t in x])
+                    cost_matrix.append(cost_x)
+                    cost_x = self.learning_func(*[t[(t.shape[0]/2):] for t in x])
             cost_matrix.append(cost_x)
             if training_callback:
                 self.last_score = cost_x[0]
