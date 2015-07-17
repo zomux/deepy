@@ -18,7 +18,7 @@ DEFAULT_TRAINER_SETTING = {
     "max_iterations": 0,
     "patience": 20,
     "auto_save": None,
-    "data_transmitter": None,
+    "data_transmitter": None, # Never use this
     "record_free_params": True,
 
     # Optimization
