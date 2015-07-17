@@ -5,7 +5,7 @@
 # -*- coding: utf-8 -*-
 
 from . import Dataset
-from deepy.utils import FakeGenerator, StreamPickler
+from deepy.utils import FakeGenerator, StreamPickler, global_rand
 
 import logging as loggers
 logging = loggers.getLogger(__name__)
@@ -29,6 +29,7 @@ class OnDiskDataset(Dataset):
         if self._cache_on_memory:
             logging.info("Cache on memory")
             self._cached_train_data = list(map(self._post_processing, StreamPickler.load(open(self._train_path))))
+            global_rand.shuffle(self._cached_train_data)
 
     def skip(self, amount):
         """
