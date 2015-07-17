@@ -248,7 +248,8 @@ class NeuralTrainer(object):
                 logging.info("Memory error was detected, sleep for 5 seconds, and use a dirty trick to fix it")
                 time.sleep(5)
                 # Dirty trick
-                cost_x = self.learning_func(*[t[:(t.shape[0]/2)] for t in x])
+                _ = self.learning_func(*[t[:(t.shape[0]/2)] for t in x])
+                cost_x = self.learning_func(*[t[(t.shape[0]/2):] for t in x])
             cost_matrix.append(cost_x)
             if training_callback:
                 self.last_score = cost_x[0]
