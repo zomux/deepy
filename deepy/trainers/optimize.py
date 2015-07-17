@@ -45,7 +45,7 @@ def optimize_updates(params, gradients, config=None, shapes=None):
             # Clip
             clipped_gradients = []
             for param, g in zip(params, gradients):
-                g = T.switch(grad_norm < clip_constant, g, g * clip_constant / (grad_norm + EPSILON))
+                g = ifelse(grad_norm < clip_constant, g, g * clip_constant / (grad_norm + EPSILON))
                 if config.avoid_nan:
                     g = T.switch(isnan, np.float32(0.1) * param, g)
                 if config.gradient_tolerance:
