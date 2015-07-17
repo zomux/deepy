@@ -41,13 +41,12 @@ def optimize_updates(params, gradients, config=None, shapes=None):
             else:
                 grad_norm = multiple_l2_norm(gradients)
             isnan = T.or_(T.isnan(grad_norm), T.isinf(grad_norm))
-            multiplier = ifelse(grad_norm < clip_constant,
-                                T.constant(1., dtype=FLOATX), clip_constant / (grad_norm + EPSILON))
+            multiplier = clip_constant / (grad_norm + EPSILON)
 
             # Clip
             clipped_gradients = []
             for param, g in zip(params, gradients):
-                g = multiplier * g
+                g = ifelse(grad_norm < clip_constant, g, g * multiplier)
                 if config.avoid_nan:
                     g = T.switch(isnan, np.float32(0.1) * param, g)
                 if config.gradient_tolerance:
