@@ -4,6 +4,7 @@
 import logging as loggers
 import gzip, sys
 import cPickle as pickle
+import time
 
 import numpy as np
 import theano
@@ -241,7 +242,12 @@ class NeuralTrainer(object):
         c = 0
 
         for x in train_set:
-            cost_x = self.learning_func(*x)
+            try:
+                cost_x = self.learning_func(*x)
+            except MemoryError:
+                logging.info("Memory error was detected, sleep for 5 seconds")
+                time.sleep(5)
+                continue
             cost_matrix.append(cost_x)
             if training_callback:
                 self.last_score = cost_x[0]
