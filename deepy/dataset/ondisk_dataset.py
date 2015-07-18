@@ -17,7 +17,8 @@ class OnDiskDataset(Dataset):
     You must convert the data to mini-batches before dump it to a file.
     """
 
-    def __init__(self, train_path, valid_path=None, test_path=None, train_size=None, cache_on_memory=False, post_processing=None):
+    def __init__(self, train_path, valid_path=None, test_path=None, train_size=None,
+                 cache_on_memory=False, post_processing=None, shuffle_memory=False):
         self._train_path = train_path
         self._valid_path = valid_path
         self._test_path = test_path
@@ -26,10 +27,13 @@ class OnDiskDataset(Dataset):
         self._cached_train_data = None
         self._post_processing = post_processing if post_processing else lambda x: x
         self._skip_amount = 0
+        self._shuffle_memory = shuffle_memory
         if self._cache_on_memory:
             logging.info("Cache on memory")
             self._cached_train_data = list(map(self._post_processing, StreamPickler.load(open(self._train_path))))
-            global_rand.shuffle(self._cached_train_data)
+            if self._shuffle_memory:
+                logging.info("Shuffle on-memory data")
+                global_rand.shuffle(self._cached_train_data)
 
     def skip(self, amount):
         """
