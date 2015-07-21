@@ -21,7 +21,7 @@ class LSTM(NeuralLayer):
                  inner_init=None, outer_init=None, steps=None,
                  go_backwards=False,
                  persistent_state=False, batch_size=0,
-                 reset_state_for_input=None,
+                 reset_state_for_input=None, positive_forget_bias=False,
                  mask=None,
                  second_input=None, second_input_size=None):
         super(LSTM, self).__init__("lstm")
@@ -41,6 +41,7 @@ class LSTM(NeuralLayer):
         self._sequence_map = OrderedDict()
         self.second_input = second_input
         self.second_input_size = second_input_size
+        self.positive_forget_bias = positive_forget_bias
         if input_type not in INPUT_TYPES:
             raise Exception("Input type of LSTM is wrong: %s" % input_type)
         if output_type not in OUTPUT_TYPES:
@@ -68,7 +69,7 @@ class LSTM(NeuralLayer):
             xi_t, xf_t, xo_t, xc_t = map(sequence_map.get, ["xi", "xf", "xo", "xc"])
         else:
             xi_t, xf_t, xo_t, xc_t = 0, 0, 0, 0
-        
+
         # Add second input
         if "xi2" in sequence_map:
             xi2, xf2, xo2, xc2 = map(sequence_map.get, ["xi2", "xf2", "xo2", "xc2"])
@@ -174,6 +175,8 @@ class LSTM(NeuralLayer):
         self.W_f = self.create_weight(self.input_dim, self._hidden_size, "wf", initializer=self._outer_init)
         self.U_f = self.create_weight(self._hidden_size, self._hidden_size, "uf", initializer=self._inner_init)
         self.b_f = self.create_bias(self._hidden_size, "f")
+        if self.positive_forget_bias:
+            self.b_f.set_value(self.get_value() + 1)
 
         self.W_c = self.create_weight(self.input_dim, self._hidden_size, "wc", initializer=self._outer_init)
         self.U_c = self.create_weight(self._hidden_size, self._hidden_size, "uc", initializer=self._inner_init)
