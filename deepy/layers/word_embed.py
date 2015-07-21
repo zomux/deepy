@@ -28,8 +28,11 @@ class WordEmbedding(NeuralLayer):
             # To avoid negative index
             x *= mask
 
-        ret_tensor = self.embed_matrix[x.flatten()].reshape((x.shape[0], x.shape[1], self.size))
+        ret_tensor = self.embed_matrix[x.flatten()].reshape(list(x.shape) + [self.size])
 
         if self.zero_index != None:
-            ret_tensor *= mask[:, :, None]
+            if x.ndim == 2:
+                ret_tensor *= mask[:, :, None]
+            elif x.ndim == 1:
+                ret_tensor *= mask[:, None]
         return ret_tensor
