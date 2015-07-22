@@ -16,7 +16,7 @@ EPSILON = T.constant(1.0e-15, dtype=FLOATX)
 BIG_EPSILON = T.constant(1.0e-7, dtype=FLOATX)
 
 if 'DEEPY_SEED' in os.environ:
-    global_seed = os.environ['DEEPY_SEED']
+    global_seed = int(os.environ['DEEPY_SEED'])
     logging.info("set global random seed to %d" % global_seed)
 else:
     global_seed = 3
