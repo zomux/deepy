@@ -176,7 +176,7 @@ class LSTM(NeuralLayer):
         self.U_f = self.create_weight(self._hidden_size, self._hidden_size, "uf", initializer=self._inner_init)
         self.b_f = self.create_bias(self._hidden_size, "f")
         if self.forget_bias > 0:
-            self.b_f.set_value(self.get_value() + self.forget_bias)
+            self.b_f.set_value(np.ones((self._hidden_size,), dtype=FLOATX))
 
         self.W_c = self.create_weight(self.input_dim, self._hidden_size, "wc", initializer=self._outer_init)
         self.U_c = self.create_weight(self._hidden_size, self._hidden_size, "uc", initializer=self._inner_init)
