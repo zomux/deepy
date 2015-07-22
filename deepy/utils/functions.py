@@ -1,20 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
+import os
 import theano
 import theano.tensor as T
 import numpy as np
 import re
 import copy
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
+import logging as loggers
+logging = loggers.getLogger(__name__)
 
 FLOATX = theano.config.floatX
 EPSILON = T.constant(1.0e-15, dtype=FLOATX)
 BIG_EPSILON = T.constant(1.0e-7, dtype=FLOATX)
 
-global_rand = np.random.RandomState(seed=3)
-global_theano_rand = RandomStreams(seed=3)
+if 'DEEPY_SEED' in os.environ:
+    global_seed = os.environ['DEEPY_SEED']
+    logging.info("set global random seed to %d" % global_seed)
+else:
+    global_seed = 3
+global_rand = np.random.RandomState(seed=global_seed)
+global_theano_rand = RandomStreams(seed=global_seed)
 
 def onehot(size, eye):
     return np.eye(1, size, eye, dtype=FLOATX)[0]
