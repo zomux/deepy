@@ -214,12 +214,17 @@ class NeuralNetwork(object):
             save_network_params(params, path)
         self.train_logger.save(path)
 
-    def load_params(self, path):
+    def load_params(self, path, exclude_free_params=False):
         """
         Load parameters from file.
         """
         if not os.path.exists(path): return;
         logging.info("loading parameters from %s" % path)
+        # Decide which parameters to load
+        if exclude_free_params:
+            params_to_load = self.parameters
+        else:
+            params_to_load = self.all_parameters
         # Load parameters
         if path.endswith(".gz"):
             opener = gzip.open if path.lower().endswith('.gz') else open
@@ -227,13 +232,13 @@ class NeuralNetwork(object):
             saved_params = pickle.load(handle)
             handle.close()
             # Write parameters
-            for target, source in zip(self.all_parameters, saved_params):
+            for target, source in zip(params_to_load, saved_params):
                 logging.info('%s: setting value %s', target.name, source.shape)
                 target.set_value(source)
         elif path.endswith(".npz"):
             arrs = np.load(path)
             # Write parameters
-            for target, idx in zip(self.all_parameters, range(len(arrs.keys()))):
+            for target, idx in zip(params_to_load, range(len(arrs.keys()))):
                 source = arrs['arr_%d' % idx]
                 logging.info('%s: setting value %s', target.name, source.shape)
                 target.set_value(source)

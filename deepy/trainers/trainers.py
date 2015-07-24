@@ -122,8 +122,8 @@ class NeuralTrainer(object):
         self.set_params(*self.best_params)
         self.network.save_params(path)
 
-    def load_params(self, path):
-        self.network.load_params(path)
+    def load_params(self, path, exclude_free_params=False):
+        self.network.load_params(path, exclude_free_params=exclude_free_params)
         self.best_params = self._copy_network_params()
 
     def _copy_network_params(self):
