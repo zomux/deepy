@@ -340,6 +340,10 @@ class GeneralNeuralTrainer(NeuralTrainer):
         Return updates in the training.
         """
         params = self.network.parameters
+        # Freeze parameters
+        if self.config.freeze_params:
+            logging.info("freeze parameters: %s" % ", ".join(map(str, self.config.freeze_params)))
+            params = [p for p in params if p not in self.config.freeze_params]
         gradients = T.grad(self.cost, params)
         updates, free_parameters = optimize_updates(params, gradients, self.config)
         self.network.free_parameters.extend(free_parameters)
