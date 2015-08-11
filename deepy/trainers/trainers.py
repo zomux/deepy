@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import logging as loggers
-import gzip, sys
-import cPickle as pickle
-import time
 
 import numpy as np
 import theano
@@ -81,6 +78,14 @@ class NeuralTrainer(object):
         self.best_cost = 1e100
         self.best_iter = 0
         self.best_params = self._copy_network_params()
+        self._skip_batches = 0
+
+    def skip(self, n_batches):
+        """
+        Skip N batches in the training.
+        """
+        logging.info("Skip %d batches" % n_batches)
+        self._skip_batches = n_batches
 
     def _setup_costs(self):
         self.cost = self._add_regularization(self.network.cost)
@@ -243,25 +248,28 @@ class NeuralTrainer(object):
         c = 0
 
         for x in train_set:
-            if dirty_trick_times > 0:
-                cost_x = self.learning_func(*[t[:(t.shape[0]/2)] for t in x])
-                cost_matrix.append(cost_x)
-                cost_x = self.learning_func(*[t[(t.shape[0]/2):] for t in x])
-                dirty_trick_times -= 1
-            else:
-                try:
-                    cost_x = self.learning_func(*x)
-                except MemoryError:
-                    logging.info("Memory error was detected, perform dirty trick 30 times")
-                    dirty_trick_times = 30
-                    # Dirty trick
+            if self._skip_batches == 0:
+                if dirty_trick_times > 0:
                     cost_x = self.learning_func(*[t[:(t.shape[0]/2)] for t in x])
                     cost_matrix.append(cost_x)
                     cost_x = self.learning_func(*[t[(t.shape[0]/2):] for t in x])
-            cost_matrix.append(cost_x)
-            if training_callback:
-                self.last_score = cost_x[0]
-                self.network.training_callback()
+                    dirty_trick_times -= 1
+                else:
+                    try:
+                        cost_x = self.learning_func(*x)
+                    except MemoryError:
+                        logging.info("Memory error was detected, perform dirty trick 30 times")
+                        dirty_trick_times = 30
+                        # Dirty trick
+                        cost_x = self.learning_func(*[t[:(t.shape[0]/2)] for t in x])
+                        cost_matrix.append(cost_x)
+                        cost_x = self.learning_func(*[t[(t.shape[0]/2):] for t in x])
+                cost_matrix.append(cost_x)
+                if training_callback:
+                    self.last_score = cost_x[0]
+                    self.network.training_callback()
+            else:
+                self._skip_batches -= 1
             if train_size:
                 c += 1
                 sys.stdout.write("\r> %d%%" % (c * 100 / train_size))
