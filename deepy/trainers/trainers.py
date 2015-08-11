@@ -3,6 +3,7 @@
 
 import logging as loggers
 
+import sys
 import numpy as np
 import theano
 import theano.tensor as T
@@ -79,6 +80,7 @@ class NeuralTrainer(object):
         self.best_iter = 0
         self.best_params = self._copy_network_params()
         self._skip_batches = 0
+        self._progress = 0
 
     def skip(self, n_batches):
         """
@@ -128,8 +130,15 @@ class NeuralTrainer(object):
         self.network.save_params(path)
 
     def load_params(self, path, exclude_free_params=False):
+        """
+        Load parameters for the training.
+        This method can load free parameters and resume the training progress.
+        """
         self.network.load_params(path, exclude_free_params=exclude_free_params)
         self.best_params = self._copy_network_params()
+        # Resume the progress
+        if self.network.train_logger.progress() > 0:
+            self.skip(self.network.train_logger.progress())
 
     def _copy_network_params(self):
         checkpoint = (map(lambda p: p.get_value().copy(), self.network.parameters),
@@ -219,6 +228,7 @@ class NeuralTrainer(object):
             self.best_params = self._copy_network_params()
             marker = ' *'
             if self.config.auto_save:
+                self.network.train_logger.record_progress(self._progress)
                 self.network.save_params(self.config.auto_save, new_thread=True)
         else:
             marker = ""
@@ -245,7 +255,7 @@ class NeuralTrainer(object):
         dirty_trick_times = 0
         training_callback = bool(self.network.training_callbacks)
         cost_matrix = []
-        c = 0
+        self._progress = 0
 
         for x in train_set:
             if self._skip_batches == 0:
@@ -271,9 +281,10 @@ class NeuralTrainer(object):
             else:
                 self._skip_batches -= 1
             if train_size:
-                c += 1
-                sys.stdout.write("\r> %d%%" % (c * 100 / train_size))
+                self._progress += 1
+                sys.stdout.write("\r> %d%%" % (self._progress * 100 / train_size))
                 sys.stdout.flush()
+        self._progress = 0
 
         if train_size:
             sys.stdout.write("\r")
