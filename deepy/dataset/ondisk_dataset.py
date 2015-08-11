@@ -26,7 +26,6 @@ class OnDiskDataset(Dataset):
         self._cache_on_memory = cache_on_memory
         self._cached_train_data = None
         self._post_processing = post_processing if post_processing else lambda x: x
-        self._skip_amount = 0
         self._shuffle_memory = shuffle_memory
         if self._cache_on_memory:
             logging.info("Cache on memory")
@@ -35,18 +34,8 @@ class OnDiskDataset(Dataset):
                 logging.info("Shuffle on-memory data")
                 global_rand.shuffle(self._cached_train_data)
 
-    def skip(self, amount):
-        """
-        Skip N training batches.
-        Do not support on-memory data set.
-        """
-        self._skip_amount = amount
-
     def generate_train_data(self):
         for data in StreamPickler.load(open(self._train_path)):
-            if self._skip_amount > 0:
-                self._skip_amount -= 1
-                continue
             yield self._post_processing(data)
 
     def generate_valid_data(self):
