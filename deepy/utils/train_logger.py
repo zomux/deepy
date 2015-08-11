@@ -48,6 +48,8 @@ class TrainLogger(object):
             outf.write("# deepy version: %s\n" % deepy.__version__)
             for line in self.log_pool:
                 outf.write(line + "\n")
+            if self._progress > 0:
+                outf.write("%s %d\n" % (PROGRESS_LOG_PREFIX, self._progress))
 
     def _log_path(self, model_path):
         log_path = model_path.rsplit(".", 1)[0] + ".log"
