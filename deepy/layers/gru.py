@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from deepy.utils import build_activation, FLOATX
+from deepy.utils import build_activation, FLOATX, OrthogonalInitializer, XavierGlorotInitializer
 import numpy as np
 import theano
 import theano.tensor as T
@@ -18,7 +18,7 @@ class GRU(NeuralLayer):
 
     def __init__(self, hidden_size, input_type="sequence", output_type="sequence",
                  inner_activation="hard_sigmoid", outer_activation="sigmoid",
-                 inner_init="orthogonal", outer_init=None, steps=None,
+                 inner_init=None, outer_init=None, steps=None,
                  go_backwards=False,
                  persistent_state=False, batch_size=0,
                  reset_state_for_input=None,
@@ -30,8 +30,8 @@ class GRU(NeuralLayer):
         self._output_type = output_type
         self._inner_activation = inner_activation
         self._outer_activation = outer_activation
-        self._inner_init = inner_init
-        self._outer_init = outer_init
+        self._inner_init = inner_init if inner_init else OrthogonalInitializer()
+        self._outer_init = outer_init if outer_init else XavierGlorotInitializer()
         self._steps = steps
         self.persistent_state = persistent_state
         self.reset_state_for_input = reset_state_for_input
