@@ -58,7 +58,7 @@ class GRU(NeuralLayer):
     def step(self, *vars):
         # Parse sequence
         sequence_map = dict(zip(self._sequence_map.keys(), vars[:len(self._sequence_map)]))
-        h_tm1 = vars[-1:]
+        h_tm1 = vars[-1]
         # Reset state
         if self.reset_state_for_input != None:
             h_tm1 = self._auto_reset_memories(sequence_map["x"], h_tm1)
@@ -78,7 +78,7 @@ class GRU(NeuralLayer):
         z_t = self._inner_act(xz_t + T.dot(h_tm1, self.U_z))
         r_t = self._inner_act(xr_t + T.dot(h_tm1, self.U_r))
         h_t_pre = self._outer_act(xh_t + T.dot(r_t * h_tm1, self.U_h))
-        h_t = z * h_tm1 + (1 - z) *  h_t_pre
+        h_t = z_t * h_tm1 + (1 - z_t) *  h_t_pre
         # Apply mask
         if "mask" in sequence_map:
             mask = sequence_map["mask"].dimshuffle(0, 'x')
@@ -90,9 +90,9 @@ class GRU(NeuralLayer):
         self._sequence_map.clear()
         if self._input_type == "sequence":
             # Input vars
-            xz = T.dot(x, self.W_i)
-            xr = T.dot(x, self.W_f)
-            xh = T.dot(x, self.W_c)
+            xz = T.dot(x, self.W_z)
+            xr = T.dot(x, self.W_r)
+            xh = T.dot(x, self.W_h)
             self._sequence_map.update([("xz", xz), ("xr", xr), ("xh", xh)])
         # Reset state
         if self.reset_state_for_input != None:
@@ -112,15 +112,15 @@ class GRU(NeuralLayer):
             self._sequence_map.update([("xz2", xz2), ("xr2", xr2), ("xh2", xh2)])
         return self._sequence_map.values()
 
-    def produce_initial_state(self, x):
+    def produce_initial_states(self, x):
         if self.persistent_state:
-            return self.state_h
+            return self.state_h,
         else:
             h0 = T.alloc(np.cast[FLOATX](0.), x.shape[0], self._hidden_size)
-            return h0
+            return h0,
 
     def output(self, x):
-        h0 = self.produce_initial_state(x)
+        h0, = self.produce_initial_states(x)
         if self._input_type == "sequence":
             # Move middle dimension to left-most position
             # (sequence, batch, value)
@@ -130,7 +130,7 @@ class GRU(NeuralLayer):
             h0 = x
             sequences = self.produce_input_sequences(None)
 
-        [hiddens, memories], _ = theano.scan(
+        hiddens, _ = theano.scan(
             self.step,
             sequences=sequences,
             outputs_info=[h0],
@@ -173,7 +173,7 @@ class GRU(NeuralLayer):
 
         if self._input_type == "sequence":
             self.register_parameters(self.W_z, self.U_z, self.b_z,
-                                     self.W_r, self.U_r, self.b_r
+                                     self.W_r, self.U_r, self.b_r,
                                      self.W_h, self.U_h, self.b_h)
         else:
             self.register_parameters(self.U_z, self.b_z,
@@ -184,7 +184,7 @@ class GRU(NeuralLayer):
             self.W_z2 = self.create_weight(self.second_input_size, self._hidden_size, "wz2", initializer=self._outer_init)
             self.W_r2 = self.create_weight(self.second_input_size, self._hidden_size, "wr2", initializer=self._outer_init)
             self.W_h2 = self.create_weight(self.second_input_size, self._hidden_size, "wh2", initializer=self._outer_init)
-            self.register_parameters(self.W_i2, self.W_f2, self.W_c2)
+            self.register_parameters(self.W_z2, self.W_r2, self.W_h2)
 
         # Create persistent state
         if self.persistent_state:
