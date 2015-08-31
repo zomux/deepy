@@ -15,6 +15,7 @@ from activation import Activation
 from prelu import PRelu
 from irnn import IRNN
 from lstm import LSTM
+from gru import GRU
 from batch_norm import BatchNormalization
 from onehot_embed import OneHotEmbedding
 from word_embed import WordEmbedding
