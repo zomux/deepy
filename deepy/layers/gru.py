@@ -69,15 +69,15 @@ class GRU(NeuralLayer):
             xz_t, xr_t, xh_t = 0, 0, 0
 
         # Add second input
-        if "xi2" in sequence_map:
-            xi2, xf2, xo2, xc2 = map(sequence_map.get, ["xz2", "xr2", "xh2"])
-            xz_t += xi2
-            xr_t += xf2
-            xh_t += xc2
+        if "xz2" in sequence_map:
+            xz2, xr2, xh2 = map(sequence_map.get, ["xz2", "xr2", "xh2"])
+            xz_t += xz2
+            xr_t += xr2
+            xh_t += xh2
         # GRU core step
-        z_t = self._inner_act(xz_t + T.dot(h_tm1, self.U_z))
-        r_t = self._inner_act(xr_t + T.dot(h_tm1, self.U_r))
-        h_t_pre = self._outer_act(xh_t + T.dot(r_t * h_tm1, self.U_h))
+        z_t = self._inner_act(xz_t + T.dot(h_tm1, self.U_z) + self.b_z)
+        r_t = self._inner_act(xr_t + T.dot(h_tm1, self.U_r) + self.b_r)
+        h_t_pre = self._outer_act(xh_t + T.dot(r_t * h_tm1, self.U_h) + self.b_h)
         h_t = z_t * h_tm1 + (1 - z_t) *  h_t_pre
         # Apply mask
         if "mask" in sequence_map:
