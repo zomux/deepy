@@ -43,6 +43,7 @@ def build_activation(act=None):
             'linear': lambda z: z,
             'logistic': T.nnet.sigmoid,
             'sigmoid': T.nnet.sigmoid,
+            'hard_sigmoid': T.nnet.hard_sigmoid,
             'softplus': T.nnet.softplus,
             'softmax': softmax,
             'theano_softmax': T.nnet.softmax,
