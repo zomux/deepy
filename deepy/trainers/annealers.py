@@ -59,7 +59,7 @@ class ScheduledLearningRateAnnealer(object):
         self.max_iters = max_iters
         self._trainer = trainer
         self._learning_rate = self._trainer.config.learning_rate
-        self._iter = -1
+        self._iter = 0
 
     def invoke(self):
         self._iter += 1
