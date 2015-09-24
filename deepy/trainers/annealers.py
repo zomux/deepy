@@ -55,6 +55,7 @@ class LearningRateAnnealer(object):
 class ScheduledLearningRateAnnealer(object):
 
     def __init__(self, trainer, iter_start_halving=5, max_iters=10):
+        logging.info("iteration to start halving learning rate: %d" % iter_start_halving)
         self.iter_start_halving = iter_start_halving
         self.max_iters = max_iters
         self._trainer = trainer
