@@ -22,9 +22,10 @@ install:
   - travis_retry conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib nose dateutil
   # Coverage packages are on my binstar channel
   - conda install --yes -c dan_blanchard python-coveralls nose-cov
-  - travis_retry pip install -r requirements.txt
+  # - travis_retry pip install -r requirements.txt
+  - travis_retry pip install theano
   - python setup.py install
- 
+
 # Run test
 script:
   - source bin/cpu_env.sh
