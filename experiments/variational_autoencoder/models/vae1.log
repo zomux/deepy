@@ -1,0 +1,96 @@
+# deepy version: 0.1.8
+[2015/10/27 16:26:32] test    (iter=1) J=54345.95 lower_bound=-543.46
+[2015/10/27 16:26:34] valid   (iter=1) J=54345.85 lower_bound=-543.46 *
+[2015/10/27 16:26:57] monitor (iter=1) J=14178.24 lower_bound=-141.78
+[2015/10/27 16:26:59] valid   (iter=2) J=14123.96 lower_bound=-141.33 *
+[2015/10/27 16:27:21] monitor (iter=2) J=13054.38 lower_bound=-130.54
+[2015/10/27 16:27:23] valid   (iter=3) J=13041.08 lower_bound=-130.62 *
+[2015/10/27 16:27:44] monitor (iter=3) J=12611.90 lower_bound=-126.12
+[2015/10/27 16:27:46] valid   (iter=4) J=12742.91 lower_bound=-127.48 *
+[2015/10/27 16:28:10] monitor (iter=4) J=12616.71 lower_bound=-126.17
+[2015/10/27 16:28:12] valid   (iter=5) J=12547.83 lower_bound=-125.56 *
+[2015/10/27 16:28:33] monitor (iter=5) J=12479.11 lower_bound=-124.79
+[2015/10/27 16:28:35] valid   (iter=6) J=12567.60 lower_bound=-125.58
+[2015/10/27 16:28:56] monitor (iter=6) J=12441.17 lower_bound=-124.41
+[2015/10/27 16:28:58] valid   (iter=7) J=12589.84 lower_bound=-126.06
+[2015/10/27 16:29:21] monitor (iter=7) J=12674.61 lower_bound=-126.75
+[2015/10/27 16:29:23] valid   (iter=8) J=12595.63 lower_bound=-125.96
+[2015/10/27 16:29:42] monitor (iter=8) J=12609.39 lower_bound=-126.09
+[2015/10/27 16:29:44] valid   (iter=9) J=12554.28 lower_bound=-125.40
+[2015/10/27 16:30:05] monitor (iter=9) J=11693.93 lower_bound=-116.94
+[2015/10/27 16:30:07] valid   (iter=10) J=11762.87 lower_bound=-117.52 *
+[2015/10/27 16:30:30] monitor (iter=10) J=11664.47 lower_bound=-116.64
+[2015/10/27 16:30:32] test    (iter=11) J=11631.69 lower_bound=-116.14
+[2015/10/27 16:30:34] valid   (iter=11) J=11727.26 lower_bound=-117.19 *
+[2015/10/27 16:30:55] monitor (iter=11) J=11600.40 lower_bound=-116.00
+[2015/10/27 16:30:57] valid   (iter=12) J=11758.90 lower_bound=-117.58
+[2015/10/27 16:31:17] monitor (iter=12) J=11544.75 lower_bound=-115.45
+[2015/10/27 16:31:19] valid   (iter=13) J=11575.03 lower_bound=-115.80 *
+[2015/10/27 16:31:41] monitor (iter=13) J=11489.60 lower_bound=-114.90
+[2015/10/27 16:31:43] valid   (iter=14) J=11663.25 lower_bound=-116.78
+[2015/10/27 16:32:04] monitor (iter=14) J=11463.37 lower_bound=-114.63
+[2015/10/27 16:32:06] valid   (iter=15) J=11519.25 lower_bound=-115.07 *
+[2015/10/27 16:32:20] monitor (iter=15) J=11367.32 lower_bound=-113.67
+[2015/10/27 16:32:21] valid   (iter=16) J=11574.97 lower_bound=-115.81
+[2015/10/27 16:32:46] monitor (iter=16) J=11498.94 lower_bound=-114.99
+[2015/10/27 16:32:48] valid   (iter=17) J=11584.82 lower_bound=-115.91
+[2015/10/27 16:33:09] monitor (iter=17) J=11367.10 lower_bound=-113.67
+[2015/10/27 16:33:11] valid   (iter=18) J=11556.51 lower_bound=-115.60
+[2015/10/27 16:33:33] monitor (iter=18) J=11377.00 lower_bound=-113.77
+[2015/10/27 16:33:35] valid   (iter=19) J=11516.09 lower_bound=-115.24
+[2015/10/27 16:33:54] monitor (iter=19) J=11059.55 lower_bound=-110.60
+[2015/10/27 16:33:56] valid   (iter=20) J=11123.16 lower_bound=-111.25 *
+[2015/10/27 16:34:14] monitor (iter=20) J=11134.34 lower_bound=-111.34
+[2015/10/27 16:34:16] test    (iter=21) J=11059.54 lower_bound=-110.63
+[2015/10/27 16:34:18] valid   (iter=21) J=11152.76 lower_bound=-111.45
+[2015/10/27 16:34:41] monitor (iter=21) J=11064.55 lower_bound=-110.65
+[2015/10/27 16:34:44] valid   (iter=22) J=11082.47 lower_bound=-110.83 *
+[2015/10/27 16:35:06] monitor (iter=22) J=11039.68 lower_bound=-110.40
+[2015/10/27 16:35:08] valid   (iter=23) J=11126.07 lower_bound=-111.30
+[2015/10/27 16:35:30] monitor (iter=23) J=11035.97 lower_bound=-110.36
+[2015/10/27 16:35:32] valid   (iter=24) J=11169.83 lower_bound=-111.62
+[2015/10/27 16:35:55] monitor (iter=24) J=11023.86 lower_bound=-110.24
+[2015/10/27 16:35:57] valid   (iter=25) J=11104.48 lower_bound=-111.08
+[2015/10/27 16:36:19] monitor (iter=25) J=11045.44 lower_bound=-110.45
+[2015/10/27 16:36:21] valid   (iter=26) J=11084.92 lower_bound=-110.74
+[2015/10/27 16:36:45] monitor (iter=26) J=10868.71 lower_bound=-108.69
+[2015/10/27 16:36:47] valid   (iter=27) J=10931.28 lower_bound=-109.29 *
+[2015/10/27 16:37:11] monitor (iter=27) J=10893.32 lower_bound=-108.93
+[2015/10/27 16:37:13] valid   (iter=28) J=10908.93 lower_bound=-109.08 *
+[2015/10/27 16:37:32] monitor (iter=28) J=10913.68 lower_bound=-109.14
+[2015/10/27 16:37:34] valid   (iter=29) J=10911.89 lower_bound=-109.11
+[2015/10/27 16:37:53] monitor (iter=29) J=10842.34 lower_bound=-108.42
+[2015/10/27 16:37:55] valid   (iter=30) J=10891.39 lower_bound=-108.95 *
+[2015/10/27 16:38:17] monitor (iter=30) J=10860.07 lower_bound=-108.60
+[2015/10/27 16:38:19] test    (iter=31) J=10776.41 lower_bound=-107.88
+[2015/10/27 16:38:21] valid   (iter=31) J=10864.71 lower_bound=-108.66 *
+[2015/10/27 16:38:43] monitor (iter=31) J=10813.83 lower_bound=-108.14
+[2015/10/27 16:38:45] valid   (iter=32) J=10897.95 lower_bound=-108.99
+[2015/10/27 16:39:05] monitor (iter=32) J=10805.33 lower_bound=-108.05
+[2015/10/27 16:39:07] valid   (iter=33) J=10851.14 lower_bound=-108.62 *
+[2015/10/27 16:39:30] monitor (iter=33) J=10737.49 lower_bound=-107.37
+[2015/10/27 16:39:32] valid   (iter=34) J=10828.36 lower_bound=-108.23 *
+[2015/10/27 16:39:52] monitor (iter=34) J=10805.45 lower_bound=-108.05
+[2015/10/27 16:39:54] valid   (iter=35) J=10886.13 lower_bound=-108.78
+[2015/10/27 16:40:19] monitor (iter=35) J=10795.75 lower_bound=-107.96
+[2015/10/27 16:40:21] valid   (iter=36) J=10857.65 lower_bound=-108.59
+[2015/10/27 16:40:38] monitor (iter=36) J=10698.67 lower_bound=-106.99
+[2015/10/27 16:40:40] valid   (iter=37) J=10796.27 lower_bound=-107.93 *
+[2015/10/27 16:41:04] monitor (iter=37) J=10741.07 lower_bound=-107.41
+[2015/10/27 16:41:06] valid   (iter=38) J=10812.59 lower_bound=-108.15
+[2015/10/27 16:41:30] monitor (iter=38) J=10716.59 lower_bound=-107.17
+[2015/10/27 16:41:32] valid   (iter=39) J=10876.78 lower_bound=-108.84
+[2015/10/27 16:41:52] monitor (iter=39) J=10698.29 lower_bound=-106.98
+[2015/10/27 16:41:54] valid   (iter=40) J=10796.60 lower_bound=-108.14
+[2015/10/27 16:42:16] monitor (iter=40) J=10705.70 lower_bound=-107.06
+[2015/10/27 16:42:18] test    (iter=41) J=10709.64 lower_bound=-107.08
+[2015/10/27 16:42:20] valid   (iter=41) J=10801.08 lower_bound=-107.88
+[2015/10/27 16:42:42] monitor (iter=41) J=10594.84 lower_bound=-105.95
+[2015/10/27 16:42:44] valid   (iter=42) J=10693.89 lower_bound=-106.98 *
+[2015/10/27 16:43:05] monitor (iter=42) J=10706.63 lower_bound=-107.07
+[2015/10/27 16:43:07] valid   (iter=43) J=10703.02 lower_bound=-107.02
+[2015/10/27 16:43:27] monitor (iter=43) J=10741.49 lower_bound=-107.41
+[2015/10/27 16:43:28] valid   (iter=44) J=10714.86 lower_bound=-107.03
+[2015/10/27 16:43:50] monitor (iter=44) J=10602.91 lower_bound=-106.03
+[2015/10/27 16:43:52] valid   (iter=45) J=10698.91 lower_bound=-106.98
+[2015/10/27 16:44:14] monitor (iter=45) J=10711.51 lower_bound=-107.12

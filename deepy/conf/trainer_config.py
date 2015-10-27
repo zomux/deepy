@@ -16,7 +16,7 @@ DEFAULT_TRAINER_SETTING = {
     "monitor_frequency": 1,
     "min_improvement": 0.001,
     "max_iterations": 0,
-    "patience": 20,
+    "patience": 6,
     "auto_save": None,
     "data_transmitter": None, # Never use this
     "record_free_params": True,
