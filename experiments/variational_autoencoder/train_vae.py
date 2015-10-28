@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 from deepy import *
 from variational_autoencoder import VariationalAutoEncoder
 
-LATENT_DIM = 1
+LATENT_DIM = 2
 model_path = os.path.join(os.path.dirname(__file__), "models", "vae_latent%d.gz" % LATENT_DIM)
 
 def create_model(load=False, sample=False):

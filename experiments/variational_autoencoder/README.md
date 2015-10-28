@@ -10,7 +10,7 @@ python experiments/variational_autoencoder/train_vae.py
 
 ## Visualization
 
-Make visualization by varying the 1-dimension latent variable.
+Make visualization by varying the 2-dimension latent variable.
 
 ![](visualization.png)
 
