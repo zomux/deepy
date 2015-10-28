@@ -88,6 +88,20 @@ python experiments/mnist/mlp_elastic_distortion.py
 python experiments/attention_models/baseline.py
 ```
 
+### Variational auto-encoders
+
+- Train a model
+```
+python experiments/variational_autoencoder/train_vae.py
+```
+
+- Visualization the output when varying the 1-dimension latent variable
+```
+python experiments/variational_autoencoder/visualize_vae.py
+```
+
+![](https://raw.githubusercontent.com/uaca/deepy/master/experiments/variational_autoencoder/visualization.png)
+
 ### Language model
 
 #### Penn Treebank benchmark

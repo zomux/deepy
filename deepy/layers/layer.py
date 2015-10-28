@@ -39,9 +39,10 @@ class NeuralLayer(object):
         self.testing_callbacks = []
 
 
-    def connect(self, input_dim, previous_layer=None, network_config=None):
+    def connect(self, input_dim, previous_layer=None, network_config=None, no_setup=False):
         """
         Connect to a previous layer.
+        :param no_setup: if avoid calling setup
         """
         self.input_dim = input_dim
         if self.output_dim == 0:
@@ -49,7 +50,8 @@ class NeuralLayer(object):
         self.previous_layer = previous_layer
         self.network_config = network_config
         self.connected = True
-        self.setup()
+        if not no_setup:
+            self.setup()
         return self
 
     def setup(self):

@@ -1,12 +1,18 @@
 # Experiment note of Variational autoencoders
 
-## Commands
+## Training
 
 Train the VAE model on MNIST data.
 
 ```
 python experiments/variational_autoencoder/train_vae.py
 ```
+
+## Visualization
+
+Make visualization by varying the 1-dimension latent variable.
+
+![](visualization.png)
 
 ## About weight initialization
 

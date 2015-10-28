@@ -7,13 +7,13 @@ logging.basicConfig(level=logging.INFO)
 from deepy import *
 from variational_autoencoder import VariationalAutoEncoder
 
+LATENT_DIM = 1
+model_path = os.path.join(os.path.dirname(__file__), "models", "vae_latent%d.gz" % LATENT_DIM)
 
-model_path = os.path.join(os.path.dirname(__file__), "models", "vae1.gz")
-
-def create_model(load=False):
-    model = VariationalAutoEncoder(input_dim=28*28)
+def create_model(load=False, sample=False):
+    model = VariationalAutoEncoder(input_dim=28*28, latent_dim=LATENT_DIM, sample=sample)
     model.stack_encoders(Dense(400, 'tanh', init=GaussianInitializer(), random_bias=True))
-    model.stack_reparameterization_layer(20)
+    model.stack_reparameterization_layer(LATENT_DIM)
     model.stack_decoders(Dense(400, 'tanh', init=GaussianInitializer(), random_bias=True),
                          Dense(28*28, 'sigmoid', init=GaussianInitializer()))
     if load:

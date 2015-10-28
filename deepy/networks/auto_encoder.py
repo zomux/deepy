@@ -53,8 +53,9 @@ class AutoEncoder(NeuralNetwork):
         """
         if not self.encoding_network:
             self.encoding_network = NeuralNetwork(self.input_dim, self.network_config, self.input_tensor)
-            self.encoding_network.stack(*self.encoding_layes)
-        self.encoding_network.compute(x)
+            for layer in self.encoding_layes:
+                self.encoding_network.stack_layer(layer, no_setup=True)
+        return self.encoding_network.compute(x)
 
     def decode(self, x):
         """
@@ -64,5 +65,6 @@ class AutoEncoder(NeuralNetwork):
             raise Exception("rep_dim must be set to decode.")
         if not self.decoding_network:
             self.decoding_network = NeuralNetwork(self.rep_dim, self.network_config)
-            self.decoding_network.stack(*self.decoding_layers)
-        self.decoding_network.compute(x)
+            for layer in self.decoding_layers:
+                self.decoding_network.stack_layer(layer, no_setup=True)
+        return self.decoding_network.compute(x)

@@ -13,10 +13,15 @@ class ReparameterizationLayer(NeuralLayer):
     The prior value is recorded after the computation graph created.
     """
 
-    def __init__(self, size):
+    def __init__(self, size, sample=False):
+        """
+        :param size: the size of latent variable
+        :param sample: whether to get a clean latent variable
+        """
         super(ReparameterizationLayer, self).__init__("VariationalEncoder")
         self.size = size
         self.output_dim = size
+        self.sample = sample
         self._prior = None
 
     def setup(self):
@@ -31,7 +36,11 @@ class ReparameterizationLayer(NeuralLayer):
         self._prior = 0.5* T.sum(1 + 2*log_sigma - mu**2 - T.exp(2*log_sigma))
         # Reparameterization
         eps = global_theano_rand.normal((x.shape[0], self.size))
-        z = mu + T.exp(log_sigma) * eps
+
+        if self.sample:
+            z = mu
+        else:
+            z = mu + T.exp(log_sigma) * eps
         return z
 
     def prior(self):
@@ -47,13 +56,23 @@ class VariationalAutoEncoder(AutoEncoder):
     Only binary output cost function is supported now.
     """
 
+    def __init__(self, input_dim, latent_dim=None, sample=False):
+        """
+        :param latent_dim: latent variable size, this is not required in training
+        :param sample: add no randomness when this flag is on
+        """
+        super(VariationalAutoEncoder, self).__init__(input_dim, rep_dim=latent_dim)
+        self.sample = sample
+        self._setup_monitors = True
+
+
     def stack_reparameterization_layer(self, layer_size):
         """
         Perform reparameterization trick for latent variables.
+        :param layer_size: the size of latent variable
         """
-        self.rep_layer = ReparameterizationLayer(layer_size)
+        self.rep_layer = ReparameterizationLayer(layer_size, sample=self.sample)
         self.stack_encoders(self.rep_layer)
-        self._setup_monitors = True
 
     def _cost_func(self, y):
         logpxz  = - T.nnet.binary_crossentropy(y, self.input_variables[0]).sum()

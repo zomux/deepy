@@ -70,16 +70,17 @@ class NeuralNetwork(object):
         if self.network_config.layers:
             self.stack(self.network_config.layers)
 
-    def stack_layer(self, layer):
+    def stack_layer(self, layer, no_setup=False):
         """
         Stack a neural layer.
         :type layer: NeuralLayer
+        :param no_setup: whether the layer is already initialized
         """
         layer.name += "%d" % (len(self.layers) + 1)
         if not self.layers:
-            layer.connect(self.input_dim, network_config=self.network_config)
+            layer.connect(self.input_dim, network_config=self.network_config, no_setup=no_setup)
         else:
-            layer.connect(self.layers[-1].output_dim, previous_layer=self.layers[-1], network_config=self.network_config)
+            layer.connect(self.layers[-1].output_dim, previous_layer=self.layers[-1], network_config=self.network_config, no_setup=no_setup)
         self._output = layer.output(self._output)
         self._test_output = layer.test_output(self._test_output)
         self._hidden_outputs.append(self._output)
