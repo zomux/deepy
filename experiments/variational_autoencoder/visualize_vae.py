@@ -35,4 +35,4 @@ if __name__ == '__main__':
             axmap[i, j].axis("off")
             axmap[i, j].matshow(output_img, cmap="gray")
 
-    plt.savefig(viz_path, bbox_inches='tight', facecolor='black')
+    plt.savefig(viz_path, bbox_inches='tight', facecolor='black', dpi=60)
