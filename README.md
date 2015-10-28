@@ -100,6 +100,8 @@ python experiments/variational_autoencoder/train_vae.py
 python experiments/variational_autoencoder/visualize_vae.py
 ```
 
+- Result of visualization
+
 ![](https://raw.githubusercontent.com/uaca/deepy/master/experiments/variational_autoencoder/visualization.png)
 
 ### Language model
