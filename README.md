@@ -95,7 +95,7 @@ python experiments/attention_models/baseline.py
 python experiments/variational_autoencoder/train_vae.py
 ```
 
-- Visualization the output when varying the 1-dimension latent variable
+- Visualization the output when varying the 2-dimension latent variable
 ```
 python experiments/variational_autoencoder/visualize_vae.py
 ```
