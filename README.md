@@ -74,6 +74,10 @@ python experiments/mnist/mlp_dropout.py
 ```
 python experiments/mnist/mlp_prelu_dropout.py
 ```
+- Maxout network
+```
+python experiments/mnist/mlp_maxout.py
+```
 - Deep convolution
 ```
 python experiments/mnist/deep_convolution.py
