@@ -9,6 +9,7 @@ import re
 import copy
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 import logging as loggers
+
 logging = loggers.getLogger(__name__)
 
 FLOATX = theano.config.floatX
@@ -42,6 +43,11 @@ def onehot_tensor(i_matrix, vocab_size):
 #     ranges = T.shape_padleft(T.arange(r), t.ndim)
 #     return T.eq(ranges, T.shape_padright(t, 1))
 
+def shared_scalar(value, name=None):
+    """
+    Create a shared theano scalar value.
+    """
+    return theano.shared(np.array(value, dtype=FLOATX), name=name)
 
 def make_float_matrices(*names):
     ret = []

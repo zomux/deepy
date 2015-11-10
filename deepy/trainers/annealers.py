@@ -3,12 +3,14 @@
 
 import theano
 import numpy as np
-from deepy.utils import FLOATX
+
+from controllers import TrainingController
+from deepy.utils import FLOATX, shared_scalar
 
 import logging as loggers
 logging = loggers.getLogger(__name__)
 
-class LearningRateAnnealer(object):
+class LearningRateAnnealer(TrainingController):
     """
     Learning rate annealer.
     """
@@ -17,7 +19,7 @@ class LearningRateAnnealer(object):
         """
         :type trainer: deepy.trainers.trainers.NeuralTrainer
         """
-        self._trainer = trainer
+        super(LearningRateAnnealer, self).__init__(trainer)
         self._iter = -1
         self._annealed_iter = -1
         self._patience = patience
@@ -25,7 +27,7 @@ class LearningRateAnnealer(object):
         self._annealed_times = 0
         self._learning_rate = self._trainer.config.learning_rate
         if type(self._learning_rate) == float:
-            raise Exception("use LearningRateAnnealer.learning_rate to wrap the value in the config.")
+            raise Exception("use shared_scalar to wrap the value in the config.")
 
     def invoke(self):
         """
@@ -49,16 +51,19 @@ class LearningRateAnnealer(object):
         """
         Wrap learning rate.
         """
-        return theano.shared(np.array(value, dtype=FLOATX), name="learning_rate")
+        return shared_scalar(value, name="learning_rate")
 
 
-class ScheduledLearningRateAnnealer(object):
+class ScheduledLearningRateAnnealer(TrainingController):
+    """
+    Anneal learning rate according to pre-scripted schedule.
+    """
 
     def __init__(self, trainer, iter_start_halving=5, max_iters=10):
+        super(ScheduledLearningRateAnnealer, self).__init__(trainer)
         logging.info("iteration to start halving learning rate: %d" % iter_start_halving)
         self.iter_start_halving = iter_start_halving
         self.max_iters = max_iters
-        self._trainer = trainer
         self._learning_rate = self._trainer.config.learning_rate
         self._iter = 0
 
@@ -71,4 +76,30 @@ class ScheduledLearningRateAnnealer(object):
         if self._iter >= self.max_iters - 1:
             logging.info("ending")
             return True
+        return False
+
+
+class ExponentialLearningRateAnnealer(TrainingController):
+    """
+    Exponentially decay learning rate after each update.
+    """
+
+    def __init__(self, trainer, decay_factor=1.000004, min_lr=.000001, debug=False):
+        super(ExponentialLearningRateAnnealer, self).__init__(trainer)
+        logging.info("exponentially decay learning rate with decay factor = %f" % decay_factor)
+        self.decay_factor = np.array(decay_factor, dtype=FLOATX)
+        self.min_lr = np.array(min_lr, dtype=FLOATX)
+        self.debug = debug
+        self._learning_rate = self._trainer.config.learning_rate
+        if type(self._learning_rate) == float:
+            raise Exception("use shared_scalar to wrap the value in the config.")
+        self._trainer.network.training_callbacks.append(self.update_callback)
+
+    def update_callback(self):
+        if self._learning_rate.get_value() > self.min_lr:
+            self._learning_rate.set_value(self._learning_rate.get_value() / self.decay_factor)
+
+    def invoke(self):
+        if self.debug:
+            logging.info("learning rate: %.8f" % self._learning_rate.get_value())
         return False

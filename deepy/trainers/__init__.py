@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
+from controllers import TrainingController
 from trainers import *
 from optimize import *
 from annealers import *
