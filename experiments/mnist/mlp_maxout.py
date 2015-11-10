@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 """
-For reference, this model should achieve 1.50% error rate, in 10 mins with i7 CPU (8 threads).
+The setting of the network architecture and optimization is
+    almost the same as the original version of Maxout netowrk:
+    https://github.com/lisa-lab/pylearn2/blob/master/pylearn2/scripts/papers/maxout/mnist_pi.yaml
+But the final accuracy in this experiment did not achieved 0.94%
 """
 
 import logging, os
