@@ -60,3 +60,6 @@ docs/site/
 
 # For tutorial
 my_experiments/
+
+# Ignore all models
+*.gz
