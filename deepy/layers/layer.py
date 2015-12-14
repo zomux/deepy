@@ -19,7 +19,11 @@ class NeuralLayer(object):
         """
         self.name = name
         self.input_dim = 0
+        self.input_dims = [0]
         self.output_dim = 0
+
+        self._linked_block = None
+        self._linked = False
 
         self.connected = False
         self.updates = []
@@ -38,24 +42,69 @@ class NeuralLayer(object):
         self.training_callbacks = []
         self.testing_callbacks = []
 
-
-    def connect(self, input_dim, previous_layer=None, network_config=None, no_setup=False):
+    def connect(self, input_dim=0, input_dims=None, previous_layer=None, network_config=None, no_prepare=False):
         """
         Connect to a previous layer.
-        :param no_setup: if avoid calling setup
+        :param no_prepare: if avoid calling setup
         """
-        self.input_dim = input_dim
+        # configure input dimensions
+        if input_dims:
+            self.input_dims = input_dims
+            self.input_dim = input_dims[0]
+        else:
+            self.input_dim = input_dim
+            self.input_dims = [input_dims]
+        # set default output dimension
         if self.output_dim == 0:
-            self.output_dim = input_dim
+            self.output_dim = self.input_dim
         self.previous_layer = previous_layer
         self.network_config = network_config
         self.connected = True
-        if not no_setup:
-            self.setup()
+        # call prepare
+        if not no_prepare:
+            self.prepare()
         return self
+
+    def compute_raw(self, inputs, dims):
+        """
+        Compute on raw Theano tensors.
+        :type inputs: list of TensorLayer
+        :type dims: list of int
+        """
+        from variable import NeuralVar
+        tensors = [NeuralVar(d, t) for d, t in zip(dims, inputs)]
+        return self.compute(*tensors)
+
+    def compute(self, *inputs):
+        """
+        Take a TensorLayer or tensor as input, compute the result.
+        Dimension must be given is the input is a tensor.
+        :type inputs:  list of TensorLayer
+        :return: TensorLayer
+        """
+        from variable import NeuralVar
+        if type(inputs[0]) != NeuralVar:
+            raise SystemError("The input of `compute` must be TensorLayer")
+
+        dims = [t.dim() for t in inputs]
+        if len(inputs) == 1:
+            self.connect(input_dim=dims[0])
+        else:
+            self.connect(input_dims=dims)
+        if self._linked_block and not self._linked:
+            self._linked = True
+            self._linked_block.register_layer(self)
+        return NeuralVar(self.output_dim, self.output(*[t.tensor for t in inputs]), self.test_output(*[t.test_tensor for t in inputs]))
+
+    def prepare(self):
+        """
+        Prepare function will be called after connected.
+        """
+        return self.setup()
 
     def setup(self):
         """
+        !!! DEPRECATED !!!
         Setup function will be called after connected.
         """
         pass
@@ -80,6 +129,26 @@ class NeuralLayer(object):
             return self.test_output(x)
         else:
             return self.output(x)
+
+    def link(self, block):
+        """
+        Let the given block or network manage the parameters of this layer.
+        :param block: Block or NeuralNetwork
+        :return: NeuralLayer
+        """
+        if self._linked_block:
+            raise SystemError("One layer can not be linked twice")
+        self._linked_block = block
+        if self.connected:
+            self._linked = True
+            block.register_layer(self)
+        return self
+
+    def register(self, *layers):
+        """
+        Register inner layers.
+        """
+        self.register_inner_layers(*layers)
 
     def register_inner_layers(self, *layers):
         for layer in layers:

@@ -80,7 +80,7 @@ class RecursiveAutoEncoderCore(NeuralLayer):
         self.additional_h = additional_h
         self.activation = activation
 
-    def setup(self):
+    def prepare(self):
         self._setup_params()
         self._setup_functions()
 

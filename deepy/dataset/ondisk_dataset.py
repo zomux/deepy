@@ -18,12 +18,12 @@ class OnDiskDataset(Dataset):
     """
 
     def __init__(self, train_path, valid_path=None, test_path=None, train_size=None,
-                 cache_on_memory=False, post_processing=None, shuffle_memory=False):
+                 cached=False, post_processing=None, shuffle_memory=False):
         self._train_path = train_path
         self._valid_path = valid_path
         self._test_path = test_path
         self._train_size = train_size
-        self._cache_on_memory = cache_on_memory
+        self._cache_on_memory = cached
         self._cached_train_data = None
         self._post_processing = post_processing if post_processing else lambda x: x
         self._shuffle_memory = shuffle_memory

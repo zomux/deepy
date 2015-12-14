@@ -8,9 +8,12 @@ class DimShuffle(NeuralLayer):
     DimShuffle layer.
     """
 
-    def __init__(self, pattern):
+    def __init__(self, *pattern):
         super(DimShuffle, self).__init__("dimshuffle")
-        self.pattern = pattern
+        if len(pattern) == 1 and type(pattern[0]) == list:
+            self.pattern = pattern[0]
+        else:
+            self.pattern = pattern
 
     def output(self, x):
         return x.dimshuffle(*self.pattern)

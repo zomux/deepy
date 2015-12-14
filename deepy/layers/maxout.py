@@ -19,7 +19,7 @@ class Maxout(NeuralLayer):
         self.init = init
 
 
-    def setup(self):
+    def prepare(self):
         self.W = self.create_weight(shape=(self.num_pieces, self.input_dim, self.output_dim),
                                     initializer=self.init, suffix="maxout")
         self.B = self.create_bias(shape=(self.num_pieces, self.output_dim), suffix="maxout")

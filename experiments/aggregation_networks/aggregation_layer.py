@@ -16,7 +16,7 @@ class AggregationLayer(NeuralLayer):
         self.init = init
         self.layers = layers
 
-    def setup(self):
+    def prepare(self):
         self.output_dim = self.size
         self._act = build_activation(self.activation)
         self._inner_layers = [Dense(self.size, self.activation, init=self.init).connect(self.input_dim)]

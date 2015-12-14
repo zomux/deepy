@@ -17,7 +17,7 @@ class HighwayLayer(NeuralLayer):
         self.init = init
         self.gate_bias = gate_bias
 
-    def setup(self):
+    def prepare(self):
         self.output_dim = self.input_dim
         self._act = build_activation(self.activation)
         self.W_h = self.create_weight(self.input_dim, self.input_dim, "h", initializer=self.init)

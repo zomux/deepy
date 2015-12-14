@@ -35,7 +35,7 @@ class Convolution(NeuralLayer):
         self.border_mode = border_mode
         self.initializer = init if init else self._default_initializer()
 
-    def setup(self):
+    def prepare(self):
         self._setup_params()
         self._setup_functions()
 

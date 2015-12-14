@@ -10,21 +10,25 @@ class Chain(NeuralLayer):
     This is useful to reuse layers in a customized layer.
     Usage:
         As part of the main pipe line:
-            chain = Chain().stack(layer1, layer2)
+            chain = Chain(layer1, layer2)
             model.stack(chain)
         As part of the computational graph:
-            chain = Chain(input_dim).stack(layer1, layer2)
-            y = chain.output(x)
+            chain = Chain(layer1, layer2)
+            y = chain.compute(x)
     """
 
-    def __init__(self, input_dim=None):
+    def __init__(self, *layers):
         super(Chain, self).__init__("chain")
         self.layers = []
-        self.input_dim = input_dim
         self._layers_to_stack = []
+        if len(layers) == 1 and type(layers[0]) == int:
+            # This is a deprecated using of Chain
+            self.input_dim = layers[0]
+        else:
+            self.stack(*layers)
 
     def stack(self, *layers):
-        if self.input_dim == None:
+        if self.input_dim is None or self.input_dim == 0:
             # Don't know the input dimension until connect
             self._layers_to_stack.extend(layers)
         else:
@@ -41,7 +45,7 @@ class Chain(NeuralLayer):
             self.output_dim = layer.output_dim
         self.register_inner_layers(*self.layers)
 
-    def setup(self, *layers):
+    def prepare(self, *layers):
         if self._layers_to_stack:
             self._register_layers(*self._layers_to_stack)
             self._layers_to_stack = []

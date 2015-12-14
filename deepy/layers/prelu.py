@@ -13,7 +13,7 @@ class PRelu(NeuralLayer):
         super(PRelu, self).__init__("prelu")
         self.input_tensor = input_tensor
 
-    def setup(self):
+    def prepare(self):
         self.alphas = self.create_bias(self.output_dim, "alphas")
         self.register_parameters(self.alphas)
         if self.input_tensor == 3:

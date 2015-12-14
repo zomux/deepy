@@ -24,7 +24,7 @@ class MyJointTrainingModel(NeuralLayer):
         super(MyJointTrainingModel, self).__init__("my joint-training model")
         self.internal_layer_size = internal_layer_size
 
-    def setup(self):
+    def prepare(self):
         """
         All codes that create parameters should be put into 'setup' function.
         """

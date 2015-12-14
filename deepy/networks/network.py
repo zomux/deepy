@@ -78,14 +78,23 @@ class NeuralNetwork(object):
         """
         layer.name += "%d" % (len(self.layers) + 1)
         if not self.layers:
-            layer.connect(self.input_dim, network_config=self.network_config, no_setup=no_setup)
+            layer.connect(self.input_dim, network_config=self.network_config, no_prepare=no_setup)
         else:
-            layer.connect(self.layers[-1].output_dim, previous_layer=self.layers[-1], network_config=self.network_config, no_setup=no_setup)
+            layer.connect(self.layers[-1].output_dim, previous_layer=self.layers[-1], network_config=self.network_config, no_prepare=no_setup)
         self._output = layer.output(self._output)
         self._test_output = layer.test_output(self._test_output)
         self._hidden_outputs.append(self._output)
         self.register_layer(layer)
         self.layers.append(layer)
+
+    def register(self, *layers):
+        """
+        Register multiple layers as the components of the network.
+        The parameter of those layers will be trained.
+        But the output of the layer will not be stacked.
+        """
+        for layer in layers:
+            self.register_layer(layer)
 
     def register_layer(self, layer):
         """

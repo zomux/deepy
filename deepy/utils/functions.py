@@ -10,6 +10,7 @@ import copy
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 import logging as loggers
 
+
 logging = loggers.getLogger(__name__)
 
 FLOATX = theano.config.floatX
@@ -23,6 +24,8 @@ else:
     global_seed = 3
 global_rand = np.random.RandomState(seed=global_seed)
 global_theano_rand = RandomStreams(seed=global_seed)
+
+
 
 def onehot(size, eye):
     return np.eye(1, size, eye, dtype=FLOATX)[0]

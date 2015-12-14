@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
+from variable import NeuralVar
 from deepy.utils import build_activation, FLOATX
 import numpy as np
 import theano
@@ -34,7 +35,13 @@ class RNN(NeuralLayer):
         self.batch_size = batch_size
         self._steps = steps
         self._go_backwards = go_backwards
+        # mask
+        mask = mask.tensor if type(mask) == NeuralVar else mask
         self._mask = mask.dimshuffle((1,0)) if mask else None
+        # second input
+        if type(second_input) == NeuralVar:
+            second_input = second_input.tensor
+            second_input_size = second_input.dim()
         self._second_input_size = second_input_size
         self._second_input = second_input
         self._sequence_map = OrderedDict()
@@ -123,7 +130,7 @@ class RNN(NeuralLayer):
         elif self._output_type == "sequence":
             return hiddens.dimshuffle((1,0,2))
 
-    def setup(self):
+    def prepare(self):
         if self._input_type == "one" and self.input_dim != self._hidden_size:
             raise Exception("For RNN receives one vector as input, "
                             "the hidden size should be same as last output dimension.")

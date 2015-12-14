@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
+from variable import NeuralVar
 from deepy.utils import build_activation, FLOATX
 import numpy as np
 import theano
@@ -37,8 +38,14 @@ class LSTM(NeuralLayer):
         self.reset_state_for_input = reset_state_for_input
         self.batch_size = batch_size
         self.go_backwards = go_backwards
+        # mask
+        mask = mask.tensor if type(mask) == NeuralVar else mask
         self.mask = mask.dimshuffle((1,0)) if mask else None
         self._sequence_map = OrderedDict()
+        # second input
+        if type(second_input) == NeuralVar:
+            second_input = second_input.tensor
+            second_input_size = second_input.dim()
         self.second_input = second_input
         self.second_input_size = second_input_size
         self.forget_bias = forget_bias
@@ -157,7 +164,7 @@ class LSTM(NeuralLayer):
             return hiddens.dimshuffle((1,0,2))
 
 
-    def setup(self):
+    def prepare(self):
         self._setup_params()
         self._setup_functions()
 

@@ -14,7 +14,7 @@ class RevealDimension(NeuralLayer):
         super(RevealDimension, self).__init__("reveal_dimension")
         self.dim = dim
 
-    def setup(self):
+    def prepare(self):
         self.output_dim = self.dim
 
     def output(self, x):

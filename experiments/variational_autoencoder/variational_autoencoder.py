@@ -24,7 +24,7 @@ class ReparameterizationLayer(NeuralLayer):
         self.sample = sample
         self._prior = None
 
-    def setup(self):
+    def prepare(self):
         self._mu_encoder = Dense(self.size, 'linear', init=GaussianInitializer(), random_bias=True).connect(self.input_dim)
         self._log_sigma_encoder = Dense(self.size, 'linear', init=GaussianInitializer(), random_bias=True).connect(self.input_dim)
         self.register_inner_layers(self._mu_encoder, self._log_sigma_encoder)

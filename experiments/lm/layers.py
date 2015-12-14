@@ -16,7 +16,7 @@ class FullOutputLayer(NeuralLayer):
         self.vocab_size = vocab_size
 
 
-    def setup(self):
+    def prepare(self):
         self.core = Chain(self.input_dim).stack(Dense(self.vocab_size),
                                                 Softmax3D())
         self.register_inner_layers(self.core)
@@ -31,7 +31,7 @@ class ClassOutputLayer(NeuralLayer):
         self.output_size = output_size
         self.class_size = class_size
 
-    def setup(self):
+    def prepare(self):
         # Output layers
         self.output_layer = Chain(self.input_dim).stack(Dense(self.output_size * self.class_size))
         self.softmax_layer = Softmax().connect(input_dim=self.output_size)

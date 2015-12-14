@@ -20,7 +20,10 @@ from batch_norm import BatchNormalization
 from onehot_embed import OneHotEmbedding
 from word_embed import WordEmbedding
 from chain import Chain
+from block import Block
 from softmax3d import Softmax3D
 from reverse3d import Reverse3D
 from concatenate import Concatenate
 from maxout import Maxout
+from variable import NeuralVar
+from combine import Combine

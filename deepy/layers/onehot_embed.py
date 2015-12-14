@@ -4,6 +4,7 @@
 import numpy as np
 import theano.tensor as T
 from deepy.layers import NeuralLayer
+from deepy.layers.variable import NeuralVar
 from deepy.utils import onehot_tensor, onehot
 from deepy.utils import FLOATX
 
@@ -12,15 +13,16 @@ class OneHotEmbedding(NeuralLayer):
     One-hot embedding layer.
     Computation: [0,1,2]  ---> [[1,0,0],[0,1,0],[0,0,1]]
     """
-    def __init__(self, vocab_size, on_memory=True, zero_index=None):
+    def __init__(self, vocab_size, cached=True, zero_index=None, mask=None):
         super(OneHotEmbedding, self).__init__("onehot")
         self.vocab_size = vocab_size
         self.output_dim = vocab_size
-        self.on_memory = on_memory
+        self.cached = cached
         self.zero_index = zero_index
+        self.mask = mask.tensor if type(mask) == NeuralVar else mask
 
-    def setup(self):
-        if not self.on_memory:
+    def prepare(self):
+        if not self.cached:
             return
         onehot_matrix = []
         for i in xrange(self.vocab_size):
@@ -30,11 +32,13 @@ class OneHotEmbedding(NeuralLayer):
         self.onehot_list.set_value(onehot_matrix)
 
     def output(self, x):
-        if self.on_memory:
+        if self.cached:
             ret_tensor = self.onehot_list[x.flatten()].reshape((x.shape[0], x.shape[1], self.vocab_size))
         else:
             ret_tensor = onehot_tensor(x, self.vocab_size)
         if self.zero_index != None:
             mask = T.neq(x, self.zero_index)
             ret_tensor *= mask[:, :, None]
+        if self.mask:
+            ret_tensor *= self.mask[:, :, None]
         return ret_tensor

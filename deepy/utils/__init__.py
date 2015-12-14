@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from functions import *
+from computations import *
 from activations import *
 from initializers import *
 from costs import *

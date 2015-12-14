@@ -15,7 +15,7 @@ class Dense(NeuralLayer):
         self.random_bias = random_bias
         self.initializer = init
 
-    def setup(self):
+    def prepare(self):
         self._setup_params()
         self._setup_functions()
 
