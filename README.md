@@ -1,6 +1,7 @@
 deepy: Highly extensible deep learning framework based on Theano
 ===
 
+2016/1: In order to prevent the repository to be too large, the model files are removed.
    
 [![Build](https://travis-ci.org/uaca/deepy.svg)](https://travis-ci.org/uaca/deepy)
 [![Quality](https://img.shields.io/scrutinizer/g/uaca/deepy.svg)](https://scrutinizer-ci.com/g/uaca/deepy/?branch=master)
