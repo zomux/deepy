@@ -70,7 +70,7 @@ if __name__ == '__main__':
     # Auto-encoders
     test_experiment("auto_encoders/rnn_auto_encoder.py", timeout=120)
     # LMs
-    test_experiment("lm/baseline_rnnlm.py", timeout=180)
+    # test_experiment("lm/baseline_rnnlm.py", timeout=180)
     # Highway networks
     test_experiment("highway_networks/mnist_highway.py", timeout=120)
     # CG Training
