@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from variable import NeuralVar
+from var import NeuralVar
 from deepy.utils import build_activation, FLOATX
 import numpy as np
 import theano
@@ -44,8 +44,9 @@ class LSTM(NeuralLayer):
         self._sequence_map = OrderedDict()
         # second input
         if type(second_input) == NeuralVar:
-            second_input = second_input.tensor
             second_input_size = second_input.dim()
+            second_input = second_input.tensor
+
         self.second_input = second_input
         self.second_input_size = second_input_size
         self.forget_bias = forget_bias

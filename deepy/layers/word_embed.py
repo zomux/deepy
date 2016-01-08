@@ -4,6 +4,7 @@
 import numpy as np
 import theano.tensor as T
 from deepy.layers import NeuralLayer
+from var import NeuralVar
 from deepy.utils import FLOATX
 
 class WordEmbedding(NeuralLayer):
@@ -17,17 +18,19 @@ class WordEmbedding(NeuralLayer):
         self.vocab_size = vocab_size
         self.output_dim = size
         self.zero_index = zero_index
-        self.mask = mask
+        self.mask = mask.tensor if type(mask) == NeuralVar else mask
 
     def prepare(self):
         self.embed_matrix = self.create_weight(self.vocab_size, self.size, "embed")
         self.register_parameters(self.embed_matrix)
 
     def output(self, x):
-        if self.zero_index is not None or self.mask:
-            mask = T.neq(x, self.zero_index) if not self.mask else self.mask
+        if self.zero_index is not None:
+            mask = T.neq(x, self.zero_index)
             # To avoid negative index
-            x *= mask
+            x = T.cast(x * mask, "int32")
+        elif self.mask:
+            mask = self.mask
         else:
             mask = None
 

@@ -76,7 +76,8 @@ class NeuralNetwork(object):
         :type layer: NeuralLayer
         :param no_setup: whether the layer is already initialized
         """
-        layer.name += "%d" % (len(self.layers) + 1)
+        if layer.name:
+            layer.name += "%d" % (len(self.layers) + 1)
         if not self.layers:
             layer.connect(self.input_dim, network_config=self.network_config, no_prepare=no_setup)
         else:

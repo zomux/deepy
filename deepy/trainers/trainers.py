@@ -215,25 +215,31 @@ class NeuralTrainer(object):
             self.network.train_logger.record(message)
         return costs
 
-    def _run_valid(self, iteration, valid_set):
+    def _run_valid(self, iteration, valid_set, dry_run=False):
         """
         Run one valid iteration, return true if to continue training.
         """
         costs = self.valid_step(valid_set)
         # this is the same as: (J_i - J_f) / J_i > min improvement
         _, J = costs[0]
+        marker = ""
         if self.best_cost - J > self.best_cost * self.min_improvement:
-            self.best_cost = J
-            self.best_iter = iteration
+            # save the best cost and parameters
             self.best_params = self._copy_network_params()
             marker = ' *'
+            if not dry_run:
+                self.best_cost = J
+                self.best_iter = iteration
+
             if self.config.auto_save:
                 self.network.train_logger.record_progress(self._progress)
                 self.network.save_params(self.config.auto_save, new_thread=True)
-        else:
-            marker = ""
+
         info = ' '.join('%s=%.2f' % el for el in costs)
-        message = "valid   (iter=%i) %s%s" % (iteration + 1, info, marker)
+        iter_str = "iter=%d" % (iteration + 1)
+        if dry_run:
+            iter_str = "dryrun" + " " * (len(iter_str) - 6)
+        message = "valid   (%s) %s%s" % (iter_str, info, marker)
         logging.info(message)
         self.network.train_logger.record(message)
         self.checkpoint = self._copy_network_params()

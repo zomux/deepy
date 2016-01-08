@@ -10,7 +10,7 @@ class BasicNetwork(NeuralNetwork):
     """
 
     def __init__(self, input_dim=0, model=None, config=None, input_tensor=None,
-                 cost=None, blocks=None, input_vars=None, target_vars=None):
+                 cost=None, output=None, blocks=None, input_vars=None, target_vars=None):
         """
         Create a basic network.
 
@@ -23,6 +23,8 @@ class BasicNetwork(NeuralNetwork):
         super(BasicNetwork, self).__init__(input_dim, config=config, input_tensor=input_tensor)
         if model:
             self.stack(model)
+        if output:
+            self.stack(output)
         if cost:
             self.stack(cost)
         if blocks:

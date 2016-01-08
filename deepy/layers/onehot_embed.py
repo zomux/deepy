@@ -4,7 +4,7 @@
 import numpy as np
 import theano.tensor as T
 from deepy.layers import NeuralLayer
-from deepy.layers.variable import NeuralVar
+from deepy.layers.var import NeuralVar
 from deepy.utils import onehot_tensor, onehot
 from deepy.utils import FLOATX
 
@@ -33,12 +33,21 @@ class OneHotEmbedding(NeuralLayer):
 
     def output(self, x):
         if self.cached:
-            ret_tensor = self.onehot_list[x.flatten()].reshape((x.shape[0], x.shape[1], self.vocab_size))
+            if x.ndim == 1:
+                ret_tensor = self.onehot_list[x]
+            else:
+                ret_tensor = self.onehot_list[x.flatten()].reshape((x.shape[0], x.shape[1], self.vocab_size))
         else:
             ret_tensor = onehot_tensor(x, self.vocab_size)
         if self.zero_index != None:
             mask = T.neq(x, self.zero_index)
-            ret_tensor *= mask[:, :, None]
+            if x.ndim == 1:
+                ret_tensor *= mask[:, None]
+            else:
+                ret_tensor *= mask[:, :, None]
         if self.mask:
-            ret_tensor *= self.mask[:, :, None]
+            if x.ndim == 1:
+                ret_tensor *= self.mask[:, None]
+            else:
+                ret_tensor *= self.mask[:, :, None]
         return ret_tensor

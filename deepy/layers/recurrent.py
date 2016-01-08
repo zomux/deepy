@@ -2,163 +2,192 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from variable import NeuralVar
-from deepy.utils import build_activation, FLOATX
+from var import NeuralVar
+from deepy.utils import build_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner
 import numpy as np
 import theano
 import theano.tensor as T
 from collections import OrderedDict
+from abc import ABCMeta, abstractmethod
 
 OUTPUT_TYPES = ["sequence", "one"]
 INPUT_TYPES = ["sequence", "one"]
 
-class RNN(NeuralLayer):
-    """
-    Recurrent neural network layer.
-    """
 
-    def __init__(self, hidden_size, input_type="sequence", output_type="sequence", vector_core=None,
-                 hidden_activation="tanh", hidden_init=None, input_init=None, steps=None,
-                 persistent_state=False, reset_state_for_input=None, batch_size=None,
-                 go_backwards=False, mask=None, second_input_size=None, second_input=None):
-        super(RNN, self).__init__("rnn")
-        self._hidden_size = hidden_size
-        self.output_dim = self._hidden_size
+
+class RecurrentLayer(NeuralLayer):
+    __metaclass__ = ABCMeta
+
+    def __init__(self, name, state_names, hidden_size=100, input_type="sequence", output_type="sequence",
+                 inner_init=None, outer_init=None,
+                 gate_activation='sigmoid', activation='tanh',
+                 steps=None, backward=False, mask=None,
+                 additional_input_dims=None):
+        super(RecurrentLayer, self).__init__(name)
+        self.state_names = state_names
+        self.main_state = state_names[0]
+        self.hidden_size = hidden_size
+        self._gate_activation = gate_activation
+        self._activation = activation
+        self.gate_activate = build_activation(self._gate_activation)
+        self.activate = build_activation(self._activation)
         self._input_type = input_type
         self._output_type = output_type
-        self._hidden_activation = hidden_activation
-        self._hidden_init = hidden_init
-        self._vector_core = vector_core
-        self._input_init = input_init
-        self.persistent_state = persistent_state
-        self.reset_state_for_input = reset_state_for_input
-        self.batch_size = batch_size
+        self.inner_init = inner_init if inner_init else OrthogonalInitializer()
+        self.outer_init = outer_init if outer_init else XavierGlorotInitializer()
         self._steps = steps
-        self._go_backwards = go_backwards
-        # mask
-        mask = mask.tensor if type(mask) == NeuralVar else mask
-        self._mask = mask.dimshuffle((1,0)) if mask else None
-        # second input
-        if type(second_input) == NeuralVar:
-            second_input = second_input.tensor
-            second_input_size = second_input.dim()
-        self._second_input_size = second_input_size
-        self._second_input = second_input
-        self._sequence_map = OrderedDict()
+        self._mask = mask.tensor if type(mask) == NeuralVar else mask
+        self._go_backwards = backward
+        self.additional_input_dims = additional_input_dims if additional_input_dims else []
+
         if input_type not in INPUT_TYPES:
-            raise Exception("Input type of RNN is wrong: %s" % input_type)
+            raise Exception("Input type of {} is wrong: {}".format(name, input_type))
         if output_type not in OUTPUT_TYPES:
-            raise Exception("Output type of RNN is wrong: %s" % output_type)
-        if self.persistent_state and not self.batch_size:
-            raise Exception("Batch size must be set for persistent state mode")
-        if mask and input_type == "one":
+            raise Exception("Output type of {} is wrong: {}".format(name, output_type))
+
+    def step(self, step_inputs):
+        new_states = self.compute_new_state(step_inputs)
+
+        # apply mask for each step if `output_type` is 'one'
+        if self._output_type == "one" and step_inputs.get("mask"):
+            mask = step_inputs["mask"].dimshuffle(0, 'x')
+            for state_name in new_states:
+                new_states[state_name] = new_states[state_name] * mask + step_inputs[state_name] * (1 - mask)
+
+        return new_states
+
+    @abstractmethod
+    def compute_new_state(self, step_inputs):
+        """
+        :type step_inputs: dict
+        :rtype: dict
+        """
+
+    @abstractmethod
+    def merge_inputs(self, input_var, additional_inputs=None):
+        """
+        Merge inputs and return a map, which will be passed to core_step.
+        :type input_var: T.var
+        :param additional_inputs: list
+        :rtype: dict
+        """
+
+    @abstractmethod
+    def prepare(self):
+        pass
+
+
+    def get_initial_states(self, input_var):
+        """
+        :type input_var: T.var
+        :rtype: dict
+        """
+        initial_states = {}
+        for state in self.state_names:
+            initial_states[state] = T.alloc(np.cast[FLOATX](0.), input_var.shape[0], self.hidden_size)
+        return initial_states
+
+    def get_step_inputs(self, input_var, states=None, mask=None, additional_inputs=None):
+        """
+        :type input_var: T.var
+        :rtype: dict
+        """
+        step_inputs = {}
+        if self._input_type == "sequence":
+            if not additional_inputs:
+                additional_inputs = []
+            step_inputs.update(self.merge_inputs(input_var, additional_inputs=additional_inputs))
+        else:
+            step_inputs["mask"] = mask.dimshuffle((1,0)) if mask else None
+        if states:
+            for name in self.state_names:
+                step_inputs[name] = states[name]
+
+        return step_inputs
+
+    def compute(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False):
+        if additional_inputs and not self.additional_input_dims:
+            self.additional_input_dims = map(lambda var: var.dim(), additional_inputs)
+        return super(RecurrentLayer, self).compute(input_var, mask=mask, additional_inputs=additional_inputs, steps=steps, backward=backward)
+
+    def output(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False):
+        # prepare parameters
+        backward = backward if backward else self._go_backwards
+        steps = steps if steps else self._steps
+        mask = mask if mask else self._mask
+        if mask and self._input_type == "one":
             raise Exception("Mask only works with sequence input")
-
-    def _hidden_preact(self, h):
-        return T.dot(h, self.W_h) if not self._vector_core else h * self.W_h
-
-    def step(self, *vars):
-        # Parse sequence
-        sequence_map = dict(zip(self._sequence_map.keys(), vars[:len(self._sequence_map)]))
-        if self._input_type == "sequence":
-            x = sequence_map["x"]
-            h = vars[-1]
-            # Reset part of the state on condition
-            if self.reset_state_for_input != None:
-                h = h * T.neq(x[:, self.reset_state_for_input], 1).dimshuffle(0, 'x')
-            # RNN core step
-            z = x + self._hidden_preact(h) + self.B_h
-        else:
-            h = vars[-1]
-            z = self._hidden_preact(h) + self.B_h
-        # Second input
-        if "second_input" in sequence_map:
-            z += sequence_map["second_input"]
-
-        new_h = self._hidden_act(z)
-        # Apply mask
-        if "mask" in sequence_map:
-            mask = sequence_map["mask"].dimshuffle(0, 'x')
-            new_h = mask * new_h + (1 - mask) * h
-        return new_h
-
-    def produce_input_sequences(self, x, mask=None, second_input=None):
-        self._sequence_map.clear()
-        if self._input_type == "sequence":
-            self._sequence_map["x"] = T.dot(x, self.W_i)
-            # Mask
-            if mask:
-                # (batch)
-                self._sequence_map["mask"] = mask
-            elif self._mask:
-                # (time, batch)
-                self._sequence_map["mask"] = self._mask
-        # Second input
-        if second_input:
-            self._sequence_map["second_input"] = T.dot(second_input, self.W_i2)
-        elif self._second_input:
-            self._sequence_map["second_input"] = T.dot(self._second_input, self.W_i2)
-        return self._sequence_map.values()
-
-    def produce_initial_states(self, x):
-        h0 = T.alloc(np.cast[FLOATX](0.), x.shape[0], self._hidden_size)
-        if self._input_type == "sequence":
-            if self.persistent_state:
-                h0 = self.state
-        else:
-            h0 = x
-        return [h0]
-
-    def output(self, x):
+        # get initial states
+        init_state_map = self.get_initial_states(input_var)
+        # get input sequence map
         if self._input_type == "sequence":
             # Move middle dimension to left-most position
             # (sequence, batch, value)
-            sequences = self.produce_input_sequences(x.dimshuffle((1,0,2)))
+            input_var = input_var.dimshuffle((1,0,2))
+            seq_map = self.get_step_inputs(input_var, mask=mask, additional_inputs=additional_inputs)
         else:
-            sequences = self.produce_input_sequences(None)
-
-        step_outputs = self.produce_initial_states(x)
-        hiddens, _ = theano.scan(self.step, sequences=sequences, outputs_info=step_outputs,
-                                 n_steps=self._steps, go_backwards=self._go_backwards)
-
-        # Save persistent state
-        if self.persistent_state:
-            self.register_updates((self.state, hiddens[-1]))
-
+            init_state_map[self.main_state] = input_var
+            seq_map = self.get_step_inputs(None)
+        # scan
+        retval_map, _ = Scanner(
+            self.step,
+            sequences=seq_map,
+            outputs_info=init_state_map,
+            n_steps=steps,
+            go_backwards=backward
+        ).compute()
+        # return main states
+        main_states = retval_map[self.main_state]
         if self._output_type == "one":
-            return hiddens[-1]
+            return main_states[-1]
         elif self._output_type == "sequence":
-            return hiddens.dimshuffle((1,0,2))
+            if mask: # ~ batch, time
+                main_states = main_states.dimshuffle((1,0,2)) # ~ batch, time, size
+                main_states *= mask.dimshuffle((0, 1, 'x'))
+            return main_states
+
+
+class RNN(RecurrentLayer):
+
+    def __init__(self, hidden_size, **kwargs):
+        kwargs["hidden_size"] = hidden_size
+        super(RNN, self).__init__("RNN", ["state"], **kwargs)
+
+    def compute_new_state(self, step_inputs):
+        xh_t, h_tm1 = map(step_inputs.get, ["xh_t", "state"])
+        if not xh_t:
+            xh_t = 0
+
+        h_t = self.activate(xh_t + T.dot(h_tm1, self.W_h) + self.b_h)
+
+        return {"state": h_t}
+
+    def merge_inputs(self, input_var, additional_inputs=None):
+        if not additional_inputs:
+            additional_inputs = []
+        all_inputs = [input_var] + additional_inputs
+        h_inputs = []
+        for x, weights in zip(all_inputs, self.input_weights):
+            wi, = weights
+            h_inputs.append(T.dot(x, wi))
+        merged_inputs = {
+            "xh_t": sum(h_inputs)
+        }
+        return merged_inputs
 
     def prepare(self):
-        if self._input_type == "one" and self.input_dim != self._hidden_size:
-            raise Exception("For RNN receives one vector as input, "
-                            "the hidden size should be same as last output dimension.")
-        self._setup_params()
-        self._setup_functions()
+        self.output_dim = self.hidden_size
 
-    def _setup_functions(self):
-        self._hidden_act = build_activation(self._hidden_activation)
+        self.W_h = self.create_weight(self.hidden_size, self.hidden_size, "h", initializer=self.inner_init)
+        self.b_h = self.create_bias(self.hidden_size, "h")
 
-    def _setup_params(self):
-        if not self._vector_core:
-            self.W_h = self.create_weight(self._hidden_size, self._hidden_size, suffix="h", initializer=self._hidden_init)
-        else:
-            self.W_h = self.create_bias(self._hidden_size, suffix="h")
-            self.W_h.set_value(self.W_h.get_value() + self._vector_core)
-        self.B_h = self.create_bias(self._hidden_size, suffix="h")
+        self.register_parameters(self.W_h, self.b_h)
 
-        self.register_parameters(self.W_h, self.B_h)
-
-        if self.persistent_state:
-            self.state = self.create_matrix(self.batch_size, self._hidden_size, "rnn_state")
-            self.register_free_parameters(self.state)
-        else:
-            self.state = None
-
+        self.input_weights = []
         if self._input_type == "sequence":
-            self.W_i = self.create_weight(self.input_dim, self._hidden_size, suffix="i", initializer=self._input_init)
-            self.register_parameters(self.W_i)
-        if self._second_input_size:
-            self.W_i2 = self.create_weight(self._second_input_size, self._hidden_size, suffix="i2", initializer=self._input_init)
-            self.register_parameters(self.W_i2)
+            all_input_dims = [self.input_dim] + self.additional_input_dims
+            for i, input_dim in enumerate(all_input_dims):
+                wi = self.create_weight(input_dim, self.hidden_size, "wi_{}".format(i+1), initializer=self.outer_init)
+                weights = [wi]
+                self.input_weights.append(weights)
+                self.register_parameters(*weights)

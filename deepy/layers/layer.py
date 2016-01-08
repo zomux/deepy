@@ -63,38 +63,51 @@ class NeuralLayer(object):
         # call prepare
         if not no_prepare:
             self.prepare()
+        if self._linked_block and not self._linked:
+            self._linked = True
+            self._linked_block.register_layer(self)
         return self
 
-    def compute_raw(self, inputs, dims):
+    def compute_raw(self, inputs, dims, **kwargs):
         """
         Compute on raw Theano tensors.
         :type inputs: list of TensorLayer
         :type dims: list of int
         """
-        from variable import NeuralVar
+        from var import NeuralVar
         tensors = [NeuralVar(d, t) for d, t in zip(dims, inputs)]
-        return self.compute(*tensors)
+        return self.compute(*tensors, **kwargs)
 
-    def compute(self, *inputs):
+    def compute(self, *inputs, **kwargs):
         """
         Take a TensorLayer or tensor as input, compute the result.
         Dimension must be given is the input is a tensor.
         :type inputs:  list of TensorLayer
         :return: TensorLayer
         """
-        from variable import NeuralVar
+        from var import NeuralVar
         if type(inputs[0]) != NeuralVar:
-            raise SystemError("The input of `compute` must be TensorLayer")
+            raise SystemError("The input of `compute` must be NeuralVar")
 
         dims = [t.dim() for t in inputs]
         if len(inputs) == 1:
             self.connect(input_dim=dims[0])
         else:
             self.connect(input_dims=dims)
-        if self._linked_block and not self._linked:
-            self._linked = True
-            self._linked_block.register_layer(self)
-        return NeuralVar(self.output_dim, self.output(*[t.tensor for t in inputs]), self.test_output(*[t.test_tensor for t in inputs]))
+        # convert kwargs
+        train_kwargs = {}
+        test_kwargs = {}
+        for key, val in kwargs.items():
+            if type(val) == NeuralVar:
+                train_kwargs[key] = val.tensor
+                test_kwargs[key] = val.test_tensor
+            else:
+                train_kwargs[key] = val
+                test_kwargs[key] = val
+
+        return NeuralVar(self.output_dim,
+                         self.output(*[t.tensor for t in inputs], **train_kwargs),
+                         self.test_output(*[t.test_tensor for t in inputs], **test_kwargs))
 
     def prepare(self):
         """
@@ -109,17 +122,17 @@ class NeuralLayer(object):
         """
         pass
 
-    def output(self, x):
+    def output(self, *args, **kwargs):
         """
         Output function.
         """
         raise NotImplementedError("output function of '%s' is not implemented" % self.name)
 
-    def test_output(self, x):
+    def test_output(self, *args, **kwargs):
         """
         Output function in test time.
         """
-        return self.output(x)
+        return self.output(*args, **kwargs)
 
     def call(self, x, test=False):
         """

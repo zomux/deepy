@@ -9,7 +9,7 @@ from flatten import Flatten
 from dimshuffle import DimShuffle
 from reshape import Reshape
 from reveal_dimension import RevealDimension
-from recurrent import RNN
+from recurrent import RecurrentLayer, RNN
 from dropout import Dropout
 from activation import Activation
 from prelu import PRelu
@@ -25,5 +25,6 @@ from softmax3d import Softmax3D
 from reverse3d import Reverse3D
 from concatenate import Concatenate
 from maxout import Maxout
-from variable import NeuralVar
+from var import NeuralVar
 from combine import Combine
+from bias import Bias
