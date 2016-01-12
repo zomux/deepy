@@ -141,8 +141,8 @@ class RecurrentLayer(NeuralLayer):
         if self._output_type == "one":
             return main_states[-1]
         elif self._output_type == "sequence":
+            main_states = main_states.dimshuffle((1,0,2)) # ~ batch, time, size
             if mask: # ~ batch, time
-                main_states = main_states.dimshuffle((1,0,2)) # ~ batch, time, size
                 main_states *= mask.dimshuffle((0, 1, 'x'))
             return main_states
 

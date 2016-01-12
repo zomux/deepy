@@ -20,6 +20,7 @@ DEFAULT_TRAINER_SETTING = {
     "auto_save": None,
     "data_transmitter": None, # Never use this
     "record_free_params": True,
+    "fixed_parameters": None,
 
     # Optimization
     "method": "ADADELTA",
