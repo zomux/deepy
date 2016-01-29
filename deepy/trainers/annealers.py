@@ -59,11 +59,11 @@ class ScheduledLearningRateAnnealer(TrainingController):
     Anneal learning rate according to pre-scripted schedule.
     """
 
-    def __init__(self, trainer, iter_start_halving=5, max_iters=10):
+    def __init__(self, trainer, start_halving_at=5, end_at=10):
         super(ScheduledLearningRateAnnealer, self).__init__(trainer)
-        logging.info("iteration to start halving learning rate: %d" % iter_start_halving)
-        self.iter_start_halving = iter_start_halving
-        self.max_iters = max_iters
+        logging.info("iteration to start halving learning rate: %d" % start_halving_at)
+        self.iter_start_halving = start_halving_at
+        self.end_at = end_at
         self._learning_rate = self._trainer.config.learning_rate
         self._iter = 0
 
@@ -73,7 +73,7 @@ class ScheduledLearningRateAnnealer(TrainingController):
             self._trainer.set_params(*self._trainer.best_params)
             self._learning_rate.set_value(self._learning_rate.get_value() * 0.5)
             logging.info("halving learning rate to %f" % self._learning_rate.get_value())
-        if self._iter >= self.max_iters - 1:
+        if self._iter >= self.end_at:
             logging.info("ending")
             return True
         return False
@@ -103,3 +103,28 @@ class ExponentialLearningRateAnnealer(TrainingController):
         if self.debug:
             logging.info("learning rate: %.8f" % self._learning_rate.get_value())
         return False
+
+class SimpleScheduler(TrainingController):
+
+    """
+    Simple scheduler with maximum patience.
+    """
+
+    def __init__(self, trainer, patience=10):
+        """
+        :type trainer: deepy.trainers.trainers.NeuralTrainer
+        """
+        super(SimpleScheduler, self).__init__(trainer)
+        self._iter = 0
+        self._patience = patience
+
+    def invoke(self):
+        """
+        Run it, return whether to end training.
+        """
+        self._iter += 1
+        logging.info("{} epochs left to run".format(self._patience - self._iter))
+        if self._iter >= self._patience:
+            return True
+        else:
+            return False

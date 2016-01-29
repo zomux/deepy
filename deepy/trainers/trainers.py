@@ -63,7 +63,6 @@ class NeuralTrainer(object):
         self.network = network
 
         self.network.prepare_training()
-
         self._setup_costs()
 
         logging.info("compile evaluation function")
@@ -342,6 +341,7 @@ class GeneralNeuralTrainer(NeuralTrainer):
         network_updates = list(network.updates) + list(network.training_updates)
         learning_updates = list(self.learning_updates())
         update_list = network_updates + learning_updates
+
         logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
         logging.info("learning updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
 

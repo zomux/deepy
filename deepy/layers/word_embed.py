@@ -18,19 +18,20 @@ class WordEmbedding(NeuralLayer):
         self.vocab_size = vocab_size
         self.output_dim = size
         self.zero_index = zero_index
-        self.mask = mask.tensor if type(mask) == NeuralVar else mask
+        self._mask = mask.tensor if type(mask) == NeuralVar else mask
 
     def prepare(self):
         self.embed_matrix = self.create_weight(self.vocab_size, self.size, "embed")
         self.register_parameters(self.embed_matrix)
 
-    def output(self, x):
+    def output(self, x, mask=None):
+        mask_input = mask if mask else self._mask
         if self.zero_index is not None:
             mask = T.neq(x, self.zero_index)
             # To avoid negative index
             x = T.cast(x * mask, "int32")
-        elif self.mask:
-            mask = self.mask
+        elif mask_input:
+            mask = self._mask
         else:
             mask = None
 

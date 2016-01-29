@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import theano
+
 from . import NeuralLayer
 from deepy.utils import global_theano_rand, FLOATX
 
@@ -12,7 +14,13 @@ class Dropout(NeuralLayer):
 
     def output(self, x):
         if self.p > 0:
-            x *= global_theano_rand.binomial(x.shape, p=1-self.p, dtype=FLOATX)
+            # deal with the problem of test_value
+            backup_test_value_setting = theano.config.compute_test_value
+            theano.config.compute_test_value = 'ignore'
+            binomial_mask = global_theano_rand.binomial(x.shape, p=1-self.p, dtype=FLOATX)
+            theano.config.compute_test_value = backup_test_value_setting
+            # apply dropout
+            x *= binomial_mask
         return x
 
     def test_output(self, x):

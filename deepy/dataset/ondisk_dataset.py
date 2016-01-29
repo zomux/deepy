@@ -18,7 +18,7 @@ class OnDiskDataset(Dataset):
     """
 
     def __init__(self, train_path, valid_path=None, test_path=None, train_size=None,
-                 cached=False, post_processing=None, shuffle_memory=False):
+                 cached=False, post_processing=None, shuffle_memory=False, curriculum=None):
         self._train_path = train_path
         self._valid_path = valid_path
         self._test_path = test_path
@@ -27,12 +27,24 @@ class OnDiskDataset(Dataset):
         self._cached_train_data = None
         self._post_processing = post_processing if post_processing else lambda x: x
         self._shuffle_memory = shuffle_memory
+        self._curriculum = curriculum
+        self._curriculum_count = 0
+        if curriculum and not callable(curriculum):
+            raise Exception("curriculum function must be callable")
+        if curriculum and not cached:
+            raise Exception("curriculum learning needs training data to be cached")
         if self._cache_on_memory:
             logging.info("Cache on memory")
             self._cached_train_data = list(map(self._post_processing, StreamPickler.load(open(self._train_path))))
             if self._shuffle_memory:
                 logging.info("Shuffle on-memory data")
                 global_rand.shuffle(self._cached_train_data)
+
+    def curriculum_train_data(self):
+        self._curriculum_count += 1
+        logging.info("curriculum learning: round {}".format(self._curriculum_count))
+        return self._curriculum(self._cached_train_data, self._curriculum_count)
+
 
     def generate_train_data(self):
         for data in StreamPickler.load(open(self._train_path)):
@@ -48,7 +60,10 @@ class OnDiskDataset(Dataset):
 
     def train_set(self):
         if self._cache_on_memory:
-            return self._cached_train_data
+            if self._curriculum:
+                return FakeGenerator(self, "curriculum_train_data")
+            else:
+                return self._cached_train_data
         if not self._train_path:
             return None
         return FakeGenerator(self, "generate_train_data")

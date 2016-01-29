@@ -42,11 +42,13 @@ class NeuralLayer(object):
         self.training_callbacks = []
         self.testing_callbacks = []
 
-    def connect(self, input_dim=0, input_dims=None, previous_layer=None, network_config=None, no_prepare=False):
+    def connect(self, input_dim=0, input_dims=None, previous_layer=None, network_config=None, no_prepare=False, no_link=False):
         """
         Connect to a previous layer.
         :param no_prepare: if avoid calling setup
         """
+        if self.connected:
+            return
         # configure input dimensions
         if input_dims:
             self.input_dims = input_dims
@@ -63,7 +65,7 @@ class NeuralLayer(object):
         # call prepare
         if not no_prepare:
             self.prepare()
-        if self._linked_block and not self._linked:
+        if self._linked_block and not self._linked and not no_link:
             self._linked = True
             self._linked_block.register_layer(self)
         return self
@@ -91,9 +93,9 @@ class NeuralLayer(object):
 
         dims = [t.dim() for t in inputs]
         if len(inputs) == 1:
-            self.connect(input_dim=dims[0])
+            self.connect(input_dim=dims[0], no_link=True)
         else:
-            self.connect(input_dims=dims)
+            self.connect(input_dims=dims, no_link=True)
         # convert kwargs
         train_kwargs = {}
         test_kwargs = {}
@@ -105,9 +107,13 @@ class NeuralLayer(object):
                 train_kwargs[key] = val
                 test_kwargs[key] = val
 
-        return NeuralVar(self.output_dim,
+        ret = NeuralVar(self.output_dim,
                          self.output(*[t.tensor for t in inputs], **train_kwargs),
                          self.test_output(*[t.test_tensor for t in inputs], **test_kwargs))
+        if self._linked_block and not self._linked:
+            self._linked = True
+            self._linked_block.register_layer(self)
+        return ret
 
     def prepare(self):
         """
@@ -166,6 +172,8 @@ class NeuralLayer(object):
     def register_inner_layers(self, *layers):
         for layer in layers:
             self.register_parameters(*layer.parameters)
+            self.register_updates(*layer.updates)
+            self.register_training_updates(*layer.training_updates)
 
     def register_parameters(self, *parameters):
         """
