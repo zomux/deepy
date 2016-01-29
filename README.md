@@ -7,7 +7,7 @@ deepy: Highly extensible deep learning framework based on Theano
 [![Quality](https://img.shields.io/scrutinizer/g/zomux/deepy.svg)](https://scrutinizer-ci.com/g/zomux/deepy/?branch=master)
 [![Requirements Status](https://requires.io/github/zomux/deepy/requirements.svg?branch=master)](https://requires.io/github/zomux/deepy/requirements/?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/deepy/badge/?version=latest)](http://deepy.readthedocs.org/en/latest/)
-[![Coverage Status](https://coveralls.io/repos/zomux/deepy/badge.svg?branch=master)](https://coveralls.io/r/zomux/deepy?branch=master)
+[![Coverage Status](https://coveralls.io/repos/zomux/uaca/badge.svg?branch=master)](https://coveralls.io/r/uaca/deepy?branch=master)
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/zomux/deepy/blob/master/LICENSE)
 
 ### Dependencies
