@@ -3,12 +3,12 @@ deepy: Highly extensible deep learning framework based on Theano
 
 2016/1: In order to prevent the repository to be too large, the model files are removed.
    
-[![Build](https://travis-ci.org/uaca/deepy.svg)](https://travis-ci.org/uaca/deepy)
-[![Quality](https://img.shields.io/scrutinizer/g/uaca/deepy.svg)](https://scrutinizer-ci.com/g/uaca/deepy/?branch=master)
-[![Requirements Status](https://requires.io/github/uaca/deepy/requirements.svg?branch=master)](https://requires.io/github/uaca/deepy/requirements/?branch=master)
+[![Build](https://travis-ci.org/uaca/deepy.svg)](https://travis-ci.org/zomux/deepy)
+[![Quality](https://img.shields.io/scrutinizer/g/zomux/deepy.svg)](https://scrutinizer-ci.com/g/zomux/deepy/?branch=master)
+[![Requirements Status](https://requires.io/github/zomux/deepy/requirements.svg?branch=master)](https://requires.io/github/zomux/deepy/requirements/?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/deepy/badge/?version=latest)](http://deepy.readthedocs.org/en/latest/)
-[![Coverage Status](https://coveralls.io/repos/uaca/deepy/badge.svg?branch=master)](https://coveralls.io/r/uaca/deepy?branch=master)
-[![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/uaca/deepy/blob/master/LICENSE)
+[![Coverage Status](https://coveralls.io/repos/zomux/deepy/badge.svg?branch=master)](https://coveralls.io/r/zomux/deepy?branch=master)
+[![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/zomux/deepy/blob/master/LICENSE)
 
 ### Dependencies
 
