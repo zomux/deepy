@@ -3,7 +3,7 @@ deepy: Highly extensible deep learning framework based on Theano
 
 2016/1: In order to prevent the repository to be too large, the model files are removed.
    
-[![Build](https://travis-ci.org/uaca/deepy.svg)](https://travis-ci.org/zomux/deepy)
+[![Build](https://travis-ci.org/zomux/deepy.svg)](https://travis-ci.org/zomux/deepy)
 [![Quality](https://img.shields.io/scrutinizer/g/zomux/deepy.svg)](https://scrutinizer-ci.com/g/zomux/deepy/?branch=master)
 [![Requirements Status](https://requires.io/github/zomux/deepy/requirements.svg?branch=master)](https://requires.io/github/zomux/deepy/requirements/?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/deepy/badge/?version=latest)](http://deepy.readthedocs.org/en/latest/)
