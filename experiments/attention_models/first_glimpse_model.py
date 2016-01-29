@@ -8,10 +8,10 @@ from theano import tensor as T
 import theano
 from theano.tensor.shared_randomstreams import RandomStreams
 
-from deepy import NeuralClassifier, NetworkConfig
+from deepy import NeuralClassifier
 from deepy.utils import build_activation, disconnected_grad
 from deepy.utils.functions import FLOATX
-from deepy.networks import NeuralLayer
+from deepy.layers import NeuralLayer
 from experiments.attention_models.gaussian_sampler import SampleMultivariateGaussian
 import theano.tensor.signal.downsample
 
@@ -24,7 +24,7 @@ class FirstGlimpseLayer(NeuralLayer):
         self.gaussian_std = std
         super(FirstGlimpseLayer, self).__init__(10, activation)
 
-    def connect(self, config, vars, x, input_n, id="UNKNOWN"):
+    def initialize(self, config, vars, x, input_n, id="UNKNOWN"):
         self._config = config
         self._vars = vars
         self.input_n = input_n
@@ -196,7 +196,7 @@ def get_network(model=None, std=0.005, disable_reinforce=False, random_glimpse=F
     Returns:
         network
     """
-    network = NeuralClassifier(input_dim=28*28)
+    network = NeuralClassifier(input_dim=28 * 28)
     network.stack_layer(FirstGlimpseLayer(std=std, disable_reinforce=disable_reinforce, random_glimpse=random_glimpse))
     if model and os.path.exists(model):
         network.load_params(model)

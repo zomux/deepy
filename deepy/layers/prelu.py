@@ -21,7 +21,7 @@ class PRelu(NeuralLayer):
         elif self.input_tensor == 4:
             self.alphas = self.alphas.dimshuffle('x', 0, 'x', 'x')
 
-    def output(self, x):
+    def compute_tensor(self, x):
         positive_vector =  x * (x >= 0)
         negative_vector = self.alphas * (x * (x < 0))
         return positive_vector + negative_vector

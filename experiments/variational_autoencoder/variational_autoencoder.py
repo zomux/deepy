@@ -25,14 +25,16 @@ class ReparameterizationLayer(NeuralLayer):
         self._prior = None
 
     def prepare(self):
-        self._mu_encoder = Dense(self.size, 'linear', init=GaussianInitializer(), random_bias=True).connect(self.input_dim)
-        self._log_sigma_encoder = Dense(self.size, 'linear', init=GaussianInitializer(), random_bias=True).connect(self.input_dim)
+        self._mu_encoder = Dense(self.size, 'linear', init=GaussianInitializer(), random_bias=True).initialize(
+            self.input_dim)
+        self._log_sigma_encoder = Dense(self.size, 'linear', init=GaussianInitializer(), random_bias=True).initialize(
+            self.input_dim)
         self.register_inner_layers(self._mu_encoder, self._log_sigma_encoder)
 
-    def output(self, x):
+    def compute_tensor(self, x):
         # Compute p(z|x)
-        mu = self._mu_encoder.output(x)
-        log_sigma = 0.5 * self._log_sigma_encoder.output(x)
+        mu = self._mu_encoder.compute_tensor(x)
+        log_sigma = 0.5 * self._log_sigma_encoder.compute_tensor(x)
         self._prior = 0.5* T.sum(1 + 2*log_sigma - mu**2 - T.exp(2*log_sigma))
         # Reparameterization
         eps = global_theano_rand.normal((x.shape[0], self.size))
@@ -56,12 +58,10 @@ class VariationalAutoEncoder(AutoEncoder):
     Only binary output cost function is supported now.
     """
 
-    def __init__(self, input_dim, latent_dim=None, sample=False):
+    def __init__(self, input_dim, input_tensor=None):
         """
-        :param latent_dim: latent variable size, this is not required in training
-        :param sample: add no randomness when this flag is on
         """
-        super(VariationalAutoEncoder, self).__init__(input_dim, rep_dim=latent_dim)
+        super(VariationalAutoEncoder, self).__init__(input_dim)
         self.sample = sample
         self._setup_monitors = True
 

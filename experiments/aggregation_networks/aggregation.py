@@ -17,7 +17,7 @@ from aggregation_layer import AggregationLayer
 model_path = os.path.join(os.path.dirname(__file__), "models", "aggregation1.gz")
 
 if __name__ == '__main__':
-    model = NeuralClassifier(input_dim=28*28)
+    model = NeuralClassifier(input_dim=28 * 28)
     model.stack(AggregationLayer(50, layers=20, init=KaimingHeInitializer()),
                 Dense(10, 'linear', init=KaimingHeInitializer()),
                 Softmax())

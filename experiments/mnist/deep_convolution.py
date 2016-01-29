@@ -12,7 +12,7 @@ from deepy.trainers import MomentumTrainer, LearningRateAnnealer
 default_model = os.path.join(os.path.dirname(__file__), "models", "deep_conv.gz")
 
 if __name__ == '__main__':
-    model = NeuralClassifier(input_dim=28*28)
+    model = NeuralClassifier(input_dim=28 * 28)
     model.stack(# Reshape to 3D tensor
                 Reshape((-1, 28, 28)),
                 # Add a new dimension for convolution

@@ -17,5 +17,5 @@ class Bias(NeuralLayer):
         self.B = self.create_bias(self.output_dim, "bias")
         self.register_parameters(self.B)
 
-    def output(self, x):
+    def compute_tensor(self, x):
         return x + self.B

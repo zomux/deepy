@@ -9,7 +9,7 @@ class BasicNetwork(NeuralNetwork):
     A simple neural network that the last layer outputs cost.
     """
 
-    def __init__(self, input_dim=0, model=None, config=None, input_tensor=None,
+    def __init__(self, input_dim=0, model=None, input_tensor=None,
                  cost=None, output=None, blocks=None, input_vars=None, target_vars=None):
         """
         Create a basic network.
@@ -20,7 +20,7 @@ class BasicNetwork(NeuralNetwork):
             config - network configuration
             input_tensor - specify the tensor of input if it's special
         """
-        super(BasicNetwork, self).__init__(input_dim, config=config, input_tensor=input_tensor)
+        super(BasicNetwork, self).__init__(input_dim, input_tensor=input_tensor)
         if model:
             self.stack(model)
         if output:

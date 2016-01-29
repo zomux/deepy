@@ -2,12 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from var import NeuralVar
-from deepy.utils import build_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner
+from var import NeuralVariable
+from deepy.utils import build_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner, neural_computation
 import numpy as np
-import theano
 import theano.tensor as T
-from collections import OrderedDict
 from abc import ABCMeta, abstractmethod
 
 OUTPUT_TYPES = ["sequence", "one"]
@@ -36,7 +34,7 @@ class RecurrentLayer(NeuralLayer):
         self.inner_init = inner_init if inner_init else OrthogonalInitializer()
         self.outer_init = outer_init if outer_init else XavierGlorotInitializer()
         self._steps = steps
-        self._mask = mask.tensor if type(mask) == NeuralVar else mask
+        self._mask = mask.tensor if type(mask) == NeuralVariable else mask
         self._go_backwards = backward
         self.additional_input_dims = additional_input_dims if additional_input_dims else []
 
@@ -45,6 +43,7 @@ class RecurrentLayer(NeuralLayer):
         if output_type not in OUTPUT_TYPES:
             raise Exception("Output type of {} is wrong: {}".format(name, output_type))
 
+    @neural_computation
     def step(self, step_inputs):
         new_states = self.compute_new_state(step_inputs)
 
@@ -76,7 +75,7 @@ class RecurrentLayer(NeuralLayer):
     def prepare(self):
         pass
 
-
+    @neural_computation
     def get_initial_states(self, input_var):
         """
         :type input_var: T.var
@@ -87,6 +86,7 @@ class RecurrentLayer(NeuralLayer):
             initial_states[state] = T.alloc(np.cast[FLOATX](0.), input_var.shape[0], self.hidden_size)
         return initial_states
 
+    @neural_computation
     def get_step_inputs(self, input_var, states=None, mask=None, additional_inputs=None):
         """
         :type input_var: T.var
@@ -110,7 +110,7 @@ class RecurrentLayer(NeuralLayer):
             self.additional_input_dims = map(lambda var: var.dim(), additional_inputs)
         return super(RecurrentLayer, self).compute(input_var, mask=mask, additional_inputs=additional_inputs, steps=steps, backward=backward)
 
-    def output(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False):
+    def compute_tensor(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False):
         # prepare parameters
         backward = backward if backward else self._go_backwards
         steps = steps if steps else self._steps

@@ -15,5 +15,5 @@ class DimShuffle(NeuralLayer):
         else:
             self.pattern = pattern
 
-    def output(self, x):
+    def compute_tensor(self, x):
         return x.dimshuffle(*self.pattern)

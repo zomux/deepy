@@ -22,9 +22,8 @@ class RecursiveAutoEncoder(NeuralNetwork):
     Parameters:
         rep_dim - dimension of representation
     """
-    def __init__(self, input_dim, rep_dim=None, activation='tanh', unfolding=True, additional_h=False,
-                 config=None):
-        super(RecursiveAutoEncoder, self).__init__(input_dim, config=config, input_tensor=3)
+    def __init__(self, input_dim, input_tensor=None):
+        super(RecursiveAutoEncoder, self).__init__(input_dim, input_tensor=3)
 
         self.rep_dim = rep_dim
         self.stack(RecursiveAutoEncoderCore(rep_dim, unfolding=unfolding, additional_h=additional_h))
@@ -84,7 +83,7 @@ class RecursiveAutoEncoderCore(NeuralLayer):
         self._setup_params()
         self._setup_functions()
 
-    def output(self, x):
+    def compute_tensor(self, x):
         rep, cost = self._recursive_func(x)
         self.register_monitors(("mean(rep)", abs(rep).mean()))
         return cost

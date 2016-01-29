@@ -4,7 +4,7 @@
 from layer import NeuralLayer
 
 
-class NeuralVar(NeuralLayer):
+class NeuralVariable(NeuralLayer):
     """
     Create a constant layer with tensors.
     """
@@ -13,23 +13,23 @@ class NeuralVar(NeuralLayer):
         """
         Create a tensor layer.
         """
-        super(NeuralVar, self).__init__("const")
+        super(NeuralVariable, self).__init__("const")
         self.output_dim = dim
         self.tensor = tensor
         self.test_tensor = tensor if not test_tensor else test_tensor
-        self.connect(0)
+        self.initialize(0)
 
     def apply(self, func, dim=None):
         """
         Apply a function to tensors.
         """
         output_dim = dim if dim else self.output_dim
-        return NeuralVar(output_dim, func(self.tensor), func(self.test_tensor))
+        return NeuralVariable(output_dim, func(self.tensor), func(self.test_tensor))
 
-    def output(self, x):
+    def compute_tensor(self, x):
         return self.tensor
 
-    def test_output(self, x):
+    def compute_test_tesnor(self, x):
         return self.test_tensor
 
     def set_test_value(self, value):

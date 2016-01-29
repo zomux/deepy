@@ -12,5 +12,5 @@ class Reshape(NeuralLayer):
         super(Reshape, self).__init__("dimshuffle")
         self.pattern = pattern
 
-    def output(self, x):
+    def compute_tensor(self, x):
         return x.reshape(self.pattern)

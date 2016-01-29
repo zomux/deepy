@@ -11,7 +11,7 @@ from deepy.layers import Dense, Softmax
 from deepy.trainers import LearningRateAnnealer, ScipyTrainer
 
 def run(method, model_path):
-    model = NeuralClassifier(input_dim=28*28)
+    model = NeuralClassifier(input_dim=28 * 28)
     model.stack(Dense(128, 'relu'),
                 Dense(128, 'relu'),
                 Dense(10, 'linear'),

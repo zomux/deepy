@@ -23,7 +23,7 @@ from deepy.trainers import MomentumTrainer, LearningRateAnnealer
 model_path = os.path.join(os.path.dirname(__file__), "models", "baseline1.gz")
 
 if __name__ == '__main__':
-    model = NeuralClassifier(input_dim=28*28)
+    model = NeuralClassifier(input_dim=28 * 28)
     for _ in range(20):
         model.stack(Dense(71, 'relu'))
     model.stack(Dense(10, 'linear'),

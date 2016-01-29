@@ -11,7 +11,7 @@ LATENT_DIM = 2
 model_path = os.path.join(os.path.dirname(__file__), "models", "vae_latent%d.gz" % LATENT_DIM)
 
 def create_model(load=False, sample=False):
-    model = VariationalAutoEncoder(input_dim=28*28, latent_dim=LATENT_DIM, sample=sample)
+    model = VariationalAutoEncoder(input_dim=28 * 28)
     model.stack_encoders(Dense(400, 'tanh', init=GaussianInitializer(), random_bias=True))
     model.stack_reparameterization_layer(LATENT_DIM)
     model.stack_decoders(Dense(400, 'tanh', init=GaussianInitializer(), random_bias=True),

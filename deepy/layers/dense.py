@@ -19,7 +19,7 @@ class Dense(NeuralLayer):
         self._setup_params()
         self._setup_functions()
 
-    def output(self, x):
+    def compute_tensor(self, x):
         return self._activation(T.dot(x, self.W) + self.B)
 
     def _setup_functions(self):

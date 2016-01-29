@@ -13,7 +13,7 @@ import theano
 
 import deepy
 from deepy.layers.layer import NeuralLayer
-from deepy.conf import NetworkConfig
+from deepy.layers.block import Block
 from deepy.utils import dim_to_var, TrainLogger
 
 logging = loggers.getLogger(__name__)
@@ -38,9 +38,8 @@ class NeuralNetwork(object):
     Basic neural network class.
     """
 
-    def __init__(self, input_dim, config=None, input_tensor=None):
+    def __init__(self, input_dim, input_tensor=None):
         logging.info(DEEPY_MESSAGE)
-        self.network_config = config if config else NetworkConfig()
         self.input_dim = input_dim
         self.input_tensor = input_tensor
         self.parameter_count = 0
@@ -67,9 +66,6 @@ class NeuralNetwork(object):
         self.setup_variables()
         self.train_logger = TrainLogger()
 
-        if self.network_config.layers:
-            self.stack(self.network_config.layers)
-
     def stack_layer(self, layer, no_setup=False):
         """
         Stack a neural layer.
@@ -79,11 +75,11 @@ class NeuralNetwork(object):
         if layer.name:
             layer.name += "%d" % (len(self.layers) + 1)
         if not self.layers:
-            layer.connect(self.input_dim, network_config=self.network_config, no_prepare=no_setup)
+            layer.initialize(self.input_dim, no_prepare=no_setup)
         else:
-            layer.connect(self.layers[-1].output_dim, previous_layer=self.layers[-1], network_config=self.network_config, no_prepare=no_setup)
-        self._output = layer.output(self._output)
-        self._test_output = layer.test_output(self._test_output)
+            layer.initialize(self.layers[-1].output_dim, no_prepare=no_setup)
+        self._output = layer.compute_tensor(self._output)
+        self._test_output = layer.compute_test_tesnor(self._test_output)
         self._hidden_outputs.append(self._output)
         self.register_layer(layer)
         self.layers.append(layer)
@@ -102,6 +98,8 @@ class NeuralNetwork(object):
         Register the layer so that it's param will be trained.
         But the output of the layer will not be stacked.
         """
+        if type(layer) == Block:
+            layer.fix()
         self.parameter_count += layer.parameter_count
         self.parameters.extend(layer.parameters)
         self.free_parameters.extend(layer.free_parameters)

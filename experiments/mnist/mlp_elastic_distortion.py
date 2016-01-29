@@ -39,7 +39,7 @@ expanded_mnist = BasicDataset(train=expanded_train_set, valid=mnist.valid_set(),
 logging.info("expanded training data size: %d" % len(expanded_train_set))
 
 if __name__ == '__main__':
-    model = NeuralClassifier(input_dim=28*28)
+    model = NeuralClassifier(input_dim=28 * 28)
     model.stack(Dense(256, 'relu'),
                 Dense(256, 'relu'),
                 Dense(10, 'linear'),

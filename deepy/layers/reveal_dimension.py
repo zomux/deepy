@@ -17,5 +17,5 @@ class RevealDimension(NeuralLayer):
     def prepare(self):
         self.output_dim = self.dim
 
-    def output(self, x):
+    def compute_tensor(self, x):
         return x

@@ -20,7 +20,7 @@ from highway_layer import HighwayLayer
 model_path = os.path.join(os.path.dirname(__file__), "models", "highway1.gz")
 
 if __name__ == '__main__':
-    model = NeuralClassifier(input_dim=28*28)
+    model = NeuralClassifier(input_dim=28 * 28)
     model.stack(Dense(50, 'relu'))
     for _ in range(20):
         model.stack(HighwayLayer(activation='relu'))

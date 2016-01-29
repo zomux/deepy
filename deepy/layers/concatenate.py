@@ -21,8 +21,8 @@ class Concatenate(NeuralLayer):
     def prepare(self):
         self.output_dim = sum(self.input_dims)
 
-    def output(self, *xs):
+    def compute_tensor(self, *xs):
         return T.concatenate(xs, axis=self.axis)
 
-    def test_output(self, *xs):
+    def compute_test_tesnor(self, *xs):
         return T.concatenate(xs, axis=self.axis)

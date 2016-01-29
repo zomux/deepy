@@ -16,3 +16,4 @@ from elastic_distortion import elastic_distortion
 from stream_pickler import StreamPickler
 from gpu_transmitter import GPUDataTransmitter
 from scanner import Scanner
+from decorations import neural_computation, neural_computation_prefer_tensor, convert_to_neural_var, convert_to_theano_var

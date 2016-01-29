@@ -11,8 +11,8 @@ class NeuralClassifier(NeuralNetwork):
     Classifier network.
     """
 
-    def __init__(self, input_dim, config=None, input_tensor=None):
-        super(NeuralClassifier, self).__init__(input_dim, config=config, input_tensor=input_tensor)
+    def __init__(self, input_dim, input_tensor=None):
+        super(NeuralClassifier, self).__init__(input_dim, input_tensor=input_tensor)
 
     def setup_variables(self):
         super(NeuralClassifier, self).setup_variables()
@@ -48,7 +48,7 @@ class MultiTargetNeuralClassifier(NeuralClassifier):
     Classifier for multiple targets.
     """
 
-    def __init__(self, config, class_num=3):
+    def __init__(self, input_dim=None):
         super(MultiTargetNeuralClassifier, self).__init__(config)
         self.class_num = class_num
 

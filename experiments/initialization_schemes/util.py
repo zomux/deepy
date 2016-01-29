@@ -14,7 +14,7 @@ Build a neural network with 6 dense layers with ReLU.
 """
 
 def run(initializer, model_path):
-    model = NeuralClassifier(input_dim=28*28)
+    model = NeuralClassifier(input_dim=28 * 28)
     for _ in range(6):
         model.stack(Dense(128, 'relu', init=initializer))
     model.stack(Dense(10, 'linear'),

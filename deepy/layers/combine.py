@@ -20,8 +20,8 @@ class Combine(NeuralLayer):
         if self.output_dim == 0:
             self.output_dim = self.input_dim
 
-    def output(self, *tensors):
+    def compute_tensor(self, *tensors):
         return self.func(*tensors)
 
-    def test_output(self, *tensors):
+    def compute_test_tesnor(self, *tensors):
         return self.func(*tensors)

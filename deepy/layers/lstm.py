@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from var import NeuralVar
+from var import NeuralVariable
 from deepy.utils import build_activation, FLOATX
 import numpy as np
 import theano
@@ -39,11 +39,11 @@ class LSTM(NeuralLayer):
         self.batch_size = batch_size
         self.go_backwards = go_backwards
         # mask
-        mask = mask.tensor if type(mask) == NeuralVar else mask
+        mask = mask.tensor if type(mask) == NeuralVariable else mask
         self.mask = mask.dimshuffle((1,0)) if mask else None
         self._sequence_map = OrderedDict()
         # second input
-        if type(second_input) == NeuralVar:
+        if type(second_input) == NeuralVariable:
             second_input_size = second_input.dim()
             second_input = second_input.tensor
 
@@ -135,7 +135,7 @@ class LSTM(NeuralLayer):
             m0 = h0
             return h0, m0
 
-    def output(self, x):
+    def compute_tensor(self, x):
         h0, m0 = self.produce_initial_states(x)
         if self._input_type == "sequence":
             # Move middle dimension to left-most position

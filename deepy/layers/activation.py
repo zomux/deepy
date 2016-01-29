@@ -13,5 +13,5 @@ class Activation(NeuralLayer):
         super(Activation, self).__init__(activation_type)
         self._activation = build_activation(activation_type)
 
-    def output(self, x):
+    def compute_tensor(self, x):
         return self._activation(x)

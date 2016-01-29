@@ -19,7 +19,7 @@ class BatchNormalization(NeuralLayer):
         self.beta = self.create_bias(self.input_dim, suffix="beta")
         self.register_parameters(self.gamma, self.beta)
 
-    def output(self, x):
+    def compute_tensor(self, x):
 
         m = x.mean(axis=0)
         std = T.mean((x-m)**2 + self.epsilon, axis=0) ** 0.5

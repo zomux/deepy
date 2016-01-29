@@ -7,7 +7,7 @@ import logging as loggers
 import numpy as np
 import theano
 
-from deepy.utils import FLOATX, global_rand, UniformInitializer
+from deepy.utils import FLOATX, UniformInitializer, neural_computation, neural_computation_prefer_tensor
 
 logging = loggers.getLogger(__name__)
 
@@ -21,11 +21,11 @@ class NeuralLayer(object):
         self.input_dim = 0
         self.input_dims = [0]
         self.output_dim = 0
+        self.output_dims= [0]
 
         self._linked_block = None
-        self._linked = False
 
-        self.connected = False
+        self.initialized = False
         self.updates = []
         self.training_updates = []
         self.free_parameters = []
@@ -42,12 +42,12 @@ class NeuralLayer(object):
         self.training_callbacks = []
         self.testing_callbacks = []
 
-    def connect(self, input_dim=0, input_dims=None, previous_layer=None, network_config=None, no_prepare=False, no_link=False):
+    def initialize(self, input_dim=0, input_dims=None, no_prepare=False):
         """
-        Connect to a previous layer.
-        :param no_prepare: if avoid calling setup
+        Initialize the layer.
+        :param no_prepare: avoid calling preparation function
         """
-        if self.connected:
+        if self.initialized:
             return
         # configure input dimensions
         if input_dims:
@@ -59,61 +59,45 @@ class NeuralLayer(object):
         # set default output dimension
         if self.output_dim == 0:
             self.output_dim = self.input_dim
-        self.previous_layer = previous_layer
-        self.network_config = network_config
-        self.connected = True
+        self.initialized = True
         # call prepare
         if not no_prepare:
             self.prepare()
-        if self._linked_block and not self._linked and not no_link:
-            self._linked = True
-            self._linked_block.register_layer(self)
         return self
-
-    def compute_raw(self, inputs, dims, **kwargs):
-        """
-        Compute on raw Theano tensors.
-        :type inputs: list of TensorLayer
-        :type dims: list of int
-        """
-        from var import NeuralVar
-        tensors = [NeuralVar(d, t) for d, t in zip(dims, inputs)]
-        return self.compute(*tensors, **kwargs)
 
     def compute(self, *inputs, **kwargs):
         """
-        Take a TensorLayer or tensor as input, compute the result.
-        Dimension must be given is the input is a tensor.
-        :type inputs:  list of TensorLayer
-        :return: TensorLayer
+        Compute based on NeuralVariable.
+        :type inputs:  list of NeuralVariable
+        :return: NeuralVariable
         """
-        from var import NeuralVar
-        if type(inputs[0]) != NeuralVar:
+        from var import NeuralVariable
+        if type(inputs[0]) != NeuralVariable:
             raise SystemError("The input of `compute` must be NeuralVar")
 
         dims = [t.dim() for t in inputs]
         if len(inputs) == 1:
-            self.connect(input_dim=dims[0], no_link=True)
+            self.initialize(input_dim=dims[0])
         else:
-            self.connect(input_dims=dims, no_link=True)
+            self.initialize(input_dims=dims)
         # convert kwargs
         train_kwargs = {}
         test_kwargs = {}
         for key, val in kwargs.items():
-            if type(val) == NeuralVar:
+            if type(val) == NeuralVariable:
                 train_kwargs[key] = val.tensor
                 test_kwargs[key] = val.test_tensor
             else:
                 train_kwargs[key] = val
                 test_kwargs[key] = val
 
-        ret = NeuralVar(self.output_dim,
-                         self.output(*[t.tensor for t in inputs], **train_kwargs),
-                         self.test_output(*[t.test_tensor for t in inputs], **test_kwargs))
-        if self._linked_block and not self._linked:
-            self._linked = True
-            self._linked_block.register_layer(self)
-        return ret
+        output = self.compute_tensor(*[t.tensor for t in inputs], **train_kwargs)
+        test_output = self.compute_test_tesnor(*[t.test_tensor for t in inputs], **test_kwargs)
+
+        if type(output) != list:
+            return NeuralVariable(self.output_dim, output, test_output)
+        else:
+            return [NeuralVariable(*item) for item in zip(self.output_dims, output, test_output)]
 
     def prepare(self):
         """
@@ -128,39 +112,40 @@ class NeuralLayer(object):
         """
         pass
 
-    def output(self, *args, **kwargs):
+    @neural_computation_prefer_tensor
+    def compute_tensor(self, *args, **kwargs):
         """
-        Output function.
+        Compute with tensors in Theano.
         """
         raise NotImplementedError("output function of '%s' is not implemented" % self.name)
 
-    def test_output(self, *args, **kwargs):
+    @neural_computation_prefer_tensor
+    def compute_test_tesnor(self, *args, **kwargs):
         """
-        Output function in test time.
+        Compute with tensors in Theano in test time.
         """
-        return self.output(*args, **kwargs)
+        return self.compute_tensor(*args, **kwargs)
 
-    def call(self, x, test=False):
+    def compute_flexible_tensor(self, x, test=False):
         """
-        Call this layer, with a parameter to switch test or not.
+        Deprecated.
+        Compute with tensors in Theano, with a parameter to switch test or not.
         """
         if test:
-            return self.test_output(x)
+            return self.compute_test_tesnor(x)
         else:
-            return self.output(x)
+            return self.compute_tensor(x)
 
-    def link(self, block):
+    def belongs_to(self, block):
         """
         Let the given block or network manage the parameters of this layer.
         :param block: Block or NeuralNetwork
         :return: NeuralLayer
         """
         if self._linked_block:
-            raise SystemError("One layer can not be linked twice")
+            raise SystemError("One layer can not belong to two blocks")
         self._linked_block = block
-        if self.connected:
-            self._linked = True
-            block.register_layer(self)
+        block.register_layer(self)
         return self
 
     def register(self, *layers):

@@ -25,13 +25,13 @@ class Maxout(NeuralLayer):
         if self.output_dim is None:
             self.output_dim = self.input_dim // self.num_pieces
         if self.linear_transform:
-            self.transformer = Dense(self.output_dim * self.num_pieces).connect(self.input_dim)
+            self.transformer = Dense(self.output_dim * self.num_pieces).initialize(self.input_dim)
             self.register(self.transformer)
 
 
-    def output(self, x):
+    def compute_tensor(self, x):
         if self.linear_transform:
-            x = self.transformer.output(x)
+            x = self.transformer.compute_tensor(x)
         # x ~ batch, time, size / batch, size
         new_shape = [x.shape[i] for i in range(x.ndim - 1)] + [self.output_dim, self.num_pieces]
         # new_shape ~ batch, time, out_dim, pieces / batch, out_dim, pieces

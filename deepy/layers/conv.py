@@ -39,7 +39,7 @@ class Convolution(NeuralLayer):
         self._setup_params()
         self._setup_functions()
 
-    def output(self, x):
+    def compute_tensor(self, x):
         if self.reshape_input:
             img_width = T.cast(T.sqrt(x.shape[1]), "int32")
             x = x.reshape((x.shape[0], 1, img_width, img_width), ndim=4)

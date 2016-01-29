@@ -3,7 +3,7 @@
 
 import numpy as np
 from functions import FLOATX
-import os, gzip, cPickle as pickle, numpy as np
+import os, gzip, cPickle as pickle
 import logging as loggers
 logging = loggers.getLogger(__name__)
 
@@ -13,8 +13,8 @@ def create_var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX):
     :param dim: last dimension of tensor, 0 indicates that the last dimension is flexible
     :rtype: TensorVar
     """
-    from deepy.layers.var import NeuralVar
-    var = NeuralVar(dim, theano_tensor)
+    from deepy.layers.var import NeuralVariable
+    var = NeuralVariable(dim, theano_tensor)
     if test_shape:
         if type(test_shape) != list and type(test_shape) != tuple:
             var.set_test_value(test_shape)

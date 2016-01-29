@@ -27,7 +27,7 @@ class HighwayLayer(NeuralLayer):
 
         self.register_parameters(self.W_h, self.B_h, self.W_t, self.B_t)
 
-    def output(self, x):
+    def compute_tensor(self, x):
         t = self._act(T.dot(x, self.W_t) + self.B_t)
         h = self._act(T.dot(x, self.W_h) + self.B_h)
         return h * t + x * (1 - t)

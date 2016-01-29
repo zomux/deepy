@@ -21,8 +21,8 @@ class FullOutputLayer(NeuralLayer):
                                                 Softmax3D())
         self.register_inner_layers(self.core)
 
-    def output(self, x):
-        return self.core.output(x)
+    def compute_tensor(self, x):
+        return self.core.compute_tensor(x)
 
 class ClassOutputLayer(NeuralLayer):
 
@@ -34,7 +34,7 @@ class ClassOutputLayer(NeuralLayer):
     def prepare(self):
         # Output layers
         self.output_layer = Chain(self.input_dim).stack(Dense(self.output_size * self.class_size))
-        self.softmax_layer = Softmax().connect(input_dim=self.output_size)
+        self.softmax_layer = Softmax().initialize(input_dim=self.output_size)
 
         self.class_layer = Chain(self.input_dim).stack(Dense(self.class_size),
                                                         Softmax3D())
@@ -46,7 +46,7 @@ class ClassOutputLayer(NeuralLayer):
         self.arange_cache = theano.shared(np.arange(10*64), name="arange_cache")
 
 
-    def output(self, x):
+    def compute_tensor(self, x):
         """
         :param x: (batch, time, vec)
         """
@@ -59,14 +59,14 @@ class ClassOutputLayer(NeuralLayer):
         # Input matrix
         input_matrix = x.reshape((-1, self.input_dim))
         # Output matrix
-        output_tensor3d = self.output_layer.output(x)
+        output_tensor3d = self.output_layer.compute_tensor(x)
         output_matrix = output_tensor3d.reshape((-1, self.class_size, self.output_size))
         arange_vec = self.arange_cache[:output_matrix.shape[0]]
         sub_output_matrix = output_matrix[arange_vec, class_vector]
         # Softmax
-        softmax_output_matrix = self.softmax_layer.output(sub_output_matrix)
+        softmax_output_matrix = self.softmax_layer.compute_tensor(sub_output_matrix)
         # Class prediction
-        class_output_matrix = self.class_layer.output(x)
+        class_output_matrix = self.class_layer.compute_tensor(x)
         # Costs
         output_cost = LMCost(softmax_output_matrix, target_vector).get()
         class_cost = LMCost(class_output_matrix, class_matrix).get()

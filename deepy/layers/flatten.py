@@ -12,5 +12,5 @@ class Flatten(NeuralLayer):
     def __init__(self):
         super(Flatten, self).__init__("flatten")
     
-    def output(self, x):
+    def compute_tensor(self, x):
         return T.flatten(x, 2)

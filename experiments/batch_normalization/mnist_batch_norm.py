@@ -18,7 +18,7 @@ from deepy.trainers import SGDTrainer
 default_model = os.path.join(os.path.dirname(__file__), "models", "batch_norm1.gz")
 
 if __name__ == '__main__':
-    model = NeuralClassifier(input_dim=28*28)
+    model = NeuralClassifier(input_dim=28 * 28)
     model.stack(Dense(100, 'sigmoid'),
                 BatchNormalization(),
                 Dense(100, 'sigmoid'),

@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     vocab, lmdata = load_data(small=args.small, history_len=5, batch_size=64)
     import pdb; pdb.set_trace()
-    model = NeuralLM(vocab.size, class_based=True)
+    model = NeuralLM(vocab.size)
     model.stack(RNN(hidden_size=100, output_type="sequence", hidden_activation='sigmoid',
                     persistent_state=True, batch_size=lmdata.size,
                     reset_state_for_input=0),

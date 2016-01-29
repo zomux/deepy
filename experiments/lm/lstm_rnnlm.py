@@ -23,7 +23,7 @@ if __name__ == '__main__':
     args = ap.parse_args()
 
     vocab, lmdata = load_data(small=args.small, history_len=5, batch_size=64)
-    model = NeuralLM(vocab.size, test_data=None)
+    model = NeuralLM(vocab.size)
     model.stack(LSTM(hidden_size=100, output_type="sequence",
                     persistent_state=True, batch_size=lmdata.size,
                     reset_state_for_input=0),

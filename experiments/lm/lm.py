@@ -17,9 +17,9 @@ class NeuralLM(NeuralNetwork):
     LM Network.
     """
 
-    def __init__(self, vocab_size, class_based=False, test_data=None, config=None):
+    def __init__(self, input_dim, input_tensor=None):
         self.class_based = class_based
-        super(NeuralLM, self).__init__(0, config, input_tensor=T.imatrix('x'))
+        super(NeuralLM, self).__init__(0, input_tensor=T.imatrix('x'))
         self.stack(OneHotEmbedding(vocab_size))
         self.test_data = test_data
         if test_data:

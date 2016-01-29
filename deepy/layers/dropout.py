@@ -12,7 +12,7 @@ class Dropout(NeuralLayer):
         super(Dropout, self).__init__("dropout")
         self.p = p
 
-    def output(self, x):
+    def compute_tensor(self, x):
         if self.p > 0:
             # deal with the problem of test_value
             backup_test_value_setting = theano.config.compute_test_value
@@ -23,7 +23,7 @@ class Dropout(NeuralLayer):
             x *= binomial_mask
         return x
 
-    def test_output(self, x):
+    def compute_test_tesnor(self, x):
         if self.p > 0:
             x *= (1.0 - self.p)
         return x

@@ -40,15 +40,15 @@ class MyJointTrainingModel(NeuralLayer):
         self.target_input = T.ivector('target')
         self.register_external_inputs(self.target_input)
 
-    def output(self, x):
+    def compute_tensor(self, x):
         """
         Build the computation graph here.
         """
-        internal_variable = self.encoder.output(x)
+        internal_variable = self.encoder.compute_tensor(x)
 
-        decoding_output = self.decoder.output(internal_variable)
+        decoding_output = self.decoder.compute_tensor(internal_variable)
 
-        classification_output = self.classifier.output(internal_variable)
+        classification_output = self.classifier.compute_tensor(internal_variable)
 
         auto_encoder_cost = AutoEncoderCost(decoding_output, x).get()
 
@@ -66,7 +66,7 @@ class MyJointTrainingModel(NeuralLayer):
 
 
 if __name__ == '__main__':
-    model = BasicNetwork(input_dim=28*28, model=MyJointTrainingModel())
+    model = BasicNetwork(input_dim=28 * 28)
 
     mnist = MiniBatches(MnistDataset(), batch_size=20)
 

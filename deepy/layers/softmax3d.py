@@ -10,7 +10,7 @@ class Softmax3D(NeuralLayer):
     def __init__(self):
         super(Softmax3D, self).__init__("softmax")
 
-    def output(self, x):
+    def compute_tensor(self, x):
         shape = x.shape
         x = x.reshape((-1, shape[-1]))
         softmax_tensor = T.nnet.softmax(x)

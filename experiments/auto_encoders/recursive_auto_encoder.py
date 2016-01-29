@@ -12,7 +12,7 @@ from util import get_data, VECTOR_SIZE
 model_path = os.path.join(os.path.dirname(__file__), "models", "rae1.gz")
 
 if __name__ == '__main__':
-    model = RecursiveAutoEncoder(input_dim=VECTOR_SIZE, rep_dim=VECTOR_SIZE)
+    model = RecursiveAutoEncoder(input_dim=VECTOR_SIZE)
 
     trainer = SGDTrainer(model)
 

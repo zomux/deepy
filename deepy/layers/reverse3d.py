@@ -10,5 +10,5 @@ class Reverse3D(NeuralLayer):
     def __init__(self):
         super(Reverse3D, self).__init__("reverse3d")
 
-    def output(self, x):
+    def compute_tensor(self, x):
         return x[:, ::-1, :]

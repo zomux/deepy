@@ -33,7 +33,7 @@ def clip_param_norm():
             param.set_value(param.get_value() * scale)
 
 if __name__ == '__main__':
-    model = NeuralClassifier(input_dim=28*28)
+    model = NeuralClassifier(input_dim=28 * 28)
     model.training_callbacks.append(clip_param_norm)
     model.stack(Dropout(0.2),
                 Maxout(240, num_pieces=5, init=UniformInitializer(.005)),

@@ -9,5 +9,5 @@ class Softmax(NeuralLayer):
     def __init__(self):
         super(Softmax, self).__init__("softmax")
 
-    def output(self, x):
+    def compute_tensor(self, x):
         return T.nnet.softmax(x)
