@@ -61,7 +61,7 @@ def convert_to_neural_var(obj, test_obj):
             merged_map[key] = convert_to_neural_var(obj[key], test_obj[key])
         return merged_map
     elif type(obj) == TensorVariable:
-        return NeuralVariable(0, obj, test_obj)
+        return NeuralVariable(obj, test_obj, 0)
     else:
         return obj
 

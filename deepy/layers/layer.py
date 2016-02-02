@@ -95,7 +95,7 @@ class NeuralLayer(object):
         test_output = self.compute_test_tesnor(*[t.test_tensor for t in inputs], **test_kwargs)
 
         if type(output) != list:
-            return NeuralVariable(self.output_dim, output, test_output)
+            return NeuralVariable(output, test_output, self.output_dim)
         else:
             return [NeuralVariable(*item) for item in zip(self.output_dims, output, test_output)]
 

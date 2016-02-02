@@ -9,7 +9,7 @@ import theano
 import theano.tensor as T
 
 from deepy.dataset import MnistDataset, MiniBatches
-from deepy.networks import BasicNetwork
+from deepy.networks import ComputationalGraph
 from deepy.trainers import optimize_updates
 from tutorial2 import MyJointTrainingModel
 
@@ -18,7 +18,7 @@ model_path = os.path.join(os.path.dirname(__file__), "models", "tutorial3.gz")
 
 if __name__ == '__main__':
 
-    model = BasicNetwork(input_dim=28 * 28)
+    model = ComputationalGraph(input_dim=28 * 28)
 
     parameters = model.parameters
     gradients = T.grad(model.output, parameters)

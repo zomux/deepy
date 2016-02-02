@@ -10,7 +10,7 @@ class NeuralRegressor(NeuralNetwork):
     """
     Regression network.
     """
-    def __init__(self, input_dim, input_tensor=None):
+    def __init__(self, input_dim, target_tensor, clip_value, input_tensor=None):
         self.target_tensor = dim_to_var(target_tensor, "k") if type(target_tensor) == int else target_tensor
         self.clip_value = clip_value
         super(NeuralRegressor, self).__init__(input_dim, input_tensor=input_tensor)

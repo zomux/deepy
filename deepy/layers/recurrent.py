@@ -153,6 +153,7 @@ class RNN(RecurrentLayer):
         kwargs["hidden_size"] = hidden_size
         super(RNN, self).__init__("RNN", ["state"], **kwargs)
 
+    @neural_computation
     def compute_new_state(self, step_inputs):
         xh_t, h_tm1 = map(step_inputs.get, ["xh_t", "state"])
         if not xh_t:
@@ -162,6 +163,7 @@ class RNN(RecurrentLayer):
 
         return {"state": h_t}
 
+    @neural_computation
     def merge_inputs(self, input_var, additional_inputs=None):
         if not additional_inputs:
             additional_inputs = []

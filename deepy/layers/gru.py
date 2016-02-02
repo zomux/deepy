@@ -3,6 +3,7 @@
 
 import theano.tensor as T
 from recurrent import RecurrentLayer
+from deepy.utils import neural_computation
 
 OUTPUT_TYPES = ["sequence", "one"]
 INPUT_TYPES = ["sequence", "one"]
@@ -13,6 +14,7 @@ class GRU(RecurrentLayer):
         kwargs["hidden_size"] = hidden_size
         super(GRU, self).__init__("GRU", ["state"], **kwargs)
 
+    @neural_computation
     def compute_new_state(self, step_inputs):
         xz_t, xr_t, xh_t, h_tm1 = map(step_inputs.get, ["xz_t", "xr_t", "xh_t", "state"])
         if not xz_t:
@@ -25,6 +27,7 @@ class GRU(RecurrentLayer):
 
         return {"state": h_t}
 
+    @neural_computation
     def merge_inputs(self, input_var, additional_inputs=None):
         if not additional_inputs:
             additional_inputs = []

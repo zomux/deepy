@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 import theano.tensor as T
 
 from deepy.dataset import MnistDataset, MiniBatches
-from deepy.networks import BasicNetwork
+from deepy.networks import ComputationalGraph
 from deepy.layers import Dense, Softmax, NeuralLayer, Chain
 from deepy.trainers import MomentumTrainer, LearningRateAnnealer
 from deepy.utils import AutoEncoderCost, CrossEntropyCost, ErrorRateCost
@@ -66,7 +66,7 @@ class MyJointTrainingModel(NeuralLayer):
 
 
 if __name__ == '__main__':
-    model = BasicNetwork(input_dim=28 * 28)
+    model = ComputationalGraph(input_dim=28 * 28)
 
     mnist = MiniBatches(MnistDataset(), batch_size=20)
 

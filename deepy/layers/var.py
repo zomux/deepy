@@ -9,7 +9,7 @@ class NeuralVariable(NeuralLayer):
     Create a constant layer with tensors.
     """
 
-    def __init__(self, dim, tensor, test_tensor=None):
+    def __init__(self, tensor, test_tensor=None, dim=0):
         """
         Create a tensor layer.
         """
@@ -24,7 +24,7 @@ class NeuralVariable(NeuralLayer):
         Apply a function to tensors.
         """
         output_dim = dim if dim else self.output_dim
-        return NeuralVariable(output_dim, func(self.tensor), func(self.test_tensor))
+        return NeuralVariable(func(self.tensor), func(self.test_tensor), output_dim)
 
     def compute_tensor(self, x):
         return self.tensor

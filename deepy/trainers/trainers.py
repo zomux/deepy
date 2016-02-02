@@ -77,7 +77,7 @@ class NeuralTrainer(object):
 
         self.best_cost = 1e100
         self.best_iter = 0
-        self.best_params = self._copy_network_params()
+        self.best_params = self.copy_params()
         self._skip_batches = 0
         self._progress = 0
 
@@ -134,12 +134,12 @@ class NeuralTrainer(object):
         This method can load free parameters and resume the training progress.
         """
         self.network.load_params(path, exclude_free_params=exclude_free_params)
-        self.best_params = self._copy_network_params()
+        self.best_params = self.copy_params()
         # Resume the progress
         if self.network.train_logger.progress() > 0:
             self.skip(self.network.train_logger.progress())
 
-    def _copy_network_params(self):
+    def copy_params(self):
         checkpoint = (map(lambda p: p.get_value().copy(), self.network.parameters),
                       map(lambda p: p.get_value().copy(), self.network.free_parameters))
         return checkpoint
@@ -224,7 +224,7 @@ class NeuralTrainer(object):
         marker = ""
         if self.best_cost - J > self.best_cost * self.min_improvement:
             # save the best cost and parameters
-            self.best_params = self._copy_network_params()
+            self.best_params = self.copy_params()
             marker = ' *'
             if not dry_run:
                 self.best_cost = J
@@ -241,7 +241,7 @@ class NeuralTrainer(object):
         message = "valid   (%s) %s%s" % (iter_str, info, marker)
         logging.info(message)
         self.network.train_logger.record(message)
-        self.checkpoint = self._copy_network_params()
+        self.checkpoint = self.copy_params()
         return iteration - self.best_iter < self.patience
 
     def test_step(self, test_set):

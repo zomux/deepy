@@ -48,8 +48,8 @@ class MultiTargetNeuralClassifier(NeuralClassifier):
     Classifier for multiple targets.
     """
 
-    def __init__(self, input_dim=None):
-        super(MultiTargetNeuralClassifier, self).__init__(config)
+    def __init__(self, class_num, input_dim=None):
+        super(MultiTargetNeuralClassifier, self).__init__(input_dim)
         self.class_num = class_num
 
     def setup_vars(self):

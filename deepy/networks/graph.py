@@ -4,7 +4,7 @@
 from . import NeuralNetwork
 
 
-class BasicNetwork(NeuralNetwork):
+class ComputationalGraph(NeuralNetwork):
     """
     A simple neural network that the last layer outputs cost.
     """
@@ -20,7 +20,7 @@ class BasicNetwork(NeuralNetwork):
             config - network configuration
             input_tensor - specify the tensor of input if it's special
         """
-        super(BasicNetwork, self).__init__(input_dim, input_tensor=input_tensor)
+        super(ComputationalGraph, self).__init__(input_dim, input_tensor=input_tensor)
         if model:
             self.stack(model)
         if output:

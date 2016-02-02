@@ -22,7 +22,7 @@ class RecursiveAutoEncoder(NeuralNetwork):
     Parameters:
         rep_dim - dimension of representation
     """
-    def __init__(self, input_dim, input_tensor=None):
+    def __init__(self, input_dim, rep_dim, input_tensor=None):
         super(RecursiveAutoEncoder, self).__init__(input_dim, input_tensor=3)
 
         self.rep_dim = rep_dim
