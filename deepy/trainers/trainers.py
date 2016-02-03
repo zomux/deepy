@@ -74,6 +74,7 @@ class NeuralTrainer(object):
         self.validation_frequency = self.config.validation_frequency
         self.min_improvement = self.config.min_improvement
         self.patience = self.config.patience
+        self._iter_callbacks = []
 
         self.best_cost = 1e100
         self.best_iter = 0
@@ -144,6 +145,12 @@ class NeuralTrainer(object):
                       map(lambda p: p.get_value().copy(), self.network.free_parameters))
         return checkpoint
 
+    def add_iter_callback(self, func):
+        """
+        Add a iteration callback function (receives an argument of the trainer).
+        :return:
+        """
+        self._iter_callbacks.append(func)
 
     def train(self, train_set, valid_set=None, test_set=None, train_size=None):
         """
@@ -258,7 +265,8 @@ class NeuralTrainer(object):
 
     def train_step(self, train_set, train_size=None):
         dirty_trick_times = 0
-        training_callback = bool(self.network.training_callbacks)
+        network_callback = bool(self.network.training_callbacks)
+        trainer_callback = bool(self._iter_callbacks)
         cost_matrix = []
         self._progress = 0
 
@@ -280,9 +288,13 @@ class NeuralTrainer(object):
                         cost_matrix.append(cost_x)
                         cost_x = self.learning_func(*[t[(t.shape[0]/2):] for t in x])
                 cost_matrix.append(cost_x)
-                if training_callback:
+                if network_callback:
                     self.last_score = cost_x[0]
                     self.network.training_callback()
+                if trainer_callback:
+                    self.last_score = cost_x[0]
+                    for func in self._iter_callbacks:
+                        func(self)
             else:
                 self._skip_batches -= 1
             if train_size:
@@ -345,12 +357,9 @@ class GeneralNeuralTrainer(NeuralTrainer):
         logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
         logging.info("learning updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
 
-        if False and config.data_transmitter:
-            variables = [config.data_transmitter.get_iterator()]
-            givens = config.data_transmitter.get_givens()
-        else:
-            variables = network.input_variables + network.target_variables
-            givens = None
+
+        variables = network.input_variables + network.target_variables
+        givens = None
 
         self.learning_func = theano.function(
             variables,

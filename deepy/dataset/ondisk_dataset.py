@@ -36,6 +36,7 @@ class OnDiskDataset(Dataset):
         if self._cache_on_memory:
             logging.info("Cache on memory")
             self._cached_train_data = list(map(self._post_processing, StreamPickler.load(open(self._train_path))))
+            self._train_size = len(self._cached_train_data)
             if self._shuffle_memory:
                 logging.info("Shuffle on-memory data")
                 global_rand.shuffle(self._cached_train_data)
@@ -44,7 +45,6 @@ class OnDiskDataset(Dataset):
         self._curriculum_count += 1
         logging.info("curriculum learning: round {}".format(self._curriculum_count))
         return self._curriculum(self._cached_train_data, self._curriculum_count)
-
 
     def generate_train_data(self):
         for data in StreamPickler.load(open(self._train_path)):
