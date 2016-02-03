@@ -35,7 +35,7 @@ def save_network_params(params, path):
 
 class NeuralNetwork(object):
     """
-    Basic neural network class.
+    The base class of neural networks.
     """
 
     def __init__(self, input_dim, input_tensor=None):

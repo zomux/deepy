@@ -18,6 +18,7 @@ from network import NeuralNetwork
 # TODO: repair additional_h mode
 class RecursiveAutoEncoder(NeuralNetwork):
     """
+    DEPRECATED.
     Recursive auto encoder (Recursively encode a sequence by combining two children).
     Parameters:
         rep_dim - dimension of representation

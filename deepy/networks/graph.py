@@ -6,7 +6,8 @@ from . import NeuralNetwork
 
 class ComputationalGraph(NeuralNetwork):
     """
-    A simple neural network that the last layer outputs cost.
+    A class for defining computational graphs.
+    This class can be used to design very complex models, such as Neural Turing Machine.
     """
 
     def __init__(self, input_dim=0, model=None, input_tensor=None,

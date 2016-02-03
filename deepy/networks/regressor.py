@@ -8,7 +8,7 @@ from deepy.utils import dim_to_var, RegressionCost
 
 class NeuralRegressor(NeuralNetwork):
     """
-    Regression network.
+    A class of defining stacked neural network regressors.
     """
     def __init__(self, input_dim, target_tensor, clip_value, input_tensor=None):
         self.target_tensor = dim_to_var(target_tensor, "k") if type(target_tensor) == int else target_tensor

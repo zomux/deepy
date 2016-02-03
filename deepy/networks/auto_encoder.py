@@ -8,7 +8,7 @@ from network import NeuralNetwork
 
 class AutoEncoder(NeuralNetwork):
     """
-    Auto encoder.
+    A class for defining simple auto encoders.
     Must call stack_encoding before stack_decoding.
     Parameters:
         rep_dim - dimension of representation

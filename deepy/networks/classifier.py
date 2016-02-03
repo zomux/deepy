@@ -8,7 +8,7 @@ import theano.tensor as T
 
 class NeuralClassifier(NeuralNetwork):
     """
-    Classifier network.
+    A class of defining stacked neural network for classifiers.
     """
 
     def __init__(self, input_dim, input_tensor=None):
