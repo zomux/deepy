@@ -10,10 +10,15 @@ class AutoEncoder(NeuralNetwork):
     """
     A class for defining simple auto encoders.
     Must call stack_encoding before stack_decoding.
-    Parameters:
-        rep_dim - dimension of representation
     """
     def __init__(self, input_dim, rep_dim, input_tensor=None):
+        """
+        Create an auto-encoder.
+        :param input_dim: dimension of the input layer
+        :param rep_dim: dimension of the representation layer
+        :param input_tensor:
+        :return:
+        """
         super(AutoEncoder, self).__init__(input_dim, input_tensor=input_tensor)
 
         self.rep_dim = rep_dim

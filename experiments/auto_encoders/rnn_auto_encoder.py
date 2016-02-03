@@ -16,7 +16,7 @@ HIDDEN_SIZE = 50
 model_path = os.path.join(os.path.dirname(__file__), "models", "rnn1.gz")
 
 if __name__ == '__main__':
-    model = AutoEncoder(input_dim=VECTOR_SIZE, input_tensor=3)
+    model = AutoEncoder(rep_dim=10, input_dim=VECTOR_SIZE, input_tensor=3)
     model.stack_encoders(RNN(hidden_size=HIDDEN_SIZE, input_type="sequence", output_type="one"))
     model.stack_decoders(RNN(hidden_size=HIDDEN_SIZE, input_type="one", output_type="sequence", steps=SEQUENCE_LENGTH),
                          Dense(VECTOR_SIZE, 'softmax'))

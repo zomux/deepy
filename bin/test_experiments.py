@@ -52,8 +52,10 @@ def test_experiment(path, timeout=60):
     if executor.stderr_output == None:
         logging.info("stderr is none")
         return
-    logging.info(executor.stdout_output)
-    logging.info(executor.stderr_output)
+    if executor.stdout_output:
+        logging.info(executor.stdout_output)
+    if executor.stderr_output:
+        logging.info(executor.stderr_output)
     if ERROR_KEYWORD in executor.stderr_output:
         logging.info("------ Error was found ------")
         logging.info(executor.stderr_output)
@@ -64,19 +66,20 @@ def test_experiment(path, timeout=60):
 
 
 if __name__ == '__main__':
-    # MNIST
+    # Mnist tasks
     test_experiment("mnist/mlp_dropout.py", timeout=30)
     test_experiment("mnist/deep_convolution.py", timeout=30)
     # Auto-encoders
+    test_experiment("auto_encoders/mnist_auto_encoder.py", timeout=60)
     test_experiment("auto_encoders/rnn_auto_encoder.py", timeout=120)
-    # LMs
-    # test_experiment("lm/baseline_rnnlm.py", timeout=180)
     # Highway networks
     test_experiment("highway_networks/mnist_highway.py", timeout=120)
-    # CG Training
+    # TODO: recurrent neural networks
+    # test_experiment("lm/baseline_rnnlm.py", timeout=180)
+    # Scipy trainers
     test_experiment("scipy_training/mnist_cg.py", timeout=180)
     # Tutorials
     test_experiment("tutorials/tutorial1.py", timeout=120)
-    test_experiment("tutorials/tutorial2.py", timeout=120)
-    test_experiment("tutorials/tutorial3.py", timeout=120)
+    # test_experiment("tutorials/tutorial2.py", timeout=120)
+    # test_experiment("tutorials/tutorial3.py", timeout=120)
     sys.exit(0)

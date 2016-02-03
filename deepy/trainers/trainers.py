@@ -81,6 +81,7 @@ class NeuralTrainer(object):
         self.best_params = self.copy_params()
         self._skip_batches = 0
         self._progress = 0
+        self.last_cost = 0
 
     def skip(self, n_batches):
         """
@@ -288,18 +289,17 @@ class NeuralTrainer(object):
                         cost_matrix.append(cost_x)
                         cost_x = self.learning_func(*[t[(t.shape[0]/2):] for t in x])
                 cost_matrix.append(cost_x)
+                self.last_cost = cost_x[0]
                 if network_callback:
-                    self.last_score = cost_x[0]
                     self.network.training_callback()
                 if trainer_callback:
-                    self.last_score = cost_x[0]
                     for func in self._iter_callbacks:
                         func(self)
             else:
                 self._skip_batches -= 1
             if train_size:
                 self._progress += 1
-                sys.stdout.write("\r> %d%%" % (self._progress * 100 / train_size))
+                sys.stdout.write("\x1b[2K\r> %d%% | J=%.2f" % (self._progress * 100 / train_size, self.last_cost))
                 sys.stdout.flush()
         self._progress = 0
 
