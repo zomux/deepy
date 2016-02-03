@@ -64,8 +64,8 @@ class BasicDataset(Dataset):
         Print dataset statistics.
         """
         logging.info("%s train=%d valid=%d test=%d" % (self.__class__.__name__,
-                                                       len(self._train_set) if self._train_set else 0,
-                                                       len(self._valid_set) if self._valid_set else 0,
-                                                       len(self._test_set) if self._test_set else 0))
+                                                       len(list(self._train_set)) if self._train_set else 0,
+                                                       len(list(self._valid_set)) if self._valid_set else 0,
+                                                       len(list(self._test_set)) if self._test_set else 0))
 
 

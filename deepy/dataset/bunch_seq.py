@@ -8,8 +8,10 @@ from . import MiniBatches
 import numpy as np
 from deepy.utils import global_rand, FakeGenerator
 
+
 class BunchSequences(MiniBatches):
     """
+    DEPRECATED.
     Arrange sequences in bunch mode.
     See http://mi.eng.cam.ac.uk/~xc257/papers/RNNLMTrain_Interspeech2014.pdf .
     """

@@ -12,7 +12,7 @@ logging = loggers.getLogger(__name__)
 
 class OnDiskDataset(Dataset):
     """
-    On-disk dataset.
+    Load large on-disk dataset.
     The data should be dumped with deepy.utils.StreamPickler.
     You must convert the data to mini-batches before dump it to a file.
     """

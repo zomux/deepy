@@ -6,6 +6,9 @@ from . import Dataset
 import numpy as np
 
 class MiniBatches(Dataset):
+    """
+    Convert data into mini-batches.
+    """
 
     def __init__(self, dataset, batch_size=20):
         self.origin = dataset
