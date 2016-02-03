@@ -2,7 +2,7 @@ deepy: A highly extensible deep learning framework based on Theano
 ===
 [![Build](https://travis-ci.org/zomux/deepy.svg)](https://travis-ci.org/zomux/deepy)
 [![Quality](https://img.shields.io/scrutinizer/g/zomux/deepy.svg)](https://scrutinizer-ci.com/g/zomux/deepy/?branch=master)
-[![Requirements Status](https://requires.io/github/zomux/deepy/requirements.svg?branch=master)](https://requires.io/github/zomux/deepy/requirements/?branch=master)
+[![PyPI version](https://badge.fury.io/py/deepy.svg)](https://badge.fury.io/py/deepy)
 [![Documentation Status](https://readthedocs.org/projects/deepy/badge/?version=latest)](http://deepy.readthedocs.org/en/latest/)
 [![Coverage Status](https://coveralls.io/repos/zomux/uaca/badge.svg?branch=master)](https://coveralls.io/r/uaca/deepy?branch=master)
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/zomux/deepy/blob/master/LICENSE)
@@ -16,6 +16,13 @@ Although highly flexible, *deepy* maintains a clean high-level interface.
 From deepy 0.2.0, you can easily design very complex computational graphs such as Neural Turing Machines.
 
 Example codes will be added shortly.
+
+## Dependencies
+
+- Python 2.7 (Better on Linux)
+- numpy
+- theano
+- scipy for L-BFGS and CG optimization
 
 ### Tutorials (Work in progress)
 
@@ -199,13 +206,6 @@ python experiments/initialization_schemes/uniform.py
 python experiments/initialization_schemes/xavier_glorot.py
 python experiments/initialization_schemes/kaiming_he.py
 ```
-
-## Dependencies
-
-- Python 2.7 (Better on Linux)
-- numpy
-- theano
-- scipy for L-BFGS and CG optimization
 
 
 ---
