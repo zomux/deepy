@@ -66,6 +66,7 @@ from deepy.dataset import MnistDataset, MiniBatches
 from deepy.networks import NeuralClassifier
 from deepy.layers import Dense, Softmax, Dropout
 from deepy.trainers import MomentumTrainer, LearningRateAnnealer
+from deepy.utils import shared_scalar
 ```
 
 ## Define your model
@@ -103,7 +104,7 @@ trainer = MomentumTrainer(model)
 For learning rate, if you want to modify it on the fly, you need define it a shared variable.
 In *deepy* you can just do it like this:
 ```python
-trainer = MomentumTrainer(model, {"learning_rate": LearningRateAnnealer.learning_rate(0.01)})
+trainer = MomentumTrainer(model, {"learning_rate": shared_scalar(0.01)})
 ```
 
 For a complete training option list, see this file:

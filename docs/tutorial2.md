@@ -1,5 +1,7 @@
 # Tutorial 2: Create your own model
 
+This tutorial is still unfinished, try to review the codes directly.
+
 ## Understand model definition in deepy
 
 ### Network and layers

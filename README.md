@@ -1,8 +1,5 @@
-deepy: Highly extensible deep learning framework based on Theano
+deepy: A highly extensible deep learning framework based on Theano
 ===
-
-2016/1: In order to prevent the repository to be too large, the model files are removed.
-   
 [![Build](https://travis-ci.org/zomux/deepy.svg)](https://travis-ci.org/zomux/deepy)
 [![Quality](https://img.shields.io/scrutinizer/g/zomux/deepy.svg)](https://scrutinizer-ci.com/g/zomux/deepy/?branch=master)
 [![Requirements Status](https://requires.io/github/zomux/deepy/requirements.svg?branch=master)](https://requires.io/github/zomux/deepy/requirements/?branch=master)
@@ -10,12 +7,15 @@ deepy: Highly extensible deep learning framework based on Theano
 [![Coverage Status](https://coveralls.io/repos/zomux/uaca/badge.svg?branch=master)](https://coveralls.io/r/uaca/deepy?branch=master)
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/zomux/deepy/blob/master/LICENSE)
 
-### Dependencies
+*deepy* is a deep learning framework for designing models with complex architectures.
 
-- Python 2.7 (Better on Linux)
-- numpy
-- theano
-- scipy for L-BFGS and CG optimization
+Many important components such as LSTM and Batch Normalization are implemented inside.
+
+Although highly flexible, *deepy* maintains a clean high-level interface.
+
+From deepy 0.2.0, you can easily design very complex computational graphs such as Neural Turing Machines.
+
+Example codes will be added shortly.
 
 ### Tutorials (Work in progress)
 
@@ -24,11 +24,8 @@ deepy: Highly extensible deep learning framework based on Theano
 Clean interface
 ===
 ```python
-# MNIST Multi-layer model with dropout.
-from deepy.dataset import MnistDataset, MiniBatches
-from deepy.networks import NeuralClassifier
-from deepy.layers import Dense, Softmax, Dropout
-from deepy.trainers import MomentumTrainer, LearningRateAnnealer
+# A multi-layer model with dropout for MNIST task.
+from deepy import *
 
 model = NeuralClassifier(input_dim=28*28)
 model.stack(Dense(256, 'relu'),
@@ -203,14 +200,17 @@ python experiments/initialization_schemes/xavier_glorot.py
 python experiments/initialization_schemes/kaiming_he.py
 ```
 
-Other features
-===
+## Dependencies
 
-- Auto gradient correction
+- Python 2.7 (Better on Linux)
+- numpy
+- theano
+- scipy for L-BFGS and CG optimization
+
 
 ---
 
 Sorry for that deepy is not well documented currently, but the framework is designed in the spirit of simplicity and readability.
 This will be improved if someone requires.
 
-**Raphael Shu, 2015**
+**Raphael Shu, 2016**
