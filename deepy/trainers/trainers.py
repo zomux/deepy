@@ -36,16 +36,35 @@ class GeneralNeuralTrainer(NeuralTrainer):
             self._learning_func = self.learning_function()
         return self._learning_func(*variables)
 
-    def learning_updates(self):
+    def _learning_updates(self):
         """
         Return updates in the training.
+        """
+        params = self.training_params()
+        gradients = self.get_gradients(params)
+        return self.optimization_updates(params, gradients)
+
+    def training_params(self):
+        """
+        Get parameters to be optimized.
         """
         params = self.network.parameters
         # Freeze parameters
         if self.config.fixed_parameters:
             logging.info("fixed parameters: %s" % ", ".join(map(str, self.config.fixed_parameters)))
             params = [p for p in params if p not in self.config.fixed_parameters]
-        gradients = T.grad(self.cost, params)
+        return params
+
+    def get_gradients(self, params):
+        """
+        Get gradients from given parameters.
+        """
+        return T.grad(self.cost, params)
+
+    def optimization_updates(self, params, gradients):
+        """
+        Return updates from optimization.
+        """
         updates, free_parameters = optimize_updates(params, gradients, self.config)
         self.network.free_parameters.extend(free_parameters)
         logging.info("Added %d free parameters for optimization" % len(free_parameters))
@@ -58,7 +77,7 @@ class GeneralNeuralTrainer(NeuralTrainer):
         :return:
         """
         network_updates = list(self.network.updates) + list(self.network.training_updates)
-        learning_updates = list(self.learning_updates())
+        learning_updates = list(self._learning_updates())
         update_list = network_updates + learning_updates
 
         logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
@@ -128,6 +147,6 @@ class FakeTrainer(GeneralNeuralTrainer):
     """
     Fake Trainer does nothing.
     """
-    
-    def learning_updates(self):
+
+    def _learning_updates(self):
         return []

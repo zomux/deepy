@@ -36,7 +36,7 @@ class DelayedBatchSGDTrainer(NeuralTrainer):
 
         logging.info('compiling %s learning function', self.__class__.__name__)
 
-        network_updates = list(network.updates) + list(network.learning_updates)
+        network_updates = list(network.updates) + list(network._learning_updates)
         learning_updates = list(self.learning_updates())
         update_list = network_updates + learning_updates
         logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
