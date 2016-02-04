@@ -49,7 +49,7 @@ Then you have four questions to consider:
 - What optimization method to use
 - Where is your dataset
 
-With *deepy* you can implement a network easily and intuitive once you got the answers.
+With *deepy* you can implement a network easily and intuitively once you got the answers.
 
 Here, we give a simple design of a feed-forward neural network.
 
