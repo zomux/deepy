@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from layer import NeuralLayer
+from deepy.utils.decorations import neural_computation
 
 
 class NeuralVariable(NeuralLayer):
@@ -18,6 +19,12 @@ class NeuralVariable(NeuralLayer):
         self.tensor = tensor
         self.test_tensor = tensor if not test_tensor else test_tensor
         self.initialize(0)
+
+    def __getitem__(self, index):
+        @neural_computation
+        def getitem_wrapper(t, index):
+            return t[index]
+        return getitem_wrapper(self, index)
 
     def apply(self, func, dim=None):
         """
