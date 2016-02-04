@@ -74,7 +74,7 @@ Now you are done, simple run the following command to train your first model.
 $ python my_experiments/first_model.py
 ```
 
-You can also save your trained model by add following code:
+You can also save your trained model by adding following code:
 
 ```
 model.save_params("my_experiments/my_first_model.gz")
