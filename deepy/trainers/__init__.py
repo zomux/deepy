@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+THEANO_LINKER = "cvm"
+
 from controllers import TrainingController
+from base import NeuralTrainer
 from trainers import *
 from optimize import *
 from annealers import *

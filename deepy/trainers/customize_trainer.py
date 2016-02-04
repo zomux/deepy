@@ -3,15 +3,16 @@
 
 import logging as loggers
 from abc import ABCMeta, abstractmethod
-
-from deepy.trainers import NeuralTrainer
-
+from deepy.trainers.base import NeuralTrainer
 
 logging = loggers.getLogger(__name__)
 THEANO_LINKER = 'cvm'
 
 class CustomizeTrainer(NeuralTrainer):
-    '''This is a base class for all trainers.'''
+    """
+    DEPRECATED !!!
+    A customized trainer.
+    """
     __metaclass__ = ABCMeta
 
     def __init__(self, network, config=None):

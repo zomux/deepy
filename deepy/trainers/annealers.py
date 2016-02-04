@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import theano
 import numpy as np
 
 from controllers import TrainingController
@@ -17,7 +16,7 @@ class LearningRateAnnealer(TrainingController):
 
     def __init__(self, trainer, patience=3, anneal_times=4):
         """
-        :type trainer: deepy.trainers.trainers.NeuralTrainer
+        :type trainer: deepy.trainers.base.NeuralTrainer
         """
         super(LearningRateAnnealer, self).__init__(trainer)
         self._iter = -1
@@ -112,7 +111,7 @@ class SimpleScheduler(TrainingController):
 
     def __init__(self, trainer, patience=10):
         """
-        :type trainer: deepy.trainers.trainers.NeuralTrainer
+        :type trainer: deepy.trainers.base.NeuralTrainer
         """
         super(SimpleScheduler, self).__init__(trainer)
         self._iter = 0

@@ -9,7 +9,7 @@ class TrainingController(object):
 
     def __init__(self, trainer):
         """
-        :type trainer: deepy.trainers.NeuralTrainer
+        :type trainer: deepy.trainers.base.NeuralTrainer
         """
         self._trainer = trainer
 

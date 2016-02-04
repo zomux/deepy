@@ -9,7 +9,7 @@ import theano.tensor as T
 from theano.ifelse import ifelse
 
 from deepy.utils import FLOATX
-from trainers import NeuralTrainer
+from deepy.trainers.base import NeuralTrainer
 
 logging = loggers.getLogger(__name__)
 
@@ -17,6 +17,7 @@ THEANO_LINKER = 'cvm'
 
 class DelayedBatchSGDTrainer(NeuralTrainer):
     """
+    DEPRECATED
     Delayed batch SGD trainer.
     Update parameters after N iterations.
     """

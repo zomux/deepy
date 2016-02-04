@@ -4,7 +4,8 @@
 
 import logging
 
-from deepy.trainers import NeuralTrainer, THEANO_LINKER
+from deepy.trainers import THEANO_LINKER
+from deepy.trainers.base import NeuralTrainer
 from deepy.utils import FLOATX
 import theano
 import numpy as np
