@@ -23,7 +23,9 @@ class NeuralVariable(NeuralLayer):
     def __getitem__(self, index):
         @neural_computation
         def getitem_wrapper(t, index):
-            return t[index]
+            if type(index) == list:
+                index = tuple(index)
+            return t.__getitem__(index)
         return getitem_wrapper(self, index)
 
     def apply(self, func, dim=None):
@@ -46,4 +48,4 @@ class NeuralVariable(NeuralLayer):
         return self.output_dim
 
     def shape(self, dim_index):
-        return self.tensor.shape[dim_index]
+        return NeuralVariable(self.tensor.shape[dim_index])
