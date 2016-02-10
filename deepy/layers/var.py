@@ -48,4 +48,4 @@ class NeuralVariable(NeuralLayer):
         return self.output_dim
 
     def shape(self, dim_index):
-        return NeuralVariable(self.tensor.shape[dim_index])
+        return NeuralVariable(self.tensor.shape[dim_index], self.test_tensor.shape[dim_index])

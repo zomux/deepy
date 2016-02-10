@@ -3,8 +3,8 @@ deepy: A highly extensible deep learning framework based on Theano
 [![Build](https://travis-ci.org/zomux/deepy.svg)](https://travis-ci.org/zomux/deepy)
 [![Quality](https://img.shields.io/scrutinizer/g/zomux/deepy.svg)](https://scrutinizer-ci.com/g/zomux/deepy/?branch=master)
 [![PyPI version](https://badge.fury.io/py/deepy.svg)](https://badge.fury.io/py/deepy)
+[![Requirements Status](https://requires.io/github/zomux/deepy/requirements.svg?branch=master)](https://requires.io/github/zomux/deepy/requirements/?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/deepy/badge/?version=latest)](http://deepy.readthedocs.org/en/latest/)
-[![Coverage Status](https://coveralls.io/repos/zomux/uaca/badge.svg?branch=master)](https://coveralls.io/r/uaca/deepy?branch=master)
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/zomux/deepy/blob/master/LICENSE)
 
 *deepy* is a deep learning framework for designing models with complex architectures.

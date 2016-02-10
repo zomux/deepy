@@ -41,10 +41,7 @@ class NeuralTrainer(object):
         self.network.prepare_training()
         self._setup_costs()
 
-        logging.info("compile evaluation function")
-        self.evaluation_func = theano.function(
-            network.input_variables + network.target_variables, self.evaluation_variables, updates=network.updates,
-            allow_input_downcast=True, mode=self.config.get("theano_mode", None))
+        self.evaluation_func = None
 
         self.validation_frequency = self.config.validation_frequency
         self.min_improvement = self.config.min_improvement
@@ -57,6 +54,15 @@ class NeuralTrainer(object):
         self._skip_batches = 0
         self._progress = 0
         self.last_cost = 0
+
+    def _compile_evaluation_func(self):
+        if not self.evaluation_func:
+            logging.info("compile evaluation function")
+            self.evaluation_func = theano.function(
+                self.network.input_variables + self.network.target_variables,
+                self.evaluation_variables,
+                updates=self.network.updates,
+                allow_input_downcast=True, mode=self.config.get("theano_mode", None))
 
     def skip(self, n_batches):
         """
@@ -234,12 +240,14 @@ class NeuralTrainer(object):
         return iteration - self.best_iter < self.patience
 
     def test_step(self, test_set):
+        self._compile_evaluation_func()
         costs = list(zip(
             self.evaluation_names,
             np.mean([self.evaluation_func(*x) for x in test_set], axis=0)))
         return costs
 
     def valid_step(self, valid_set):
+        self._compile_evaluation_func()
         costs = list(zip(
             self.evaluation_names,
             np.mean([self.evaluation_func(*x) for x in valid_set], axis=0)))

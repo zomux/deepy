@@ -27,12 +27,11 @@ class GeneralNeuralTrainer(NeuralTrainer):
 
         super(GeneralNeuralTrainer, self).__init__(network, config)
 
-        logging.info('compiling %s learning function', self.__class__.__name__)
-
         self._learning_func = None
 
     def learn(self, *variables):
         if not self._learning_func:
+            logging.info('compiling %s learning function', self.__class__.__name__)
             self._learning_func = self.learning_function()
         return self._learning_func(*variables)
 
