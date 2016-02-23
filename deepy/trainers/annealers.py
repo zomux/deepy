@@ -72,6 +72,7 @@ class ScheduledLearningRateAnnealer(TrainingController):
             self._trainer.set_params(*self._trainer.best_params)
             self._learning_rate.set_value(self._learning_rate.get_value() * 0.5)
             logging.info("halving learning rate to %f" % self._learning_rate.get_value())
+            self._trainer.network.train_logger.record("set learning rate to %f" % self._learning_rate.get_value())
         if self._iter >= self.end_at:
             logging.info("ending")
             return True
