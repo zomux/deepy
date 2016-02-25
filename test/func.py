@@ -45,7 +45,7 @@ class ParallelExecutor(object):
 
 ERROR_KEYWORD = "Traceback (most recent call last)"
 
-def test_experiment(path, timeout=60):
+def run_experiment(path, timeout=60):
     path = os.path.join("experiments", path)
     executor = ParallelExecutor("python %s" % path)
     executor.run(timeout=timeout)
@@ -62,24 +62,4 @@ def test_experiment(path, timeout=60):
         logging.info("-----------------------------")
     else:
         logging.info("------ No error was found ------")
-    assert ERROR_KEYWORD not in executor.stderr_output
-
-
-if __name__ == '__main__':
-    # Mnist tasks
-    test_experiment("mnist/mlp_dropout.py", timeout=30)
-    test_experiment("mnist/deep_convolution.py", timeout=30)
-    # Auto-encoders
-    test_experiment("auto_encoders/mnist_auto_encoder.py", timeout=60)
-    test_experiment("auto_encoders/rnn_auto_encoder.py", timeout=120)
-    # Highway networks
-    test_experiment("highway_networks/mnist_highway.py", timeout=120)
-    # TODO: recurrent neural networks
-    # test_experiment("lm/baseline_rnnlm.py", timeout=180)
-    # Scipy trainers
-    test_experiment("scipy_training/mnist_cg.py", timeout=180)
-    # Tutorials
-    test_experiment("tutorials/tutorial1.py", timeout=120)
-    # test_experiment("tutorials/tutorial2.py", timeout=120)
-    # test_experiment("tutorials/tutorial3.py", timeout=120)
-    sys.exit(0)
+    return executor.stderr_output

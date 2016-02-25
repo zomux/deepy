@@ -8,8 +8,8 @@ from deepy.utils import neural_computation
 OUTPUT_TYPES = ["sequence", "one"]
 INPUT_TYPES = ["sequence", "one"]
 
-class GRU(RecurrentLayer):
 
+class GRU(RecurrentLayer):
     def __init__(self, hidden_size, **kwargs):
         kwargs["hidden_size"] = hidden_size
         super(GRU, self).__init__("GRU", ["state"], **kwargs)
@@ -23,7 +23,7 @@ class GRU(RecurrentLayer):
         z_t = self.gate_activate(xz_t + T.dot(h_tm1, self.U_z) + self.b_z)
         r_t = self.gate_activate(xr_t + T.dot(h_tm1, self.U_r) + self.b_r)
         h_t_pre = self.activate(xh_t + T.dot(r_t * h_tm1, self.U_h) + self.b_h)
-        h_t = z_t * h_tm1 + (1 - z_t) *  h_t_pre
+        h_t = z_t * h_tm1 + (1 - z_t) * h_t_pre
 
         return {"state": h_t}
 
@@ -31,7 +31,7 @@ class GRU(RecurrentLayer):
     def merge_inputs(self, input_var, additional_inputs=None):
         if not additional_inputs:
             additional_inputs = []
-        all_inputs = [input_var] + additional_inputs
+        all_inputs = filter(bool, [input_var] + additional_inputs)
         z_inputs = []
         r_inputs = []
         h_inputs = []
@@ -66,10 +66,12 @@ class GRU(RecurrentLayer):
         self.input_weights = []
         if self._input_type == "sequence":
             all_input_dims = [self.input_dim] + self.additional_input_dims
-            for i, input_dim in enumerate(all_input_dims):
-                wz = self.create_weight(input_dim, self.hidden_size, "wz_{}".format(i+1), initializer=self.outer_init)
-                wr = self.create_weight(input_dim, self.hidden_size, "wr_{}".format(i+1), initializer=self.outer_init)
-                wh = self.create_weight(input_dim, self.hidden_size, "wh_{}".format(i+1), initializer=self.outer_init)
-                weights = [wz, wr, wh]
-                self.input_weights.append(weights)
-                self.register_parameters(*weights)
+        else:
+            all_input_dims = self.additional_input_dims
+        for i, input_dim in enumerate(all_input_dims):
+            wz = self.create_weight(input_dim, self.hidden_size, "wz_{}".format(i + 1), initializer=self.outer_init)
+            wr = self.create_weight(input_dim, self.hidden_size, "wr_{}".format(i + 1), initializer=self.outer_init)
+            wh = self.create_weight(input_dim, self.hidden_size, "wh_{}".format(i + 1), initializer=self.outer_init)
+            weights = [wz, wr, wh]
+            self.input_weights.append(weights)
+            self.register_parameters(*weights)

@@ -20,7 +20,7 @@ before_install:
 
 # Install packages
 install:
-  - travis_retry conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib nose dateutil
+  - travis_retry conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib nose dateutil pytest
   # Coverage packages are on my binstar channel
   - conda install --yes -c dan_blanchard python-coveralls nose-cov
   # - travis_retry pip install -r requirements.txt
@@ -31,7 +31,7 @@ install:
 script:
   - source bin/cpu_env.sh
   # - export THEANO_FLAGS="$THEANO_FLAGS,blas.ldflags='-lblas -lgfortran'"
-  - python bin/test_experiments.py
+  - py.test
   # Coverage test
   # - nosetests --with-cov --cover-tests deepy --logging-level=INFO
 

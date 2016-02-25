@@ -98,7 +98,9 @@ class RecurrentLayer(NeuralLayer):
                 additional_inputs = []
             step_inputs.update(self.merge_inputs(input_var, additional_inputs=additional_inputs))
         else:
-            step_inputs["mask"] = mask.dimshuffle((1,0)) if mask else None
+            # step_inputs["mask"] = mask.dimshuffle((1,0)) if mask else None
+            if additional_inputs:
+                step_inputs.update(self.merge_inputs(None, additional_inputs=additional_inputs))
         if states:
             for name in self.state_names:
                 step_inputs[name] = states[name]
@@ -127,7 +129,7 @@ class RecurrentLayer(NeuralLayer):
             seq_map = self.get_step_inputs(input_var, mask=mask, additional_inputs=additional_inputs)
         else:
             init_state_map[self.main_state] = input_var
-            seq_map = self.get_step_inputs(None)
+            seq_map = self.get_step_inputs(None, mask=mask, additional_inputs=additional_inputs)
         # scan
         retval_map, _ = Scanner(
             self.step,
