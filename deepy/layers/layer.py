@@ -8,6 +8,7 @@ import numpy as np
 import theano
 
 from deepy.utils import FLOATX, UniformInitializer, neural_computation, neural_computation_prefer_tensor
+from deepy.utils import convert_to_neural_var, convert_to_theano_var
 
 logging = loggers.getLogger(__name__)
 
@@ -81,15 +82,7 @@ class NeuralLayer(object):
         else:
             self.initialize(input_dims=dims)
         # convert kwargs
-        train_kwargs = {}
-        test_kwargs = {}
-        for key, val in kwargs.items():
-            if type(val) == NeuralVariable:
-                train_kwargs[key] = val.tensor
-                test_kwargs[key] = val.test_tensor
-            else:
-                train_kwargs[key] = val
-                test_kwargs[key] = val
+        train_kwargs, test_kwargs, _, _ = convert_to_theano_var(kwargs)
 
         output = self.compute_tensor(*[t.tensor for t in inputs], **train_kwargs)
         test_output = self.compute_test_tesnor(*[t.test_tensor for t in inputs], **test_kwargs)
