@@ -12,7 +12,7 @@ DEFAULT_TRAINER_SETTING = {
     # Training
     "learning_rate": theano.shared(np.array(0.01, dtype=FLOATX)),
     "validation_frequency": 1,
-    "test_frequency": 10,
+    "test_frequency": 3,
     "monitor_frequency": 1,
     "min_improvement": 0.001,
     "max_iterations": 0,

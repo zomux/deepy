@@ -12,6 +12,7 @@ import logging as loggers
 
 
 logging = loggers.getLogger(__name__)
+logging.setLevel(loggers.INFO)
 
 FLOATX = theano.config.floatX
 EPSILON = T.constant(1.0e-15, dtype=FLOATX)

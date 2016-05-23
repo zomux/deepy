@@ -262,6 +262,7 @@ class NeuralTrainer(object):
 
         for x in train_set:
             if self._skip_batches == 0:
+
                 if dirty_trick_times > 0:
                     cost_x = self.learn(*[t[:(t.shape[0]/2)] for t in x])
                     cost_matrix.append(cost_x)

@@ -151,7 +151,7 @@ class RecurrentLayer(NeuralLayer):
 
 class RNN(RecurrentLayer):
 
-    def __init__(self, hidden_size, **kwargs):
+    def  __init__(self, hidden_size, **kwargs):
         kwargs["hidden_size"] = hidden_size
         super(RNN, self).__init__("RNN", ["state"], **kwargs)
 
@@ -182,7 +182,7 @@ class RNN(RecurrentLayer):
     def prepare(self):
         self.output_dim = self.hidden_size
 
-        self.W_h = self.create_weight(self.hidden_size, self.hidden_size, "h", initializer=self.inner_init)
+        self.W_h = self.create_weight(self.hidden_size, self.hidden_size, "h", initializer=self.outer_init)
         self.b_h = self.create_bias(self.hidden_size, "h")
 
         self.register_parameters(self.W_h, self.b_h)

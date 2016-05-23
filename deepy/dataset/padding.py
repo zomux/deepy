@@ -11,7 +11,7 @@ def pad_dataset(subset, side, length):
         length - max length, a just to the max length in the batch if length is -1
     """
     assert length == -1 or length > 0
-    if type(subset[0][0][0]) in [float, int]:
+    if type(subset[0][0][0]) in [float, int, np.int64, np.int32, np.float32]:
         return _pad_2d(subset, side, length)
     else:
         return _pad_3d(subset, side, length)
