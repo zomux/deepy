@@ -138,20 +138,20 @@ class NeuralTrainer(object):
         """
         Train the model and return costs.
         """
-        iteration = 0
+        epoch = 0
         while True:
             # Test
-            if not iteration % self.config.test_frequency and test_set:
+            if not epoch % self.config.test_frequency and test_set:
                 try:
-                    self._run_test(iteration, test_set)
+                    self._run_test(epoch, test_set)
                 except KeyboardInterrupt:
                     logging.info('interrupted!')
                     break
             # Validate
-            if not iteration % self.validation_frequency and valid_set:
+            if not epoch % self.validation_frequency and valid_set:
                 try:
 
-                    if not self._run_valid(iteration, valid_set):
+                    if not self._run_valid(epoch, valid_set):
                         logging.info('patience elapsed, bailing out')
                         break
                 except KeyboardInterrupt:
@@ -159,7 +159,7 @@ class NeuralTrainer(object):
                     break
             # Train one step
             try:
-                costs = self._run_train(iteration, train_set, train_size)
+                costs = self._run_train(epoch, train_set, train_size)
             except KeyboardInterrupt:
                 logging.info('interrupted!')
                 break
@@ -168,7 +168,7 @@ class NeuralTrainer(object):
                 logging.info("NaN detected in costs, rollback to last parameters")
                 self.set_params(*self.checkpoint)
             else:
-                iteration += 1
+                epoch += 1
                 self.network.epoch_callback()
 
             yield dict(costs)
@@ -192,7 +192,7 @@ class NeuralTrainer(object):
         """
         costs = self.test_step(test_set)
         info = ' '.join('%s=%.2f' % el for el in costs)
-        message = "test    (iter=%i) %s" % (iteration + 1, info)
+        message = "test    (epoch=%i) %s" % (iteration + 1, info)
         logging.info(message)
         self.network.train_logger.record(message)
 
@@ -204,7 +204,7 @@ class NeuralTrainer(object):
 
         if not iteration % self.config.monitor_frequency:
             info = " ".join("%s=%.2f" % item for item in costs)
-            message = "monitor (iter=%i) %s" % (iteration + 1, info)
+            message = "monitor (epoch=%i) %s" % (iteration + 1, info)
             logging.info(message)
             self.network.train_logger.record(message)
         return costs
@@ -230,10 +230,10 @@ class NeuralTrainer(object):
                 self.network.save_params(self.config.auto_save, new_thread=True)
 
         info = ' '.join('%s=%.2f' % el for el in costs)
-        iter_str = "iter=%d" % (iteration + 1)
+        epoch = "epoch=%d" % (iteration + 1)
         if dry_run:
-            iter_str = "dryrun" + " " * (len(iter_str) - 6)
-        message = "valid   (%s) %s%s" % (iter_str, info, marker)
+            epoch = "dryrun" + " " * (len(epoch) - 6)
+        message = "valid   (%s) %s%s" % (epoch, info, marker)
         logging.info(message)
         self.network.train_logger.record(message)
         self.checkpoint = self.copy_params()
