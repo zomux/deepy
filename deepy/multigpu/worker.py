@@ -81,7 +81,8 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 worker.send_req({
                     "eval_done": None,
                     "valid_costs": valid_costs,
-                    "test_costs": test_costs
+                    "test_costs": test_costs,
+                    "auto_save": self.config.auto_save
                 })
             elif 'valid' in resp:
                 self.best_cost = resp['best_valid_cost']
@@ -90,7 +91,8 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                     self._run_valid(self.epoch, valid_set, dry_run=True)
                 worker.send_req({
                     "valid_done": None,
-                    "valid_costs": self.last_run_costs
+                    "valid_costs": self.last_run_costs,
+                    "auto_save": self.config.auto_save
                 })
             elif 'train' in resp:
                 batch_ids = resp['train']

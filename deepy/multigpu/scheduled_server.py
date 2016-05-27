@@ -173,6 +173,11 @@ class ScheduledTrainingServer(Controller):
                         self.epoch,
                         self.get_monitor_string(req['valid_costs']),
                         star_str))
+                    if star_str and 'auto_save' in req and req['auto_save']:
+                        logging.info("(worker {}) save the model to {}".format(
+                            worker_id,
+                            req['auto_save']
+                        ))
                 continue_training = self.prepare_epoch()
                 if not continue_training:
                     self._done = True
@@ -193,6 +198,11 @@ class ScheduledTrainingServer(Controller):
                         self.get_monitor_string(req['valid_costs']),
                         star_str
                     ))
+                    if star_str and 'auto_save' in req and req['auto_save']:
+                        logging.info("(worker {}) save the model to {}".format(
+                            worker_id,
+                            req['auto_save']
+                        ))
         elif 'train_done' in req:
             costs = req['costs']
             self._train_costs.append(costs)
@@ -206,8 +216,12 @@ class ScheduledTrainingServer(Controller):
         elif 'sync_hyperparams' in req:
             response = {"sync_hyperparams": self.feed_hyperparams()}
         elif 'set_names' in req:
-            self._training_names = req['training_names']
-            self._evaluation_names = req['evaluation_names']
+            with self._lock:
+                self._training_names = req['training_names']
+                self._evaluation_names = req['evaluation_names']
+                sys.stdout.write("\r")
+                sys.stdout.flush()
+                logging.info("worker {} connected".format(worker_id))
 
         return response
 
