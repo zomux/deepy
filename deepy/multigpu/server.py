@@ -21,16 +21,17 @@ class ScheduledTrainingServer(Controller):
     This multi-process controller implements patience-based early-stopping SGD
     """
 
-    def __init__(self, port=CONTROLLER_PORT, start_halving_at=5, end_at=10, step_len=10,
-                 valid_freq = 1000,
-                 learning_rate = 0.1,
-                 easgd_alpha=0.5):
+    def __init__(self, port=CONTROLLER_PORT, easgd_alpha=0.5,
+                 # Following arguments can be received from workers
+                 start_halving_at=6, end_at=10, step_len=10,
+                 valid_freq = 1500,
+                 learning_rate = 0.1):
         """
         Initialize the controller.
 
         Args:
-            step_len (int): batches in one training step
-            config (dict)
+            port (int): batches in one training step
+            easgd_alpha (float)
         """
 
         Controller.__init__(self, port)
@@ -157,12 +158,12 @@ class ScheduledTrainingServer(Controller):
                 self._evaluating = False
                 sys.stdout.write("\r")
                 sys.stdout.flush()
-                if 'test_costs' in req:
+                if 'test_costs' in req and req['test_costs']:
                     logging.info("test    (epoch={:2d}) {}".format(
                         self.epoch,
                         self.get_monitor_string(req['test_costs']))
                     )
-                if 'valid_costs' in req:
+                if 'valid_costs' in req and req['test_costs']:
                     valid_J = req['valid_costs'][0][1]
                     if valid_J < self._best_valid_cost:
                         self._best_valid_cost = valid_J
@@ -215,32 +216,42 @@ class ScheduledTrainingServer(Controller):
             response = self._easgd_alpha
         elif 'sync_hyperparams' in req:
             response = {"sync_hyperparams": self.feed_hyperparams()}
-        elif 'set_names' in req:
+        elif 'init_schedule' in req:
             with self._lock:
-                self._training_names = req['training_names']
-                self._evaluation_names = req['evaluation_names']
                 sys.stdout.write("\r")
                 sys.stdout.flush()
                 logging.info("worker {} connected".format(worker_id))
+                if self.epoch == 0:
+                    schedule_params = req['init_schedule']
+                    sch_str = " ".join("{}={}".format(a, b) for (a, b) in schedule_params.items())
+                    logging.info("initialize the schedule with {}".format(sch_str))
+                    for key, val in schedule_params.items():
+                        if not val: continue
+                        if key == 'learning_rate':
+                            self._lr = val
+                        elif key == 'start_halving_at':
+                            self.epoch_start_halving = val
+                        elif key == 'end_at':
+                            self.end_at = val
+                        elif key == 'step_len':
+                            self.step_len = val
+                        elif key == 'valid_freq':
+                            self._valid_freq = val
+
+        elif 'set_names' in req:
+            self._training_names = req['training_names']
+            self._evaluation_names = req['evaluation_names']
+
 
         return response
 
 if __name__ == '__main__':
     ap = ArgumentParser()
     ap.add_argument("--port", type=int, default=5567)
-    ap.add_argument("--learning_rate", type=float, default=0.01)
-    ap.add_argument("--start_halving_at", type=int, default=5)
-    ap.add_argument("--end_at", type=int, default=10)
-    ap.add_argument("--step_len", type=int, default=10)
-    ap.add_argument("--valid_freq", type=int, default=1500)
     ap.add_argument("--easgd_alpha", type=float, default=0.5)
     args = ap.parse_args()
 
     server = ScheduledTrainingServer(
-        port=args.port, learning_rate=args.learning_rate,
-        start_halving_at=args.start_halving_at,
-        end_at=args.end_at,
-        step_len=args.step_len,
-        valid_freq=args.valid_freq,
+        port=args.port,
         easgd_alpha=args.easgd_alpha)
     server.serve()

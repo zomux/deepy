@@ -12,16 +12,31 @@ from deepy.trainers import GeneralNeuralTrainer
 
 import logging
 
+
 class MultiGPUTrainer(GeneralNeuralTrainer):
     """
     General neural network trainer.
     """
-    def __init__(self, network, config=None, method=None):
-        # TODO: auto save
+    def __init__(self,
+                 network, config=None, method=None,
+                 server_port=5567,
+                 start_halving_at=6, end_at=10, step_len=10,
+                 valid_freq=1500, learning_rate=None
+                 ):
         super(MultiGPUTrainer, self).__init__(network, config, method)
         self._report_time = False
+        self._port = server_port
         self.logger = logging.getLogger('MultiGPUTrainingWorker')
         self.epoch = 0
+        if not learning_rate:
+            learning_rate = float(self.config.learning_rate.get_value())
+        self._schedule_params = {
+            'learning_rate': learning_rate,
+            'start_halving_at': start_halving_at,
+            'end_at': end_at,
+            'step_len': step_len,
+            'valid_freq': valid_freq
+        }
 
     def create_param_map(self):
         param_map = OrderedDict()
@@ -36,14 +51,19 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         if 'learning_rate' in param_map:
             self.config.learning_rate.set_value(param_map['learning_rate'])
 
+    def fix_costs(self):
+        self.last_run_costs = [(a, float(b)) for (a,b) in self.last_run_costs]
+
     def train(self, train_set, valid_set=None, test_set=None, train_size=None):
         """
         Train the model in multi-GPU environment.
         """
-        server_port = self.config.get("server_port", 5567)
+        server_port = self._port
         param_map = self.create_param_map()
         # Initialize the worker
         worker = Worker(control_port=server_port)
+        if self.config.learning_rate:
+            worker.send_req({'init_schedule': self._schedule_params})
         self.sync_hyperparams(worker.send_req('sync_hyperparams')['sync_hyperparams'])
         easgd_alpha = worker.send_req('get_easgd_alpha')
         worker.init_shared_params(param_map.values(), param_sync_rule=EASGD(easgd_alpha))
@@ -74,9 +94,11 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 test_costs = None
                 if valid_set:
                     self._run_valid(self.epoch, valid_set)
+                    self.fix_costs()
                     valid_costs = self.last_run_costs
                 if test_set:
                     self._run_test(self.epoch, test_set)
+                    self.fix_costs()
                     test_costs = self.last_run_costs
                 worker.send_req({
                     "eval_done": None,
@@ -89,6 +111,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 worker.copy_to_local()
                 if valid_set:
                     self._run_valid(self.epoch, valid_set, dry_run=True)
+                    self.fix_costs()
                 worker.send_req({
                     "valid_done": None,
                     "valid_costs": self.last_run_costs,

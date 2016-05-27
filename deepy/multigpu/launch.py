@@ -5,7 +5,6 @@
 
 from __future__ import print_function
 import os
-import time
 import shlex
 import argparse
 import subprocess
@@ -18,11 +17,6 @@ def parse_arguments():
     ap.add_argument('worker_path', help='Path of worker')
     ap.add_argument('gpu_list', nargs='+', type=str, help='The list of Theano GPU ids (Ex: gpu0, cuda1) the script will use. 1 GPU id = 1 worker launched.')
     ap.add_argument("--port", type=int, default=5567)
-    ap.add_argument("--learning_rate", type=float, default=0.01)
-    ap.add_argument("--start_halving_at", type=int, default=5)
-    ap.add_argument("--end_at", type=int, default=10)
-    ap.add_argument("--step_len", type=int, default=10)
-    ap.add_argument("--valid_freq", type=int, default=1500)
     ap.add_argument("--easgd_alpha", default="auto")
     ap.add_argument('-w', '--workers-args', required=False, help='The arguments that will be passed to your workers. (Ex: -w="learning_rate=0.1")')
     return ap.parse_args()
@@ -34,7 +28,7 @@ def launch_process(is_server, args, device, path=""):
     env = dict(os.environ)
     env['THEANO_FLAGS'] = '{},device={}'.format(env.get('THEANO_FLAGS', ''), device)
     if is_server:
-        command = ["python",  "-u",  "-m", "deepy.multigpu.scheduled_server"]
+        command = ["python",  "-u",  "-m", "deepy.multigpu.server"]
     else:
         command = ["python", "-u", path]
     if not args is None:
@@ -52,10 +46,8 @@ if __name__ == '__main__':
     if easgd_alpha == "auto":
         easgd_alpha = 1.0 / len(args.gpu_list)
 
-    controller_args_str = "--port {} --learning_rate {} --start_halving_at {} --end_at {} --step_len {} --valid_freq {} --easgd_alpha {}".format(
-        args.port, args.learning_rate,
-        args.start_halving_at, args.end_at,
-        args.step_len, args.valid_freq,
+    controller_args_str = "--port {} --easgd_alpha {}".format(
+        args.port,
         easgd_alpha
     )
     p = launch_process(True, shlex.split(controller_args_str), "cpu")
