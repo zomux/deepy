@@ -17,7 +17,9 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
     General neural network trainer.
     """
     def __init__(self, network, config=None, method=None):
+        # TODO: auto save
         super(MultiGPUTrainer, self).__init__(network, config, method)
+        self._report_time = False
         self.logger = logging.getLogger('MultiGPUTrainingWorker')
         self.epoch = 0
 
@@ -46,6 +48,11 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         easgd_alpha = worker.send_req('get_easgd_alpha')
         worker.init_shared_params(param_map.values(), param_sync_rule=EASGD(easgd_alpha))
         worker.copy_to_local()
+        worker.send_req({
+            "set_names": None,
+            "training_names": self.training_names,
+            "evaluation_names": self.evaluation_names
+        })
         # Load all training batches, consume vast memory here
         self.logger.info("started process {}".format(os.getpid()))
         self.logger.info("(proc {}) load training data".format(os.getpid()))
@@ -60,24 +67,31 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 time.sleep(1)
             elif resp == 'get_num_batches':
                 worker.send_req({'get_num_batches_done': len(train_batches)})
-            elif resp == 'eval':
+            elif 'eval' in resp:
+                self.best_cost = resp['best_valid_cost']
                 worker.copy_to_local()
-                messages = []
+                valid_costs = None
+                test_costs = None
                 if valid_set:
                     self._run_valid(self.epoch, valid_set)
-                    messages.append(self.network.train_logger.log_pool[-1])
+                    valid_costs = self.last_run_costs
                 if test_set:
                     self._run_test(self.epoch, test_set)
-                    messages.append(self.network.train_logger.log_pool[-1])
-                worker.send_req({"eval_done": messages})
-            elif resp == 'valid':
+                    test_costs = self.last_run_costs
+                worker.send_req({
+                    "eval_done": None,
+                    "valid_costs": valid_costs,
+                    "test_costs": test_costs
+                })
+            elif 'valid' in resp:
+                self.best_cost = resp['best_valid_cost']
                 worker.copy_to_local()
-                messages = []
                 if valid_set:
-                    # TODO: set and send the best cost
                     self._run_valid(self.epoch, valid_set, dry_run=True)
-                    messages.append(self.network.train_logger.log_pool[-1])
-                worker.send_req({"valid_done": messages})
+                worker.send_req({
+                    "valid_done": None,
+                    "valid_costs": self.last_run_costs
+                })
             elif 'train' in resp:
                 batch_ids = resp['train']
                 batch_costs = [[] for _ in self.training_names]

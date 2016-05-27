@@ -54,6 +54,8 @@ class NeuralTrainer(object):
         self._skip_batches = 0
         self._progress = 0
         self.last_cost = 0
+        self.last_run_costs = None
+        self._report_time = True
 
     def _compile_evaluation_func(self):
         if not self.evaluation_func:
@@ -195,18 +197,19 @@ class NeuralTrainer(object):
         message = "test    (epoch=%i) %s" % (iteration + 1, info)
         logging.info(message)
         self.network.train_logger.record(message)
+        self.last_run_costs = costs
 
     def _run_train(self, iteration, train_set, train_size=None):
         """
         Run one training iteration.
         """
         costs = self.train_step(train_set, train_size)
-
         if not iteration % self.config.monitor_frequency:
             info = " ".join("%s=%.2f" % item for item in costs)
             message = "monitor (epoch=%i) %s" % (iteration + 1, info)
             logging.info(message)
             self.network.train_logger.record(message)
+        self.last_run_costs = costs
         return costs
 
     def _run_valid(self, iteration, valid_set, dry_run=False):
@@ -235,6 +238,7 @@ class NeuralTrainer(object):
             epoch = "dryrun" + " " * (len(epoch) - 6)
         message = "valid   (%s) %s%s" % (epoch, info, marker)
         logging.info(message)
+        self.last_run_costs = costs
         self.network.train_logger.record(message)
         self.checkpoint = self.copy_params()
         return iteration - self.best_iter < self.patience
@@ -319,5 +323,5 @@ class NeuralTrainer(object):
                         ending = True
                 if ending:
                     break
-        timer.report()
-        return
+        if self._report_time:
+            timer.report()

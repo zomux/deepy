@@ -6,6 +6,7 @@ import time
 import sys, os
 import numpy as np
 import logging as loggers
+from threading import Lock
 logging = loggers.getLogger("ScheduledTrainingServer")
 loggers.basicConfig(level=loggers.INFO)
 
@@ -46,6 +47,10 @@ class ScheduledTrainingServer(Controller):
         self._done = False
         self._lr = learning_rate
         self._easgd_alpha = easgd_alpha
+        self._training_names = []
+        self._evaluation_names = []
+        self._best_valid_cost = sys.float_info.max
+        self._lock = Lock()
 
         self.num_train_batches = 0
         self.batch_pool = []
@@ -94,6 +99,9 @@ class ScheduledTrainingServer(Controller):
         }
         return retval
 
+    def get_monitor_string(self, costs):
+        return " ".join(["{}={:.2f}".format(n, c) for (n, c) in costs])
+
 
     def handle_control(self, req, worker_id):
         """
@@ -121,7 +129,18 @@ class ScheduledTrainingServer(Controller):
                 response = 'wait'
             elif not self.batch_pool:
                 # End of one iter
-                response = 'eval'
+                if self._train_costs:
+                    with self._lock:
+                        sys.stdout.write("\r")
+                        sys.stdout.flush()
+                        mean_costs = []
+                        for i in range(len(self._training_names)):
+                            mean_costs.append(np.mean([c[i] for c in self._train_costs]))
+                        logging.info("train   (epoch={:2d}) {}".format(
+                            self.epoch,
+                            self.get_monitor_string(zip(self._training_names, mean_costs)))
+                        )
+                response = {'eval': None, 'best_valid_cost': self._best_valid_cost}
                 self._evaluating = True
             else:
                 # Continue training
@@ -129,28 +148,51 @@ class ScheduledTrainingServer(Controller):
                     response = {"sync_hyperparams": self.feed_hyperparams()}
                     self.prepared_worker_pool.add(worker_id)
                 elif self._iters_from_last_valid >= self._valid_freq:
-                    response = 'valid'
+                    response = {'valid': None, 'best_valid_cost': self._best_valid_cost}
                     self._iters_from_last_valid = 0
                 else:
                     response = {"train": self.feed_batches()}
         elif 'eval_done' in req:
-            messages = req['eval_done']
-            self._evaluating = False
-            sys.stdout.write("\r")
-            sys.stdout.flush()
-            for msg in messages:
-                logging.info(msg)
-            continue_training = self.prepare_epoch()
-            if not continue_training:
-                self._done = True
-                logging.info("training time {:.4f}s".format(time.time() - self.start_time))
-                response = "stop"
+            with self._lock:
+                self._evaluating = False
+                sys.stdout.write("\r")
+                sys.stdout.flush()
+                if 'test_costs' in req:
+                    logging.info("test    (epoch={:2d}) {}".format(
+                        self.epoch,
+                        self.get_monitor_string(req['test_costs']))
+                    )
+                if 'valid_costs' in req:
+                    valid_J = req['valid_costs'][0][1]
+                    if valid_J < self._best_valid_cost:
+                        self._best_valid_cost = valid_J
+                        star_str = "*"
+                    else:
+                        star_str = ""
+                    logging.info("valid   (epoch={:2d}) {} {}".format(
+                        self.epoch,
+                        self.get_monitor_string(req['valid_costs']),
+                        star_str))
+                continue_training = self.prepare_epoch()
+                if not continue_training:
+                    self._done = True
+                    logging.info("training time {:.4f}s".format(time.time() - self.start_time))
+                    response = "stop"
         elif 'valid_done' in req:
-            messages = req['valid_done']
-            sys.stdout.write("\r")
-            sys.stdout.flush()
-            for msg in messages:
-                logging.info(msg)
+            with self._lock:
+                sys.stdout.write("\r")
+                sys.stdout.flush()
+                if 'valid_costs' in req:
+                    valid_J = req['valid_costs'][0][1]
+                    if valid_J < self._best_valid_cost:
+                        self._best_valid_cost = valid_J
+                        star_str = "*"
+                    else:
+                        star_str = ""
+                    logging.info("valid   ( dryrun ) {} {}".format(
+                        self.get_monitor_string(req['valid_costs']),
+                        star_str
+                    ))
         elif 'train_done' in req:
             costs = req['costs']
             self._train_costs.append(costs)
@@ -163,6 +205,9 @@ class ScheduledTrainingServer(Controller):
             response = self._easgd_alpha
         elif 'sync_hyperparams' in req:
             response = {"sync_hyperparams": self.feed_hyperparams()}
+        elif 'set_names' in req:
+            self._training_names = req['training_names']
+            self._evaluation_names = req['evaluation_names']
 
         return response
 

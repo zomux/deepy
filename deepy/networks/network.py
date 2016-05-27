@@ -10,6 +10,7 @@ from threading import Thread
 import numpy as np
 import theano.tensor as T
 import theano
+import filelock
 
 import deepy
 from deepy.layers.layer import NeuralLayer
@@ -20,18 +21,21 @@ logging = loggers.getLogger(__name__)
 
 DEEPY_MESSAGE = "deepy version = %s" % deepy.__version__
 
+
 def save_network_params(params, path):
-    if path.endswith('gz'):
-        opener = gzip.open if path.lower().endswith('.gz') else open
-        handle = opener(path, 'wb')
-        pickle.dump(params, handle)
-        handle.close()
-    elif path.endswith('uncompressed.npz'):
-        np.savez(path, *params)
-    elif path.endswith('.npz'):
-        np.savez_compressed(path, *params)
-    else:
-        raise Exception("File format of %s is not supported, use '.gz' or '.npz' or '.uncompressed.gz'" % path)
+    lock = filelock.FileLock(path)
+    with lock:
+        if path.endswith('gz'):
+            opener = gzip.open if path.lower().endswith('.gz') else open
+            handle = opener(path, 'wb')
+            pickle.dump(params, handle)
+            handle.close()
+        elif path.endswith('uncompressed.npz'):
+            np.savez(path, *params)
+        elif path.endswith('.npz'):
+            np.savez_compressed(path, *params)
+        else:
+            raise Exception("File format of %s is not supported, use '.gz' or '.npz' or '.uncompressed.gz'" % path)
 
 class NeuralNetwork(object):
     """
