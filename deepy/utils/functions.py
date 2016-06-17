@@ -8,6 +8,7 @@ import numpy as np
 import re
 import copy
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
+from theano.tensor.shared_randomstreams import RandomStreams as SharedRandomStreams
 import logging as loggers
 
 
@@ -25,6 +26,7 @@ else:
     global_seed = 3
 global_rand = np.random.RandomState(seed=global_seed)
 global_theano_rand = RandomStreams(seed=global_seed)
+global_shared_rand = SharedRandomStreams(seed=global_seed)
 
 
 

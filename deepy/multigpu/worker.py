@@ -18,7 +18,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
     General neural network trainer.
     """
     def __init__(self,
-                 network, config=None, method=None,
+                 network, config=None, method='sgd',
                  server_port=5567,
                  start_halving_at=6, end_at=10, step_len=10,
                  valid_freq=1500, learning_rate=None

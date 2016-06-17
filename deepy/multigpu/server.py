@@ -24,8 +24,7 @@ class ScheduledTrainingServer(Controller):
     def __init__(self, port=CONTROLLER_PORT, easgd_alpha=0.5,
                  # Following arguments can be received from workers
                  start_halving_at=6, end_at=10, step_len=10,
-                 valid_freq = 1500,
-                 learning_rate = 0.1):
+                 valid_freq=1500, learning_rate=0.1, log_path=None):
         """
         Initialize the controller.
 
@@ -56,8 +55,17 @@ class ScheduledTrainingServer(Controller):
         self.num_train_batches = 0
         self.batch_pool = []
         self._train_costs = []
+        self._epoch_start_time = None
         self.prepared_worker_pool = set()
+        self.log_file = open(log_path, "w") if log_path else None
+        if log_path:
+            logging.info("write logs into {}".format(log_path))
         logging.info("multi-gpu server is listening port {}".format(port))
+
+    def log(self, msg):
+        logging.info(msg)
+        if self.log_file:
+            self.log_file.write(msg + "\n")
 
     def prepare_epoch(self):
         """
@@ -75,10 +83,10 @@ class ScheduledTrainingServer(Controller):
         self.batch_pool = range(self.num_train_batches)
         self.rand.shuffle(self.batch_pool)
         if self.epoch > self.end_at:
-            logging.info("Training is done, wait all workers to stop")
+            self.log("Training is done, wait all workers to stop")
             return False
         else:
-            logging.info("start epoch {} with lr={}".format(self.epoch, self._lr))
+            self.log("start epoch {} with lr={}".format(self.epoch, self._lr))
             return True
 
     def feed_batches(self):
@@ -137,7 +145,7 @@ class ScheduledTrainingServer(Controller):
                         mean_costs = []
                         for i in range(len(self._training_names)):
                             mean_costs.append(np.mean([c[i] for c in self._train_costs]))
-                        logging.info("train   (epoch={:2d}) {}".format(
+                        self.log("train   (epoch={:2d}) {}".format(
                             self.epoch,
                             self.get_monitor_string(zip(self._training_names, mean_costs)))
                         )
@@ -159,7 +167,7 @@ class ScheduledTrainingServer(Controller):
                 sys.stdout.write("\r")
                 sys.stdout.flush()
                 if 'test_costs' in req and req['test_costs']:
-                    logging.info("test    (epoch={:2d}) {}".format(
+                    self.log("test    (epoch={:2d}) {}".format(
                         self.epoch,
                         self.get_monitor_string(req['test_costs']))
                     )
@@ -170,19 +178,21 @@ class ScheduledTrainingServer(Controller):
                         star_str = "*"
                     else:
                         star_str = ""
-                    logging.info("valid   (epoch={:2d}) {} {}".format(
+                        self.log("valid   (epoch={:2d}) {} {} (worker {})".format(
                         self.epoch,
                         self.get_monitor_string(req['valid_costs']),
-                        star_str))
-                    if star_str and 'auto_save' in req and req['auto_save']:
-                        logging.info("(worker {}) save the model to {}".format(
-                            worker_id,
-                            req['auto_save']
-                        ))
+                        star_str,
+                        worker_id))
+                    # if star_str and 'auto_save' in req and req['auto_save']:
+                    #     self.log("(worker {}) save the model to {}".format(
+                    #         worker_id,
+                    #         req['auto_save']
+                    #     ))
                 continue_training = self.prepare_epoch()
+                self._epoch_start_time = time.time()
                 if not continue_training:
                     self._done = True
-                    logging.info("training time {:.4f}s".format(time.time() - self.start_time))
+                    self.log("training time {:.4f}s".format(time.time() - self.start_time))
                     response = "stop"
         elif 'valid_done' in req:
             with self._lock:
@@ -195,20 +205,22 @@ class ScheduledTrainingServer(Controller):
                         star_str = "*"
                     else:
                         star_str = ""
-                    logging.info("valid   ( dryrun ) {} {}".format(
+                    self.log("valid   ( dryrun ) {} {} (worker {})".format(
                         self.get_monitor_string(req['valid_costs']),
-                        star_str
+                        star_str,
+                        worker_id
                     ))
-                    if star_str and 'auto_save' in req and req['auto_save']:
-                        logging.info("(worker {}) save the model to {}".format(
-                            worker_id,
-                            req['auto_save']
-                        ))
+                    # if star_str and 'auto_save' in req and req['auto_save']:
+                    #     self.log("(worker {}) save the model to {}".format(
+                    #         worker_id,
+                    #         req['auto_save']
+                    #     ))
         elif 'train_done' in req:
             costs = req['costs']
             self._train_costs.append(costs)
-            sys.stdout.write("\x1b[2K\r> %d%% | J=%.2f" % (self._current_iter * 100 / self.num_train_batches,
-                                                           costs[0]))
+            sys.stdout.write("\x1b[2K\r> %d%% | J=%.2f | %.1f batch/s" % (
+                self._current_iter * 100 / self.num_train_batches,
+                costs[0], float(len(self._train_costs)*self.step_len)/(time.time() - self._epoch_start_time)))
             sys.stdout.flush()
         elif 'get_num_batches_done' in req:
             self.num_train_batches = req['get_num_batches_done']
@@ -220,11 +232,11 @@ class ScheduledTrainingServer(Controller):
             with self._lock:
                 sys.stdout.write("\r")
                 sys.stdout.flush()
-                logging.info("worker {} connected".format(worker_id))
+                self.log("worker {} connected".format(worker_id))
                 if self.epoch == 0:
                     schedule_params = req['init_schedule']
                     sch_str = " ".join("{}={}".format(a, b) for (a, b) in schedule_params.items())
-                    logging.info("initialize the schedule with {}".format(sch_str))
+                    self.log("initialize the schedule with {}".format(sch_str))
                     for key, val in schedule_params.items():
                         if not val: continue
                         if key == 'learning_rate':
@@ -249,9 +261,12 @@ if __name__ == '__main__':
     ap = ArgumentParser()
     ap.add_argument("--port", type=int, default=5567)
     ap.add_argument("--easgd_alpha", type=float, default=0.5)
+    ap.add_argument("--log", type=str, default=None)
     args = ap.parse_args()
 
     server = ScheduledTrainingServer(
         port=args.port,
-        easgd_alpha=args.easgd_alpha)
+        easgd_alpha=args.easgd_alpha,
+        log_path=args.log
+    )
     server.serve()

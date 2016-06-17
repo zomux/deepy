@@ -17,6 +17,12 @@ From deepy 0.2.0, you can easily design very complex computational graphs such a
 
 Example codes will be added shortly.
 
+## Recent updates
+
+deepy now supports training on multiple GPUs, see the following example for training neural machine translation models.
+
+https://github.com/zomux/neuralmt
+
 ## Dependencies
 
 - Python 2.7 (Better on Linux)

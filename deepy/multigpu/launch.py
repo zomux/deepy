@@ -18,6 +18,7 @@ def parse_arguments():
     ap.add_argument('gpu_list', nargs='+', type=str, help='The list of Theano GPU ids (Ex: gpu0, cuda1) the script will use. 1 GPU id = 1 worker launched.')
     ap.add_argument("--port", type=int, default=5567)
     ap.add_argument("--easgd_alpha", default="auto")
+    ap.add_argument("--log", type=str, default=None)
     ap.add_argument('-w', '--workers-args', required=False, help='The arguments that will be passed to your workers. (Ex: -w="learning_rate=0.1")')
     return ap.parse_args()
 
@@ -33,7 +34,9 @@ def launch_process(is_server, args, device, path=""):
         command = ["python", "-u", path]
     if not args is None:
         command += args
-    process = subprocess.Popen(command, bufsize=0, env=env)
+    process = subprocess.Popen(command, bufsize=0, env=env,
+                               stdout=subprocess.PIPE if not is_server else None,
+                               stderr=subprocess.PIPE if not is_server else None)
     print("Done")
     return process
 
@@ -46,9 +49,10 @@ if __name__ == '__main__':
     if easgd_alpha == "auto":
         easgd_alpha = 1.0 / len(args.gpu_list)
 
-    controller_args_str = "--port {} --easgd_alpha {}".format(
+    controller_args_str = "--port {} --easgd_alpha {} --log {}".format(
         args.port,
-        easgd_alpha
+        easgd_alpha,
+        args.log
     )
     p = launch_process(True, shlex.split(controller_args_str), "cpu")
     process_map[p.pid] = ('scheduling server', p)
