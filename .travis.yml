@@ -25,6 +25,7 @@ install:
   - conda install --yes -c dan_blanchard python-coveralls nose-cov
   # - travis_retry pip install -r requirements.txt
   - travis_retry pip install theano filelock
+  - travis_retry pip install git+https://github.com/mila-udem/platoon
   - python setup.py install
 
 # Run test
