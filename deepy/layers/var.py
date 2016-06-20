@@ -26,7 +26,17 @@ class NeuralVariable(NeuralLayer):
             if type(index) == list:
                 index = tuple(index)
             return t.__getitem__(index)
-        return getitem_wrapper(self, index)
+        ret = getitem_wrapper(self, index)
+        ret.output_dim = self.dim()
+        return ret
+
+    def __call__(self, *args, **kwargs):
+        return NeuralVariable(self.tensor(*args, **kwargs), self.test_tensor(*args, **kwargs), dim=self.dim())
+
+    def __getattr__(self, name):
+        return NeuralVariable(getattr(self.tensor, name), getattr(self.test_tensor, name), dim=self.dim())
+
+
 
     def apply(self, func, dim=None):
         """

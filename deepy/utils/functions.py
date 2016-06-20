@@ -28,7 +28,10 @@ global_rand = np.random.RandomState(seed=global_seed)
 global_theano_rand = RandomStreams(seed=global_seed)
 global_shared_rand = SharedRandomStreams(seed=global_seed)
 
-
+def apply(func, *args, **kwargs):
+    from deepy.layers.var import NeuralVariable
+    dim = kwargs['dim'] if 'dim' in kwargs else args[0].dim()
+    return NeuralVariable(func(*[x.tensor for x in args]), func(*[x.tensor for x in args]), dim)
 
 def onehot(size, eye):
     return np.eye(1, size, eye, dtype=FLOATX)[0]
