@@ -8,17 +8,17 @@ import numpy as np
 import theano
 
 from deepy.utils import FLOATX, UniformInitializer, neural_computation, neural_computation_prefer_tensor
-from deepy.utils import convert_to_neural_var, convert_to_theano_var
+from deepy.utils import convert_to_neural_var, convert_to_theano_var, build_activation
 
 logging = loggers.getLogger(__name__)
 
 class NeuralLayer(object):
 
-    def __init__(self, name="unknown"):
+    def __init__(self, name=None):
         """
         Create a neural layer.
         """
-        self.name = name
+        self.name = name if name else self.__class__.__name__
         self.input_dim = 0
         self.input_dims = [0]
         self.output_dim = 0
@@ -259,6 +259,9 @@ class NeuralLayer(object):
 
         logging.info('create matrix %s: %d x %d', name, m, n)
         return matrix
+
+    def activation(self, name):
+        return build_activation(name)
 
     def callback_forward_propagation(self):
         pass
