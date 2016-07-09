@@ -25,6 +25,6 @@ from softmax3d import Softmax3D
 from reverse3d import Reverse3D
 from concatenate import Concatenate
 from maxout import Maxout
-from var import NeuralVariable
+from neural_var import NeuralVariable
 from combine import Combine
 from bias import Bias

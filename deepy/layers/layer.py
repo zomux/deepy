@@ -43,6 +43,12 @@ class NeuralLayer(object):
         self.training_callbacks = []
         self.testing_callbacks = []
 
+    def init(self, input_dim=0, input_dims=None, no_prepare=False):
+        """
+        A short version for initialize function.
+        """
+        return self.initialize(input_dim, input_dims, no_prepare)
+
     def initialize(self, input_dim=0, input_dims=None, no_prepare=False):
         """
         Initialize the layer.

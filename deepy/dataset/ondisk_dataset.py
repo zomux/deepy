@@ -4,6 +4,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import types
 from . import Dataset
 from deepy.utils import FakeGenerator, StreamPickler, global_rand
 
@@ -61,6 +62,8 @@ class OnDiskDataset(Dataset):
     def train_set(self):
         if self._cache_on_memory:
             if self._curriculum:
+                if not isinstance(self._curriculum(self._cached_train_data, 1), types.GeneratorType):
+                    raise Exception("Curriculum function must be a generator.")
                 return FakeGenerator(self, "curriculum_train_data")
             else:
                 return self._cached_train_data

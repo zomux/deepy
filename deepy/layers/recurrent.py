@@ -47,8 +47,8 @@ class RecurrentLayer(NeuralLayer):
     def step(self, step_inputs):
         new_states = self.compute_new_state(step_inputs)
 
-        # apply mask for each step if `output_type` is 'one'
-        if self._output_type == "one" and step_inputs.get("mask"):
+        # apply mask for each step for any `output_type`
+        if step_inputs.get("mask"):
             mask = step_inputs["mask"].dimshuffle(0, 'x')
             for state_name in new_states:
                 new_states[state_name] = new_states[state_name] * mask + step_inputs[state_name] * (1 - mask)
@@ -96,6 +96,8 @@ class RecurrentLayer(NeuralLayer):
         if self._input_type == "sequence":
             if not additional_inputs:
                 additional_inputs = []
+            if mask:
+                step_inputs['mask'] = mask.dimshuffle(1, 0)
             step_inputs.update(self.merge_inputs(input_var, additional_inputs=additional_inputs))
         else:
             # step_inputs["mask"] = mask.dimshuffle((1,0)) if mask else None
@@ -144,8 +146,8 @@ class RecurrentLayer(NeuralLayer):
             return main_states[-1]
         elif self._output_type == "sequence":
             main_states = main_states.dimshuffle((1,0,2)) # ~ batch, time, size
-            if mask: # ~ batch, time
-                main_states *= mask.dimshuffle((0, 1, 'x'))
+            # if mask: # ~ batch, time
+            #     main_states *= mask.dimshuffle((0, 1, 'x'))
             return main_states
 
 
@@ -169,7 +171,7 @@ class RNN(RecurrentLayer):
     def merge_inputs(self, input_var, additional_inputs=None):
         if not additional_inputs:
             additional_inputs = []
-        all_inputs = [input_var] + additional_inputs
+        all_inputs = ([input_var] if input_var else []) + additional_inputs
         h_inputs = []
         for x, weights in zip(all_inputs, self.input_weights):
             wi, = weights
@@ -189,9 +191,13 @@ class RNN(RecurrentLayer):
 
         self.input_weights = []
         if self._input_type == "sequence":
-            all_input_dims = [self.input_dim] + self.additional_input_dims
-            for i, input_dim in enumerate(all_input_dims):
-                wi = self.create_weight(input_dim, self.hidden_size, "wi_{}".format(i+1), initializer=self.outer_init)
-                weights = [wi]
-                self.input_weights.append(weights)
-                self.register_parameters(*weights)
+            normal_input_dims = [self.input_dim]
+        else:
+            normal_input_dims = []
+
+        all_input_dims = normal_input_dims + self.additional_input_dims
+        for i, input_dim in enumerate(all_input_dims):
+            wi = self.create_weight(input_dim, self.hidden_size, "wi_{}".format(i+1), initializer=self.outer_init)
+            weights = [wi]
+            self.input_weights.append(weights)
+            self.register_parameters(*weights)

@@ -58,23 +58,26 @@ class ScheduledLearningRateAnnealer(TrainingController):
     Anneal learning rate according to pre-scripted schedule.
     """
 
-    def __init__(self, trainer, start_halving_at=5, end_at=10, rollback=False):
+    def __init__(self, trainer, start_halving_at=5, end_at=10, halving_interval=1, rollback=False):
         super(ScheduledLearningRateAnnealer, self).__init__(trainer)
         logging.info("iteration to start halving learning rate: %d" % start_halving_at)
         self.iter_start_halving = start_halving_at
         self.end_at = end_at
         self._learning_rate = self._trainer.config.learning_rate
         self._iter = 0
+        self._halving_interval = halving_interval
         self._rollback = rollback
+        self._last_halving_iter = 0
 
     def invoke(self):
         self._iter += 1
-        if self._iter >= self.iter_start_halving:
+        if self._iter >= self.iter_start_halving and self._iter > self._last_halving_iter + self._halving_interval:
             if self._rollback:
                 self._trainer.set_params(*self._trainer.best_params)
             self._learning_rate.set_value(self._learning_rate.get_value() * 0.5)
             logging.info("halving learning rate to %f" % self._learning_rate.get_value())
             self._trainer.network.train_logger.record("set learning rate to %f" % self._learning_rate.get_value())
+            self._last_halving_iter = self._iter
         if self._iter >= self.end_at:
             logging.info("ending")
             return True

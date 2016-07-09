@@ -17,7 +17,8 @@ from deepy.layers.layer import NeuralLayer
 from deepy.layers.block import Block
 from deepy.utils import dim_to_var, TrainLogger
 
-logging = loggers.getLogger(__name__)
+logging = loggers.getLogger("network")
+save_logger = loggers.getLogger("saving")
 
 DEEPY_MESSAGE = "deepy version = %s" % deepy.__version__
 
@@ -62,6 +63,8 @@ class NeuralNetwork(object):
         self.epoch_callbacks = []
 
         self.layers = []
+        self._test_outputs = []
+        self._test_output = None
 
         self._hidden_outputs = []
         self.training_monitors = []
@@ -174,9 +177,14 @@ class NeuralNetwork(object):
 
     def _compile(self):
         if not hasattr(self, '_compute'):
+            if self._test_outputs:
+                output = [self.test_output] if self.test_output else []
+                output += self._test_outputs
+            else:
+                output = self.test_output
             self._compute = theano.function(
                 filter(lambda x: x not in self.target_variables, self.input_variables),
-                self.test_output, updates=self.updates, allow_input_downcast=True)
+                output, updates=self.updates, allow_input_downcast=True)
 
     def compute(self, *x):
         """
@@ -217,7 +225,7 @@ class NeuralNetwork(object):
         """
         Save parameters to file.
         """
-        logging.info("saving parameters to %s" % path)
+        save_logger.info(path)
         param_variables = self.all_parameters
         params = [p.get_value().copy() for p in param_variables]
         if new_thread:

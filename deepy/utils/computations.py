@@ -7,6 +7,12 @@ import os, gzip, cPickle as pickle
 import logging as loggers
 logging = loggers.getLogger(__name__)
 
+def var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX):
+    """
+    A shortcut of create_var
+    """
+    return create_var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX)
+
 def create_var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX):
     """
     Wrap a Theano tensor into the variable for defining neural network.

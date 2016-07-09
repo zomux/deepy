@@ -11,7 +11,7 @@ from deepy.utils import Timer
 from abc import ABCMeta, abstractmethod
 
 from logging import getLogger
-logging = getLogger(__name__)
+logging = getLogger("trainer")
 
 class NeuralTrainer(object):
     """

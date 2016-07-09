@@ -50,3 +50,7 @@ class Block(NeuralLayer):
 
     def compute_test_tesnor(self, x):
         return x
+
+    @property
+    def all_parameters(self):
+        return self.parameters

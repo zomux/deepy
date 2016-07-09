@@ -11,7 +11,7 @@ class ComputationalGraph(NeuralNetwork):
     """
 
     def __init__(self, input_dim=0, model=None, input_tensor=None,
-                 cost=None, output=None, blocks=None, input_vars=None, target_vars=None):
+                 cost=None, output=None, outputs=None, blocks=None, input_vars=None, target_vars=None):
         """
         Create a basic network.
 
@@ -34,6 +34,10 @@ class ComputationalGraph(NeuralNetwork):
             self.input_variables = [t.tensor for t in input_vars]
         if target_vars:
             self.target_variables = [t.tensor for t in target_vars]
+        if outputs:
+            if not output and not cost:
+                self._test_output = None
+            self._test_outputs = outputs
 
 
     @property

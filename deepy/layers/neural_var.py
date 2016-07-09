@@ -59,3 +59,21 @@ class NeuralVariable(NeuralLayer):
 
     def shape(self, dim_index):
         return NeuralVariable(self.tensor.shape[dim_index], self.test_tensor.shape[dim_index])
+
+    @property
+    def test_value(self):
+        if hasattr(self.tensot.tag, 'test_value'):
+            return self.tensor.tag.test_value
+        else:
+            return None
+
+    @property
+    def tv(self):
+        return self.test_value
+
+    @property
+    def ts(self):
+        if self.test_value:
+            return self.test_value.shape
+        else:
+            return None

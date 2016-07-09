@@ -57,3 +57,7 @@ class Scanner(object):
         if type(results) != list:
             results = [results]
         return dict(zip(self._output_keys, results)), updates
+
+
+def scan(func, sequences=None, outputs_info=None, non_sequences=None, **kwargs):
+    return Scanner(func, sequences, outputs_info, non_sequences, **kwargs).compute()
