@@ -4,7 +4,7 @@
 import numpy as np
 import theano.tensor as T
 from deepy.layers import NeuralLayer
-from var import NeuralVariable
+from neural_var import NeuralVariable
 from deepy.utils import FLOATX
 
 class WordEmbedding(NeuralLayer):

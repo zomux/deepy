@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from var import NeuralVariable
+from neural_var import NeuralVariable
 from deepy.utils import build_activation, FLOATX
 import numpy as np
 import theano

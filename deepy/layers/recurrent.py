@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import NeuralLayer
-from var import NeuralVariable
+from neural_var import NeuralVariable
 from deepy.utils import build_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner, neural_computation
 import numpy as np
 import theano.tensor as T
@@ -47,7 +47,7 @@ class RecurrentLayer(NeuralLayer):
     def step(self, step_inputs):
         new_states = self.compute_new_state(step_inputs)
 
-        # apply mask for each step for any `output_type`
+        # apply mask for each step if `output_type` is 'one'
         if step_inputs.get("mask"):
             mask = step_inputs["mask"].dimshuffle(0, 'x')
             for state_name in new_states:

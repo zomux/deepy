@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from layer import NeuralLayer
-from deepy.utils.decorations import neural_computation
+from deepy.utils.decorations import neural_computation, convert_to_theano_var
 
 
 class NeuralVariable(NeuralLayer):
@@ -31,7 +31,16 @@ class NeuralVariable(NeuralLayer):
         return ret
 
     def __call__(self, *args, **kwargs):
-        return NeuralVariable(self.tensor(*args, **kwargs), self.test_tensor(*args, **kwargs), dim=self.dim())
+        normal_args, test_args, tensor_found_in_args, neural_found_in_args = convert_to_theano_var(args)
+        normal_kwargs, test_kwargs, tensor_found_in_kwargs, neural_found_in_kwargs = convert_to_theano_var(kwargs)
+
+        tensor_found = tensor_found_in_args or tensor_found_in_kwargs
+        import pdb;pdb.set_trace()
+
+        if tensor_found:
+            raise Exception("Theano tensor variables can not be used together with neural variables.")
+
+        return NeuralVariable(self.tensor(*normal_args, **normal_kwargs), self.test_tensor(*test_args, **test_kwargs), dim=self.dim())
 
     def __getattr__(self, name):
         return NeuralVariable(getattr(self.tensor, name), getattr(self.test_tensor, name), dim=self.dim())
@@ -69,11 +78,11 @@ class NeuralVariable(NeuralLayer):
 
     @property
     def tv(self):
-        return self.test_value
+        return self.test_value()
 
     @property
     def ts(self):
-        if self.test_value:
-            return self.test_value.shape
+        if self.test_value():
+            return self.test_value().shape
         else:
             return None

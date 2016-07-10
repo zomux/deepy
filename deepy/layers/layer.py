@@ -78,7 +78,7 @@ class NeuralLayer(object):
         :type inputs:  list of NeuralVariable
         :return: NeuralVariable
         """
-        from var import NeuralVariable
+        from neural_var import NeuralVariable
         if type(inputs[0]) != NeuralVariable:
             raise SystemError("The input of `compute` must be NeuralVar")
 
