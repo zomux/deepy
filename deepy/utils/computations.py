@@ -11,7 +11,7 @@ def var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX):
     """
     A shortcut of create_var
     """
-    return create_var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX)
+    return create_var(theano_tensor, dim, test_shape, test_dtype)
 
 def create_var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX):
     """

@@ -37,7 +37,7 @@ class ComputationalGraph(NeuralNetwork):
         if outputs:
             if not output and not cost:
                 self._test_output = None
-            self._test_outputs = outputs
+            self._test_outputs = [o.test_tensor for o in outputs]
 
 
     @property

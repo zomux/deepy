@@ -35,7 +35,6 @@ class NeuralVariable(NeuralLayer):
         normal_kwargs, test_kwargs, tensor_found_in_kwargs, neural_found_in_kwargs = convert_to_theano_var(kwargs)
 
         tensor_found = tensor_found_in_args or tensor_found_in_kwargs
-        import pdb;pdb.set_trace()
 
         if tensor_found:
             raise Exception("Theano tensor variables can not be used together with neural variables.")
@@ -76,11 +75,9 @@ class NeuralVariable(NeuralLayer):
         else:
             return None
 
-    @property
     def tv(self):
         return self.test_value()
 
-    @property
     def ts(self):
         if self.test_value():
             return self.test_value().shape

@@ -5,9 +5,6 @@ import theano.tensor as T
 from recurrent import RecurrentLayer
 from deepy.utils import neural_computation
 
-OUTPUT_TYPES = ["sequence", "one"]
-INPUT_TYPES = ["sequence", "one"]
-
 
 class GRU(RecurrentLayer):
     def __init__(self, hidden_size, **kwargs):
