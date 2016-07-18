@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     trainer = SGDTrainer(model)
 
-    annealer = LearningRateAnnealer(trainer)
+    annealer = LearningRateAnnealer()
 
     trainer.run(get_data(), controllers=[annealer])
 

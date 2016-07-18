@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     trainer = FirstGlimpseTrainer(network, network.layers[0], config=trainer_conf)
 
-    annealer = LearningRateAnnealer(trainer, patience=5)
+    annealer = LearningRateAnnealer(patience=5)
 
     timer = Timer()
     for _ in trainer.train(mnist.train_set(), mnist.valid_set(), mnist.test_set()):

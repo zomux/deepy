@@ -313,7 +313,9 @@ class NeuralTrainer(object):
             valid_set = dataset.valid_set()
             test_set = dataset.test_set()
             train_size = dataset.train_size()
-
+        if controllers:
+            for controller in controllers:
+                controller.bind(self)
         timer = Timer()
         for _ in self.train(train_set, valid_set=valid_set, test_set=test_set, train_size=train_size):
             if controllers:

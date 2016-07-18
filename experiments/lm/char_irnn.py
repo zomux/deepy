@@ -39,7 +39,7 @@ if __name__ == '__main__':
     batch = SequentialMiniBatches(lmdata, batch_size=20)
 
     trainer = SGDTrainer(model)
-    annealer = LearningRateAnnealer(trainer)
+    annealer = LearningRateAnnealer()
 
     trainer.run(batch, controllers=[annealer])
 

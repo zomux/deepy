@@ -26,4 +26,3 @@ class Concatenate(NeuralLayer):
 
     def compute_test_tesnor(self, *xs):
         return T.concatenate(xs, axis=self.axis)
-

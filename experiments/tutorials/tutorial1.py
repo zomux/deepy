@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     trainer = MomentumTrainer(model, {"learning_rate": shared_scalar(0.01)})
 
-    annealer = LearningRateAnnealer(trainer)
+    annealer = LearningRateAnnealer()
 
     trainer.run(mnist, controllers=[annealer])
 

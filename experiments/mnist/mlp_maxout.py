@@ -45,7 +45,7 @@ if __name__ == '__main__':
     trainer = MomentumTrainer(model, {"learning_rate": shared_scalar(0.01),
                                       "momentum": 0.5})
 
-    annealer = ExponentialLearningRateAnnealer(trainer, debug=True)
+    annealer = ExponentialLearningRateAnnealer(debug=True)
 
     mnist = MiniBatches(MnistDataset(), batch_size=100)
 

@@ -19,7 +19,7 @@ def run(method, model_path):
 
     trainer = ScipyTrainer(model, method)
 
-    annealer = LearningRateAnnealer(trainer)
+    annealer = LearningRateAnnealer()
 
     mnist = MiniBatches(MnistDataset(), batch_size=100)
 

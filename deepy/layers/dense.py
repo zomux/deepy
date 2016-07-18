@@ -26,13 +26,12 @@ class Dense(NeuralLayer):
         self._activation = build_activation(self.activation)
 
     def _setup_params(self):
-        self.W = self.create_weight(self.input_dim, self.output_dim, self.name, initializer=self.initializer)
+        self.W = self.create_weight(self.input_dim, self.output_dim, initializer=self.initializer)
         self.register_parameters(self.W)
         if self.disable_bias:
             self.B = T.constant(0, dtype=FLOATX)
         elif self.random_bias:
-            self.B = self.create_weight(suffix=self.name + "_bias",
-                                        initializer=self.initializer,
+            self.B = self.create_weight(initializer=self.initializer,
                                         shape=(self.output_dim, ))
             self.register_parameters(self.B)
         else:

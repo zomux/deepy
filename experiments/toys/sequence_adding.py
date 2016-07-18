@@ -73,7 +73,7 @@ if __name__ == '__main__':
     conf.avoid_nan = False
     trainer = SGDTrainer(model, conf)
 
-    annealer = LearningRateAnnealer(trainer, patience=20)
+    annealer = LearningRateAnnealer(patience=20)
 
     trainer.run(batch_set, controllers=[annealer])
 

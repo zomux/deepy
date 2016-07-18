@@ -6,8 +6,7 @@ class TrainingController(object):
     Abstract class of training controllers.
     """
 
-
-    def __init__(self, trainer):
+    def bind(self, trainer):
         """
         :type trainer: deepy.trainers.base.NeuralTrainer
         """

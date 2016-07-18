@@ -22,7 +22,7 @@ def run(initializer, model_path):
 
     trainer = MomentumTrainer(model)
 
-    annealer = LearningRateAnnealer(trainer)
+    annealer = LearningRateAnnealer()
 
     mnist = MiniBatches(MnistDataset(), batch_size=20)
 

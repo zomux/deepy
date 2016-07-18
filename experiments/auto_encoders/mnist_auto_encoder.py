@@ -26,6 +26,6 @@ if __name__ == '__main__':
 
     mnist = MiniBatches(MnistDataset(for_autoencoder=True), batch_size=20)
 
-    trainer.run(mnist, controllers=[LearningRateAnnealer(trainer)])
+    trainer.run(mnist, controllers=[LearningRateAnnealer()])
 
     model.save_params(model_path)

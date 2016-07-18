@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     trainer = SGDTrainer(model)
 
-    annealer = LearningRateAnnealer(trainer)
+    annealer = LearningRateAnnealer()
 
     trainer.run(batch_set.train_set(), batch_set.valid_set(), controllers=[annealer])
 

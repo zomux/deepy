@@ -14,11 +14,10 @@ class LearningRateAnnealer(TrainingController):
     Learning rate annealer.
     """
 
-    def __init__(self, trainer, patience=3, anneal_times=4):
+    def __init__(self, patience=3, anneal_times=4):
         """
         :type trainer: deepy.trainers.base.NeuralTrainer
         """
-        super(LearningRateAnnealer, self).__init__(trainer)
         self._iter = -1
         self._annealed_iter = -1
         self._patience = patience
@@ -58,15 +57,18 @@ class ScheduledLearningRateAnnealer(TrainingController):
     Anneal learning rate according to pre-scripted schedule.
     """
 
-    def __init__(self, trainer, start_halving_at=5, end_at=10, halving_interval=1, rollback=False):
-        super(ScheduledLearningRateAnnealer, self).__init__(trainer)
+    def __init__(self, start_halving_at=5, end_at=10, halving_interval=1, rollback=False):
         logging.info("iteration to start halving learning rate: %d" % start_halving_at)
         self.iter_start_halving = start_halving_at
         self.end_at = end_at
-        self._learning_rate = self._trainer.config.learning_rate
-        self._iter = 0
         self._halving_interval = halving_interval
         self._rollback = rollback
+
+
+    def bind(self, trainer):
+        super(ScheduledLearningRateAnnealer, self).bind(trainer)
+        self._learning_rate = self._trainer.config.learning_rate
+        self._iter = 0
         self._last_halving_iter = 0
 
     def invoke(self):
@@ -89,8 +91,7 @@ class ExponentialLearningRateAnnealer(TrainingController):
     Exponentially decay learning rate after each update.
     """
 
-    def __init__(self, trainer, decay_factor=1.000004, min_lr=.000001, debug=False):
-        super(ExponentialLearningRateAnnealer, self).__init__(trainer)
+    def __init__(self, decay_factor=1.000004, min_lr=.000001, debug=False):
         logging.info("exponentially decay learning rate with decay factor = %f" % decay_factor)
         self.decay_factor = np.array(decay_factor, dtype=FLOATX)
         self.min_lr = np.array(min_lr, dtype=FLOATX)
@@ -115,11 +116,10 @@ class SimpleScheduler(TrainingController):
     Simple scheduler with maximum patience.
     """
 
-    def __init__(self, trainer, patience=10):
+    def __init__(self, patience=10):
         """
         :type trainer: deepy.trainers.base.NeuralTrainer
         """
-        super(SimpleScheduler, self).__init__(trainer)
         self._iter = 0
         self._patience = patience
 

@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     trainer = SGDTrainer(model, {"learning_rate": LearningRateAnnealer.learning_rate(1.2),
                                  "weight_l2": 1e-7})
-    annealer = LearningRateAnnealer(trainer)
+    annealer = LearningRateAnnealer()
 
     trainer.run(lmdata, controllers=[annealer])
 

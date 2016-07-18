@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     trainer = MomentumTrainer(model)
 
-    annealer = LearningRateAnnealer(trainer)
+    annealer = LearningRateAnnealer()
 
     mnist = MiniBatches(MnistDataset(), batch_size=20)
 
