@@ -254,7 +254,7 @@ class NeuralLayer(object):
 
     def create_scalar(self, name="S", value=0, dtype=FLOATX):
         bs = np.array(0)
-        bs *= value
+        bs += value
         v = theano.shared(bs.astype(dtype), name='{}_{}'.format(self.name, name))
 
         logging.info('create scalar %s', name)
