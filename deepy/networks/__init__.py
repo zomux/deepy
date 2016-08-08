@@ -6,4 +6,4 @@ from classifier import NeuralClassifier
 from regressor import NeuralRegressor
 from auto_encoder import AutoEncoder
 from recursive_auto_encoder import RecursiveAutoEncoder
-from graph import ComputationalGraph
+from comp_graph import ComputationalGraph, graph

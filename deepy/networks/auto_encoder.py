@@ -58,9 +58,10 @@ class AutoEncoder(NeuralNetwork):
         """
         if not self.encoding_network:
             self.encoding_network = NeuralNetwork(self.input_dim, self.input_tensor)
+            self.encoding_network.input_variables = self.input_variables
             for layer in self.encoding_layes:
                 self.encoding_network.stack_layer(layer, no_setup=True)
-        return self.encoding_network.compute(x)
+        return self.encoding_network.compute(*x)
 
     def decode(self, x):
         """

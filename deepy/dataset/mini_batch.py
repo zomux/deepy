@@ -19,6 +19,8 @@ class MiniBatches(Dataset):
         self.cache = cache
 
     def _yield_data(self, subset):
+        if type(subset) != list:
+            subset = list(subset)
         for i in xrange(0, len(subset), self.size):
             yield map(np.array, list(zip(*subset[i:i + self.size])))
 
@@ -36,6 +38,8 @@ class MiniBatches(Dataset):
             return data_generator
 
     def test_set(self):
+        if not self.origin.test_set():
+            return None
         if self.cache and self._cached_test_set is not None:
             return self._cached_test_set
 
@@ -49,6 +53,8 @@ class MiniBatches(Dataset):
             return data_generator
 
     def valid_set(self):
+        if not self.origin.valid_set():
+            return None
         if self.cache and self._cached_valid_set is not None:
             return self._cached_valid_set
 

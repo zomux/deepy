@@ -13,7 +13,7 @@ class ReparameterizationLayer(NeuralLayer):
     The prior value is recorded after the computation graph created.
     """
 
-    def __init__(self, size, sample=False):
+    def __init__(self, size, sample=True):
         """
         :param size: the size of latent variable
         :param sample: whether to get a clean latent variable
@@ -39,7 +39,7 @@ class ReparameterizationLayer(NeuralLayer):
         # Reparameterization
         eps = global_theano_rand.normal((x.shape[0], self.size))
 
-        if self.sample:
+        if not self.sample:
             z = mu
         else:
             z = mu + T.exp(log_sigma) * eps
@@ -58,10 +58,10 @@ class VariationalAutoEncoder(AutoEncoder):
     Only binary output cost function is supported now.
     """
 
-    def __init__(self, input_dim, input_tensor=None):
+    def __init__(self, input_dim, rep_dim, input_tensor=None, sample=True):
         """
         """
-        super(VariationalAutoEncoder, self).__init__(input_dim)
+        super(VariationalAutoEncoder, self).__init__(input_dim, rep_dim)
         self.sample = sample
         self._setup_monitors = True
 

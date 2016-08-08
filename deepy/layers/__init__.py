@@ -23,7 +23,7 @@ from chain import Chain
 from block import Block
 from softmax3d import Softmax3D
 from reverse3d import Reverse3D
-from concatenate import Concatenate
+from concat import Concatenate
 from maxout import Maxout
 from neural_var import NeuralVariable
 from combine import Combine

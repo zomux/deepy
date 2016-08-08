@@ -10,7 +10,7 @@ class ComputationalGraph(NeuralNetwork):
     This class can be used to design very complex models, such as Neural Turing Machine.
     """
 
-    def __init__(self, input_dim=0, model=None, input_tensor=None,
+    def __init__(self, input_dim=0, model=None, input_tensor=None, monitors=None,
                  cost=None, output=None, outputs=None, blocks=None, input_vars=None, target_vars=None):
         """
         Create a basic network.
@@ -24,10 +24,13 @@ class ComputationalGraph(NeuralNetwork):
         super(ComputationalGraph, self).__init__(input_dim, input_tensor=input_tensor)
         if model:
             self.stack(model)
-        if output:
-            self.stack(output)
         if cost:
             self.stack(cost)
+        if output:
+            if cost:
+                self._test_output = output.test_tensor
+            else:
+                self.stack(output)
         if blocks:
             self.register(*blocks)
         if input_vars:
@@ -38,6 +41,13 @@ class ComputationalGraph(NeuralNetwork):
             if not output and not cost:
                 self._test_output = None
             self._test_outputs = [o.test_tensor for o in outputs]
+        if monitors:
+            for monitor in monitors:
+                if type(monitor) != tuple:
+                    raise Exception("monitors shall be tuples of (name, var).")
+                name, var = monitor
+                self.training_monitors.append((name, var.tensor))
+                self.testing_monitors.append((name, var.test_tensor))
 
 
     @property
@@ -47,3 +57,5 @@ class ComputationalGraph(NeuralNetwork):
     @property
     def test_cost(self):
         return self.test_output
+
+graph = ComputationalGraph

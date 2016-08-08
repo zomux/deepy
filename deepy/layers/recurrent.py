@@ -83,7 +83,11 @@ class RecurrentLayer(NeuralLayer):
         """
         initial_states = {}
         for state in self.state_names:
-            initial_states[state] = T.alloc(np.cast[FLOATX](0.), input_var.shape[0], self.hidden_size)
+            if self._input_type == 'sequence' and input_var.ndim == 2:
+                init_state = T.alloc(np.cast[FLOATX](0.), self.hidden_size)
+            else:
+                init_state = T.alloc(np.cast[FLOATX](0.), input_var.shape[0], self.hidden_size)
+            initial_states[state] = init_state
         return initial_states
 
     @neural_computation
@@ -127,7 +131,9 @@ class RecurrentLayer(NeuralLayer):
         if self._input_type == "sequence":
             # Move middle dimension to left-most position
             # (sequence, batch, value)
-            input_var = input_var.dimshuffle((1,0,2))
+            if input_var.ndim == 3:
+                input_var = input_var.dimshuffle((1,0,2))
+
             seq_map = self.get_step_inputs(input_var, mask=mask, additional_inputs=additional_inputs)
         else:
             init_state_map[self.main_state] = input_var

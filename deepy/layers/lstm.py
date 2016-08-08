@@ -39,7 +39,7 @@ class LSTM(RecurrentLayer):
         all_inputs = filter(bool, [input_var] + additional_inputs)
         if not all_inputs:
             return {}
-        last_dim_id = input_var.ndim - 1
+        last_dim_id = all_inputs[0].ndim - 1
         merged_input = T.concatenate(all_inputs, axis=last_dim_id)
         merged_inputs = {
             "xi": T.dot(merged_input, self.W_i),

@@ -44,8 +44,6 @@ class NeuralVariable(NeuralLayer):
     def __getattr__(self, name):
         return NeuralVariable(getattr(self.tensor, name), getattr(self.test_tensor, name), dim=self.dim())
 
-
-
     def apply(self, func, dim=None):
         """
         Apply a function to tensors.
@@ -68,18 +66,39 @@ class NeuralVariable(NeuralLayer):
     def shape(self, dim_index):
         return NeuralVariable(self.tensor.shape[dim_index], self.test_tensor.shape[dim_index])
 
+    def _other_tensor(self, other):
+        return  other.tensor if isinstance(other, NeuralVariable) else other
+
+    def _other_test_tensor(self, other):
+        return other.test_tensor if isinstance(other, NeuralVariable) else other
+
+    def __add__(self, other):
+
+        return NeuralVariable(self.tensor + self._other_tensor(other), self.test_tensor + self._other_test_tensor(other), dim=self.dim())
+
+    def __sub__(self, other):
+        return NeuralVariable(self.tensor - self._other_tensor(other), self.test_tensor - self._other_test_tensor(other), dim=self.dim())
+
+    def __mul__(self, other):
+        return NeuralVariable(self.tensor * self._other_tensor(other), self.test_tensor * self._other_test_tensor(other), dim=self.dim())
+
+    def __div__(self, other):
+        return NeuralVariable(self.tensor / self._other_tensor(other), self.test_tensor / self._other_test_tensor(other), dim=self.dim())
+
     @property
     def test_value(self):
-        if hasattr(self.tensot.tag, 'test_value'):
+        if hasattr(self.tensor.tag, 'test_value'):
             return self.tensor.tag.test_value
         else:
             return None
 
+    @property
     def tv(self):
-        return self.test_value()
+        return self.test_value
 
+    @property
     def ts(self):
-        if self.test_value():
-            return self.test_value().shape
+        if self.test_value is not None:
+            return self.test_value.shape
         else:
             return None
