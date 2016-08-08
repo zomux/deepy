@@ -6,8 +6,6 @@ import os
 from collections import OrderedDict
 import numpy as np
 
-from platoon.channel import Worker
-from platoon.param_sync import EASGD
 from deepy.trainers import GeneralNeuralTrainer
 
 import logging
@@ -17,6 +15,10 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
     """
     General neural network trainer.
     """
+
+    from platoon.channel import Worker
+    from platoon.param_sync import EASGD
+    
     def __init__(self,
                  network, config=None, method='sgd',
                  server_port=5567,
