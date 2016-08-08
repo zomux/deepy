@@ -10,15 +10,12 @@ from deepy.trainers import GeneralNeuralTrainer
 
 import logging
 
-
 class MultiGPUTrainer(GeneralNeuralTrainer):
     """
     General neural network trainer.
     """
 
-    from platoon.channel import Worker
-    from platoon.param_sync import EASGD
-    
+
     def __init__(self,
                  network, config=None, method='sgd',
                  server_port=5567,
@@ -60,6 +57,8 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         """
         Train the model in multi-GPU environment.
         """
+        from platoon.channel import Worker
+        from platoon.param_sync import EASGD
         server_port = self._port
         param_map = self.create_param_map()
         # Initialize the worker
