@@ -63,8 +63,8 @@ class NeuralVariable(NeuralLayer):
     def dim(self):
         return self.output_dim
 
-    def shape(self, dim_index):
-        return NeuralVariable(self.tensor.shape[dim_index], self.test_tensor.shape[dim_index])
+    # def shape(self, dim_index):
+    #     return NeuralVariable(self.tensor.shape[dim_index], self.test_tensor.shape[dim_index])
 
     def _other_tensor(self, other):
         return  other.tensor if isinstance(other, NeuralVariable) else other

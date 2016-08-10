@@ -12,7 +12,7 @@ class NeuralTensorNet(object):
             return getattr(theano_tensor.nnet, func_name)(*args, **kwargs)
         return wrapper
 
-neural_tensor_net = NeuralTensorNet()
+deepy_nnet = NeuralTensorNet()
 
 class NeuralTensor(object):
     """
@@ -20,16 +20,16 @@ class NeuralTensor(object):
     """
 
     def __getattr__(self, func_name):
-        global neural_tensor_net
+        global deepy_nnet
         @neural_computation
         def wrapper(*args, **kwargs):
             return getattr(theano_tensor, func_name)(*args, **kwargs)
         if func_name == 'nnet':
-            return neural_tensor_net
+            return deepy_nnet
         else:
             return wrapper
 
 
-neural_tensor = NeuralTensor()
-NT = neural_tensor
-tensor = neural_tensor
+deepy_tensor = NeuralTensor()
+tensor = NT = deepy_tensor
+

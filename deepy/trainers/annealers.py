@@ -65,28 +65,28 @@ class ScheduledLearningRateAnnealer(TrainingController):
 
     def __init__(self, start_halving_at=5, end_at=10, halving_interval=1, rollback=False):
         logging.info("iteration to start halving learning rate: %d" % start_halving_at)
-        self.iter_start_halving = start_halving_at
+        self.epoch_start_halving = start_halving_at
         self.end_at = end_at
         self._halving_interval = halving_interval
         self._rollback = rollback
-
+        self._last_halving_epoch = 0
+        self._learning_rate = None
 
     def bind(self, trainer):
         super(ScheduledLearningRateAnnealer, self).bind(trainer)
         self._learning_rate = self._trainer.config.learning_rate
-        self._iter = 0
-        self._last_halving_iter = 0
+        self._last_halving_epoch = 0
 
     def invoke(self):
-        self._iter += 1
-        if self._iter >= self.iter_start_halving and self._iter > self._last_halving_iter + self._halving_interval:
+        epoch = self._trainer.epoch()
+        if epoch >= self.epoch_start_halving and epoch >= self._last_halving_epoch + self._halving_interval:
             if self._rollback:
                 self._trainer.set_params(*self._trainer.best_params)
             self._learning_rate.set_value(self._learning_rate.get_value() * 0.5)
             logging.info("halving learning rate to %f" % self._learning_rate.get_value())
             self._trainer.network.train_logger.record("set learning rate to %f" % self._learning_rate.get_value())
-            self._last_halving_iter = self._iter
-        if self._iter >= self.end_at:
+            self._last_halving_epoch = epoch
+        if epoch >= self.end_at:
             logging.info("ending")
             return True
         return False

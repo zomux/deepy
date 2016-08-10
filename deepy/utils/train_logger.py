@@ -8,18 +8,23 @@ import deepy
 logging = loggers.getLogger(__name__)
 
 PROGRESS_LOG_PREFIX = "progress:"
+EPOCH_LOG_PREFIX = "epoch:"
 
 class TrainLogger(object):
 
     def __init__(self):
         self.log_pool = []
         self._progress = 0
+        self._epoch = 0
 
     def load(self, model_path):
         log_path = self._log_path(model_path)
         if os.path.exists(log_path):
             logging.info("Load training log from %s" % log_path)
             for line in open(log_path).xreadlines():
+                if line.startswith(EPOCH_LOG_PREFIX):
+                    self._epoch = int(line.replace(EPOCH_LOG_PREFIX, "").strip())
+                    continue
                 if line.startswith(PROGRESS_LOG_PREFIX):
                     self._progress = int(line.replace(PROGRESS_LOG_PREFIX, "").strip())
                     continue
@@ -35,11 +40,17 @@ class TrainLogger(object):
         """
         self._progress = progress
 
+    def record_epoch(self, epoch):
+        self._epoch = epoch
+
     def progress(self):
         """
         Get loaded progress.
         """
         return self._progress
+
+    def epoch(self):
+        return self._epoch
 
     def save(self, model_path):
         log_path = self._log_path(model_path)
@@ -48,6 +59,8 @@ class TrainLogger(object):
             outf.write("# deepy version: %s\n" % deepy.__version__)
             for line in self.log_pool:
                 outf.write(line + "\n")
+            if self._epoch > 0:
+                outf.write("%s %d\n" % (EPOCH_LOG_PREFIX, self._epoch))
             if self._progress > 0:
                 outf.write("%s %d\n" % (PROGRESS_LOG_PREFIX, self._progress))
 

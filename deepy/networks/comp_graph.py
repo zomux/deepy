@@ -42,6 +42,8 @@ class ComputationalGraph(NeuralNetwork):
                 self._test_output = None
             self._test_outputs = [o.test_tensor for o in outputs]
         if monitors:
+            if type(monitors) == dict:
+                monitors = monitors.items()
             for monitor in monitors:
                 if type(monitor) != tuple:
                     raise Exception("monitors shall be tuples of (name, var).")

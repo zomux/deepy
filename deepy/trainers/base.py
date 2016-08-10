@@ -49,13 +49,15 @@ class NeuralTrainer(object):
         self._iter_callbacks = []
 
         self.best_cost = 1e100
-        self.best_iter = 0
+        self.best_epoch = 0
         self.best_params = self.copy_params()
         self._skip_batches = 0
+        self._skip_epochs = 0
         self._progress = 0
         self.last_cost = 0
         self.last_run_costs = None
         self._report_time = True
+        self._epoch = 0
 
     def _compile_evaluation_func(self):
         if not self.evaluation_func:
@@ -66,12 +68,19 @@ class NeuralTrainer(object):
                 updates=self.network.updates,
                 allow_input_downcast=True, mode=self.config.get("theano_mode", None))
 
-    def skip(self, n_batches):
+    def skip(self, n_batches, n_epochs=0):
         """
         Skip N batches in the training.
         """
-        logging.info("Skip %d batches" % n_batches)
+        logging.info("skip %d epochs and %d batches" % (n_epochs, n_batches))
         self._skip_batches = n_batches
+        self._skip_epochs = n_epochs
+
+    def epoch(self):
+        """
+        Get current epoch.
+        """
+        return self._epoch
 
     def _setup_costs(self):
         self.cost = self._add_regularization(self.network.cost)
@@ -121,8 +130,8 @@ class NeuralTrainer(object):
         self.network.load_params(path, exclude_free_params=exclude_free_params)
         self.best_params = self.copy_params()
         # Resume the progress
-        if self.network.train_logger.progress() > 0:
-            self.skip(self.network.train_logger.progress())
+        if self.network.train_logger.progress() > 0 or self.network.train_logger.epoch() > 0:
+            self.skip(self.network.train_logger.progress(), self.network.train_logger.epoch() - 1)
 
     def copy_params(self):
         checkpoint = (map(lambda p: p.get_value().copy(), self.network.parameters),
@@ -140,28 +149,35 @@ class NeuralTrainer(object):
         """
         Train the model and return costs.
         """
-        epoch = 0
+        self._epoch = 0
         while True:
+            if self._skip_epochs > 0:
+                logging.info("skipping one epoch ...")
+                self._skip_epochs -= 1
+                self._epoch += 1
+                yield None
+                continue
             # Test
-            if not epoch % self.config.test_frequency and test_set:
+            if not self._epoch % self.config.test_frequency and test_set:
                 try:
-                    self._run_test(epoch, test_set)
+                    self._run_test(self._epoch, test_set)
                 except KeyboardInterrupt:
                     logging.info('interrupted!')
                     break
             # Validate
-            if not epoch % self.validation_frequency and valid_set:
+            if not self._epoch % self.validation_frequency and valid_set:
                 try:
 
-                    if not self._run_valid(epoch, valid_set):
+                    if not self._run_valid(self._epoch, valid_set):
                         logging.info('patience elapsed, bailing out')
                         break
                 except KeyboardInterrupt:
                     logging.info('interrupted!')
                     break
             # Train one step
+
             try:
-                costs = self._run_train(epoch, train_set, train_size)
+                costs = self._run_train(self._epoch, train_set, train_size)
             except KeyboardInterrupt:
                 logging.info('interrupted!')
                 break
@@ -170,7 +186,7 @@ class NeuralTrainer(object):
                 logging.info("NaN detected in costs, rollback to last parameters")
                 self.set_params(*self.checkpoint)
             else:
-                epoch += 1
+                self._epoch += 1
                 self.network.epoch_callback()
 
             yield dict(costs)
@@ -199,20 +215,21 @@ class NeuralTrainer(object):
         self.network.train_logger.record(message)
         self.last_run_costs = costs
 
-    def _run_train(self, iteration, train_set, train_size=None):
+    def _run_train(self, epoch, train_set, train_size=None):
         """
         Run one training iteration.
         """
+        self.network.train_logger.record_epoch(epoch + 1)
         costs = self.train_step(train_set, train_size)
-        if not iteration % self.config.monitor_frequency:
+        if not epoch % self.config.monitor_frequency:
             info = " ".join("%s=%.2f" % item for item in costs)
-            message = "monitor (epoch=%i) %s" % (iteration + 1, info)
+            message = "monitor (epoch=%i) %s" % (epoch + 1, info)
             logging.info(message)
             self.network.train_logger.record(message)
         self.last_run_costs = costs
         return costs
 
-    def _run_valid(self, iteration, valid_set, dry_run=False):
+    def _run_valid(self, epoch, valid_set, dry_run=False):
         """
         Run one valid iteration, return true if to continue training.
         """
@@ -226,22 +243,22 @@ class NeuralTrainer(object):
             marker = ' *'
             if not dry_run:
                 self.best_cost = J
-                self.best_iter = iteration
+                self.best_epoch = epoch
 
-            if self.config.auto_save:
+            if self.config.auto_save and self._skip_batches == 0:
                 self.network.train_logger.record_progress(self._progress)
                 self.network.save_params(self.config.auto_save, new_thread=True)
 
         info = ' '.join('%s=%.2f' % el for el in costs)
-        epoch = "epoch=%d" % (iteration + 1)
+        epoch_str = "epoch=%d" % (epoch + 1)
         if dry_run:
-            epoch = "dryrun" + " " * (len(epoch) - 6)
-        message = "valid   (%s) %s%s" % (epoch, info, marker)
+            epoch_str = "dryrun" + " " * (len(epoch_str) - 6)
+        message = "valid   (%s) %s%s" % (epoch_str, info, marker)
         logging.info(message)
         self.last_run_costs = costs
         self.network.train_logger.record(message)
         self.checkpoint = self.copy_params()
-        return iteration - self.best_iter < self.patience
+        return epoch - self.best_epoch < self.patience
 
     def test_step(self, test_set):
         self._compile_evaluation_func()

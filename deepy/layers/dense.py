@@ -35,5 +35,5 @@ class Dense(NeuralLayer):
                                         shape=(self.output_dim, ))
             self.register_parameters(self.B)
         else:
-            self.B = self.create_bias(self.output_dim, self.name)
+            self.B = self.create_bias(self.output_dim, "B")
             self.register_parameters(self.B)
