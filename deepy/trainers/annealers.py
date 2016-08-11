@@ -122,12 +122,12 @@ class SimpleScheduler(TrainingController):
     Simple scheduler with maximum patience.
     """
 
-    def __init__(self, patience=10):
+    def __init__(self, end_at=10):
         """
         :type trainer: deepy.trainers.base.NeuralTrainer
         """
         self._iter = 0
-        self._patience = patience
+        self._patience = end_at
 
     def invoke(self):
         """
