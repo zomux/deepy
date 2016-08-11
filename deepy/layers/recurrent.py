@@ -118,7 +118,7 @@ class RecurrentLayer(NeuralLayer):
             self.additional_input_dims = map(lambda var: var.dim(), additional_inputs)
         return super(RecurrentLayer, self).compute(input_var, mask=mask, additional_inputs=additional_inputs, steps=steps, backward=backward)
 
-    def compute_tensor(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False):
+    def compute_tensor(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False, all_states=None, return_all=False):
         # prepare parameters
         backward = backward if backward else self._go_backwards
         steps = steps if steps else self._steps
@@ -127,6 +127,10 @@ class RecurrentLayer(NeuralLayer):
             raise Exception("Mask only works with sequence input")
         # get initial states
         init_state_map = self.get_initial_states(input_var)
+        if all_states:
+            for name, val in all_states:
+                if name in init_state_map:
+                    init_state_map[name] = val
         # get input sequence map
         if self._input_type == "sequence":
             # Move middle dimension to left-most position
@@ -149,12 +153,24 @@ class RecurrentLayer(NeuralLayer):
         # return main states
         main_states = retval_map[self.main_state]
         if self._output_type == "one":
-            return main_states[-1]
+            if return_all:
+                return_map = {}
+                for name, val in retval_map:
+                    return_map[name] = val[-1]
+                return return_map
+            else:
+                return main_states[-1]
         elif self._output_type == "sequence":
-            main_states = main_states.dimshuffle((1,0,2)) # ~ batch, time, size
-            # if mask: # ~ batch, time
-            #     main_states *= mask.dimshuffle((0, 1, 'x'))
-            return main_states
+            if return_all:
+                return_map = {}
+                for name, val in retval_map:
+                    return_map[name] = val.dimshuffle((1,0,2))
+                return return_map
+            else:
+                main_states = main_states.dimshuffle((1,0,2)) # ~ batch, time, size
+                # if mask: # ~ batch, time
+                #     main_states *= mask.dimshuffle((0, 1, 'x'))
+                return main_states
 
 
 class RNN(RecurrentLayer):
