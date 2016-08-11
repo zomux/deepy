@@ -113,10 +113,11 @@ class RecurrentLayer(NeuralLayer):
 
         return step_inputs
 
-    def compute(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False):
+    def compute(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False, all_states=None, return_all=False):
         if additional_inputs and not self.additional_input_dims:
             self.additional_input_dims = map(lambda var: var.dim(), additional_inputs)
-        return super(RecurrentLayer, self).compute(input_var, mask=mask, additional_inputs=additional_inputs, steps=steps, backward=backward)
+        return super(RecurrentLayer, self).compute(input_var,
+                mask=mask, additional_inputs=additional_inputs, steps=steps, backward=backward, all_states=all_states, return_all=return_all)
 
     def compute_tensor(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False, all_states=None, return_all=False):
         # prepare parameters
