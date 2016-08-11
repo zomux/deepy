@@ -129,7 +129,7 @@ class RecurrentLayer(NeuralLayer):
         # get initial states
         init_state_map = self.get_initial_states(input_var)
         if all_states:
-            for name, val in all_states:
+            for name, val in all_states.items():
                 if name in init_state_map:
                     init_state_map[name] = val
         # get input sequence map
@@ -156,7 +156,7 @@ class RecurrentLayer(NeuralLayer):
         if self._output_type == "one":
             if return_all:
                 return_map = {}
-                for name, val in retval_map:
+                for name, val in retval_map.items():
                     return_map[name] = val[-1]
                 return return_map
             else:
@@ -164,7 +164,7 @@ class RecurrentLayer(NeuralLayer):
         elif self._output_type == "sequence":
             if return_all:
                 return_map = {}
-                for name, val in retval_map:
+                for name, val in retval_map.items():
                     return_map[name] = val.dimshuffle((1,0,2))
                 return return_map
             else:
