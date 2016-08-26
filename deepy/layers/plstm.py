@@ -78,3 +78,5 @@ class PeepholeLSTM(RecurrentLayer):
         else:
             self.register_parameters(self.U, self.C,
                                      self.b_i, self.b_f, self.b_c, self.b_o)
+
+PLSTM = PeepholeLSTM

@@ -15,7 +15,7 @@ from activation import Activation
 from prelu import PRelu
 from irnn import IRNN
 from lstm import LSTM
-from plstm import PeepholeLSTM
+from plstm import PeepholeLSTM, PLSTM
 from gru import GRU
 from batch_norm import BatchNormalization
 from onehot_embed import OneHotEmbedding

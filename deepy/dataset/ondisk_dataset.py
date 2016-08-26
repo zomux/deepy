@@ -38,9 +38,9 @@ class OnDiskDataset(Dataset):
             logging.info("Cache on memory")
             self._cached_train_data = list(map(self._post_processing, StreamPickler.load(open(self._train_path))))
             self._train_size = len(self._cached_train_data)
-            if self._shuffle_memory:
-                logging.info("Shuffle on-memory data")
-                global_rand.shuffle(self._cached_train_data)
+            # if self._shuffle_memory:
+            #     logging.info("Shuffle on-memory data")
+            #     global_rand.shuffle(self._cached_train_data)
 
     def curriculum_train_data(self):
         self._curriculum_count += 1
@@ -61,6 +61,9 @@ class OnDiskDataset(Dataset):
 
     def train_set(self):
         if self._cache_on_memory:
+            if self._shuffle_memory:
+                logging.info("shuffle on-memory data")
+                global_rand.shuffle(self._cached_train_data)
             if self._curriculum:
                 if not isinstance(self._curriculum(self._cached_train_data, 1), types.GeneratorType):
                     raise Exception("Curriculum function must be a generator.")

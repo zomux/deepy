@@ -27,7 +27,11 @@ class NeuralVariable(NeuralLayer):
                 index = tuple(index)
             return t.__getitem__(index)
         ret = getitem_wrapper(self, index)
-        ret.output_dim = self.dim()
+        if (hasattr(ret.tensor, 'tag') and hasattr(ret.tensor.tag, 'test_value')
+            and ret.tensor.tag.test_value is not None and len(ret.tensor.tag.test_value.shape) > 0):
+            ret.output_dim = ret.tensor.tag.test_value.shape[-1]
+        else:
+            ret.output_dim = self.dim()
         return ret
 
     def __call__(self, *args, **kwargs):

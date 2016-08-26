@@ -113,13 +113,20 @@ class RecurrentLayer(NeuralLayer):
 
         return step_inputs
 
-    def compute(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False, all_states=None, return_all=False):
+    def compute(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False, init_states=None, return_all_states=False):
         if additional_inputs and not self.additional_input_dims:
             self.additional_input_dims = map(lambda var: var.dim(), additional_inputs)
-        return super(RecurrentLayer, self).compute(input_var,
-                mask=mask, additional_inputs=additional_inputs, steps=steps, backward=backward, all_states=all_states, return_all=return_all)
+        result_var = super(RecurrentLayer, self).compute(input_var,
+                                                   mask=mask, additional_inputs=additional_inputs, steps=steps, backward=backward, init_states=init_states, return_all_states=return_all_states)
+        if return_all_states:
+            state_map = {}
+            for k in result_var.tensor:
+                state_map[k] = NeuralVariable(result_var.tensor[k], result_var.test_tensor[k], self.output_dim)
+            return state_map
+        else:
+            return result_var
 
-    def compute_tensor(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False, all_states=None, return_all=False):
+    def compute_tensor(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False, init_states=None, return_all_states=False):
         # prepare parameters
         backward = backward if backward else self._go_backwards
         steps = steps if steps else self._steps
@@ -128,8 +135,8 @@ class RecurrentLayer(NeuralLayer):
             raise Exception("Mask only works with sequence input")
         # get initial states
         init_state_map = self.get_initial_states(input_var)
-        if all_states:
-            for name, val in all_states.items():
+        if init_states:
+            for name, val in init_states.items():
                 if name in init_state_map:
                     init_state_map[name] = val
         # get input sequence map
@@ -154,7 +161,7 @@ class RecurrentLayer(NeuralLayer):
         # return main states
         main_states = retval_map[self.main_state]
         if self._output_type == "one":
-            if return_all:
+            if return_all_states:
                 return_map = {}
                 for name, val in retval_map.items():
                     return_map[name] = val[-1]
@@ -162,7 +169,7 @@ class RecurrentLayer(NeuralLayer):
             else:
                 return main_states[-1]
         elif self._output_type == "sequence":
-            if return_all:
+            if return_all_states:
                 return_map = {}
                 for name, val in retval_map.items():
                     return_map[name] = val.dimshuffle((1,0,2))

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
+import time
 import numpy as np
 import theano
 
@@ -279,7 +280,10 @@ class NeuralTrainer(object):
         network_callback = bool(self.network.training_callbacks)
         trainer_callback = bool(self._iter_callbacks)
         cost_matrix = []
+        exec_count = 0
+        start_time = time.time()
         self._progress = 0
+
 
         for x in train_set:
             if self._skip_batches == 0:
@@ -301,6 +305,7 @@ class NeuralTrainer(object):
                         cost_x = self.learn(*[t[(t.shape[0]/2):] for t in x])
                 cost_matrix.append(cost_x)
                 self.last_cost = cost_x[0]
+                exec_count += 1
                 if network_callback:
                     self.network.training_callback()
                 if trainer_callback:
@@ -310,7 +315,8 @@ class NeuralTrainer(object):
                 self._skip_batches -= 1
             if train_size:
                 self._progress += 1
-                sys.stdout.write("\x1b[2K\r> %d%% | J=%.2f" % (self._progress * 100 / train_size, self.last_cost))
+                spd = float(exec_count) / (time.time() - start_time)
+                sys.stdout.write("\x1b[2K\r> %d%% | J=%.2f | spd=%.2f batch/s" % (self._progress * 100 / train_size, self.last_cost, spd))
                 sys.stdout.flush()
         self._progress = 0
 
