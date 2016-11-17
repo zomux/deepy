@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy as np
-from functions import FLOATX
-import os, gzip, cPickle as pickle
+import cPickle as pickle
+import gzip
 import logging as loggers
+import os
+
+import numpy as np
+
+from functions import FLOATX
+
 logging = loggers.getLogger(__name__)
 
 def var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX):
@@ -19,7 +24,7 @@ def create_var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX):
     :param dim: last dimension of tensor, 0 indicates that the last dimension is flexible
     :rtype: TensorVar
     """
-    from deepy.layers.neural_var import NeuralVariable
+    from deepy.core.var import NeuralVariable
     var = NeuralVariable(theano_tensor, dim=dim)
     if test_shape:
         if type(test_shape) != list and type(test_shape) != tuple:

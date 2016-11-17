@@ -2,30 +2,29 @@
 # -*- coding: utf-8 -*-
 
 from layer import NeuralLayer
-from dense import Dense
-from softmax import Softmax
+from activation import Activation
+from batch_norm import BatchNormalization
+from bias import Bias
+from block import Block
+from chain import Chain
+from combine import Combine
+from concat import Concatenate
 from conv import Convolution
-from flatten import Flatten
+from dense import Dense
 from dimshuffle import DimShuffle
+from dropout import Dropout
+from flatten import Flatten
+from maxout import Maxout
+from onehot_embed import OneHotEmbedding
+from plstm import PeepholeLSTM, PLSTM
+from prelu import PRelu
+from recurrent import RecurrentLayer, RNN
+from irnn import IRNN
+from gru import GRU
+from lstm import LSTM
 from reshape import Reshape
 from reveal_dimension import RevealDimension
-from recurrent import RecurrentLayer, RNN
-from dropout import Dropout
-from activation import Activation
-from prelu import PRelu
-from irnn import IRNN
-from lstm import LSTM
-from plstm import PeepholeLSTM, PLSTM
-from gru import GRU
-from batch_norm import BatchNormalization
-from onehot_embed import OneHotEmbedding
-from word_embed import WordEmbedding
-from chain import Chain
-from block import Block
-from softmax3d import Softmax3D
 from reverse3d import Reverse3D
-from concat import Concatenate
-from maxout import Maxout
-from neural_var import NeuralVariable
-from combine import Combine
-from bias import Bias
+from softmax import Softmax
+from softmax3d import Softmax3D
+from word_embed import WordEmbedding

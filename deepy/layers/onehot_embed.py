@@ -3,10 +3,12 @@
 
 import numpy as np
 import theano.tensor as T
+
+from deepy.core.var import NeuralVariable
 from deepy.layers import NeuralLayer
-from deepy.layers.neural_var import NeuralVariable
-from deepy.utils import onehot_tensor, onehot
 from deepy.utils import FLOATX
+from deepy.utils import onehot_tensor, onehot
+
 
 class OneHotEmbedding(NeuralLayer):
     """

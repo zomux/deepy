@@ -7,8 +7,8 @@ import logging as loggers
 import numpy as np
 import theano
 
-from deepy.utils import FLOATX, UniformInitializer, neural_computation, neural_computation_prefer_tensor
-from deepy.utils import convert_to_neural_var, convert_to_theano_var, build_activation
+from deepy.utils import FLOATX, UniformInitializer, neural_computation_prefer_tensor
+from deepy.utils import convert_to_theano_var, build_activation
 
 logging = loggers.getLogger(__name__)
 
@@ -72,7 +72,7 @@ class NeuralLayer(object):
         :type inputs:  list of NeuralVariable
         :return: NeuralVariable
         """
-        from neural_var import NeuralVariable
+        from deepy.core.var import NeuralVariable
         if type(inputs[0]) != NeuralVariable:
             raise SystemError("The input of `compute` must be NeuralVar")
 

@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from . import NeuralLayer
-from neural_var import NeuralVariable
-from deepy.utils import build_activation, FLOATX
+from collections import OrderedDict
+
 import numpy as np
 import theano
 import theano.tensor as T
-from collections import OrderedDict
+
+from deepy.core.var import NeuralVariable
+from deepy.utils import build_activation, FLOATX
+from . import NeuralLayer
 
 OUTPUT_TYPES = ["sequence", "one"]
 INPUT_TYPES = ["sequence", "one"]

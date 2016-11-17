@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy as np
 import theano.tensor as T
+
+from deepy.core.var import NeuralVariable
 from deepy.layers import NeuralLayer
-from neural_var import NeuralVariable
-from deepy.utils import FLOATX
+
 
 class WordEmbedding(NeuralLayer):
     """

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from layer import NeuralLayer
+from deepy.layers.layer import NeuralLayer
 from deepy.utils.decorations import neural_computation, convert_to_theano_var
 
 

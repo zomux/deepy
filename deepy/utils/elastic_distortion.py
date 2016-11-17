@@ -11,7 +11,7 @@ import numpy as np
 import math
 from scipy.signal import convolve2d
 
-from deepy.utils import global_rand
+from deepy.utils.functions import global_rand
 
 
 def create_2d_gaussian(dim, sigma):

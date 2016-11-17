@@ -12,7 +12,7 @@ from deepy import NeuralClassifier
 from deepy.utils import build_activation, disconnected_grad
 from deepy.utils.functions import FLOATX
 from deepy.layers import NeuralLayer
-from experiments.attention_models.gaussian_sampler import SampleMultivariateGaussian
+from examples.attention_models.gaussian_sampler import SampleMultivariateGaussian
 
 
 class AttentionLayer(NeuralLayer):

@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from . import NeuralLayer
-from neural_var import NeuralVariable
-from deepy.utils import build_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner, neural_computation
+from abc import ABCMeta, abstractmethod
+
 import numpy as np
 import theano.tensor as T
-from abc import ABCMeta, abstractmethod
+
+from deepy.core.var import NeuralVariable
+from deepy.utils import build_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner, neural_computation
+from . import NeuralLayer
 
 OUTPUT_TYPES = ["sequence", "one"]
 INPUT_TYPES = ["sequence", "one"]

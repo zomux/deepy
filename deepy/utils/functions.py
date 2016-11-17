@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import copy
+import logging as loggers
 import os
+import re
+
+import numpy as np
 import theano
 import theano.tensor as T
-import numpy as np
-import re
-import copy
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 from theano.tensor.shared_randomstreams import RandomStreams as SharedRandomStreams
-import logging as loggers
-
 
 logging = loggers.getLogger(__name__)
 logging.setLevel(loggers.INFO)
@@ -29,7 +29,7 @@ global_theano_rand = RandomStreams(seed=global_seed)
 global_shared_rand = SharedRandomStreams(seed=global_seed)
 
 def apply(func, *args, **kwargs):
-    from deepy.layers.neural_var import NeuralVariable
+    from deepy.core.var import NeuralVariable
     dim = kwargs['dim'] if 'dim' in kwargs else args[0].dim()
     return NeuralVariable(func(*[x.tensor for x in args]), dim)
 
