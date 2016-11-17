@@ -76,6 +76,22 @@ class RecurrentLayer(NeuralLayer):
         pass
 
     @neural_computation
+    def compute_step(self, state, lstm_cell=None, input=None, additional_inputs=None):
+        """
+        Compute one step in the RNN.
+        :return: one variable for RNN and GRU, multiple variables for LSTM
+        """
+        input_map = self.merge_inputs(input, additional_inputs=additional_inputs)
+        input_map.update({"state": state, "lstm_cell": lstm_cell})
+        output_map = self.compute_new_state(input_map)
+        outputs = [output_map.pop("state")]
+        outputs += output_map.values()
+        if len(outputs) == 1:
+            return outputs[0]
+        else:
+            return outputs
+
+    @neural_computation
     def get_initial_states(self, input_var):
         """
         :type input_var: T.var

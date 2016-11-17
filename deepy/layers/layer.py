@@ -93,10 +93,10 @@ class NeuralLayer(object):
         output = self.compute_tensor(*[t.tensor for t in inputs], **train_kwargs)
         test_output = self.compute_test_tesnor(*[t.test_tensor for t in inputs], **test_kwargs)
 
-        if type(output) != list:
+        if type(output) != list and type(output) != tuple:
             return NeuralVariable(output, test_output, self.output_dim)
         else:
-            return [NeuralVariable(*item) for item in zip(self.output_dims, output, test_output)]
+            return [NeuralVariable(*item) for item in zip(output, test_output, self.output_dims)]
 
     def prepare(self):
         """

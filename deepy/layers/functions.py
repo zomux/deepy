@@ -9,7 +9,10 @@ def concatenate(vars, axis=-1):
     """
     A utility function of concatenate.
     """
-    return Concatenate(axis=axis).compute(*vars)
+    concat_var = Concatenate(axis=axis).compute(*vars)
+    if axis == -1 or axis == vars[0].tensor.ndim - 1:
+        concat_var.output_dim = sum([x.output_dim for x in vars], 0)
+    return concat_var
 
 @neural_computation
 def ifelse(condition, then_branch, else_branch):

@@ -230,7 +230,7 @@ class NeuralTrainer(object):
         self.last_run_costs = costs
         return costs
 
-    def _run_valid(self, epoch, valid_set, dry_run=False):
+    def _run_valid(self, epoch, valid_set, dry_run=False, save_path=None):
         """
         Run one valid iteration, return true if to continue training.
         """
@@ -246,9 +246,10 @@ class NeuralTrainer(object):
                 self.best_cost = J
                 self.best_epoch = epoch
 
-            if self.config.auto_save and self._skip_batches == 0:
+            save_path = save_path if save_path else self.config.auto_save
+            if save_path and self._skip_batches == 0:
                 self.network.train_logger.record_progress(self._progress)
-                self.network.save_params(self.config.auto_save, new_thread=True)
+                self.network.save_params(save_path, new_thread=True)
 
         info = ' '.join('%s=%.2f' % el for el in costs)
         epoch_str = "epoch=%d" % (epoch + 1)

@@ -51,6 +51,14 @@ class Block(NeuralLayer):
     def compute_test_tesnor(self, x):
         return x
 
+    def load_params(self, path, exclude_free_params=False):
+        """
+        Load parameters to the block.
+        """
+        from deepy.networks.comp_graph import ComputationalGraph
+        model = ComputationalGraph(blocks=[self])
+        model.load_params(path, exclude_free_params=exclude_free_params)
+
     @property
     def all_parameters(self):
         return self.parameters

@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import theano.tensor as T
 from theano import tensor as theano_tensor
 from decorations import neural_computation
+from deepy.layers.neural_var import NeuralVariable
 
 class NeuralTensorNet(object):
 
@@ -17,7 +19,11 @@ deepy_nnet = NeuralTensorNet()
 class NeuralTensor(object):
     """
     A class for exporting Theano tensor operations to neural variables.
+
     """
+
+    def constant(self, value, dtype="float32", dim=None):
+        return NeuralVariable(T.constant(value, dtype=dtype), dim=dim)
 
     def __getattr__(self, func_name):
         global deepy_nnet

@@ -49,7 +49,8 @@ def build_activation(act=None):
             'theano_softmax': T.nnet.softmax,
 
             # shorthands
-            'relu': lambda z: z * (z > 0),
+            'relu': lambda z: T.nnet.relu(z),
+            'leaky_relu': lambda z: T.nnet.relu(z, 0.01),
             'trel': lambda z: z * (z > 0) * (z < 1),
             'trec': lambda z: z * (z > 1),
             'tlin': lambda z: z * (abs(z) > 1),

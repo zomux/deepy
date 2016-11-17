@@ -6,6 +6,7 @@
 
 import types
 from . import Dataset
+from data_processor import DataProcessor
 from deepy.utils import FakeGenerator, StreamPickler, global_rand
 
 import logging as loggers
@@ -19,7 +20,10 @@ class OnDiskDataset(Dataset):
     """
 
     def __init__(self, train_path, valid_path=None, test_path=None, train_size=None,
-                 cached=False, post_processing=None, shuffle_memory=False, curriculum=None):
+                 cached=False, post_processing=None, shuffle_memory=False, data_processor=None):
+        """
+        :type data_processor: DataProcessor
+        """
         self._train_path = train_path
         self._valid_path = valid_path
         self._test_path = test_path
@@ -28,48 +32,41 @@ class OnDiskDataset(Dataset):
         self._cached_train_data = None
         self._post_processing = post_processing if post_processing else lambda x: x
         self._shuffle_memory = shuffle_memory
-        self._curriculum = curriculum
-        self._curriculum_count = 0
-        if curriculum and not callable(curriculum):
-            raise Exception("curriculum function must be callable")
-        if curriculum and not cached:
-            raise Exception("curriculum learning needs training data to be cached")
+        self._epoch = 0
+        self._data_processor = data_processor
+        if data_processor and not isinstance(data_processor, DataProcessor):
+            raise Exception("data_processor must be an instance of DataProcessor.")
         if self._cache_on_memory:
             logging.info("Cache on memory")
             self._cached_train_data = list(map(self._post_processing, StreamPickler.load(open(self._train_path))))
             self._train_size = len(self._cached_train_data)
-            # if self._shuffle_memory:
-            #     logging.info("Shuffle on-memory data")
-            #     global_rand.shuffle(self._cached_train_data)
+            if self._shuffle_memory:
+                logging.info("Shuffle on-memory data")
+                global_rand.shuffle(self._cached_train_data)
 
-    def curriculum_train_data(self):
-        self._curriculum_count += 1
-        logging.info("curriculum learning: round {}".format(self._curriculum_count))
-        return self._curriculum(self._cached_train_data, self._curriculum_count)
+    def _process_data(self, split, epoch, dataset):
+        if self._data_processor:
+            return self._data_processor.process(split, epoch, dataset)
+        else:
+            return dataset
 
     def generate_train_data(self):
-        for data in StreamPickler.load(open(self._train_path)):
+        self._epoch += 1
+        data_source = self._cached_train_data if self._cache_on_memory else StreamPickler.load(open(self._train_path))
+        for data in self._process_data('train', self._epoch, data_source):
             yield self._post_processing(data)
 
     def generate_valid_data(self):
-        for data in StreamPickler.load(open(self._valid_path)):
+        data_source = StreamPickler.load(open(self._valid_path))
+        for data in self._process_data('valid', self._epoch, data_source):
             yield self._post_processing(data)
 
     def generate_test_data(self):
-        for data in StreamPickler.load(open(self._test_path)):
+        data_source = StreamPickler.load(open(self._test_path))
+        for data in self._process_data('test', self._epoch, data_source):
             yield self._post_processing(data)
 
     def train_set(self):
-        if self._cache_on_memory:
-            if self._shuffle_memory:
-                logging.info("shuffle on-memory data")
-                global_rand.shuffle(self._cached_train_data)
-            if self._curriculum:
-                if not isinstance(self._curriculum(self._cached_train_data, 1), types.GeneratorType):
-                    raise Exception("Curriculum function must be a generator.")
-                return FakeGenerator(self, "curriculum_train_data")
-            else:
-                return self._cached_train_data
         if not self._train_path:
             return None
         return FakeGenerator(self, "generate_train_data")

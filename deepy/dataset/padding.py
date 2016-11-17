@@ -4,7 +4,7 @@
 import numpy as np
 from deepy.utils import FLOATX
 
-def pad_dataset(subset, side, length):
+def pad_dataset(subset, side="right", length=-1):
     """
     Pad data set to specified length.
     Parameters:

@@ -11,3 +11,5 @@ from seq_mini_batch import SequentialMiniBatches
 from binarized_mnist import BinarizedMnistDataset
 from bunch_seq import BunchSequences
 from ondisk_dataset import OnDiskDataset
+from data_processor import DataProcessor
+from padding import pad_dataset

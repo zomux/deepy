@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from theano.tensor.var import TensorVariable
+
 def convert_to_theano_var(obj):
     """
     Convert neural vars to theano vars.
     :param obj: NeuralVariable or list or dict or tuple
     :return: theano var, test var, tensor found, neural var found
     """
-    from theano.tensor.var import TensorVariable
     from deepy.layers.neural_var import NeuralVariable
     if type(obj) == tuple:
         return tuple(convert_to_theano_var(list(obj)))
@@ -39,6 +40,18 @@ def convert_to_theano_var(obj):
         return obj.tensor, obj.test_tensor, False, True
     elif type(obj) == TensorVariable:
         return obj, obj, True, False
+    elif type(obj) == slice:
+        normal_args = []
+        test_args = []
+        theano_var_found = False
+        neural_var_found = False
+        for arg in [obj.start, obj.stop, obj.step]:
+            normal_var, test_var, tensor_found, neural_found = convert_to_theano_var(arg)
+            normal_args.append(normal_var)
+            test_args.append(test_var)
+            if tensor_found: theano_var_found = True
+            if neural_found: neural_var_found = True
+        return slice(*normal_args), slice(*test_args), theano_var_found, neural_var_found
     else:
         return obj, obj, False, False
 
@@ -74,7 +87,6 @@ def neural_computation(original_func, prefer_tensor=False):
     """
 
     def wrapper(*args, **kwargs):
-
         normal_args, test_args, tensor_found_in_args, neural_found_in_args = convert_to_theano_var(args)
         normal_kwargs, test_kwargs, tensor_found_in_kwargs, neural_found_in_kwargs = convert_to_theano_var(kwargs)
 
@@ -90,10 +102,15 @@ def neural_computation(original_func, prefer_tensor=False):
             # No neural variables are inputted, so output tensors
             return normal_result
         else:
-            # Output neural variables
+            # Output neural variables, auto set output_dim
             test_result = original_func(*test_args, **test_kwargs)
-            return convert_to_neural_var(normal_result, test_result)
-
+            result_var = convert_to_neural_var(normal_result, test_result)
+            if (isinstance(normal_result, TensorVariable) and
+                    hasattr(normal_result.tag, "test_value") and
+                    hasattr(normal_result.tag.test_value, "shape") and
+                    normal_result.tag.test_value.shape):
+                result_var.output_dim = normal_result.tag.test_value.shape[-1]
+            return result_var
     return wrapper
 
 def neural_computation_prefer_tensor(original_func):
