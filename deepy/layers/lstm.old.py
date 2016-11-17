@@ -7,7 +7,7 @@ import numpy as np
 import theano
 import theano.tensor as T
 
-from deepy.core.var import NeuralVariable
+from deepy.core.neural_var import NeuralVariable
 from deepy.utils import build_activation, FLOATX
 from . import NeuralLayer
 

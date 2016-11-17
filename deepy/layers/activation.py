@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from . import NeuralLayer
+from layer import NeuralLayer
 from deepy.utils import build_activation
 
 class Activation(NeuralLayer):

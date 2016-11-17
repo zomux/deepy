@@ -66,7 +66,7 @@ class MyJointTrainingModel(NeuralLayer):
 
 
 if __name__ == '__main__':
-    model = ComputationalGraph(input_dim=28 * 28)
+    model = graph.compile(input_dim=28 * 28)
 
     mnist = MiniBatches(MnistDataset(), batch_size=20)
 

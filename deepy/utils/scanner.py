@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import theano
-from decorations import neural_computation
+
 
 class Scanner(object):
     """

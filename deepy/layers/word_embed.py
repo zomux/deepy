@@ -3,7 +3,7 @@
 
 import theano.tensor as T
 
-from deepy.core.var import NeuralVariable
+from deepy.core.neural_var import NeuralVariable
 from deepy.layers import NeuralLayer
 
 

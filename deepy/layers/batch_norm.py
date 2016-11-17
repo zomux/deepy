@@ -3,7 +3,7 @@
 
 import theano.tensor as T
 
-from . import NeuralLayer
+from layer import NeuralLayer
 
 class BatchNormalization(NeuralLayer):
     """

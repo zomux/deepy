@@ -7,8 +7,10 @@ import logging as loggers
 import numpy as np
 import theano
 
-from deepy.utils import FLOATX, UniformInitializer, neural_computation_prefer_tensor
-from deepy.utils import convert_to_theano_var, build_activation
+from deepy.utils import UniformInitializer
+from deepy.utils import build_activation
+from deepy.core.global_env import env
+from deepy.core.decorations import neural_computation_prefer_tensor, convert_to_theano_var
 
 logging = loggers.getLogger(__name__)
 
@@ -72,7 +74,7 @@ class NeuralLayer(object):
         :type inputs:  list of NeuralVariable
         :return: NeuralVariable
         """
-        from deepy.core.var import NeuralVariable
+        from deepy.core.neural_var import NeuralVariable
         if type(inputs[0]) != NeuralVariable:
             raise SystemError("The input of `compute` must be NeuralVar")
 
@@ -206,7 +208,7 @@ class NeuralLayer(object):
         if not initializer:
             initializer = UniformInitializer()
 
-        weight = theano.shared(initializer.sample(shape).astype(FLOATX), name='{}_{}'.format(self.name, suffix))
+        weight = theano.shared(initializer.sample(shape).astype(env.FLOATX), name='{}_{}'.format(self.name, suffix))
 
         logging.info('create weight W_%s: %s', suffix, str(shape))
         return weight
@@ -216,11 +218,11 @@ class NeuralLayer(object):
             shape = (output_n, )
         bs =  np.ones(shape)
         bs *= value
-        bias = theano.shared(bs.astype(FLOATX), name='{}_{}'.format(self.name, suffix))
+        bias = theano.shared(bs.astype(env.FLOATX), name='{}_{}'.format(self.name, suffix))
         logging.info('create bias B_%s: %s', suffix, str(shape))
         return bias
 
-    def create_scalar(self, name="S", value=0, dtype=FLOATX):
+    def create_scalar(self, name="S", value=0, dtype=env.FLOATX):
         bs = np.array(0)
         bs += value
         v = theano.shared(bs.astype(dtype), name='{}_{}'.format(self.name, name))
@@ -228,7 +230,7 @@ class NeuralLayer(object):
         logging.info('create scalar %s', name)
         return v
 
-    def create_vector(self, n, name="V", dtype=FLOATX):
+    def create_vector(self, n, name="V", dtype=env.FLOATX):
         bs =  np.zeros(n)
         v = theano.shared(bs.astype(dtype), name='{}_{}'.format(self.name, name))
 
@@ -237,7 +239,7 @@ class NeuralLayer(object):
 
     def create_matrix(self, m, n, name="M"):
 
-        matrix = theano.shared(np.zeros((m, n)).astype(FLOATX), name="{}_{}".format(self.name, name))
+        matrix = theano.shared(np.zeros((m, n)).astype(env.FLOATX), name="{}_{}".format(self.name, name))
 
         logging.info('create matrix %s: %d x %d', name, m, n)
         return matrix

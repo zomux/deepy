@@ -4,7 +4,8 @@
 import numpy as np
 import theano.tensor as T
 from recurrent import RecurrentLayer
-from deepy.utils import neural_computation, FLOATX
+from deepy.core.decorations import neural_computation
+from deepy.core.global_env import env
 
 
 class LSTM(RecurrentLayer):
@@ -65,7 +66,7 @@ class LSTM(RecurrentLayer):
         self.W_f = self.create_weight(summed_input_dim, self.hidden_size, "wf", initializer=self.outer_init)
         self.U_f = self.create_weight(self.hidden_size, self.hidden_size, "uf", initializer=self.inner_init)
         self.b_f = self.create_bias(self.hidden_size, "f")
-        self.b_f.set_value(np.ones((self.hidden_size,) * self._init_forget_bias, dtype=FLOATX))
+        self.b_f.set_value(np.ones((self.hidden_size,) * self._init_forget_bias, dtype=env.FLOATX))
 
         self.W_c = self.create_weight(summed_input_dim, self.hidden_size, "wc", initializer=self.outer_init)
         self.U_c = self.create_weight(self.hidden_size, self.hidden_size, "uc", initializer=self.inner_init)

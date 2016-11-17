@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from layer import NeuralLayer
+from deepy.layers.layer import NeuralLayer
 
 
 class Block(NeuralLayer):
@@ -9,8 +9,8 @@ class Block(NeuralLayer):
     Create a block, which contains the parameters of many connected layers.
     """
 
-    def __init__(self):
-        super(Block, self).__init__("block")
+    def __init__(self, name=None):
+        super(Block, self).__init__(name if name else "block")
         self.layers = []
         self.fixed = False
 
@@ -48,15 +48,12 @@ class Block(NeuralLayer):
     def compute_tensor(self, x):
         return x
 
-    def compute_tensor(self, x):
-        return x
-
     def load_params(self, path, exclude_free_params=False):
         """
         Load parameters to the block.
         """
-        from deepy.networks.comp_graph import ComputationalGraph
-        model = ComputationalGraph(blocks=[self])
+        from deepy.core.comp_graph import ComputationalGraph
+        model = graph.compile(blocks=[self])
         model.load_params(path, exclude_free_params=exclude_free_params)
 
     @property

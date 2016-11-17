@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from . import NeuralNetwork
+from deepy.networks import NeuralNetwork
 
 
 class ComputationalGraph(NeuralNetwork):
@@ -62,5 +62,3 @@ class ComputationalGraph(NeuralNetwork):
     @property
     def test_cost(self):
         return self.test_output
-
-graph = ComputationalGraph

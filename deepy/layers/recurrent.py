@@ -6,8 +6,9 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 import theano.tensor as T
 
-from deepy.core.var import NeuralVariable
-from deepy.utils import build_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner, neural_computation
+from deepy.core.neural_var import NeuralVariable
+from deepy.core.decorations import neural_computation
+from deepy.utils import build_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner
 from . import NeuralLayer
 
 OUTPUT_TYPES = ["sequence", "one"]

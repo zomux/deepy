@@ -18,7 +18,7 @@ model_path = os.path.join(os.path.dirname(__file__), "models", "tutorial3.gz")
 
 if __name__ == '__main__':
 
-    model = ComputationalGraph(input_dim=28 * 28)
+    model = graph.compile(input_dim=28 * 28)
 
     parameters = model.parameters
     gradients = T.grad(model.output, parameters)

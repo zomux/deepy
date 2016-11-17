@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from concat import Concatenate
 from theano.ifelse import ifelse as theano_ifelse
-from deepy.utils.decorations import neural_computation
+
+from concat import Concatenate
+from deepy.core.decorations import neural_computation
+
 
 def concatenate(vars, axis=-1):
     """

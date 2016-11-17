@@ -4,7 +4,7 @@
 import numpy as np
 import theano.tensor as T
 from recurrent import RecurrentLayer
-from deepy.utils import neural_computation, FLOATX
+from deepy.core import neural_computation, env
 
 class PeepholeLSTM(RecurrentLayer):
     """
@@ -67,7 +67,7 @@ class PeepholeLSTM(RecurrentLayer):
 
         self.b_i = self.create_bias(self.hidden_size, "bi")
         self.b_f = self.create_bias(self.hidden_size, "bf")
-        self.b_f.set_value(np.ones((self.hidden_size,) * self._init_forget_bias, dtype=FLOATX))
+        self.b_f.set_value(np.ones((self.hidden_size,) * self._init_forget_bias, dtype=env.FLOATX))
         self.b_c = self.create_bias(self.hidden_size, "bc")
         self.b_o = self.create_bias(self.hidden_size, "bo")
 

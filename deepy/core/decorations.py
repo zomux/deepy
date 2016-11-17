@@ -9,7 +9,7 @@ def convert_to_theano_var(obj):
     :param obj: NeuralVariable or list or dict or tuple
     :return: theano var, test var, tensor found, neural var found
     """
-    from deepy.core.var import NeuralVariable
+    from deepy.core.neural_var import NeuralVariable
     if type(obj) == tuple:
         return tuple(convert_to_theano_var(list(obj)))
     if type(obj) == list:
@@ -58,7 +58,7 @@ def convert_to_neural_var(obj):
     :return:
     """
     from theano.tensor.var import TensorVariable
-    from deepy.core.var import NeuralVariable
+    from deepy.core.neural_var import NeuralVariable
     if type(obj) == list:
         return [convert_to_neural_var(item) for item in obj]
     elif type(obj) == tuple:

@@ -12,26 +12,7 @@ from functions import FLOATX
 
 logging = loggers.getLogger(__name__)
 
-def var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX):
-    """
-    A shortcut of create_var
-    """
-    return create_var(theano_tensor, dim, test_shape, test_dtype)
 
-def create_var(theano_tensor, dim=0, test_shape=None, test_dtype=FLOATX):
-    """
-    Wrap a Theano tensor into the variable for defining neural network.
-    :param dim: last dimension of tensor, 0 indicates that the last dimension is flexible
-    :rtype: TensorVar
-    """
-    from deepy.core.var import NeuralVariable
-    var = NeuralVariable(theano_tensor, dim=dim)
-    if test_shape:
-        if type(test_shape) != list and type(test_shape) != tuple:
-            var.set_test_value(test_shape)
-        else:
-            var.set_test_value(np.random.rand(*test_shape).astype(test_dtype))
-    return var
 
 def fill_parameters(path, networks, exclude_free_params=False, check_parameters=False):
         """

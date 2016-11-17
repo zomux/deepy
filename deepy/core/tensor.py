@@ -4,8 +4,8 @@
 import theano.tensor as T
 from theano import tensor as theano_tensor
 
-from deepy.utils.decorations import neural_computation
-from var import NeuralVariable
+from deepy.core.decorations import neural_computation
+from neural_var import NeuralVariable
 
 
 class NeuralTensorNet(object):

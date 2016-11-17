@@ -12,3 +12,4 @@ from dataset import *
 from multigpu import *
 from layers.functions import *
 from deepy.core.tensor import tensor
+from core import graph, env

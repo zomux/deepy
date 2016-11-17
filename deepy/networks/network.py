@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import logging as loggers
-import gzip
 import cPickle as pickle
+import gzip
+import logging as loggers
 import os
 from threading import Thread
 
-import numpy as np
-import theano.tensor as T
-import theano
 import filelock
+import numpy as np
+import theano
+import theano.tensor as T
 
 import deepy
-from deepy.layers.layer import NeuralLayer
 from deepy.layers.block import Block
+from deepy.layers.layer import NeuralLayer
 from deepy.utils import dim_to_var, TrainLogger
 
 logging = loggers.getLogger("network")
