@@ -82,11 +82,11 @@ class NeuralNetwork(object):
         if layer.name:
             layer.name += "%d" % (len(self.layers) + 1)
         if not self.layers:
-            layer.initialize(self.input_dim, no_prepare=no_setup)
+            layer.init(self.input_dim, no_prepare=no_setup)
         else:
-            layer.initialize(self.layers[-1].output_dim, no_prepare=no_setup)
+            layer.init(self.layers[-1].output_dim, no_prepare=no_setup)
         self._output = layer.compute_tensor(self._output)
-        self._test_output = layer.compute_test_tesnor(self._test_output)
+        self._test_output = layer.compute_tensor(self._test_output)
         self._hidden_outputs.append(self._output)
         self.register_layer(layer)
         self.layers.append(layer)

@@ -18,44 +18,39 @@ def convert_to_theano_var(obj):
         test_list = []
         theano_var_found = False
         neural_var_found = False
-        for normal_var, test_var, tensor_found, neural_found in unpacked_list:
+        for normal_var, tensor_found, neural_found in unpacked_list:
             normal_list.append(normal_var)
-            test_list.append(test_var)
             if tensor_found: theano_var_found = True
             if neural_found: neural_var_found = True
-        return normal_list, test_list, theano_var_found, neural_var_found
+        return normal_list, theano_var_found, neural_var_found
     elif type(obj) == dict:
         normal_map = {}
-        test_map = {}
         theano_var_found = False
         neural_var_found = False
         for key in obj:
-            normal_var, test_var, tensor_found, neural_found = convert_to_theano_var(obj[key])
+            normal_var, tensor_found, neural_found = convert_to_theano_var(obj[key])
             normal_map[key] = normal_var
-            test_map[key] = test_var
             if tensor_found: theano_var_found = True
             if neural_found: neural_var_found = True
-        return normal_map, test_map, theano_var_found, neural_var_found
+        return normal_map, theano_var_found, neural_var_found
     elif type(obj) == NeuralVariable:
-        return obj.tensor, obj.test_tensor, False, True
+        return obj.tensor, False, True
     elif type(obj) == TensorVariable:
-        return obj, obj, True, False
+        return obj, True, False
     elif type(obj) == slice:
         normal_args = []
-        test_args = []
         theano_var_found = False
         neural_var_found = False
         for arg in [obj.start, obj.stop, obj.step]:
-            normal_var, test_var, tensor_found, neural_found = convert_to_theano_var(arg)
+            normal_var, tensor_found, neural_found = convert_to_theano_var(arg)
             normal_args.append(normal_var)
-            test_args.append(test_var)
             if tensor_found: theano_var_found = True
             if neural_found: neural_var_found = True
-        return slice(*normal_args), slice(*test_args), theano_var_found, neural_var_found
+        return slice(*normal_args), theano_var_found, neural_var_found
     else:
-        return obj, obj, False, False
+        return obj, False, False
 
-def convert_to_neural_var(obj, test_obj):
+def convert_to_neural_var(obj):
     """
     Convert object and a test object into neural var.
     :param obj: tensor or list or dict or tuple
@@ -65,16 +60,16 @@ def convert_to_neural_var(obj, test_obj):
     from theano.tensor.var import TensorVariable
     from deepy.layers.neural_var import NeuralVariable
     if type(obj) == list:
-        return [convert_to_neural_var(*item) for item in zip(obj, test_obj)]
+        return [convert_to_neural_var(item) for item in obj]
     elif type(obj) == tuple:
-        return tuple(convert_to_neural_var(list(obj), list(test_obj)))
+        return tuple(convert_to_neural_var(list(obj)))
     elif type(obj) == dict:
         merged_map = {}
         for key in obj:
-            merged_map[key] = convert_to_neural_var(obj[key], test_obj[key])
+            merged_map[key] = convert_to_neural_var(obj[key])
         return merged_map
     elif type(obj) == TensorVariable:
-        return NeuralVariable(obj, test_obj, 0)
+        return NeuralVariable(obj)
     else:
         return obj
 
@@ -87,8 +82,8 @@ def neural_computation(original_func, prefer_tensor=False):
     """
 
     def wrapper(*args, **kwargs):
-        normal_args, test_args, tensor_found_in_args, neural_found_in_args = convert_to_theano_var(args)
-        normal_kwargs, test_kwargs, tensor_found_in_kwargs, neural_found_in_kwargs = convert_to_theano_var(kwargs)
+        normal_args, tensor_found_in_args, neural_found_in_args = convert_to_theano_var(args)
+        normal_kwargs, tensor_found_in_kwargs, neural_found_in_kwargs = convert_to_theano_var(kwargs)
 
         tensor_found = tensor_found_in_args or tensor_found_in_kwargs
         neural_found = neural_found_in_args or neural_found_in_kwargs
@@ -103,8 +98,7 @@ def neural_computation(original_func, prefer_tensor=False):
             return normal_result
         else:
             # Output neural variables, auto set output_dim
-            test_result = original_func(*test_args, **test_kwargs)
-            result_var = convert_to_neural_var(normal_result, test_result)
+            result_var = convert_to_neural_var(normal_result)
             if (isinstance(normal_result, TensorVariable) and
                     hasattr(normal_result.tag, "test_value") and
                     hasattr(normal_result.tag.test_value, "shape") and

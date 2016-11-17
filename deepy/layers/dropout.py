@@ -23,7 +23,7 @@ class Dropout(NeuralLayer):
             x *= binomial_mask
         return x
 
-    def compute_test_tesnor(self, x):
+    def compute_tensor(self, x):
         if self.p > 0:
             x *= (1.0 - self.p)
         return x

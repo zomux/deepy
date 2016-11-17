@@ -23,7 +23,7 @@ class AttentionLayer(NeuralLayer):
         self.gaussian_std = std
         super(AttentionLayer, self).__init__(10, activation)
 
-    def initialize(self, config, vars, x, input_n, id="UNKNOWN"):
+    def init(self, config, vars, x, input_n, id="UNKNOWN"):
         self._config = config
         self._vars = vars
         self.input_n = input_n

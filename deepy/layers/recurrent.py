@@ -138,7 +138,7 @@ class RecurrentLayer(NeuralLayer):
         if return_all_states:
             state_map = {}
             for k in result_var.tensor:
-                state_map[k] = NeuralVariable(result_var.tensor[k], result_var.test_tensor[k], self.output_dim)
+                state_map[k] = NeuralVariable(result_var.tensor[k], self.output_dim)
             return state_map
         else:
             return result_var

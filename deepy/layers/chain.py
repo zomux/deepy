@@ -53,7 +53,7 @@ class Chain(NeuralLayer):
     def compute_tensor(self, x):
         return self._output(x, False)
 
-    def compute_test_tesnor(self, x):
+    def compute_tensor(self, x):
         return self._output(x, True)
 
     def _output(self, x, test):

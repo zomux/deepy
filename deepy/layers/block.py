@@ -48,7 +48,7 @@ class Block(NeuralLayer):
     def compute_tensor(self, x):
         return x
 
-    def compute_test_tesnor(self, x):
+    def compute_tensor(self, x):
         return x
 
     def load_params(self, path, exclude_free_params=False):

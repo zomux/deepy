@@ -34,7 +34,7 @@ class ClassOutputLayer(NeuralLayer):
     def prepare(self):
         # Output layers
         self.output_layer = Chain(self.input_dim).stack(Dense(self.output_size * self.class_size))
-        self.softmax_layer = Softmax().initialize(input_dim=self.output_size)
+        self.softmax_layer = Softmax().init(input_dim=self.output_size)
 
         self.class_layer = Chain(self.input_dim).stack(Dense(self.class_size),
                                                         Softmax3D())

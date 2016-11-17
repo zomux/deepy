@@ -45,12 +45,6 @@ class NeuralLayer(object):
 
     def init(self, input_dim=0, input_dims=None, no_prepare=False):
         """
-        A short version for initialize function.
-        """
-        return self.initialize(input_dim, input_dims, no_prepare)
-
-    def initialize(self, input_dim=0, input_dims=None, no_prepare=False):
-        """
         Initialize the layer.
         :param no_prepare: avoid calling preparation function
         """
@@ -84,32 +78,23 @@ class NeuralLayer(object):
 
         dims = [t.dim() for t in inputs]
         if len(inputs) == 1:
-            self.initialize(input_dim=dims[0])
+            self.init(input_dim=dims[0])
         else:
-            self.initialize(input_dims=dims)
+            self.init(input_dims=dims)
         # convert kwargs
-        train_kwargs, test_kwargs, _, _ = convert_to_theano_var(kwargs)
+        train_kwargs, _, _ = convert_to_theano_var(kwargs)
 
         output = self.compute_tensor(*[t.tensor for t in inputs], **train_kwargs)
-        test_output = self.compute_test_tesnor(*[t.test_tensor for t in inputs], **test_kwargs)
 
         if type(output) != list and type(output) != tuple:
-            return NeuralVariable(output, test_output, self.output_dim)
+            return NeuralVariable(output, dim=self.output_dim)
         else:
-            return [NeuralVariable(*item) for item in zip(output, test_output, self.output_dims)]
+            return [NeuralVariable(*item) for item in zip(output, self.output_dims)]
 
     def prepare(self):
         """
         Prepare function will be called after connected.
         """
-        return self.setup()
-
-    def setup(self):
-        """
-        !!! DEPRECATED !!!
-        Setup function will be called after connected.
-        """
-        pass
 
     @neural_computation_prefer_tensor
     def compute_tensor(self, *args, **kwargs):
@@ -117,23 +102,6 @@ class NeuralLayer(object):
         Compute with tensors in Theano.
         """
         raise NotImplementedError("output function of '%s' is not implemented" % self.name)
-
-    @neural_computation_prefer_tensor
-    def compute_test_tesnor(self, *args, **kwargs):
-        """
-        Compute with tensors in Theano in test time.
-        """
-        return self.compute_tensor(*args, **kwargs)
-
-    def compute_flexible_tensor(self, x, test=False):
-        """
-        Deprecated.
-        Compute with tensors in Theano, with a parameter to switch test or not.
-        """
-        if test:
-            return self.compute_test_tesnor(x)
-        else:
-            return self.compute_tensor(x)
 
     def belongs_to(self, block):
         """

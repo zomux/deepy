@@ -28,7 +28,7 @@ class ComputationalGraph(NeuralNetwork):
             self.stack(cost)
         if output:
             if cost:
-                self._test_output = output.test_tensor
+                self._test_output = output.tensor
             else:
                 self.stack(output)
         if blocks:
@@ -40,7 +40,7 @@ class ComputationalGraph(NeuralNetwork):
         if outputs:
             if not output and not cost:
                 self._test_output = None
-            self._test_outputs = [o.test_tensor for o in outputs]
+            self._test_outputs = [o.tensor for o in outputs]
 
         self.output_map = output_map if output_map else {}
 
@@ -52,7 +52,7 @@ class ComputationalGraph(NeuralNetwork):
                     raise Exception("monitors shall be tuples of (name, var).")
                 name, var = monitor
                 self.training_monitors.append((name, var.tensor))
-                self.testing_monitors.append((name, var.test_tensor))
+                self.testing_monitors.append((name, var.tensor))
 
 
     @property
