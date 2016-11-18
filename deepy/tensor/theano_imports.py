@@ -1,7 +1,7 @@
 
 # This file is automatically created, never edit it directly.
 
-from wrapper import deepy_tensor
+from wrapper import deepy_tensor, deepy_nnet
 
     
 def all(*args, **kwargs):
