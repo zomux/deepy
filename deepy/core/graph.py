@@ -69,6 +69,14 @@ class GraphBuilder(object):
         """
         return Scanner(func, sequences, outputs_info, non_sequences, **kwargs).compute()
 
+    def get_trainer(self, model, config=None, method='sgd'):
+        """
+        Get a trainer to optimize given model.
+        :rtype: deepy.trainers.GeneralNeuralTrainer
+        """
+        from deepy.trainers import GeneralNeuralTrainer
+        return GeneralNeuralTrainer(model, config=config, method=method)
+
     @neural_computation
     def cross_entropy_cost(self, y, target_index):
         return CrossEntropyCost(y, target_index).get()
