@@ -7,6 +7,8 @@ import theano.tensor as T
 import logging as loggers
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 from theano.tensor.shared_randomstreams import RandomStreams as SharedRandomStreams
+from deepy.utils.initializers import UniformInitializer
+
 logging = loggers.getLogger(__name__)
 
 class GlobalEnvironment(object):
@@ -31,6 +33,7 @@ class GlobalEnvironment(object):
         self._numpy_rand = np.random.RandomState(seed=self._seed)
         self._theano_rand = RandomStreams(seed=self._seed)
         self._shared_rand = SharedRandomStreams(seed=self._seed)
+        self._default_initializer = UniformInitializer()
 
     @property
     def numpy_rand(self):
@@ -43,6 +46,13 @@ class GlobalEnvironment(object):
     @property
     def shared_rand(self):
         return self._shared_rand
+
+    @property
+    def default_initializer(self):
+        return self._default_initializer
+
+    def set_default_initializer(self, initializer):
+        self._default_initializer = initializer
 
 
 if "env" not in globals():

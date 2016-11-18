@@ -64,6 +64,9 @@ class GraphBuilder(object):
 
     @neural_computation
     def scan(self, func, sequences=None, outputs_info=None, non_sequences=None, **kwargs):
+        """
+        A loop function, the usage is identical with the theano one.
+        """
         return Scanner(func, sequences, outputs_info, non_sequences, **kwargs).compute()
 
     @neural_computation

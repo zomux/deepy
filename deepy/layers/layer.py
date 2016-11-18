@@ -206,7 +206,7 @@ class NeuralLayer(object):
             shape = (input_n, output_n)
 
         if not initializer:
-            initializer = UniformInitializer()
+            initializer = env.default_initializer
 
         weight = theano.shared(initializer.sample(shape).astype(env.FLOATX), name='{}_{}'.format(self.name, suffix))
 
