@@ -30,14 +30,14 @@ def softmax(x):
     z = T.exp(x.T - x.T.max(axis=0))
     return (z / z.sum(axis=0)).T
 
-def build_activation(act=None):
+def get_activation(act=None):
         def compose(a, b):
             c = lambda z: b(a(z))
             c.__theanets_name__ = '%s(%s)' % (b.__theanets_name__, a.__theanets_name__)
             return c
         if '+' in act:
             return functools.reduce(
-                compose, (build_activation(a) for a in act.split('+')))
+                compose, (get_activation(a) for a in act.split('+')))
         options = {
             'tanh': T.tanh,
             'linear': lambda z: z,

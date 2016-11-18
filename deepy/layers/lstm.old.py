@@ -8,7 +8,7 @@ import theano
 import theano.tensor as T
 
 from deepy.core.neural_var import NeuralVariable
-from deepy.utils import build_activation, FLOATX
+from deepy.utils import get_activation, FLOATX
 from . import NeuralLayer
 
 OUTPUT_TYPES = ["sequence", "one"]
@@ -174,8 +174,8 @@ class LSTM(NeuralLayer):
         self._setup_functions()
 
     def _setup_functions(self):
-        self._inner_act = build_activation(self._inner_activation)
-        self._outer_act = build_activation(self._outer_activation)
+        self._inner_act = get_activation(self._inner_activation)
+        self._outer_act = get_activation(self._outer_activation)
 
     def _setup_params(self):
         self.output_dim = self._hidden_size

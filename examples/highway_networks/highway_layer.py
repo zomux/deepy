@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from deepy.layers import NeuralLayer
-from deepy.utils import build_activation
+from deepy.utils import get_activation
 import theano.tensor as T
 
 class HighwayLayer(NeuralLayer):
@@ -19,7 +19,7 @@ class HighwayLayer(NeuralLayer):
 
     def prepare(self):
         self.output_dim = self.input_dim
-        self._act = build_activation(self.activation)
+        self._act = get_activation(self.activation)
         self.W_h = self.create_weight(self.input_dim, self.input_dim, "h", initializer=self.init)
         self.W_t = self.create_weight(self.input_dim, self.input_dim, "t", initializer=self.init)
         self.B_h = self.create_bias(self.input_dim, "h")

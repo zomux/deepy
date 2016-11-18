@@ -5,7 +5,7 @@ import numpy as np
 import theano.tensor as T
 from recurrent import RecurrentLayer
 from deepy.core.decorations import neural_computation
-from deepy.core.global_env import env
+from deepy.core.env import env
 
 
 class LSTM(RecurrentLayer):

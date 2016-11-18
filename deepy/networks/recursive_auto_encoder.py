@@ -7,7 +7,7 @@ import logging as loggers
 import theano
 import theano.tensor as T
 
-from deepy.utils import build_activation
+from deepy.utils import get_activation
 from deepy.trainers import THEANO_LINKER
 from deepy.layers.layer import NeuralLayer
 
@@ -145,8 +145,8 @@ class RecursiveAutoEncoderCore(NeuralLayer):
 
     def _setup_functions(self):
         self._assistive_params = []
-        self._activation_func = build_activation(self.activation)
-        self._softmax_func = build_activation('softmax')
+        self._activation_func = get_activation(self.activation)
+        self._softmax_func = get_activation('softmax')
 
     def _setup_params(self):
         if not self.rep_dim or self.rep_dim < 0:

@@ -22,7 +22,7 @@ Consider sampled position as a constant in T.grad.
 Runs with theano 0.6.
 
 ```python
-_tanh = nnprocessors.build_activation("tanh")
+_tanh = nnprocessors.get_activation("tanh")
 
 wl = theano.shared(np.array([[0.2,0.3], [0.1,0.3]], dtype="float32"))
 h_t = T.constant(np.array([0.1,0.2]))

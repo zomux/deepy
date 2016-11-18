@@ -3,7 +3,7 @@
 
 from inspect import getargspec
 
-from global_env import env
+from env import env
 
 
 class GraphBuilder(object):
@@ -48,8 +48,6 @@ class GraphBuilder(object):
         arg_vals = [locals()[k] for k in args]
         kwargs = dict(zip(args, arg_vals))
         return ComputationalGraph(**kwargs)
-
-
 
 
 if "graph" not in globals():

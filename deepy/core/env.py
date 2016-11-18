@@ -3,7 +3,6 @@
 
 import os
 import numpy as np
-import theano
 import theano.tensor as T
 import logging as loggers
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
@@ -44,6 +43,7 @@ class GlobalEnvironment(object):
     @property
     def shared_rand(self):
         return self._shared_rand
+
 
 if "env" not in globals():
     env = GlobalEnvironment()

@@ -9,7 +9,7 @@ import theano.tensor as T
 from theano.tensor.nnet import conv
 from theano.tensor.signal import downsample
 
-from deepy.utils import build_activation, UniformInitializer
+from deepy.utils import get_activation, UniformInitializer
 from deepy.layers.layer import NeuralLayer
 
 
@@ -68,7 +68,7 @@ class Convolution(NeuralLayer):
         return output
 
     def _setup_functions(self):
-        self._activation_func = build_activation(self.activation)
+        self._activation_func = get_activation(self.activation)
 
     def _setup_params(self):
         self.W_conv = self.create_weight(suffix="conv", initializer=self.initializer, shape=self.filter_shape)

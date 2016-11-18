@@ -8,7 +8,7 @@ import theano.tensor as T
 
 from deepy.core.neural_var import NeuralVariable
 from deepy.core.decorations import neural_computation
-from deepy.utils import build_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner
+from deepy.utils import get_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner
 from . import NeuralLayer
 
 OUTPUT_TYPES = ["sequence", "one"]
@@ -30,8 +30,8 @@ class RecurrentLayer(NeuralLayer):
         self.hidden_size = hidden_size
         self._gate_activation = gate_activation
         self._activation = activation
-        self.gate_activate = build_activation(self._gate_activation)
-        self.activate = build_activation(self._activation)
+        self.gate_activate = get_activation(self._gate_activation)
+        self.activate = get_activation(self._activation)
         self._input_type = input_type
         self._output_type = output_type
         self.inner_init = inner_init if inner_init else OrthogonalInitializer()

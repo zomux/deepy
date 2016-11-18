@@ -8,8 +8,8 @@ import numpy as np
 import theano
 
 from deepy.utils import UniformInitializer
-from deepy.utils import build_activation
-from deepy.core.global_env import env
+from deepy.utils import get_activation
+from deepy.core.env import env
 from deepy.core.decorations import neural_computation_prefer_tensor, convert_to_theano_var
 
 logging = loggers.getLogger(__name__)
@@ -245,7 +245,7 @@ class NeuralLayer(object):
         return matrix
 
     def activation(self, name):
-        return build_activation(name)
+        return get_activation(name)
 
     def callback_forward_propagation(self):
         pass

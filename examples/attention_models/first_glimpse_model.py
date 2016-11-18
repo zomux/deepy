@@ -9,7 +9,7 @@ import theano
 from theano.tensor.shared_randomstreams import RandomStreams
 
 from deepy import NeuralClassifier
-from deepy.utils import build_activation, disconnected_grad
+from deepy.utils import get_activation, disconnected_grad
 from deepy.utils.functions import FLOATX
 from deepy.layers import NeuralLayer
 from examples.attention_models.gaussian_sampler import SampleMultivariateGaussian
@@ -149,9 +149,9 @@ class FirstGlimpseLayer(NeuralLayer):
         return a_ts[-1].reshape((1,10))
 
     def _setup_functions(self):
-        self._relu = build_activation("tanh")
-        self._tanh = build_activation("tanh")
-        self._softmax = build_activation("softmax")
+        self._relu = get_activation("tanh")
+        self._tanh = get_activation("tanh")
+        self._softmax = get_activation("softmax")
         self.output_func = self._output_func()
 
     def _setup_params(self):
