@@ -31,7 +31,12 @@ class GraphBuilder(object):
         :rtype: TensorVar
         """
         from deepy.core.neural_var import NeuralVariable
-        var = NeuralVariable(theano_tensor, dim=dim)
+        if isinstance(theano_tensor, NeuralVariable):
+            var = theano_tensor
+            if dim != 0:
+                var.output_dim = dim
+        else:
+            var = NeuralVariable(theano_tensor, dim=dim)
         if test_shape:
             if type(test_shape) != list and type(test_shape) != tuple:
                 var.set_test_value(test_shape)

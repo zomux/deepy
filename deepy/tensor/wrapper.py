@@ -5,7 +5,7 @@ import theano.tensor as T
 from theano import tensor as theano_tensor
 
 from deepy.core.decorations import neural_computation
-from neural_var import NeuralVariable
+from deepy.core.neural_var import NeuralVariable
 
 
 class NeuralTensorNet(object):
@@ -39,5 +39,5 @@ class NeuralTensor(object):
 
 
 deepy_tensor = NeuralTensor()
-tensor = NT = deepy_tensor
+tensor = deepy_tensor
 

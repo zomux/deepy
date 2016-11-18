@@ -3,8 +3,9 @@
 
 import theano
 
-from . import NeuralLayer
+from deepy.core import runtime
 from deepy.utils import global_theano_rand, FLOATX
+from layer import NeuralLayer
 
 class Dropout(NeuralLayer):
 
@@ -20,10 +21,5 @@ class Dropout(NeuralLayer):
             binomial_mask = global_theano_rand.binomial(x.shape, p=1-self.p, dtype=FLOATX)
             theano.config.compute_test_value = backup_test_value_setting
             # apply dropout
-            x *= binomial_mask
-        return x
-
-    def compute_tensor(self, x):
-        if self.p > 0:
-            x *= (1.0 - self.p)
+            x = runtime.iftrain(x * binomial_mask, x * (1.0 - self.p))
         return x
