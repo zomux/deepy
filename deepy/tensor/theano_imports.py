@@ -808,10 +808,6 @@ def python_complex(*args, **kwargs):
     return deepy_tensor.python_complex(*args, **kwargs)
 
     
-def concatenate(*args, **kwargs):
-    return deepy_tensor.concatenate(*args, **kwargs)
-
-    
 def cmatrix(*args, **kwargs):
     return deepy_tensor.cmatrix(*args, **kwargs)
 

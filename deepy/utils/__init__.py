@@ -5,7 +5,6 @@ from activations import *
 from costs import *
 from detect_nan import detect_nan, DETECT_NAN_MODE
 from dim_to_var import dim_to_var
-from elastic_distortion import elastic_distortion
 from fake_generator import FakeGenerator
 from functions import *
 from initializers import *

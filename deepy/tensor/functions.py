@@ -3,10 +3,10 @@
 
 from theano.ifelse import ifelse as theano_ifelse
 
-from concat import Concatenate
+from deepy.layers.concat import Concatenate
 from deepy.core.decorations import neural_computation
 
-
+@neural_computation
 def concatenate(vars, axis=-1):
     """
     A utility function of concatenate.
