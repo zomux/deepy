@@ -3,7 +3,7 @@
 import theano
 from theano import tensor as T
 
-from deepy import FLOATX
+from deepy.core.env import FLOATX
 
 
 def monitor_var_sum(value, name="", disabled=False):

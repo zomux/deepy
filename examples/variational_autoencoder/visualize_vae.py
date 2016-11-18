@@ -4,7 +4,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from deepy import *
+from deepy.import_all import *
 from train_vae import create_model
 
 viz_path = os.path.join(os.path.dirname(__file__), "visualization.png")

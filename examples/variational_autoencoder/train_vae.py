@@ -4,7 +4,7 @@
 import logging
 logging.basicConfig(level=logging.INFO)
 
-from deepy import *
+from deepy.import_all import *
 from variational_autoencoder import VariationalAutoEncoder
 
 LATENT_DIM = 2

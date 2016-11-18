@@ -37,7 +37,7 @@ From now on, you are going to write python codes for defining a neural network.
 First import everything from *deepy*.
 
 ```
-from deepy import *
+from deepy.import_all import *
 ```
 
 Suppose you want to design a multi-layer feed-forward network to classify MNIST numbers.
