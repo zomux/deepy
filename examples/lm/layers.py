@@ -5,7 +5,7 @@ import numpy as np
 import theano
 import theano.tensor as T
 from deepy.layers import NeuralLayer, Softmax3D, Softmax, Dense, Chain
-from deepy.utils import CrossEntropyCost
+from deepy.core import CrossEntropyCost
 
 from cost import LMCost
 

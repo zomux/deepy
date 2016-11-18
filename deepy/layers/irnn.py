@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from . import RNN
-from deepy.utils import GaussianInitializer, IdentityInitializer, FLOATX
+from deepy.utils import GaussianInitializer, IdentityInitializer
+from deepy.core.env import FLOATX
 
 MAX_IDENTITY_VALUE = 0.99
 MIN_IDENTITY_VALUE = 0.0

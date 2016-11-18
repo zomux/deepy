@@ -42,7 +42,7 @@ if __name__ == '__main__':
                 Softmax())
 
 
-    trainer = MomentumTrainer(model, {"learning_rate": shared_scalar(0.01),
+    trainer = MomentumTrainer(model, {"learning_rate": graph.shared(0.01),
                                       "momentum": 0.5})
 
     annealer = ExponentialLearningRateAnnealer(debug=True)

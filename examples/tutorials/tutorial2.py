@@ -7,10 +7,10 @@ logging.basicConfig(level=logging.INFO)
 import theano.tensor as T
 
 from deepy.dataset import MnistDataset, MiniBatches
-from deepy.networks import ComputationalGraph
+from deepy.core.comp_graph import ComputationalGraph
 from deepy.layers import Dense, Softmax, NeuralLayer, Chain
 from deepy.trainers import MomentumTrainer, LearningRateAnnealer
-from deepy.utils import AutoEncoderCost, CrossEntropyCost, ErrorRateCost
+from deepy.core import AutoEncoderCost, CrossEntropyCost, ErrorRateCost
 
 
 model_path = os.path.join(os.path.dirname(__file__), "models", "tutorial2.gz")

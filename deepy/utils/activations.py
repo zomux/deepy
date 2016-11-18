@@ -7,8 +7,7 @@ import functools
 import theano.tensor as T
 from theano.tensor.shared_randomstreams import RandomStreams
 
-from deepy.utils.functions import FLOATX
-
+from deepy.core.env import FLOATX
 
 theano_rng = RandomStreams(seed=3)
 

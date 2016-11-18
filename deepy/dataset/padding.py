@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from deepy.utils import FLOATX
+from deepy.core.env import FLOATX
 
 def pad_dataset(subset, side="right", length=-1):
     """

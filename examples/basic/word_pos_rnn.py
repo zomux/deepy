@@ -9,7 +9,7 @@ from deepy.dataset import SequentialDataset, MiniBatches
 from deepy.networks import NeuralClassifier
 from deepy.layers import RNN, Dense, Softmax
 from deepy.trainers import SGDTrainer, LearningRateAnnealer
-from deepy.utils import FLOATX
+from deepy.core.env import FLOATX
 
 WORD_POS_RESOURCE = os.path.abspath(os.path.dirname(__file__)) + os.sep + "resources/word_pos.txt"
 CLASSES = ["N", "V", "ADJ", "ADV"]

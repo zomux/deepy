@@ -47,3 +47,5 @@ class GlobalEnvironment(object):
 
 if "env" not in globals():
     env = GlobalEnvironment()
+    FLOATX = env.FLOATX
+    EPSILON = env.EPSILON

@@ -22,7 +22,7 @@ if __name__ == '__main__':
     model.stack_encoders(Dense(50, 'tanh'), Dense(30))
     model.stack_decoders(Dense(50, 'tanh'), Dense(28 * 28))
 
-    trainer = SGDTrainer(model, {'learning_rate': shared_scalar(0.05), 'gradient_clipping': 3})
+    trainer = SGDTrainer(model, {'learning_rate': graph.shared(0.05), 'gradient_clipping': 3})
 
     mnist = MiniBatches(MnistDataset(for_autoencoder=True), batch_size=20)
 

@@ -32,22 +32,6 @@ global_rand = np.random.RandomState(seed=global_seed)
 global_theano_rand = RandomStreams(seed=global_seed)
 global_shared_rand = SharedRandomStreams(seed=global_seed)
 
-def apply(func, *args, **kwargs):
-    from deepy.core.neural_var import NeuralVariable
-    dim = kwargs['dim'] if 'dim' in kwargs else args[0].dim()
-    return NeuralVariable(func(*[x.tensor for x in args]), dim)
-
-def onehot(size, eye):
-    return np.eye(1, size, eye, dtype=FLOATX)[0]
-
-def onehot_tensor(i_matrix, vocab_size):
-    """
-    # batch x time
-    """
-    dim0, dim1 = i_matrix.shape
-    i_vector = i_matrix.reshape((-1,))
-    hot_matrix = T.extra_ops.to_one_hot(i_vector, vocab_size).reshape((dim0, dim1, vocab_size))
-    return hot_matrix
 
 # def onehot_tensor(t, r=None):
 #     if r is None:
@@ -56,11 +40,7 @@ def onehot_tensor(i_matrix, vocab_size):
 #     ranges = T.shape_padleft(T.arange(r), t.ndim)
 #     return T.eq(ranges, T.shape_padright(t, 1))
 
-def shared_scalar(value, name=None):
-    """
-    Create a shared theano scalar value.
-    """
-    return theano.shared(np.array(value, dtype=FLOATX), name=name)
+
 
 def make_float_matrices(*names):
     ret = []
@@ -74,20 +54,6 @@ def make_float_vectors(*names):
     for n in names:
         ret.append(T.vector(n, dtype=FLOATX))
     return ret
-
-
-def monitor_var(value, name="", disabled=False):
-    if disabled:
-        return value
-    else:
-        return theano.printing.Print(name)(value)
-
-def monitor_var_sum(value, name="", disabled=False):
-    if disabled:
-        return T.sum(value)*0
-    else:
-        val = T.sum(theano.printing.Print(name)(value))*T.constant(0.0000001, dtype=FLOATX)
-        return T.cast(val, FLOATX)
 
 
 def back_grad(jacob, err_g):
@@ -189,16 +155,3 @@ class VarMap():
 
     def set(self, name, value):
         self.varmap[name] = value
-
-
-from theano.compile import ViewOp
-from theano.gradient import DisconnectedType
-
-class DisconnectedGrad(ViewOp):
-    def grad(self, args, g_outs):
-        return [ DisconnectedType()() for g_out in g_outs]
-
-    def connection_pattern(self, node):
-        return [[False]]
-
-disconnected_grad = DisconnectedGrad()

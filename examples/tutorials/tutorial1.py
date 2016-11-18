@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     mnist = MiniBatches(MnistDataset(), batch_size=20)
 
-    trainer = MomentumTrainer(model, {"learning_rate": shared_scalar(0.01)})
+    trainer = MomentumTrainer(model, {"learning_rate": graph.shared(0.01)})
 
     annealer = LearningRateAnnealer()
 

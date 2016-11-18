@@ -5,3 +5,4 @@ from decorations import convert_to_neural_var, convert_to_theano_var, neural_com
 from env import env
 from graph import graph
 from runtime import runtime
+from costs import CrossEntropyCost, RegressionCost, AutoEncoderCost, ErrorRateCost

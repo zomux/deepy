@@ -3,7 +3,8 @@
 
 from theano import tensor as T
 from . import NeuralNetwork
-from deepy.utils import dim_to_var, RegressionCost
+from deepy.core import RegressionCost
+from deepy.utils import dim_to_var
 
 
 class NeuralRegressor(NeuralNetwork):

@@ -3,7 +3,7 @@
 
 
 from network import NeuralNetwork
-from deepy.utils import FLOATX, EPSILON, CrossEntropyCost
+from deepy.core import env, CrossEntropyCost
 import theano.tensor as T
 
 class NeuralClassifier(NeuralNetwork):
@@ -21,7 +21,7 @@ class NeuralClassifier(NeuralNetwork):
         self.target_variables.append(self.k)
 
     def _cost_func(self, y):
-        y = T.clip(y, EPSILON, 1.0 - EPSILON)
+        y = T.clip(y, env.EPSILON, 1.0 - env.EPSILON)
         return CrossEntropyCost(y, self.k).get()
 
     def _error_func(self, y):
@@ -59,7 +59,7 @@ class MultiTargetNeuralClassifier(NeuralClassifier):
         self.target_variables.append(self.k)
 
     def _cost_func(self, y):
-        entropy_sum = T.constant(0, dtype=FLOATX)
+        entropy_sum = T.constant(0, dtype=env.FLOATX)
         for i in range(self.class_num):
             entropy_sum += T.sum(T.nnet.categorical_crossentropy(self._output[:, i, :], self._output[:,i]))
         return entropy_sum / (self.k.shape[0] * self.k.shape[1])

@@ -6,9 +6,9 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 import theano.tensor as T
 
-from deepy.core.neural_var import NeuralVariable
 from deepy.core.decorations import neural_computation
-from deepy.utils import get_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner
+from deepy.utils import get_activation, XavierGlorotInitializer, OrthogonalInitializer, Scanner
+from deepy.core import env
 from . import NeuralLayer
 
 OUTPUT_TYPES = ["sequence", "one"]
@@ -24,6 +24,7 @@ class RecurrentLayer(NeuralLayer):
                  gate_activation='sigmoid', activation='tanh',
                  steps=None, backward=False, mask=None,
                  additional_input_dims=None):
+        from deepy.core.neural_var import NeuralVariable
         super(RecurrentLayer, self).__init__(name)
         self.state_names = state_names
         self.main_state = state_names[0]
@@ -104,9 +105,9 @@ class RecurrentLayer(NeuralLayer):
         for state in self.state_names:
             if state != "state" or not init_state:
                 if self._input_type == 'sequence' and input_var.ndim == 2:
-                    init_state = T.alloc(np.cast[FLOATX](0.), self.hidden_size)
+                    init_state = T.alloc(np.cast[env.FLOATX](0.), self.hidden_size)
                 else:
-                    init_state = T.alloc(np.cast[FLOATX](0.), input_var.shape[0], self.hidden_size)
+                    init_state = T.alloc(np.cast[env.FLOATX](0.), input_var.shape[0], self.hidden_size)
             initial_states[state] = init_state
         return initial_states
 
@@ -134,6 +135,7 @@ class RecurrentLayer(NeuralLayer):
         return step_inputs
 
     def compute(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False, init_states=None, return_all_states=False):
+        from deepy.core.neural_var import NeuralVariable
         if additional_inputs and not self.additional_input_dims:
             self.additional_input_dims = map(lambda var: var.dim(), additional_inputs)
         result_var = super(RecurrentLayer, self).compute(input_var,

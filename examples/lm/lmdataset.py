@@ -4,8 +4,7 @@
 import logging as loggers
 import numpy as np
 from deepy.dataset import Dataset
-from deepy.utils import FLOATX
-
+from deepy.core.env import FLOATX
 logging = loggers.getLogger(__name__)
 
 class LMDataset(Dataset):

@@ -4,7 +4,8 @@
 import numpy as np
 
 from controllers import TrainingController
-from deepy.utils import FLOATX, shared_scalar
+from deepy.core.env import FLOATX
+from deepy.core import graph
 
 import logging as loggers
 logging = loggers.getLogger(__name__)
@@ -55,7 +56,7 @@ class LearningRateAnnealer(TrainingController):
         """
         Wrap learning rate.
         """
-        return shared_scalar(value, name="learning_rate")
+        return graph.shared(value, name="learning_rate")
 
 
 class ScheduledLearningRateAnnealer(TrainingController):

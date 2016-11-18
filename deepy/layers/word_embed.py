@@ -3,7 +3,6 @@
 
 import theano.tensor as T
 
-from deepy.core.neural_var import NeuralVariable
 from deepy.layers import NeuralLayer
 
 
@@ -13,6 +12,7 @@ class WordEmbedding(NeuralLayer):
     The word embeddings are randomly initialized, and are learned over the time.
     """
     def __init__(self, size, vocab_size, zero_index=None, mask=None, init=None):
+        from deepy.core.neural_var import NeuralVariable
         super(WordEmbedding, self).__init__("word_embed")
         self.size = size
         self.vocab_size = vocab_size

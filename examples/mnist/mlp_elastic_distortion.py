@@ -16,7 +16,9 @@ from deepy.dataset import MnistDataset, MiniBatches, BasicDataset
 from deepy.networks import NeuralClassifier
 from deepy.layers import Dense, Softmax
 from deepy.trainers import MomentumTrainer, LearningRateAnnealer
-from deepy.utils import elastic_distortion, global_rand
+
+from deepy.preprocessing import elastic_distortion
+from deepy.core import env
 
 default_model = os.path.join(os.path.dirname(__file__), "models", "mlp_distortion1.gz")
 
@@ -32,7 +34,7 @@ for img, label in mnist.train_set():
     transformed_img = (elastic_distortion(original_img) / 256).flatten()
     expanded_train_set.append((transformed_img, label))
 
-global_rand.shuffle(expanded_train_set)
+env.numpy_rand.shuffle(expanded_train_set)
 
 expanded_mnist = BasicDataset(train=expanded_train_set, valid=mnist.valid_set(), test=mnist.test_set())
 

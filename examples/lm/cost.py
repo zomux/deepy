@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from deepy.utils import CrossEntropyCost, EPSILON
+from deepy.core.env import EPSILON
+from deepy.core import CrossEntropyCost
 import theano.tensor as T
 
 class LMCost(CrossEntropyCost):

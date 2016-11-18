@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from deepy.utils import AutoEncoderCost
+from deepy.core import AutoEncoderCost
 import theano.tensor as T
 
 from network import NeuralNetwork

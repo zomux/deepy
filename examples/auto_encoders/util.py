@@ -3,7 +3,7 @@
 
 import numpy as np
 from random import Random
-from deepy.utils import onehot
+from deepy.tensor.onehot import onehot
 from deepy.dataset import MiniBatches, BasicDataset
 random = Random(3)
 

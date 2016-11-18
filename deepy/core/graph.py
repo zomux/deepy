@@ -7,7 +7,12 @@ import pickle
 import gzip
 from inspect import getargspec
 from env import env
+import theano
 import logging as loggers
+from deepy.utils.activations import get_activation
+from decorations import neural_computation
+from costs import RegressionCost, CrossEntropyCost, AutoEncoderCost
+from disconnected_grad import disconnected_grad
 logging = loggers.getLogger(__name__)
 
 
@@ -48,6 +53,46 @@ class GraphBuilder(object):
         Create vars given a dataset and set test values.
         Useful when dataset is already defined.
         """
+
+    @neural_computation
+    def activation(self, x, name='tanh'):
+        """
+        Compute an activation value.
+        """
+        return get_activation(name)(x)
+
+    @neural_computation
+    def cross_entropy_cost(self, y, target_index):
+        return CrossEntropyCost(y, target_index).get()
+
+    @neural_computation
+    def least_squares_cost(self, y, target):
+        return RegressionCost(y, target).get()
+
+    @neural_computation
+    def auto_encoder_cost(self, y, target):
+        return AutoEncoderCost(y, target).get()
+
+    @neural_computation
+    def shared(self, value, name=None):
+        """
+        Create a shared theano scalar value.
+        """
+        if type(value) == int:
+            final_value = np.array(value, dtype="int32")
+        elif type(value) == float:
+            final_value = np.array(value, dtype=env.FLOATX)
+        else:
+            final_value = value
+
+        return theano.shared(final_value, name=name)
+
+    @neural_computation
+    def disconnect(self, x):
+        """
+        Disconnect a variable from backpropagation.
+        """
+        return disconnected_grad(x)
 
     def compile(self, input_dim=0, model=None, input_tensor=None, monitors=None,
                  cost=None, output=None, outputs=None, blocks=None, input_vars=None, target_vars=None, output_map=None):

@@ -81,6 +81,10 @@ class NeuralVariable(NeuralLayer):
 
         return NeuralVariable(self.tensor(*normal_args, **normal_kwargs), dim=self.dim())
 
+    def debug_monitor(self, name=""):
+        from deepy.debug import monitor_var_sum
+        self.tensor += monitor_var_sum(self.tensor, name=name)
+
     @property
     def test_value(self):
         if hasattr(self.tensor.tag, 'test_value'):

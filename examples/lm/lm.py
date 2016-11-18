@@ -7,7 +7,8 @@ logging = loggers.getLogger(__name__)
 
 from deepy.networks import NeuralNetwork
 from deepy.layers import OneHotEmbedding
-from deepy.utils import onehot, EPSILON
+from deepy.utils import EPSILON
+from deepy.tensor.onehot import onehot
 import theano.tensor as T
 
 from cost import LMCost

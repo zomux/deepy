@@ -11,7 +11,7 @@ import numpy as np
 import math
 from scipy.signal import convolve2d
 
-from deepy.utils.functions import global_rand
+from deepy.core import env
 
 
 def create_2d_gaussian(dim, sigma):
@@ -77,9 +77,9 @@ def elastic_distortion(image, kernel_dim=21, sigma=6, alpha=30, negated=True):
     result = np.zeros(image.shape)
 
     # create random displacement fields
-    displacement_field_x = np.array([[global_rand.random_integers(-1, 1) for x in xrange(image.shape[0])] \
+    displacement_field_x = np.array([[env.numpy_rand.random_integers(-1, 1) for x in xrange(image.shape[0])] \
                             for y in xrange(image.shape[1])]) * alpha
-    displacement_field_y = np.array([[global_rand.random_integers(-1, 1) for x in xrange(image.shape[0])] \
+    displacement_field_y = np.array([[env.numpy_rand.random_integers(-1, 1) for x in xrange(image.shape[0])] \
                             for y in xrange(image.shape[1])]) * alpha
 
     # create the gaussian kernel

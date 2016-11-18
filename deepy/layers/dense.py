@@ -1,4 +1,5 @@
-from deepy.utils import get_activation, FLOATX
+from deepy.utils import get_activation
+from deepy.core.env import FLOATX
 import theano.tensor as T
 from . import NeuralLayer
 

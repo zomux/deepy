@@ -21,7 +21,7 @@ from deepy.dataset import SequentialDataset, MiniBatches
 from deepy.networks import NeuralRegressor
 from deepy.layers import RNN, IRNN, Dense
 from deepy.trainers import SGDTrainer, LearningRateAnnealer
-from deepy.utils import FLOATX
+from deepy.core.env import FLOATX
 
 SEQUENCE_LEN = 100
 rand = np.random.RandomState(3)

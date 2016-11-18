@@ -7,7 +7,8 @@
 import types
 from . import Dataset
 from data_processor import DataProcessor
-from deepy.utils import FakeGenerator, StreamPickler, global_rand
+from deepy.utils import FakeGenerator, StreamPickler
+from deepy.core import env
 
 import logging as loggers
 logging = loggers.getLogger(__name__)
@@ -42,7 +43,7 @@ class OnDiskDataset(Dataset):
             self._train_size = len(self._cached_train_data)
             if self._shuffle_memory:
                 logging.info("Shuffle on-memory data")
-                global_rand.shuffle(self._cached_train_data)
+                env.numpy_rand.shuffle(self._cached_train_data)
 
     def _process_data(self, split, epoch, dataset):
         if self._data_processor:

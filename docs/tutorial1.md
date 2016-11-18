@@ -104,7 +104,7 @@ trainer = MomentumTrainer(model)
 For learning rate, if you want to modify it on the fly, you need define it a shared variable.
 In *deepy* you can just do it like this:
 ```python
-trainer = MomentumTrainer(model, {"learning_rate": shared_scalar(0.01)})
+trainer = MomentumTrainer(model, {"learning_rate": graph.shared(0.01)})
 ```
 
 For a complete training option list, see this file:
