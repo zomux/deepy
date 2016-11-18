@@ -11,7 +11,7 @@ from networks import *
 from trainers import *
 from utils import *
 from dataset import *
-from parallel import *
+from multigpu import *
 from layers.functions import *
 
 from deepy.core.tensor import tensor
