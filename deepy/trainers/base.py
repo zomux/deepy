@@ -8,6 +8,7 @@ import theano
 from deepy.conf import TrainerConfig
 from deepy.dataset import Dataset
 from deepy.utils import Timer
+from deepy.core import runtime
 
 from abc import ABCMeta, abstractmethod
 
@@ -263,6 +264,7 @@ class NeuralTrainer(object):
         return epoch - self.best_epoch < self.patience
 
     def test_step(self, test_set):
+        runtime.switch_training(False)
         self._compile_evaluation_func()
         costs = list(zip(
             self.evaluation_names,
@@ -270,6 +272,7 @@ class NeuralTrainer(object):
         return costs
 
     def valid_step(self, valid_set):
+        runtime.switch_training(False)
         self._compile_evaluation_func()
         costs = list(zip(
             self.evaluation_names,
@@ -285,8 +288,8 @@ class NeuralTrainer(object):
         start_time = time.time()
         self._progress = 0
 
-
         for x in train_set:
+            runtime.switch_training(True)
             if self._skip_batches == 0:
 
                 if dirty_trick_times > 0:

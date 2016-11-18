@@ -13,6 +13,8 @@ class Runtime(object):
 
     def __init__(self):
         self._training_flag = theano.shared(0, name="training_flag")
+        self._is_training = False
+
 
     @neural_computation
     def iftrain(self, then_branch, else_branch):
@@ -26,6 +28,8 @@ class Runtime(object):
         Switch training mode.
         :param flag: switch on training mode when flag is True.
         """
+        if self._is_training == flag: return
+        self._is_training = flag
         if flag:
             self._training_flag.set_value(1)
         else:

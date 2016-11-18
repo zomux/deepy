@@ -13,6 +13,7 @@ from deepy.utils.activations import get_activation
 from decorations import neural_computation
 from costs import RegressionCost, CrossEntropyCost, AutoEncoderCost
 from disconnected_grad import disconnected_grad
+from deepy.utils import Scanner
 logging = loggers.getLogger(__name__)
 
 
@@ -60,6 +61,10 @@ class GraphBuilder(object):
         Compute an activation value.
         """
         return get_activation(name)(x)
+
+    @neural_computation
+    def scan(self, func, sequences=None, outputs_info=None, non_sequences=None, **kwargs):
+        return Scanner(func, sequences, outputs_info, non_sequences, **kwargs).compute()
 
     @neural_computation
     def cross_entropy_cost(self, y, target_index):
