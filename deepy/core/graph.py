@@ -8,6 +8,8 @@ import gzip
 from inspect import getargspec
 from env import env
 import theano
+import theano.tensor as TT
+from theano.tensor.var import TensorVariable
 import logging as loggers
 from deepy.utils.activations import get_activation
 from decorations import neural_computation
@@ -29,31 +31,67 @@ class GraphBuilder(object):
         from deepy.layers.block import Block
         return Block(name)
 
-    def var(self, theano_tensor, dim=0, dtype=env.FLOATX, test_shape=None):
+    def var(self, tensor_type, last_dim=0, test_shape=None):
         """
         Wrap a Theano tensor into the variable for defining neural network.
-        :param dim: last dimension of tensor, 0 indicates that the last dimension is flexible
+        :param last_dim: last dimension of tensor, 0 indicates that the last dimension is flexible
         :rtype: TensorVar
         """
+        # Create tensor
         from deepy.core.neural_var import NeuralVariable
-        if isinstance(theano_tensor, NeuralVariable):
-            var = theano_tensor
-            if dim != 0:
-                var.output_dim = dim
+        if isinstance(tensor_type, NeuralVariable):
+            var = tensor_type
+            if last_dim != 0:
+                var.output_dim = last_dim
+        elif isinstance(tensor_type, TensorVariable):
+            var = NeuralVariable(tensor_type, dim=last_dim)
+        elif isinstance(tensor_type, str):
+            theano_tensor = getattr(TT, tensor_type)()
+            var = NeuralVariable(theano_tensor, dim=last_dim)
         else:
-            var = NeuralVariable(theano_tensor, dim=dim)
+            raise Exception("tensor_type shall be a string or a NeuralVariable")
+        # Create test value
         if test_shape:
             if type(test_shape) != list and type(test_shape) != tuple:
                 var.set_test_value(test_shape)
             else:
-                var.set_test_value(env.numpy_rand.rand(*test_shape).astype(dtype))
+                var.set_test_value(env.numpy_rand.rand(*test_shape).astype(var.tensor.dtype))
         return var
 
-    def create_vars_from_data(self, dataset):
+    def create_vars_from_data(self, dataset, split="train"):
         """
         Create vars given a dataset and set test values.
         Useful when dataset is already defined.
         """
+        from deepy.core.neural_var import NeuralVariable
+        vars = []
+        if split == "valid":
+            data_split = dataset.valid_set()
+        elif split == "test":
+            data_split = dataset.test_set()
+        else:
+            data_split = dataset.train_set()
+        first_data_piece = list(data_split)[0]
+        for i, numpy_tensor in enumerate(first_data_piece):
+            type_map = {
+                0: "scalar",
+                1: "vector",
+                2: "matrix",
+                3: "tensor3",
+                4: "tensor4",
+                5: "tensor5",
+            }
+            tensor_type = type_map[numpy_tensor.ndim] if numpy_tensor.ndim in type_map else type_map[0]
+            if numpy_tensor.dtype.kind == "i":
+                tensor_type = "i" + tensor_type
+            theano_tensor = getattr(TT, tensor_type)("input_{}_{}".format(i + 1, tensor_type))
+            last_dim = numpy_tensor.shape[-1]
+            var = NeuralVariable(theano_tensor, dim=last_dim)
+            var.set_test_value(numpy_tensor)
+            vars.append(var)
+        return vars
+
+
 
     @neural_computation
     def activation(self, x, name='tanh'):

@@ -286,6 +286,7 @@ class NeuralTrainer(object):
         cost_matrix = []
         exec_count = 0
         start_time = time.time()
+        self._compile_time = 0
         self._progress = 0
 
         for x in train_set:
@@ -319,7 +320,7 @@ class NeuralTrainer(object):
                 self._skip_batches -= 1
             if train_size:
                 self._progress += 1
-                spd = float(exec_count) / (time.time() - start_time)
+                spd = float(exec_count) / (time.time() - start_time - self._compile_time)
                 sys.stdout.write("\x1b[2K\r> %d%% | J=%.2f | spd=%.2f batch/s" % (self._progress * 100 / train_size, self.last_cost, spd))
                 sys.stdout.flush()
         self._progress = 0
