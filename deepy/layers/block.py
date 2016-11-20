@@ -2,15 +2,18 @@
 # -*- coding: utf-8 -*-
 
 from deepy.layers.layer import NeuralLayer
-
+from deepy.core import graph
 
 class Block(NeuralLayer):
     """
     Create a block, which contains the parameters of many connected layers.
     """
 
+    _BLOCK_COUNT = 0
+
     def __init__(self, name=None):
-        super(Block, self).__init__(name if name else "block")
+        super(Block, self).__init__(name if name else "block_{}".format(self._BLOCK_COUNT + 1))
+        self._BLOCK_COUNT += 1
         self.layers = []
         self.fixed = False
 
@@ -26,6 +29,12 @@ class Block(NeuralLayer):
                 self.register_inner_layers(layer)
             self.fixed = True
 
+    def add_parameters(self, *parameters):
+        from deepy.core.neural_var import NeuralVariable
+        for param in parameters:
+            if isinstance(param, NeuralVariable):
+                param = param.tensor
+            self.parameters.append(param)
 
     def register(self, *layers):
         """

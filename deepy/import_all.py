@@ -12,7 +12,6 @@ from conf import *
 from dataset import *
 from deepy.tensor.functions import *
 from layers import *
-from multigpu import *
 from networks import *
 from trainers import *
 from utils import *
