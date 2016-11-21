@@ -19,7 +19,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
     def __init__(self,
                  network, config=None, method='sgd',
                  server_port=5567,
-                 start_halving_at=6, end_at=10, sync_freq=10,
+                 start_halving_at=6, end_at=10, sync_freq=1,
                  valid_freq=1500, learning_rate=None, using_easgd=False
                  ):
         super(MultiGPUTrainer, self).__init__(network, config, method)
@@ -74,7 +74,6 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
             self.logger.info("using ASGD rule")
         rule = EASGD(easgd_alpha) if self._using_easgd else ASGD()
         worker.init_shared_params(param_map.values(), param_sync_rule=rule)
-        worker.copy_to_local()
         worker.send_req({
             "set_names": None,
             "training_names": self.training_names,
@@ -86,6 +85,18 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         train_batches = list(train_set)
         network_callback = bool(self.network.training_callbacks)
         trainer_callback = bool(self._iter_callbacks)
+        # Start from valid, so the performance when a worked join can be known
+        worker.copy_to_local()
+        if valid_set:
+            self._run_valid(self.epoch, valid_set, dry_run=True)
+            self.fix_costs()
+        worker.send_req({
+            "valid_done": None,
+            "valid_costs": self.last_run_costs,
+            "auto_save": self.config.auto_save
+        })
+        worker.copy_to_local()
+        # Begin the loop
         while True:
             resp = worker.send_req('next')
             if resp == 'stop':
