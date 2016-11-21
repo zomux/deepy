@@ -43,7 +43,6 @@ class NeuralVariable(NeuralLayer):
         return  other.tensor if isinstance(other, NeuralVariable) else other
 
     def __add__(self, other):
-
         return NeuralVariable(self.tensor + self._other_tensor(other), dim=self.dim())
 
     def __sub__(self, other):
@@ -55,6 +54,20 @@ class NeuralVariable(NeuralLayer):
     def __div__(self, other):
         return NeuralVariable(self.tensor / self._other_tensor(other), dim=self.dim())
 
+    def __neg__(self):
+        return NeuralVariable(- self.tensor, dim=self.dim())
+
+    def __radd__(self, other):
+        return NeuralVariable(self._other_tensor(other) + self.tensor, dim=self.dim())
+
+    def __rsub__(self, other):
+        return NeuralVariable(self._other_tensor(other) - self.tensor, dim=self.dim())
+
+    def __rmul__(self, other):
+        return NeuralVariable(self._other_tensor(other) * self.tensor, dim=self.dim())
+
+    def __rdiv__(self, other):
+        return NeuralVariable(self._other_tensor(other) / self.tensor, dim=self.dim())
 
     def __getitem__(self, index):
         @neural_computation

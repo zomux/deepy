@@ -112,7 +112,7 @@ class ScheduledTrainingServer(Controller):
         return " ".join(["{}={:.2f}".format(n, c) for (n, c) in costs])
 
 
-    def handle_control(self, req, worker_id):
+    def handle_control(self, req, worker_id, req_info):
         """
         Handles a control_request received from a worker.
         Returns:
@@ -269,4 +269,5 @@ if __name__ == '__main__':
         easgd_alpha=args.easgd_alpha,
         log_path=args.log
     )
+
     server.serve()

@@ -21,6 +21,8 @@ class ComputationalGraph(NeuralNetwork):
             config - network configuration
             input_tensor - specify the tensor of input if it's special
         """
+        from deepy.core.neural_var import NeuralVariable
+        from theano.sandbox.cuda import CudaNdarraySharedVariable
         super(ComputationalGraph, self).__init__(input_dim, input_tensor=input_tensor)
         if model:
             self.stack(model)
@@ -51,8 +53,12 @@ class ComputationalGraph(NeuralNetwork):
                 if type(monitor) != tuple:
                     raise Exception("monitors shall be tuples of (name, var).")
                 name, var = monitor
-                self.training_monitors.append((name, var.tensor))
-                self.testing_monitors.append((name, var.tensor))
+                if isinstance(var, NeuralVariable):
+                    var = var.tensor
+                if isinstance(var, CudaNdarraySharedVariable):
+                    var = var * 1
+                self.training_monitors.append((name, var))
+                self.testing_monitors.append((name, var))
 
 
     @property

@@ -256,7 +256,7 @@ class NeuralTrainer(object):
         epoch_str = "epoch=%d" % (epoch + 1)
         if dry_run:
             epoch_str = "dryrun" + " " * (len(epoch_str) - 6)
-        message = "valid   (%s) %s%s" % (epoch_str, info, marker)
+        message = "%svalid   (%s) %s%s" % ("\r" if dry_run else "", epoch_str, info, marker)
         logging.info(message)
         self.last_run_costs = costs
         self.network.train_logger.record(message)

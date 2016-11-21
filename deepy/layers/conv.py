@@ -54,7 +54,7 @@ class Convolution(NeuralLayer):
 
         pooled_out = pool.pool_2d(
             input=conv_out,
-            ds=self.pool_size,
+            ws=self.pool_size,
             ignore_border=True
         )
 
