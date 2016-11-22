@@ -73,6 +73,10 @@ class GraphBuilder(object):
             data_split = dataset.train_set()
         first_data_piece = list(data_split)[0]
         for i, numpy_tensor in enumerate(first_data_piece):
+            if numpy_tensor.dtype == "int64":
+                numpy_tensor = numpy_tensor.astype("int32")
+            if numpy_tensor.dtype == "float64":
+                numpy_tensor = numpy_tensor.astype(env.FLOATX)
             type_map = {
                 0: "scalar",
                 1: "vector",
