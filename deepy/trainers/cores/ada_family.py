@@ -54,5 +54,8 @@ def ada_family_core(params, gparams, learning_rate = 0.01, eps= 1e-6, rho=0.95, 
         free_parameters.extend(gsums + xsums)
     elif method == 'ADAGRAD':
         free_parameters.extend(gsums)
-
+    # Check dtype
+    for k in updates:
+        if updates[k].dtype != FLOATX:
+            updates[k] = updates[k].astype(FLOATX)
     return updates.items(), free_parameters
