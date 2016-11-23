@@ -23,7 +23,7 @@ class ScheduledTrainingServer(Controller):
 
     def __init__(self, port=CONTROLLER_PORT, easgd_alpha=0.5,
                  # Following arguments can be received from workers
-                 start_halving_at=6, end_at=10, sync_freq=10,
+                 start_halving_at=6, end_at=10, sync_freq=10, halving_freq=1,
                  valid_freq=1500, learning_rate=0.1, log_path=None):
         """
         Initialize the controller.
@@ -44,6 +44,7 @@ class ScheduledTrainingServer(Controller):
         self._iters_from_last_valid = 0
         self._evaluating = False
         self._valid_freq = valid_freq
+        self._halving_freq = halving_freq
         self._done = False
         self._lr = learning_rate
         self._easgd_alpha = easgd_alpha
@@ -74,7 +75,7 @@ class ScheduledTrainingServer(Controller):
             bool: False if to stop the training.
         """
         self.epoch += 1
-        if self.epoch >= self.epoch_start_halving:
+        if self.epoch >= self.epoch_start_halving and ((self.epoch - self.epoch_start_halving) % self._halving_freq == 0):
             self._lr *= 0.5
         self._current_iter = 0
         self._iters_from_last_valid = 0
@@ -244,6 +245,8 @@ class ScheduledTrainingServer(Controller):
                             self._lr = val
                         elif key == 'start_halving_at':
                             self.epoch_start_halving = val
+                        elif key == 'halving_freq':
+                            self._halving_freq = val
                         elif key == 'end_at':
                             self.end_at = val
                         elif key == 'sync_freq':
