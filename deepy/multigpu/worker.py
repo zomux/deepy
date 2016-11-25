@@ -19,9 +19,9 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
     def __init__(self,
                  network, config=None, method='sgd',
                  server_port=5567,
-                 start_halving_at=6, end_at=10, sync_freq=1,
+                 start_halving_at=6, end_at=10, sync_freq=3,
                  valid_freq=1500, learning_rate=None, halving_freq=1,
-                 using_easgd=False
+                 using_easgd=True
                  ):
         super(MultiGPUTrainer, self).__init__(network, config, method)
         self._report_time = False

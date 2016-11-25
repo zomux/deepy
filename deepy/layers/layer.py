@@ -10,6 +10,7 @@ import theano
 from deepy.utils import UniformInitializer
 from deepy.utils import get_activation
 from deepy.core.env import env
+from deepy.core.graph import graph
 from deepy.core.decorations import neural_computation_prefer_tensor, convert_to_theano_var
 
 logging = loggers.getLogger(__name__)
@@ -83,6 +84,9 @@ class NeuralLayer(object):
             self.init(input_dim=dims[0])
         else:
             self.init(input_dims=dims)
+        # Check block
+        if self.parameters and not self._linked_block:
+            self.belongs_to(graph.default_block())
         # convert kwargs
         train_kwargs, _, _ = convert_to_theano_var(kwargs)
 
@@ -112,7 +116,7 @@ class NeuralLayer(object):
         :return: NeuralLayer
         """
         if self._linked_block:
-            raise SystemError("One layer can not belong to two blocks")
+            raise SystemError("The layer {} has already blonged to {}".format(self.name, self._linked_block.name))
         self._linked_block = block
         block.register_layer(self)
         return self
@@ -223,16 +227,16 @@ class NeuralLayer(object):
         return bias
 
     def create_scalar(self, name="S", value=0, dtype=env.FLOATX):
-        bs = np.array(0)
+        bs = np.array(0, dtype=dtype)
         bs += value
-        v = theano.shared(bs.astype(dtype), name='{}_{}'.format(self.name, name))
+        v = theano.shared(bs, name='{}_{}'.format(self.name, name))
 
         logging.info('create scalar %s', name)
         return v
 
     def create_vector(self, n, name="V", dtype=env.FLOATX):
-        bs =  np.zeros(n)
-        v = theano.shared(bs.astype(dtype), name='{}_{}'.format(self.name, name))
+        bs =  np.zeros(n, dtype=dtype)
+        v = theano.shared(bs, name='{}_{}'.format(self.name, name))
 
         logging.info('create vector %s: %d', name, n)
         return v

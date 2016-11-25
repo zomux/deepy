@@ -24,7 +24,22 @@ class GraphBuilder(object):
     Tool for creating computational graph in deepy.
     """
 
-    def block(self, name=None):
+    def __init__(self):
+        self._default_block = self.new_block("default_block")
+
+    def default_block(self):
+        """
+        Return the default block.
+        """
+        return self._default_block
+
+    def collect_global_parameters(self):
+        """
+        Return the default block, as all parameters will be registered to the default one.
+        """
+        return self._default_block
+
+    def new_block(self, name=None):
         """
         Create a block.
         """
