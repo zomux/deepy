@@ -56,7 +56,7 @@ class ComputationalGraph(NeuralNetwork):
                 if isinstance(var, NeuralVariable):
                     var = var.tensor
                 if isinstance(var, CudaNdarraySharedVariable):
-                    var = var * 1
+                    var *= 1.0  # Avoid CudaNdarray
                 self.training_monitors.append((name, var))
                 self.testing_monitors.append((name, var))
 

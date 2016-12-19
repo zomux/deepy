@@ -56,6 +56,10 @@ def discrete_dtypes(*args, **kwargs):
     return deepy_tensor.discrete_dtypes(*args, **kwargs)
 
     
+def division(*args, **kwargs):
+    return deepy_tensor.division(*args, **kwargs)
+
+    
 def matrices(*args, **kwargs):
     return deepy_tensor.matrices(*args, **kwargs)
 
@@ -120,6 +124,10 @@ def neq(*args, **kwargs):
     return deepy_tensor.neq(*args, **kwargs)
 
     
+def btensor5(*args, **kwargs):
+    return deepy_tensor.btensor5(*args, **kwargs)
+
+    
 def btensor4(*args, **kwargs):
     return deepy_tensor.btensor4(*args, **kwargs)
 
@@ -180,6 +188,10 @@ def eye(*args, **kwargs):
     return deepy_tensor.eye(*args, **kwargs)
 
     
+def dtensor5s(*args, **kwargs):
+    return deepy_tensor.dtensor5s(*args, **kwargs)
+
+    
 def as_index_variable(*args, **kwargs):
     return deepy_tensor.as_index_variable(*args, **kwargs)
 
@@ -212,12 +224,20 @@ def dvectors(*args, **kwargs):
     return deepy_tensor.dvectors(*args, **kwargs)
 
     
+def ftensor5(*args, **kwargs):
+    return deepy_tensor.ftensor5(*args, **kwargs)
+
+    
 def ftensor4(*args, **kwargs):
     return deepy_tensor.ftensor4(*args, **kwargs)
 
     
 def logging(*args, **kwargs):
     return deepy_tensor.logging(*args, **kwargs)
+
+    
+def ctensor5(*args, **kwargs):
+    return deepy_tensor.ctensor5(*args, **kwargs)
 
     
 def join(*args, **kwargs):
@@ -296,12 +316,24 @@ def max(*args, **kwargs):
     return deepy_tensor.max(*args, **kwargs)
 
     
+def itensor4(*args, **kwargs):
+    return deepy_tensor.itensor4(*args, **kwargs)
+
+    
 def fscalars(*args, **kwargs):
     return deepy_tensor.fscalars(*args, **kwargs)
 
     
+def itensor5(*args, **kwargs):
+    return deepy_tensor.itensor5(*args, **kwargs)
+
+    
 def flatnonzero(*args, **kwargs):
     return deepy_tensor.flatnonzero(*args, **kwargs)
+
+    
+def ltensor5(*args, **kwargs):
+    return deepy_tensor.ltensor5(*args, **kwargs)
 
     
 def ltensor4(*args, **kwargs):
@@ -452,10 +484,6 @@ def log2(*args, **kwargs):
     return deepy_tensor.log2(*args, **kwargs)
 
     
-def autocast_float(*args, **kwargs):
-    return deepy_tensor.autocast_float(*args, **kwargs)
-
-    
 def diagonal(*args, **kwargs):
     return deepy_tensor.diagonal(*args, **kwargs)
 
@@ -526,10 +554,6 @@ def advanced_set_subtensor1(*args, **kwargs):
     
 def bscalar(*args, **kwargs):
     return deepy_tensor.bscalar(*args, **kwargs)
-
-    
-def autocast_float_as(*args, **kwargs):
-    return deepy_tensor.autocast_float_as(*args, **kwargs)
 
     
 def true_div(*args, **kwargs):
@@ -620,6 +644,10 @@ def all_dtypes(*args, **kwargs):
     return deepy_tensor.all_dtypes(*args, **kwargs)
 
     
+def tensor5(*args, **kwargs):
+    return deepy_tensor.tensor5(*args, **kwargs)
+
+    
 def angle(*args, **kwargs):
     return deepy_tensor.angle(*args, **kwargs)
 
@@ -704,8 +732,8 @@ def itensor3(*args, **kwargs):
     return deepy_tensor.itensor3(*args, **kwargs)
 
     
-def itensor4(*args, **kwargs):
-    return deepy_tensor.itensor4(*args, **kwargs)
+def alloc_validate_shape(*args, **kwargs):
+    return deepy_tensor.alloc_validate_shape(*args, **kwargs)
 
     
 def ceil(*args, **kwargs):
@@ -734,6 +762,10 @@ def advanced_set_subtensor(*args, **kwargs):
     
 def get_idx_list(*args, **kwargs):
     return deepy_tensor.get_idx_list(*args, **kwargs)
+
+    
+def dtensor5(*args, **kwargs):
+    return deepy_tensor.dtensor5(*args, **kwargs)
 
     
 def dtensor4(*args, **kwargs):
@@ -796,6 +828,10 @@ def erfcx(*args, **kwargs):
     return deepy_tensor.erfcx(*args, **kwargs)
 
     
+def tensor5s(*args, **kwargs):
+    return deepy_tensor.tensor5s(*args, **kwargs)
+
+    
 def nonzero_values(*args, **kwargs):
     return deepy_tensor.nonzero_values(*args, **kwargs)
 
@@ -852,6 +888,10 @@ def div_proxy(*args, **kwargs):
     return deepy_tensor.div_proxy(*args, **kwargs)
 
     
+def itensor5s(*args, **kwargs):
+    return deepy_tensor.itensor5s(*args, **kwargs)
+
+    
 def inplace_increment(*args, **kwargs):
     return deepy_tensor.inplace_increment(*args, **kwargs)
 
@@ -878,6 +918,10 @@ def pow(*args, **kwargs):
     
 def round_half_to_even(*args, **kwargs):
     return deepy_tensor.round_half_to_even(*args, **kwargs)
+
+    
+def ztensor5(*args, **kwargs):
+    return deepy_tensor.ztensor5(*args, **kwargs)
 
     
 def ztensor4(*args, **kwargs):
@@ -926,10 +970,6 @@ def imag(*args, **kwargs):
     
 def round_half_away_from_zero(*args, **kwargs):
     return deepy_tensor.round_half_away_from_zero(*args, **kwargs)
-
-    
-def autocast_int(*args, **kwargs):
-    return deepy_tensor.autocast_int(*args, **kwargs)
 
     
 def tanh(*args, **kwargs):
@@ -1050,6 +1090,10 @@ def izip(*args, **kwargs):
     
 def float64_rtol(*args, **kwargs):
     return deepy_tensor.float64_rtol(*args, **kwargs)
+
+    
+def absolute_import(*args, **kwargs):
+    return deepy_tensor.absolute_import(*args, **kwargs)
 
     
 def shape(*args, **kwargs):
@@ -1192,6 +1236,14 @@ def wmatrix(*args, **kwargs):
     return deepy_tensor.wmatrix(*args, **kwargs)
 
     
+def integer_dtypes(*args, **kwargs):
+    return deepy_tensor.integer_dtypes(*args, **kwargs)
+
+    
+def print_function(*args, **kwargs):
+    return deepy_tensor.print_function(*args, **kwargs)
+
+    
 def dscalars(*args, **kwargs):
     return deepy_tensor.dscalars(*args, **kwargs)
 
@@ -1246,10 +1298,6 @@ def transfer(*args, **kwargs):
     
 def lmatrices(*args, **kwargs):
     return deepy_tensor.lmatrices(*args, **kwargs)
-
-    
-def var(*args, **kwargs):
-    return deepy_tensor.var(*args, **kwargs)
 
     
 def log10(*args, **kwargs):
@@ -1348,6 +1396,10 @@ def int_types(*args, **kwargs):
     return deepy_tensor.int_types(*args, **kwargs)
 
     
+def ltensor5s(*args, **kwargs):
+    return deepy_tensor.ltensor5s(*args, **kwargs)
+
+    
 def make_constant(*args, **kwargs):
     return deepy_tensor.make_constant(*args, **kwargs)
 
@@ -1384,6 +1436,10 @@ def float32_rtol(*args, **kwargs):
     return deepy_tensor.float32_rtol(*args, **kwargs)
 
     
+def ftensor5s(*args, **kwargs):
+    return deepy_tensor.ftensor5s(*args, **kwargs)
+
+    
 def ftensor3(*args, **kwargs):
     return deepy_tensor.ftensor3(*args, **kwargs)
 
@@ -1394,6 +1450,10 @@ def integer_types(*args, **kwargs):
     
 def wtensor4(*args, **kwargs):
     return deepy_tensor.wtensor4(*args, **kwargs)
+
+    
+def wtensor5(*args, **kwargs):
+    return deepy_tensor.wtensor5(*args, **kwargs)
 
     
 def wtensor3(*args, **kwargs):

@@ -13,6 +13,7 @@ if __name__ == '__main__':
     import_names.update([name for name in dir(theano.tensor.subtensor) if name[0].islower() and name[0] != "_"])
     import_names.update(["sort", "argsort", "grad"])
     import_names.remove("concatenate")
+    import_names.remove("var")
 
     notes = """
 # This file is automatically created, never edit it directly.

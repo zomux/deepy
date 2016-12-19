@@ -9,7 +9,6 @@ from inspect import getargspec
 from env import env
 import theano
 import theano.tensor as TT
-from theano.tensor.var import TensorVariable
 import logging as loggers
 from deepy.utils.activations import get_activation
 from decorations import neural_computation
@@ -48,30 +47,11 @@ class GraphBuilder(object):
 
     def var(self, tensor_type, last_dim=0, test_shape=None):
         """
-        Wrap a Theano tensor into the variable for defining neural network.
-        :param last_dim: last dimension of tensor, 0 indicates that the last dimension is flexible
-        :rtype: TensorVar
+        An alias of deepy.tensor.var.
         """
-        # Create tensor
-        from deepy.core.neural_var import NeuralVariable
-        if isinstance(tensor_type, NeuralVariable):
-            var = tensor_type
-            if last_dim != 0:
-                var.output_dim = last_dim
-        elif isinstance(tensor_type, TensorVariable):
-            var = NeuralVariable(tensor_type, dim=last_dim)
-        elif isinstance(tensor_type, str):
-            theano_tensor = getattr(TT, tensor_type)()
-            var = NeuralVariable(theano_tensor, dim=last_dim)
-        else:
-            raise Exception("tensor_type shall be a string or a NeuralVariable")
-        # Create test value
-        if test_shape:
-            if type(test_shape) != list and type(test_shape) != tuple:
-                var.set_test_value(test_shape)
-            else:
-                var.set_test_value(env.numpy_rand.rand(*test_shape).astype(var.tensor.dtype))
-        return var
+        from deepy.tensor import var
+        return var(tensor_type, last_dim=last_dim, test_shape=test_shape)
+
 
     def create_vars_from_data(self, dataset, split="train"):
         """

@@ -10,7 +10,6 @@ import theano
 from deepy.utils import UniformInitializer
 from deepy.utils import get_activation
 from deepy.core.env import env
-from deepy.core.graph import graph
 from deepy.core.decorations import neural_computation_prefer_tensor, convert_to_theano_var
 
 logging = loggers.getLogger(__name__)
@@ -76,6 +75,7 @@ class NeuralLayer(object):
         :return: NeuralVariable
         """
         from deepy.core.neural_var import NeuralVariable
+        from deepy.core.graph import graph
         if type(inputs[0]) != NeuralVariable:
             raise SystemError("The input of `compute` must be NeuralVar")
 
@@ -132,6 +132,8 @@ class NeuralLayer(object):
             self.register_parameters(*layer.parameters)
             self.register_updates(*layer.updates)
             self.register_training_updates(*layer.training_updates)
+            self.training_monitors.extend(layer.training_monitors)
+            self.testing_monitors.extend(layer.testing_monitors)
 
     def register_parameters(self, *parameters):
         """
@@ -171,6 +173,7 @@ class NeuralLayer(object):
         """
         for key, node in monitors:
             if key not in self._registered_monitors:
+                node *= 1.0 # Avoid CudaNdarray
                 self.training_monitors.append((key, node))
                 self.testing_monitors.append((key, node))
                 self._registered_monitors.add(key)

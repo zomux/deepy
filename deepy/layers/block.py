@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from deepy.layers.layer import NeuralLayer
-from deepy.core import graph
 
 class Block(NeuralLayer):
     """
@@ -58,6 +57,7 @@ class Block(NeuralLayer):
         return x
 
     def load_params(self, path, exclude_free_params=False):
+        from deepy.core import graph
         """
         Load parameters to the block.
         """

@@ -4,6 +4,10 @@
 from wrapper import deepy_tensor, deepy_nnet
 
     
+def absolute_import(*args, **kwargs):
+    return deepy_nnet.absolute_import(*args, **kwargs)
+
+    
 def abstract_conv(*args, **kwargs):
     return deepy_nnet.abstract_conv(*args, **kwargs)
 
@@ -48,6 +52,10 @@ def computeR(*args, **kwargs):
     return deepy_nnet.computeR(*args, **kwargs)
 
     
+def confusion_matrix(*args, **kwargs):
+    return deepy_nnet.confusion_matrix(*args, **kwargs)
+
+    
 def conv(*args, **kwargs):
     return deepy_nnet.conv(*args, **kwargs)
 
@@ -60,6 +68,10 @@ def conv3D(*args, **kwargs):
     return deepy_nnet.conv3D(*args, **kwargs)
 
     
+def conv3d(*args, **kwargs):
+    return deepy_nnet.conv3d(*args, **kwargs)
+
+    
 def convGrad3D(*args, **kwargs):
     return deepy_nnet.convGrad3D(*args, **kwargs)
 
@@ -70,6 +82,10 @@ def convTransp3D(*args, **kwargs):
     
 def corr(*args, **kwargs):
     return deepy_nnet.corr(*args, **kwargs)
+
+    
+def corr3d(*args, **kwargs):
+    return deepy_nnet.corr3d(*args, **kwargs)
 
     
 def crossentropy_categorical_1hot(*args, **kwargs):
@@ -110,6 +126,10 @@ def crossentropy_to_crossentropy_with_softmax(*args, **kwargs):
     
 def crossentropy_to_crossentropy_with_softmax_with_bias(*args, **kwargs):
     return deepy_nnet.crossentropy_to_crossentropy_with_softmax_with_bias(*args, **kwargs)
+
+    
+def division(*args, **kwargs):
+    return deepy_nnet.division(*args, **kwargs)
 
     
 def elu(*args, **kwargs):
