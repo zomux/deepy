@@ -4,7 +4,7 @@
 import numpy as np
 import theano.tensor as T
 from recurrent import RecurrentLayer
-from deepy.core.decorations import neural_computation
+from deepy.core.tensor_conversion import neural_computation
 from deepy.core.env import env
 
 
@@ -61,20 +61,20 @@ class LSTM(RecurrentLayer):
 
         self.W_i = self.create_weight(summed_input_dim, self.hidden_size, "wi", initializer=self.outer_init)
         self.U_i = self.create_weight(self.hidden_size, self.hidden_size, "ui", initializer=self.inner_init)
-        self.b_i = self.create_bias(self.hidden_size, "i")
+        self.b_i = self.create_bias(self.hidden_size, "bi")
 
         self.W_f = self.create_weight(summed_input_dim, self.hidden_size, "wf", initializer=self.outer_init)
         self.U_f = self.create_weight(self.hidden_size, self.hidden_size, "uf", initializer=self.inner_init)
-        self.b_f = self.create_bias(self.hidden_size, "f")
+        self.b_f = self.create_bias(self.hidden_size, "bf")
         self.b_f.set_value(np.ones((self.hidden_size,) * self._init_forget_bias, dtype=env.FLOATX))
 
         self.W_c = self.create_weight(summed_input_dim, self.hidden_size, "wc", initializer=self.outer_init)
         self.U_c = self.create_weight(self.hidden_size, self.hidden_size, "uc", initializer=self.inner_init)
-        self.b_c = self.create_bias(self.hidden_size, "c")
+        self.b_c = self.create_bias(self.hidden_size, "bc")
 
         self.W_o = self.create_weight(summed_input_dim, self.hidden_size, "wo", initializer=self.outer_init)
         self.U_o = self.create_weight(self.hidden_size, self.hidden_size, "uo", initializer=self.inner_init)
-        self.b_o = self.create_bias(self.hidden_size, suffix="o")
+        self.b_o = self.create_bias(self.hidden_size, "bo")
 
 
         if summed_input_dim > 0:

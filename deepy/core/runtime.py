@@ -4,7 +4,7 @@
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
-from decorations import neural_computation
+from tensor_conversion import neural_computation
 
 class Runtime(object):
     """

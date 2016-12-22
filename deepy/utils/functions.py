@@ -33,15 +33,6 @@ global_theano_rand = RandomStreams(seed=global_seed)
 global_shared_rand = SharedRandomStreams(seed=global_seed)
 
 
-# def onehot_tensor(t, r=None):
-#     if r is None:
-#         r = T.max(t) + 1
-#
-#     ranges = T.shape_padleft(T.arange(r), t.ndim)
-#     return T.eq(ranges, T.shape_padright(t, 1))
-
-
-
 def make_float_matrices(*names):
     ret = []
     for n in names:
@@ -60,31 +51,6 @@ def back_grad(jacob, err_g):
     return T.dot(jacob, err_g)
     # return (jacob.T * err_g).T
 
-
-def replace_graph(node, dct, deepcopy=True):
-    """
-    Replace nodes in a computational graph (Safe).
-    """
-    if not hasattr(node, 'owner'):
-        return node
-    if not hasattr(node.owner, 'inputs'):
-        return node
-
-    if deepcopy:
-        new_node = copy.deepcopy(node)
-        new_node.owner.inputs = copy.copy(node.owner.inputs)
-        node = new_node
-
-    owner = node.owner
-
-    for i, elem in enumerate(owner.inputs):
-        if elem in dct:
-            owner.inputs[i] = dct[elem]
-        else:
-            owner.inputs[i] = replace_graph(elem, dct)
-    return node
-
-
 def build_node_name(n):
     if "owner" not in dir(n) or "inputs" not in dir(n.owner):
         return str(n)
@@ -97,37 +63,6 @@ def build_node_name(n):
         if "_" in op_name:
             op_name = re.sub(r"\{[^}]+_([^_}]+)\}", "{\\1}", op_name)
         return "%s(%s)" % (op_name, ",".join([build_node_name(m) for m in n.owner.inputs]))
-
-
-def smart_replace_graph(n, dct, name_map=None, deepcopy=True):
-    """
-    Replace nodes in a computational graph (Smart).
-    """
-    if not name_map:
-        name_map = {}
-        for src, dst in dct.items():
-            name_map[build_node_name(src)] = dst
-
-    if not hasattr(n, 'owner'):
-        return n
-    if not hasattr(n.owner, 'inputs'):
-        return n
-
-    if deepcopy:
-        new_node = copy.deepcopy(n)
-        new_node.owner.inputs = copy.copy(n.owner.inputs)
-        n = new_node
-
-    owner = n.owner
-
-    for i, elem in enumerate(owner.inputs):
-        if elem in dct:
-            owner.inputs[i] = dct[elem]
-        elif build_node_name(elem) in name_map:
-            owner.inputs[i] = name_map[build_node_name(elem)]
-        else:
-            owner.inputs[i] = smart_replace_graph(elem, dct, name_map, deepcopy)
-    return n
 
 
 class VarMap():

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from deepy.core import env
+from deepy.core.env import env
 
 
 def get_fans(shape):

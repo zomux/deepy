@@ -12,3 +12,4 @@ from customize_trainer import CustomizeTrainer
 from util import wrap_core, multiple_l2_norm
 from delayed_trainers import DelayedBatchSGDTrainer
 from scipy_trainer import ScipyTrainer
+from train_logger import TrainLogger

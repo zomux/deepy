@@ -6,9 +6,10 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 import theano.tensor as T
 
-from deepy.core.decorations import neural_computation
+from deepy.core.tensor_conversion import neural_computation
 from deepy.utils import get_activation, XavierGlorotInitializer, OrthogonalInitializer, Scanner
 from deepy.core import env
+import deepy.tensor as DT
 from . import NeuralLayer
 
 OUTPUT_TYPES = ["sequence", "one"]
@@ -85,11 +86,19 @@ class RecurrentLayer(NeuralLayer):
         Compute one step in the RNN.
         :return: one variable for RNN and GRU, multiple variables for LSTM
         """
+        if not self.initialized:
+            input_dim = None
+            if input and hasattr(input.tag, 'last_dim'):
+                input_dim = input.tag.last_dim
+            self.init(input_dim)
+
         input_map = self.merge_inputs(input, additional_inputs=additional_inputs)
         input_map.update({"state": state, "lstm_cell": lstm_cell})
         output_map = self.compute_new_state(input_map)
         outputs = [output_map.pop("state")]
         outputs += output_map.values()
+        for tensor in outputs:
+            tensor.tag.last_dim = self.hidden_size
         if len(outputs) == 1:
             return outputs[0]
         else:

@@ -164,25 +164,25 @@ class FirstGlimpseLayer(NeuralLayer):
         self.cov_det_var = theano.shared(np.array(LA.det(self.small_cov), dtype=FLOATX))
         self._sample_gaussian = SampleMultivariateGaussian()
 
-        self.W_g0 = self.create_weight(7*7, 128, suffix="g0")
-        self.W_g1 = self.create_weight(2, 128, suffix="g1")
-        self.W_g2_hg = self.create_weight(128, 256, suffix="g2_hg")
-        self.W_g2_hl = self.create_weight(128, 256, suffix="g2_hl")
+        self.W_g0 = self.create_weight(7 * 7, 128, label="g0")
+        self.W_g1 = self.create_weight(2, 128, label="g1")
+        self.W_g2_hg = self.create_weight(128, 256, label="g2_hg")
+        self.W_g2_hl = self.create_weight(128, 256, label="g2_hl")
 
-        self.W_h_g = self.create_weight(256, 256, suffix="h_g")
-        self.W_h = self.create_weight(256, 256, suffix="h")
-        self.B_h = self.create_bias(256, suffix="h")
+        self.W_h_g = self.create_weight(256, 256, label="h_g")
+        self.W_h = self.create_weight(256, 256, label="h")
+        self.B_h = self.create_bias(256, label="h")
         self.h0 = self.create_vector(256, "h0")
         self.l0 = self.create_vector(2, "l0")
         self.l0.set_value(np.array([-1, -1], dtype=FLOATX))
 
-        self.W_l = self.create_weight(256, 2, suffix="l")
+        self.W_l = self.create_weight(256, 2, label="l")
         self.W_l.set_value(self.W_l.get_value() / 10)
-        self.B_l = self.create_bias(2, suffix="l")
-        self.W_a = self.create_weight(256, 10, suffix="a")
-        self.B_a = self.create_bias(10, suffix="a")
+        self.B_l = self.create_bias(2, label="l")
+        self.W_a = self.create_weight(256, 10, label="a")
+        self.B_a = self.create_bias(10, label="a")
 
-        self.W_f = self.create_weight(7*7, 2, suffix="f")
+        self.W_f = self.create_weight(7 * 7, 2, label="f")
 
 
         self.W = [self.W_g0, self.W_g1, self.W_g2_hg, self.W_g2_hl, self.W_h_g, self.W_h, self.W_a]

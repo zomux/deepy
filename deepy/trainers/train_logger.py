@@ -4,11 +4,12 @@
 import os
 import datetime
 import logging as loggers
-import deepy
+
 logging = loggers.getLogger(__name__)
 
 PROGRESS_LOG_PREFIX = "progress:"
 EPOCH_LOG_PREFIX = "epoch:"
+
 
 class TrainLogger(object):
 

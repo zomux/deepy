@@ -4,7 +4,7 @@
 import theano.tensor as T
 from theano import tensor as theano_tensor
 
-from deepy.core.decorations import neural_computation
+from deepy.core.tensor_conversion import neural_computation
 from deepy.core.neural_var import NeuralVariable
 
 

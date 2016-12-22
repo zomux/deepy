@@ -8,11 +8,11 @@ import numpy as np
 import theano
 
 from deepy.utils import UniformInitializer
-from deepy.utils import get_activation
+from deepy.tensor.activations import get_activation
 from deepy.core.env import env
-from deepy.core.decorations import neural_computation_prefer_tensor, convert_to_theano_var
+from deepy.core.tensor_conversion import neural_computation_prefer_tensor, convert_to_theano_var
 
-logging = loggers.getLogger(__name__)
+logging = loggers.getLogger("deepy")
 
 class NeuralLayer(object):
 
@@ -208,25 +208,25 @@ class NeuralLayer(object):
         """
         self.epoch_callbacks.extend(callbacks)
 
-    def create_weight(self, input_n=1, output_n=1, suffix="W", initializer=None, shape=None):
+    def create_weight(self, input_n=1, output_n=1, label="W", initializer=None, shape=None):
         if not shape:
             shape = (input_n, output_n)
 
         if not initializer:
             initializer = env.default_initializer
 
-        weight = theano.shared(initializer.sample(shape).astype(env.FLOATX), name='{}_{}'.format(self.name, suffix))
+        weight = theano.shared(initializer.sample(shape).astype(env.FLOATX), name='{}_{}'.format(self.name, label))
 
-        logging.info('create weight W_%s: %s', suffix, str(shape))
+        logging.info('create param %s %s for %s', label, str(shape), self.name)
         return weight
 
-    def create_bias(self, output_n=1, suffix="B", value=0., shape=None):
+    def create_bias(self, output_n=1, label="B", value=0., shape=None):
         if not shape:
             shape = (output_n, )
         bs =  np.ones(shape)
         bs *= value
-        bias = theano.shared(bs.astype(env.FLOATX), name='{}_{}'.format(self.name, suffix))
-        logging.info('create bias B_%s: %s', suffix, str(shape))
+        bias = theano.shared(bs.astype(env.FLOATX), name='{}_{}'.format(self.name, label))
+        logging.info('create param %s %s for %s', label, str(shape), self.name)
         return bias
 
     def create_scalar(self, name="S", value=0, dtype=env.FLOATX):

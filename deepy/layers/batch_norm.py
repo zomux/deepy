@@ -15,8 +15,8 @@ class BatchNormalization(NeuralLayer):
         self.epsilon = epsilon
 
     def prepare(self):
-        self.gamma = self.create_weight(shape=(self.input_dim,), suffix="gamma")
-        self.beta = self.create_bias(self.input_dim, suffix="beta")
+        self.gamma = self.create_weight(shape=(self.input_dim,), label="gamma")
+        self.beta = self.create_bias(self.input_dim, label="beta")
         self.register_parameters(self.gamma, self.beta)
 
     def compute_tensor(self, x):

@@ -15,7 +15,8 @@ import theano.tensor as T
 import deepy
 from deepy.layers.block import Block
 from deepy.layers.layer import NeuralLayer
-from deepy.utils import dim_to_var, TrainLogger
+from deepy.utils import dim_to_var
+from deepy.trainers.train_logger import TrainLogger
 
 logging = loggers.getLogger("network")
 save_logger = loggers.getLogger("saving")

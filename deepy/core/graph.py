@@ -10,9 +10,7 @@ from env import env
 import theano
 import theano.tensor as TT
 import logging as loggers
-from deepy.utils.activations import get_activation
-from decorations import neural_computation
-from costs import RegressionCost, CrossEntropyCost, AutoEncoderCost
+from tensor_conversion import neural_computation
 from disconnected_grad import disconnected_grad
 from deepy.utils import Scanner
 logging = loggers.getLogger(__name__)
@@ -52,7 +50,6 @@ class GraphBuilder(object):
         from deepy.tensor import var
         return var(tensor_type, last_dim=last_dim, test_shape=test_shape)
 
-
     def create_vars_from_data(self, dataset, split="train"):
         """
         Create vars given a dataset and set test values.
@@ -90,41 +87,40 @@ class GraphBuilder(object):
             vars.append(var)
         return vars
 
-
-
     @neural_computation
-    def activation(self, x, name='tanh'):
-        """
-        Compute an activation value.
-        """
-        return get_activation(name)(x)
-
-    @neural_computation
-    def scan(self, func, sequences=None, outputs_info=None, non_sequences=None, **kwargs):
+    def scan(self, func, sequences=None, outputs=None, non_sequences=None, block=None, **kwargs):
         """
         A loop function, the usage is identical with the theano one.
+        :type block: deepy.layers.Block
         """
-        return Scanner(func, sequences, outputs_info, non_sequences, **kwargs).compute()
+        results, updates = Scanner(func, sequences, outputs, non_sequences, neural_computation=True, **kwargs).compute()
+        if block and updates:
+            if type(updates) == dict:
+                updates = updates.items()
+            block.register_updates(*updates)
+        return results
 
-    def get_trainer(self, model, config=None, method='sgd'):
+    def loop(self, sequences=None, outputs=None, non_sequences=None, block=None, **kwargs):
+        """
+        Start a loop.
+        Usage:
+        ```
+        with deepy.graph.loop(sequences={"x": x}, outputs={"o": None}) as vars:
+            vars.o = vars.x + 1
+        loop_outputs = deepy.graph.loop_outputs()
+        result = loop_outputs.o
+        ```
+        """
+        from loop import Loop
+        return Loop(sequences, outputs, non_sequences, block, **kwargs)
+
+    def get_trainer(self, model,  method='sgd', config=None):
         """
         Get a trainer to optimize given model.
         :rtype: deepy.trainers.GeneralNeuralTrainer
         """
         from deepy.trainers import GeneralNeuralTrainer
-        return GeneralNeuralTrainer(model, config=config, method=method)
-
-    @neural_computation
-    def cross_entropy_cost(self, y, target_index):
-        return CrossEntropyCost(y, target_index).get()
-
-    @neural_computation
-    def least_squares_cost(self, y, target):
-        return RegressionCost(y, target).get()
-
-    @neural_computation
-    def auto_encoder_cost(self, y, target):
-        return AutoEncoderCost(y, target).get()
+        return GeneralNeuralTrainer(model, method=method, config=config)
 
     @neural_computation
     def shared(self, value, name=None):

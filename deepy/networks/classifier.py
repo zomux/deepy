@@ -3,7 +3,8 @@
 
 
 from network import NeuralNetwork
-from deepy.core import env, CrossEntropyCost
+from deepy.core import env
+import deepy.tensor as DT
 import theano.tensor as T
 
 class NeuralClassifier(NeuralNetwork):
@@ -22,7 +23,7 @@ class NeuralClassifier(NeuralNetwork):
 
     def _cost_func(self, y):
         y = T.clip(y, env.EPSILON, 1.0 - env.EPSILON)
-        return CrossEntropyCost(y, self.k).get()
+        return DT.costs.cross_entropy(y, self.k)
 
     def _error_func(self, y):
         return 100 * T.mean(T.neq(T.argmax(y, axis=1), self.k))

@@ -14,7 +14,7 @@ class GeneralNeuralTrainer(NeuralTrainer):
     """
     General neural network trainer.
     """
-    def __init__(self, network, config=None, method=None):
+    def __init__(self, network, method=None, config=None):
 
         if method:
             logging.info("changing optimization method to '%s'" % method)

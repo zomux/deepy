@@ -23,7 +23,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                  valid_freq=1500, learning_rate=None, halving_freq=1,
                  using_easgd=True
                  ):
-        super(MultiGPUTrainer, self).__init__(network, config, method)
+        super(MultiGPUTrainer, self).__init__(network, method, config)
         self._report_time = False
         self._port = server_port
         self.logger = logging.getLogger('MultiGPUTrainingWorker')

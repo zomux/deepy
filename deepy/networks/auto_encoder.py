@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from deepy.core import AutoEncoderCost
-import theano.tensor as T
+import deepy.tensor as DT
 
 from network import NeuralNetwork
 
@@ -28,7 +27,8 @@ class AutoEncoder(NeuralNetwork):
         self.decoding_network = None
 
     def _cost_func(self, y):
-        return AutoEncoderCost(self.input_variables[0], y).get()
+        return DT.costs.least_squares(y, self.input_variables[0])
+
 
     @property
     def cost(self):

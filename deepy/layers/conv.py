@@ -71,8 +71,8 @@ class Convolution(NeuralLayer):
         self._activation_func = get_activation(self.activation)
 
     def _setup_params(self):
-        self.W_conv = self.create_weight(suffix="conv", initializer=self.initializer, shape=self.filter_shape)
-        self.B_conv = self.create_bias(self.filter_shape[0], suffix="conv")
+        self.W_conv = self.create_weight(label="conv", initializer=self.initializer, shape=self.filter_shape)
+        self.B_conv = self.create_bias(self.filter_shape[0], label="conv")
 
         self.register_parameters(self.W_conv, self.B_conv)
 

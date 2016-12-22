@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from theano import tensor as T
+import deepy.tensor as DT
 from . import NeuralNetwork
-from deepy.core import RegressionCost
 from deepy.utils import dim_to_var
 
 
@@ -24,7 +24,7 @@ class NeuralRegressor(NeuralNetwork):
     def _cost_func(self, y):
         if self.clip_value:
             y = T.clip(y, -self.clip_value, self.clip_value)
-        return RegressionCost(y, self.k).get()
+        return DT.costs.least_squares(y, self.k)
 
     @property
     def cost(self):

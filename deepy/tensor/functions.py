@@ -4,9 +4,26 @@
 import theano.tensor as TT
 from theano.ifelse import ifelse as theano_ifelse
 
+from deepy.core.tensor_conversion import neural_computation
 from deepy.layers.concat import Concatenate
-from deepy.core.decorations import neural_computation
 from wrapper import deepy_tensor
+
+
+def concat(vars, axis=-1):
+    """
+    A shortcut for concatenation.
+    """
+    return concatenate(vars, axis)
+
+@neural_computation
+def activate(var, method):
+    """
+    An activation function.
+    :param var: input var
+    :param method: type of activation, such as `relu`,`tanh`,`sigmoid`
+    """
+    from activations import get_activation
+    return get_activation(method)(var)
 
 def concatenate(vars, axis=-1):
     """
@@ -34,12 +51,12 @@ def apply(func, *args, **kwargs):
 def repeat(*args, **kwargs):
     return deepy_tensor.repeat(*args, **kwargs)
 
-def var(self, tensor_type, last_dim=0, test_shape=None):
+def var(tensor_type, last_dim=0, test_shape=None):
     """
-            Wrap a Theano tensor into the variable for defining neural network.
-            :param last_dim: last dimension of tensor, 0 indicates that the last dimension is flexible
-            :rtype: TensorVar
-            """
+    Wrap a Theano tensor into the variable for defining neural network.
+    :param last_dim: last dimension of tensor, 0 indicates that the last dimension is flexible
+    :rtype: TensorVar
+    """
     # Create tensor
     from deepy.core.neural_var import NeuralVariable
     from deepy.core.env import env
@@ -62,3 +79,12 @@ def var(self, tensor_type, last_dim=0, test_shape=None):
         else:
             var.set_test_value(env.numpy_rand.rand(*test_shape).astype(var.tensor.dtype))
     return var
+
+
+def is_neural_var(var):
+    from deepy.core.neural_var import NeuralVariable
+    return isinstance(var, NeuralVariable)
+
+def is_theano_var(var):
+    from theano.tensor.var import TensorVariable
+    return isinstance(var, TensorVariable)

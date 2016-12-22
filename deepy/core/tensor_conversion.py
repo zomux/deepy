@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from theano.tensor.var import TensorVariable
+from deepy.utils.map_dict import MapDict
 
 def convert_to_theano_var(obj):
     """
@@ -33,8 +34,20 @@ def convert_to_theano_var(obj):
             if tensor_found: theano_var_found = True
             if neural_found: neural_var_found = True
         return normal_map, theano_var_found, neural_var_found
+    elif type(obj) == MapDict:
+        normal_map = {}
+        theano_var_found = False
+        neural_var_found = False
+        for key in obj:
+            normal_var, tensor_found, neural_found = convert_to_theano_var(obj[key])
+            normal_map[key] = normal_var
+            if tensor_found: theano_var_found = True
+            if neural_found: neural_var_found = True
+        return MapDict(normal_map), theano_var_found, neural_var_found
     elif type(obj) == NeuralVariable:
-        return obj.tensor, False, True
+        theano_tensor = obj.tensor
+        theano_tensor.tag.last_dim = obj.dim()
+        return theano_tensor, False, True
     elif type(obj) == TensorVariable:
         return obj, True, False
     elif type(obj) == slice:
@@ -68,8 +81,16 @@ def convert_to_neural_var(obj):
         for key in obj:
             merged_map[key] = convert_to_neural_var(obj[key])
         return merged_map
+    elif type(obj) == MapDict:
+        merged_map = {}
+        for key in obj:
+            merged_map[key] = convert_to_neural_var(obj[key])
+        return MapDict(merged_map)
     elif type(obj) == TensorVariable:
-        return NeuralVariable(obj)
+        deepy_var = NeuralVariable(obj)
+        if hasattr(obj, 'tag') and hasattr(obj.tag, 'last_dim'):
+            deepy_var.output_dim = obj.tag.last_dim
+        return deepy_var
     else:
         return obj
 

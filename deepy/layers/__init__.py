@@ -28,3 +28,4 @@ from softmax import Softmax
 from softmax3d import Softmax3D
 from word_embed import WordEmbedding
 from block import Block
+from attention import Attention
