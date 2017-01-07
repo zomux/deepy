@@ -11,7 +11,7 @@ class ComputationalGraph(NeuralNetwork):
     """
 
     def __init__(self, input_dim=0, model=None, input_tensor=None, monitors=None,
-                 cost=None, output=None, outputs=None, blocks=None, input_vars=None, target_vars=None, output_map=None):
+                 cost=None, output=None, outputs=None, blocks=None, input_vars=None, target_vars=None):
         """
         Create a basic network.
 
@@ -22,6 +22,7 @@ class ComputationalGraph(NeuralNetwork):
             input_tensor - specify the tensor of input if it's special
         """
         from deepy.core.neural_var import NeuralVariable
+        from deepy.core.tensor_conversion import convert_to_theano_var
         from theano.sandbox.cuda import CudaNdarraySharedVariable
         super(ComputationalGraph, self).__init__(input_dim, input_tensor=input_tensor)
         if model:
@@ -42,9 +43,8 @@ class ComputationalGraph(NeuralNetwork):
         if outputs:
             if not output and not cost:
                 self._test_output = None
-            self._test_outputs = [o.tensor for o in outputs]
+            self._test_outputs, _, _ = convert_to_theano_var(outputs)
 
-        self.output_map = output_map if output_map else {}
 
         if monitors:
             if type(monitors) == dict:

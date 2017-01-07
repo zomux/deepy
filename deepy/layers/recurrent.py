@@ -7,7 +7,7 @@ import numpy as np
 import theano.tensor as T
 
 from deepy.core.tensor_conversion import neural_computation
-from deepy.utils import get_activation, XavierGlorotInitializer, OrthogonalInitializer, Scanner
+from deepy.utils import XavierGlorotInitializer, OrthogonalInitializer, Scanner
 from deepy.core import env
 import deepy.tensor as DT
 from . import NeuralLayer
@@ -26,6 +26,7 @@ class RecurrentLayer(NeuralLayer):
                  steps=None, backward=False, mask=None,
                  additional_input_dims=None):
         from deepy.core.neural_var import NeuralVariable
+        from deepy.tensor.activations import get_activation
         super(RecurrentLayer, self).__init__(name)
         self.state_names = state_names
         self.main_state = state_names[0]

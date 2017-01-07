@@ -9,7 +9,7 @@ import theano.tensor as T
 from theano.tensor.nnet import conv
 from theano.tensor.signal import pool
 
-from deepy.utils import get_activation, UniformInitializer
+from deepy.utils import UniformInitializer
 from deepy.layers.layer import NeuralLayer
 
 
@@ -68,6 +68,7 @@ class Convolution(NeuralLayer):
         return output
 
     def _setup_functions(self):
+        from deepy.tensor.activations import get_activation
         self._activation_func = get_activation(self.activation)
 
     def _setup_params(self):

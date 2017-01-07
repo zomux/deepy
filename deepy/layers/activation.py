@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from layer import NeuralLayer
-from deepy.utils import get_activation
 
 class Activation(NeuralLayer):
     """
@@ -10,8 +9,10 @@ class Activation(NeuralLayer):
     """
 
     def __init__(self, activation_type):
+        from deepy.tensor.activations import get_activation
         super(Activation, self).__init__(activation_type)
         self._activation = get_activation(activation_type)
 
     def compute_tensor(self, x):
-        return self._activation(x)
+        self.activation = self._activation(x)
+        return self.activation

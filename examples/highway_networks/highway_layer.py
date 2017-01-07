@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from deepy.layers import NeuralLayer
-from deepy.utils import get_activation
 import theano.tensor as T
 
 class HighwayLayer(NeuralLayer):
@@ -18,6 +17,7 @@ class HighwayLayer(NeuralLayer):
         self.gate_bias = gate_bias
 
     def prepare(self):
+        from deepy.tensor.activations import get_activation
         self.output_dim = self.input_dim
         self._act = get_activation(self.activation)
         self.W_h = self.create_weight(self.input_dim, self.input_dim, "h", initializer=self.init)

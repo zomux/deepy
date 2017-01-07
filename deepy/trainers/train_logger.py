@@ -54,6 +54,7 @@ class TrainLogger(object):
         return self._epoch
 
     def save(self, model_path):
+        import deepy
         log_path = self._log_path(model_path)
         # logging.info("Save training log to %s" % log_path)
         with open(log_path, "w") as outf:

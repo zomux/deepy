@@ -13,6 +13,7 @@ import theano
 import theano.tensor as T
 
 import deepy
+from deepy.utils.map_dict import MapDict
 from deepy.layers.block import Block
 from deepy.layers.layer import NeuralLayer
 from deepy.utils import dim_to_var
@@ -66,6 +67,7 @@ class NeuralNetwork(object):
         self.layers = []
         self._test_outputs = []
         self._test_output = None
+        self._output_keys = None
 
         self._hidden_outputs = []
         self.training_monitors = []
@@ -178,21 +180,31 @@ class NeuralNetwork(object):
 
     def _compile(self):
         if not hasattr(self, '_compute'):
-            if self._test_outputs:
-                output = [self.test_output] if self.test_output else []
-                output += self._test_outputs
+            if isinstance(self._test_outputs, dict):
+                self._output_keys, out_tensors = map(list, zip(*self._test_outputs.items()))
+                if self._test_output:
+                    self._output_keys.insert(0, "cost")
+                    out_tensors.insert(0, self._test_output)
+            elif isinstance(self._test_outputs, list) and self._test_outputs:
+                out_tensors = self._test_outputs
+                if self._test_output:
+                    out_tensors.insert(0, self._test_output)
             else:
-                output = self.test_output
+                out_tensors = self._test_output
             self._compute = theano.function(
                 filter(lambda x: x not in self.target_variables, self.input_variables),
-                output, updates=self.updates, allow_input_downcast=True)
+                out_tensors, updates=self.updates, allow_input_downcast=True)
 
     def compute(self, *x):
         """
         Return network output.
         """
         self._compile()
-        return self._compute(*x)
+        outs = self._compute(*x)
+        if self._output_keys:
+            return MapDict(dict(zip(self._output_keys, outs)))
+        else:
+            return outs
 
     @property
     def output(self):

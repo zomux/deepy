@@ -30,18 +30,21 @@ class GraphBuilder(object):
         """
         return self._default_block
 
-    def collect_global_parameters(self):
+    def collect_parameters(self):
         """
         Return the default block, as all parameters will be registered to the default one.
         """
         return self._default_block
 
-    def new_block(self, name=None):
+    def new_block(self, *layers, **kwargs):
         """
-        Create a block.
+        Create a parameters block.
+        :param layers: register some layers in the block
+        :param name: specify the name of this block
         """
         from deepy.layers.block import Block
-        return Block(name)
+        block = Block(*layers, **kwargs)
+        return block
 
     def var(self, tensor_type, last_dim=0, test_shape=None):
         """
@@ -144,7 +147,7 @@ class GraphBuilder(object):
         return disconnected_grad(x)
 
     def compile(self, input_dim=0, model=None, input_tensor=None, monitors=None,
-                 cost=None, output=None, outputs=None, blocks=None, input_vars=None, target_vars=None, output_map=None):
+                 cost=None, output=None, outputs=None, blocks=None, input_vars=None, target_vars=None):
         from comp_graph import ComputationalGraph
         # Pass the arguments to `ComputationalGraph`
         args = [arg for arg in getargspec(GraphBuilder.compile).args if arg != "self"]

@@ -8,7 +8,6 @@ import numpy as np
 import theano
 
 from deepy.utils import UniformInitializer
-from deepy.tensor.activations import get_activation
 from deepy.core.env import env
 from deepy.core.tensor_conversion import neural_computation_prefer_tensor, convert_to_theano_var
 
@@ -252,8 +251,15 @@ class NeuralLayer(object):
         return matrix
 
     def activation(self, name):
+        from deepy.tensor.activations import get_activation
         return get_activation(name)
 
     def callback_forward_propagation(self):
         pass
 
+    def set_name(self, name):
+        """
+        Set the name of this layer.
+        This will be the key of saved parameters.
+        """
+        self.name = name

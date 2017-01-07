@@ -16,6 +16,16 @@ def concat(vars, axis=-1):
     return concatenate(vars, axis)
 
 @neural_computation
+def reverse(tensor, axis=-1):
+    ndim = tensor.ndim
+    selectors = [slice(None)] * ndim
+    selectors[axis] = slice(None, None, -1)
+    ret = tensor[selectors]
+    if hasattr(tensor.tag, "last_dim"):
+        ret.tag.last_dim = tensor.tag.last_dim
+    return ret
+
+@neural_computation
 def activate(var, method):
     """
     An activation function.
@@ -51,11 +61,19 @@ def apply(func, *args, **kwargs):
 def repeat(*args, **kwargs):
     return deepy_tensor.repeat(*args, **kwargs)
 
+def vars(*tensor_types):
+    """
+    Create multiple variables without specifying last dimension and shape.
+    :rtype: list of deepy.core.neural_var.NeuralVariable
+    """
+    return map(var, tensor_types)
+
+
 def var(tensor_type, last_dim=0, test_shape=None):
     """
     Wrap a Theano tensor into the variable for defining neural network.
     :param last_dim: last dimension of tensor, 0 indicates that the last dimension is flexible
-    :rtype: TensorVar
+    :rtype: deepy.core.neural_var.NeuralVariable
     """
     # Create tensor
     from deepy.core.neural_var import NeuralVariable
@@ -72,12 +90,19 @@ def var(tensor_type, last_dim=0, test_shape=None):
         var = NeuralVariable(theano_tensor, dim=last_dim)
     else:
         raise Exception("tensor_type shall be a string or a NeuralVariable")
-    # Create test value
+    # Set test value
     if test_shape:
         if type(test_shape) != list and type(test_shape) != tuple:
+            # May be it's a value
             var.set_test_value(test_shape)
         else:
             var.set_test_value(env.numpy_rand.rand(*test_shape).astype(var.tensor.dtype))
+    else:
+        # Create a general test_shape
+        dims = [(d + 1) * 3 for d in range(var.tensor.ndim)]
+        if var.dim() != 0:
+            dims[-1] = var.dim()
+        var.set_test_value(env.numpy_rand.rand(*dims).astype(var.tensor.dtype))
     return var
 
 

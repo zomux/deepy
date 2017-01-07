@@ -3,7 +3,7 @@
 
 THEANO_LINKER = "cvm"
 
-from controllers import TrainingController
+from controllers import TrainingController, TrainingMonitor
 from base import NeuralTrainer
 from trainers import *
 from optimize import *

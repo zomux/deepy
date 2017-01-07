@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import theano.tensor as TT
+
 from deepy.core.tensor_conversion import neural_computation, convert_to_theano_var
 from deepy.layers.layer import NeuralLayer
 
@@ -13,6 +15,7 @@ class NeuralVariable(NeuralLayer):
     def __init__(self, tensor, dim=0):
         """
         Create a tensor layer.
+        :type tensor: theano.tensor.var.TensorVariable
         """
         super(NeuralVariable, self).__init__("const")
         self.output_dim = dim
@@ -41,6 +44,12 @@ class NeuralVariable(NeuralLayer):
 
     def _other_tensor(self, other):
         return  other.tensor if isinstance(other, NeuralVariable) else other
+
+    def __eq__(self, other):
+        return NeuralVariable(TT.eq(self.tensor, self._other_tensor(other)), dim=self.dim())
+
+    def __ne__(self, other):
+        return NeuralVariable(TT.neq(self.tensor, self._other_tensor(other)), dim=self.dim())
 
     def __add__(self, other):
         return NeuralVariable(self.tensor + self._other_tensor(other), dim=self.dim())
@@ -104,6 +113,10 @@ class NeuralVariable(NeuralLayer):
             return self.tensor.tag.test_value
         else:
             return None
+
+    @property
+    def ndim(self):
+        return self.tensor.ndim
 
     @property
     def tv(self):

@@ -22,6 +22,7 @@ class WordEmbedding(NeuralLayer):
         self._mask = mask.tensor if type(mask) == NeuralVariable else mask
         self._init = init
         self._load_values = load_values
+        self.init(1)
 
     def prepare(self):
         if self._load_values is not None:
@@ -31,17 +32,16 @@ class WordEmbedding(NeuralLayer):
         self.register_parameters(self.embed_matrix)
 
     def compute_tensor(self, x, mask=None):
-        mask_input = mask if mask else self._mask
+        mask = mask if mask else self._mask
         if self.zero_index is not None:
             mask = T.neq(x, self.zero_index)
             # To avoid negative index
             x = T.cast(x * mask, "int32")
-        elif mask_input:
-            mask = self._mask
-        else:
-            mask = None
 
-        ret_tensor = self.embed_matrix[x.flatten()].reshape(list(x.shape) + [self.size])
+        if x.ndim == 1:
+            ret_tensor = self.embed_matrix[x]
+        else:
+            ret_tensor = self.embed_matrix[x.flatten()].reshape(list(x.shape) + [self.size])
 
         if mask:
             if x.ndim == 2:

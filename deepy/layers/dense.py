@@ -1,4 +1,3 @@
-from deepy.utils import get_activation
 from deepy.core.env import FLOATX
 import theano.tensor as T
 from . import NeuralLayer
@@ -24,6 +23,7 @@ class Dense(NeuralLayer):
         return self._activation(T.dot(x, self.W) + self.B)
 
     def _setup_functions(self):
+        from deepy.tensor.activations import get_activation
         self._activation = get_activation(self.activation)
 
     def _setup_params(self):

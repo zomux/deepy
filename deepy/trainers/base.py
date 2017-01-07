@@ -9,6 +9,7 @@ from deepy.conf import TrainerConfig
 from deepy.dataset import Dataset
 from deepy.utils import Timer
 from deepy.core import runtime
+from controllers import TrainingController
 
 from abc import ABCMeta, abstractmethod
 
@@ -21,7 +22,7 @@ class NeuralTrainer(object):
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, network, config=None):
+    def __init__(self, network, config=None, iter_controllers=None, epoch_controllers=None):
         """
         Basic neural network trainer.
         :type network: deepy.NeuralNetwork
@@ -48,7 +49,9 @@ class NeuralTrainer(object):
         self.validation_frequency = self.config.validation_frequency
         self.min_improvement = self.config.min_improvement
         self.patience = self.config.patience
-        self._iter_callbacks = []
+
+        self._iter_controllers = iter_controllers if iter_controllers else []
+        self._epoch_controllers = epoch_controllers if epoch_controllers else []
 
         self.best_cost = 1e100
         self.best_epoch = 0
@@ -60,6 +63,12 @@ class NeuralTrainer(object):
         self.last_run_costs = None
         self._report_time = True
         self._epoch = 0
+
+        self._current_train_set = None
+        self._current_valid_set = None
+        self._current_test_set = None
+        self._ended = False
+
 
     def _compile_evaluation_func(self):
         if not self.evaluation_func:
@@ -140,12 +149,32 @@ class NeuralTrainer(object):
                       map(lambda p: p.get_value().copy(), self.network.free_parameters))
         return checkpoint
 
-    def add_iter_callback(self, func):
+    def exit(self):
         """
-        Add a iteration callback function (receives an argument of the trainer).
-        :return:
+        End the training.
         """
-        self._iter_callbacks.append(func)
+        self._ended = True
+
+    def add_iter_controllers(self, *controllers):
+        """
+        Add iteration callbacks function (receives an argument of the trainer).
+        :param controllers: can be a `TrainingController` or a function.
+        :type funcs: list of TrainingContoller
+        """
+        for controller in controllers:
+            if isinstance(controller, TrainingController):
+                controller.bind(self)
+            self._iter_controllers.append(controller)
+
+    def add_epoch_controllers(self, *controllers):
+        """
+        Add epoch callbacks function.
+        :param controllers: can be a `TrainingController` or a function.
+        """
+        for controller in controllers:
+            if isinstance(controller, TrainingController):
+                controller.bind(self)
+            self._epoch_controllers.append(controller)
 
     def train(self, train_set, valid_set=None, test_set=None, train_size=None):
         """
@@ -206,15 +235,12 @@ class NeuralTrainer(object):
         :return:
         """
 
-    def _run_test(self, iteration, test_set):
+    def _run_test(self, epoch, test_set):
         """
-        Run on test iteration.
+        Run on test epoch.
         """
         costs = self.test_step(test_set)
-        info = ' '.join('%s=%.2f' % el for el in costs)
-        message = "test    (epoch=%i) %s" % (iteration + 1, info)
-        logging.info(message)
-        self.network.train_logger.record(message)
+        self.report(dict(costs), "test", epoch)
         self.last_run_costs = costs
 
     def _run_train(self, epoch, train_set, train_size=None):
@@ -224,10 +250,7 @@ class NeuralTrainer(object):
         self.network.train_logger.record_epoch(epoch + 1)
         costs = self.train_step(train_set, train_size)
         if not epoch % self.config.monitor_frequency:
-            info = " ".join("%s=%.2f" % item for item in costs)
-            message = "monitor (epoch=%i) %s" % (epoch + 1, info)
-            logging.info(message)
-            self.network.train_logger.record(message)
+            self.report(dict(costs), "train", epoch)
         self.last_run_costs = costs
         return costs
 
@@ -238,30 +261,46 @@ class NeuralTrainer(object):
         costs = self.valid_step(valid_set)
         # this is the same as: (J_i - J_f) / J_i > min improvement
         _, J = costs[0]
-        marker = ""
+        new_best = False
         if self.best_cost - J > self.best_cost * self.min_improvement:
             # save the best cost and parameters
             self.best_params = self.copy_params()
-            marker = ' *'
+            new_best = True
             if not dry_run:
                 self.best_cost = J
                 self.best_epoch = epoch
+            self.save_checkpoint(save_path)
 
-            save_path = save_path if save_path else self.config.auto_save
-            if save_path and self._skip_batches == 0:
-                self.network.train_logger.record_progress(self._progress)
-                self.network.save_params(save_path, new_thread=True)
-
-        info = ' '.join('%s=%.2f' % el for el in costs)
-        epoch_str = "epoch=%d" % (epoch + 1)
-        if dry_run:
-            epoch_str = "dryrun" + " " * (len(epoch_str) - 6)
-        message = "%svalid   (%s) %s%s" % ("\r" if dry_run else "", epoch_str, info, marker)
-        logging.info(message)
+        self.report(dict(costs), type="valid", epoch=0 if dry_run else epoch, new_best=new_best)
         self.last_run_costs = costs
-        self.network.train_logger.record(message)
-        self.checkpoint = self.copy_params()
         return epoch - self.best_epoch < self.patience
+
+    def save_checkpoint(self, save_path=None):
+        save_path = save_path if save_path else self.config.auto_save
+        self.checkpoint = self.copy_params()
+        if save_path and self._skip_batches == 0:
+            self.network.train_logger.record_progress(self._progress)
+            self.network.save_params(save_path, new_thread=True)
+
+    def report(self, score_map, type="valid", epoch=0, new_best=False):
+        """
+        Report the scores and record them in the log.
+        """
+        type_str = type
+        if len(type_str) < 5:
+            type_str += " " * (5 - len(type_str))
+        info = " ".join("%s=%.2f" % el for el in score_map.items())
+        current_epoch = epoch if epoch > 0 else self.current_epoch()
+        epoch_str = "epoch={}".format(current_epoch + 1)
+        if epoch == 0:
+            epoch_str = "dryrun" + " " * (len(epoch_str) - 6)
+        if epoch == 0:
+            sys.stdout.write("\r")
+            sys.stdout.flush()
+        marker = " *" if new_best else ""
+        message = "{} ({}) {}{}".format(type_str, epoch_str, info, marker)
+        self.network.train_logger.record(message)
+        logging.info(message)
 
     def test_step(self, test_set):
         runtime.switch_training(False)
@@ -282,7 +321,7 @@ class NeuralTrainer(object):
     def train_step(self, train_set, train_size=None):
         dirty_trick_times = 0
         network_callback = bool(self.network.training_callbacks)
-        trainer_callback = bool(self._iter_callbacks)
+        trainer_callback = bool(self._iter_controllers)
         cost_matrix = []
         exec_count = 0
         start_time = time.time()
@@ -314,8 +353,11 @@ class NeuralTrainer(object):
                 if network_callback:
                     self.network.training_callback()
                 if trainer_callback:
-                    for func in self._iter_callbacks:
-                        func(self)
+                    for func in self._iter_controllers:
+                        if isinstance(func, TrainingController):
+                            func.invoke()
+                        else:
+                            func(self)
             else:
                 self._skip_batches -= 1
             if train_size:
@@ -331,27 +373,51 @@ class NeuralTrainer(object):
         costs = list(zip(self.training_names, np.mean(cost_matrix, axis=0)))
         return costs
 
+    def current_epoch(self):
+        """
+        Get current epoch.
+        """
+        return self._epoch
+
+
+    def get_data(self, data_split="train"):
+        """
+        Get specified split of data.
+        """
+        if data_split == 'train':
+            return self._current_train_set
+        elif data_split == 'valid':
+            return self._current_valid_set
+        elif data_split == 'test':
+            return self._current_test_set
+        else:
+            return None
+
     def run(self, train_set, valid_set=None, test_set=None, train_size=None, controllers=None):
         """
         Run until the end.
         """
+        controllers = controllers if controllers else []
+        controllers += self._epoch_controllers
         if isinstance(train_set, Dataset):
             dataset = train_set
             train_set = dataset.train_set()
             valid_set = dataset.valid_set()
             test_set = dataset.test_set()
             train_size = dataset.train_size()
+        self._current_train_set = train_set
+        self._current_valid_set = valid_set
+        self._current_test_set = test_set
         if controllers:
             for controller in controllers:
                 controller.bind(self)
         timer = Timer()
         for _ in self.train(train_set, valid_set=valid_set, test_set=test_set, train_size=train_size):
             if controllers:
-                ending = False
                 for controller in controllers:
                     if hasattr(controller, 'invoke') and controller.invoke():
-                        ending = True
-                if ending:
-                    break
+                        self.exit()
+            if self._ended:
+                break
         if self._report_time:
             timer.report()

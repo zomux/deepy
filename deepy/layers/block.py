@@ -10,10 +10,15 @@ class Block(NeuralLayer):
 
     _BLOCK_COUNT = 0
 
-    def __init__(self, name=None):
-        super(Block, self).__init__(name if name else "block_{}".format(self._BLOCK_COUNT + 1))
+    def __init__(self, *layers, **kwargs):
+        """
+        Create a new parameter block with some layers.
+        You can also specify a name through kwargs.
+        """
+        name = kwargs['name'] if 'name' in kwargs else "block_{}".format(self._BLOCK_COUNT + 1)
+        super(Block, self).__init__(name)
         self._BLOCK_COUNT += 1
-        self.layers = []
+        self.layers = list(layers)
         self.fixed = False
 
     def fix(self):

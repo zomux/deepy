@@ -32,7 +32,7 @@ def cross_entropy_3d(y, target_index, mask=None, after_softmax=False):
     else:
         if mask:
             penalties = 99. * (1 - flat_mask)
-            y_2d -= penalties
+            y_2d -= penalties[:, None]
         softmax_tensor = T.nnet.softmax(y_2d)
 
     # Get cost
@@ -52,8 +52,14 @@ def least_squares(y, target):
     return T.mean((err * err).sum(axis=target.ndim - 1)) / 2
 
 @neural_computation
-def accuracy(y, target_index):
-    return  100 * T.mean(T.eq(T.argmax(y, axis=1), target_index))
+def accuracy(y, target_index, mask=None):
+    if mask:
+        target_index = target_index * mask - (1 - mask)
+    hits = T.eq(y, target_index)
+    if mask:
+        return T.sum(hits) / T.sum(mask)
+    else:
+        return T.mean(hits)
 
 @neural_computation
 def error_rate(y, target_index):

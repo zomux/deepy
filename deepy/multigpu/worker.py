@@ -86,7 +86,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         self.logger.info("(proc {}) load training data".format(os.getpid()))
         train_batches = list(train_set)
         network_callback = bool(self.network.training_callbacks)
-        trainer_callback = bool(self._iter_callbacks)
+        trainer_callback = bool(self._iter_controllers)
         # Start from valid, so the performance when a worked join can be known
         worker.copy_to_local()
         if valid_set:
@@ -149,7 +149,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 if network_callback:
                     self.network.training_callback()
                 if trainer_callback:
-                    for func in self._iter_callbacks:
+                    for func in self._iter_controllers:
                         func(self)
                 worker.sync_params(synchronous=True)
                 worker.send_req({'train_done': None, 'costs': [float(np.mean(c)) for c in batch_costs]})

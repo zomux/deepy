@@ -42,14 +42,13 @@ class LearningRateAnnealer(TrainingController):
         if self._iter - max(self._trainer.best_iter, self._annealed_iter) >= self._patience:
             if self._annealed_times >= self._anneal_times:
                 logging.info("ending")
-                return True
+                self._trainer.exit()
             else:
                 self._trainer.set_params(*self._trainer.best_params)
                 self._learning_rate.set_value(self._learning_rate.get_value() * 0.5)
                 self._annealed_times += 1
                 self._annealed_iter = self._iter
                 logging.info("annealed learning rate to %f" % self._learning_rate.get_value())
-        return False
 
     @staticmethod
     def learning_rate(value=0.01):
@@ -89,8 +88,7 @@ class ScheduledLearningRateAnnealer(TrainingController):
             self._last_halving_epoch = epoch
         if epoch >= self.end_at:
             logging.info("ending")
-            return True
-        return False
+            self._trainer.exit()
 
 
 class ExponentialLearningRateAnnealer(TrainingController):
@@ -115,7 +113,7 @@ class ExponentialLearningRateAnnealer(TrainingController):
     def invoke(self):
         if self.debug:
             logging.info("learning rate: %.8f" % self._learning_rate.get_value())
-        return False
+
 
 class SimpleScheduler(TrainingController):
 
@@ -137,6 +135,4 @@ class SimpleScheduler(TrainingController):
         self._iter += 1
         logging.info("{} epochs left to run".format(self._patience - self._iter))
         if self._iter >= self._patience:
-            return True
-        else:
-            return False
+            self._trainer.exit()
