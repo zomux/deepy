@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from deepy.utils import global_rand
+from deepy.core.env import env
+
 
 def get_fans(shape):
     fan_in = shape[0] if len(shape) == 2 else np.prod(shape[1:])
@@ -16,7 +17,7 @@ class WeightInitializer(object):
 
     def __init__(self, seed=None):
         if not seed:
-            self.rand = global_rand
+            self.rand = env.numpy_rand
         else:
             self.rand = np.random.RandomState(seed)
 

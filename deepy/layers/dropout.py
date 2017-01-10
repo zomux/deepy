@@ -3,8 +3,9 @@
 
 import theano
 
-from . import NeuralLayer
-from deepy.utils import global_theano_rand, FLOATX
+from deepy.core import runtime
+from deepy.core import env
+from layer import NeuralLayer
 
 class Dropout(NeuralLayer):
 
@@ -17,13 +18,8 @@ class Dropout(NeuralLayer):
             # deal with the problem of test_value
             backup_test_value_setting = theano.config.compute_test_value
             theano.config.compute_test_value = 'ignore'
-            binomial_mask = global_theano_rand.binomial(x.shape, p=1-self.p, dtype=FLOATX)
+            binomial_mask = env.theano_rand.binomial(x.shape, p=1-self.p, dtype=env.FLOATX)
             theano.config.compute_test_value = backup_test_value_setting
             # apply dropout
-            x *= binomial_mask
-        return x
-
-    def compute_test_tesnor(self, x):
-        if self.p > 0:
-            x *= (1.0 - self.p)
+            x = runtime.iftrain(x * binomial_mask, x * (1.0 - self.p))
         return x

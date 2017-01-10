@@ -23,5 +23,5 @@ class Combine(NeuralLayer):
     def compute_tensor(self, *tensors):
         return self.func(*tensors)
 
-    def compute_test_tesnor(self, *tensors):
+    def compute_tensor(self, *tensors):
         return self.func(*tensors)

@@ -19,22 +19,25 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
     def __init__(self,
                  network, config=None, method='sgd',
                  server_port=5567,
-                 start_halving_at=6, end_at=10, step_len=10,
-                 valid_freq=1500, learning_rate=None
+                 start_halving_at=6, end_at=10, sync_freq=3,
+                 valid_freq=1500, learning_rate=None, halving_freq=1,
+                 using_easgd=True
                  ):
-        super(MultiGPUTrainer, self).__init__(network, config, method)
+        super(MultiGPUTrainer, self).__init__(network, method, config)
         self._report_time = False
         self._port = server_port
         self.logger = logging.getLogger('MultiGPUTrainingWorker')
         self.epoch = 0
+        self._using_easgd = using_easgd
         if not learning_rate:
             learning_rate = float(self.config.learning_rate.get_value())
         self._schedule_params = {
             'learning_rate': learning_rate,
             'start_halving_at': start_halving_at,
             'end_at': end_at,
-            'step_len': step_len,
-            'valid_freq': valid_freq
+            'sync_freq': sync_freq,
+            'valid_freq': valid_freq,
+            'halving_freq': halving_freq
         }
 
     def create_param_map(self):
@@ -58,7 +61,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         Train the model in multi-GPU environment.
         """
         from platoon.channel import Worker
-        from platoon.param_sync import EASGD
+        from platoon.param_sync import EASGD, ASGD
         server_port = self._port
         param_map = self.create_param_map()
         # Initialize the worker
@@ -67,8 +70,12 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
             worker.send_req({'init_schedule': self._schedule_params})
         self.sync_hyperparams(worker.send_req('sync_hyperparams')['sync_hyperparams'])
         easgd_alpha = worker.send_req('get_easgd_alpha')
-        worker.init_shared_params(param_map.values(), param_sync_rule=EASGD(easgd_alpha))
-        worker.copy_to_local()
+        if self._using_easgd:
+            self.logger.info("using EASGD with alpha={}".format(easgd_alpha))
+        else:
+            self.logger.info("using ASGD rule")
+        rule = EASGD(easgd_alpha) if self._using_easgd else ASGD()
+        worker.init_shared_params(param_map.values(), param_sync_rule=rule)
         worker.send_req({
             "set_names": None,
             "training_names": self.training_names,
@@ -79,7 +86,19 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         self.logger.info("(proc {}) load training data".format(os.getpid()))
         train_batches = list(train_set)
         network_callback = bool(self.network.training_callbacks)
-        trainer_callback = bool(self._iter_callbacks)
+        trainer_callback = bool(self._iter_controllers)
+        # Start from valid, so the performance when a worked join can be known
+        worker.copy_to_local()
+        if valid_set:
+            self._run_valid(self.epoch, valid_set, dry_run=True)
+            self.fix_costs()
+        worker.send_req({
+            "valid_done": None,
+            "valid_costs": self.last_run_costs,
+            "auto_save": self.config.auto_save
+        })
+        worker.copy_to_local()
+        # Begin the loop
         while True:
             resp = worker.send_req('next')
             if resp == 'stop':
@@ -130,7 +149,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 if network_callback:
                     self.network.training_callback()
                 if trainer_callback:
-                    for func in self._iter_callbacks:
+                    for func in self._iter_controllers:
                         func(self)
                 worker.sync_params(synchronous=True)
                 worker.send_req({'train_done': None, 'costs': [float(np.mean(c)) for c in batch_costs]})

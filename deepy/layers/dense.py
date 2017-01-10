@@ -1,4 +1,4 @@
-from deepy.utils import build_activation, FLOATX
+from deepy.core.env import FLOATX
 import theano.tensor as T
 from . import NeuralLayer
 
@@ -23,7 +23,8 @@ class Dense(NeuralLayer):
         return self._activation(T.dot(x, self.W) + self.B)
 
     def _setup_functions(self):
-        self._activation = build_activation(self.activation)
+        from deepy.tensor.activations import get_activation
+        self._activation = get_activation(self.activation)
 
     def _setup_params(self):
         self.W = self.create_weight(self.input_dim, self.output_dim, initializer=self.initializer)

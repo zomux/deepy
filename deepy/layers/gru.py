@@ -3,7 +3,7 @@
 
 import theano.tensor as T
 from recurrent import RecurrentLayer
-from deepy.utils import neural_computation
+from deepy.core.tensor_conversion import neural_computation
 
 
 class GRU(RecurrentLayer):

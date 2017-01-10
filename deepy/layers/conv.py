@@ -7,9 +7,9 @@ import logging as loggers
 import numpy as np
 import theano.tensor as T
 from theano.tensor.nnet import conv
-from theano.tensor.signal import downsample
+from theano.tensor.signal import pool
 
-from deepy.utils import build_activation, UniformInitializer
+from deepy.utils import UniformInitializer
 from deepy.layers.layer import NeuralLayer
 
 
@@ -52,9 +52,9 @@ class Convolution(NeuralLayer):
             border_mode=self.border_mode
         )
 
-        pooled_out = downsample.max_pool_2d(
+        pooled_out = pool.pool_2d(
             input=conv_out,
-            ds=self.pool_size,
+            ws=self.pool_size,
             ignore_border=True
         )
 
@@ -68,11 +68,12 @@ class Convolution(NeuralLayer):
         return output
 
     def _setup_functions(self):
-        self._activation_func = build_activation(self.activation)
+        from deepy.tensor.activations import get_activation
+        self._activation_func = get_activation(self.activation)
 
     def _setup_params(self):
-        self.W_conv = self.create_weight(suffix="conv", initializer=self.initializer, shape=self.filter_shape)
-        self.B_conv = self.create_bias(self.filter_shape[0], suffix="conv")
+        self.W_conv = self.create_weight(label="conv", initializer=self.initializer, shape=self.filter_shape)
+        self.B_conv = self.create_bias(self.filter_shape[0], label="conv")
 
         self.register_parameters(self.W_conv, self.B_conv)
 

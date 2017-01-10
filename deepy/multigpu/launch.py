@@ -62,24 +62,27 @@ if __name__ == '__main__':
         process_map[worker_process.pid] = ("worker_{}".format(device),
                                            worker_process)
 
-    print("\n### Waiting on experiment to finish ...")
+    print("\n### Waiting experiment to finish ...")
 
     # Silly error handling but that will do for now.
     while process_map:
-        pid, returncode = os.wait()
-        if pid not in process_map:
-            print("Recieved status for unknown process {}".format(pid))
+        try:
+            pid, returncode = os.wait()
+            if pid not in process_map:
+                print("Recieved status for unknown process {}".format(pid))
 
-        name, p = process_map[pid]
-        del process_map[pid]
-        print("{} terminated with return code: {}.".format(name, returncode))
-        if returncode != 0:
-            print("\nWARNING! An error has occurred.")
-            while process_map:
-                for name, p in list(process_map.values()):
-                    try:
-                        p.kill()
-                    except OSError:
-                        pass
-                    if p.poll() is not None:
-                        del process_map[p.pid]
+            name, p = process_map[pid]
+            del process_map[pid]
+            print("{} terminated with return code: {}.".format(name, returncode))
+            if returncode != 0:
+                # print("\nWARNING! An error has occurred.")
+                while process_map:
+                    for name, p in list(process_map.values()):
+                        try:
+                            p.kill()
+                        except OSError:
+                            pass
+                        if p.poll() is not None:
+                            del process_map[p.pid]
+        except KeyboardInterrupt:
+            print ("KeyboardInterrupt")

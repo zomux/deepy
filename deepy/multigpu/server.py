@@ -23,7 +23,7 @@ class ScheduledTrainingServer(Controller):
 
     def __init__(self, port=CONTROLLER_PORT, easgd_alpha=0.5,
                  # Following arguments can be received from workers
-                 start_halving_at=6, end_at=10, step_len=10,
+                 start_halving_at=6, end_at=10, sync_freq=10, halving_freq=1,
                  valid_freq=1500, learning_rate=0.1, log_path=None):
         """
         Initialize the controller.
@@ -36,7 +36,7 @@ class ScheduledTrainingServer(Controller):
         Controller.__init__(self, port)
         self.epoch_start_halving = start_halving_at
         self.end_at = end_at
-        self.step_len = step_len
+        self.sync_freq = sync_freq
         self.start_time = None
         self.rand = np.random.RandomState(3)
         self.epoch = 0
@@ -44,6 +44,7 @@ class ScheduledTrainingServer(Controller):
         self._iters_from_last_valid = 0
         self._evaluating = False
         self._valid_freq = valid_freq
+        self._halving_freq = halving_freq
         self._done = False
         self._lr = learning_rate
         self._easgd_alpha = easgd_alpha
@@ -74,7 +75,7 @@ class ScheduledTrainingServer(Controller):
             bool: False if to stop the training.
         """
         self.epoch += 1
-        if self.epoch >= self.epoch_start_halving:
+        if self.epoch >= self.epoch_start_halving and ((self.epoch - self.epoch_start_halving) % self._halving_freq == 0):
             self._lr *= 0.5
         self._current_iter = 0
         self._iters_from_last_valid = 0
@@ -93,8 +94,8 @@ class ScheduledTrainingServer(Controller):
         if not self.batch_pool:
             return None
         else:
-            batches = self.batch_pool[:self.step_len]
-            self.batch_pool = self.batch_pool[self.step_len:]
+            batches = self.batch_pool[:self.sync_freq]
+            self.batch_pool = self.batch_pool[self.sync_freq:]
             self._current_iter += len(batches)
             self._iters_from_last_valid += len(batches)
             return batches
@@ -112,7 +113,7 @@ class ScheduledTrainingServer(Controller):
         return " ".join(["{}={:.2f}".format(n, c) for (n, c) in costs])
 
 
-    def handle_control(self, req, worker_id):
+    def handle_control(self, req, worker_id, req_info):
         """
         Handles a control_request received from a worker.
         Returns:
@@ -167,9 +168,10 @@ class ScheduledTrainingServer(Controller):
                 sys.stdout.write("\r")
                 sys.stdout.flush()
                 if 'test_costs' in req and req['test_costs']:
-                    self.log("test    (epoch={:2d}) {}".format(
+                    self.log("test    (epoch={:2d}) {} (worker {})".format(
                         self.epoch,
-                        self.get_monitor_string(req['test_costs']))
+                        self.get_monitor_string(req['test_costs']),
+                        worker_id)
                     )
                 if 'valid_costs' in req and req['test_costs']:
                     valid_J = req['valid_costs'][0][1]
@@ -220,7 +222,7 @@ class ScheduledTrainingServer(Controller):
             self._train_costs.append(costs)
             sys.stdout.write("\x1b[2K\r> %d%% | J=%.2f | %.1f batch/s" % (
                 self._current_iter * 100 / self.num_train_batches,
-                costs[0], float(len(self._train_costs)*self.step_len)/(time.time() - self._epoch_start_time)))
+                costs[0], float(len(self._train_costs) * self.sync_freq) / (time.time() - self._epoch_start_time)))
             sys.stdout.flush()
         elif 'get_num_batches_done' in req:
             self.num_train_batches = req['get_num_batches_done']
@@ -243,10 +245,12 @@ class ScheduledTrainingServer(Controller):
                             self._lr = val
                         elif key == 'start_halving_at':
                             self.epoch_start_halving = val
+                        elif key == 'halving_freq':
+                            self._halving_freq = val
                         elif key == 'end_at':
                             self.end_at = val
-                        elif key == 'step_len':
-                            self.step_len = val
+                        elif key == 'sync_freq':
+                            self.sync_freq = val
                         elif key == 'valid_freq':
                             self._valid_freq = val
 
@@ -269,4 +273,5 @@ if __name__ == '__main__':
         easgd_alpha=args.easgd_alpha,
         log_path=args.log
     )
+
     server.serve()
