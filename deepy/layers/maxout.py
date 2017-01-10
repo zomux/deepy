@@ -25,7 +25,7 @@ class Maxout(NeuralLayer):
         if self.output_dim is None:
             self.output_dim = self.input_dim // self.num_pieces
         if self.linear_transform:
-            self.transformer = Dense(self.output_dim * self.num_pieces).initialize(self.input_dim)
+            self.transformer = Dense(self.output_dim * self.num_pieces).init(self.input_dim)
             self.register(self.transformer)
 
 

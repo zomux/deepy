@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import time
 import theano
 import theano.tensor as T
-
 from deepy.conf import TrainerConfig
 from deepy.trainers.base import NeuralTrainer
 from deepy.trainers.optimize import optimize_updates
-
 from logging import getLogger
 logging = getLogger(__name__)
 
@@ -15,7 +14,7 @@ class GeneralNeuralTrainer(NeuralTrainer):
     """
     General neural network trainer.
     """
-    def __init__(self, network, config=None, method=None):
+    def __init__(self, network, method=None, config=None, annealer=None, validator=None):
 
         if method:
             logging.info("changing optimization method to '%s'" % method)
@@ -25,14 +24,17 @@ class GeneralNeuralTrainer(NeuralTrainer):
                 config = TrainerConfig(config)
             config.method = method
 
-        super(GeneralNeuralTrainer, self).__init__(network, config)
+        super(GeneralNeuralTrainer, self).__init__(network, config, annealer=annealer, validator=validator)
 
         self._learning_func = None
 
     def learn(self, *variables):
         if not self._learning_func:
+            start_time = time.time()
             logging.info('compiling %s learning function', self.__class__.__name__)
             self._learning_func = self.learning_function()
+            self._compile_time = time.time() - start_time
+            logging.info("took {} seconds to compile".format(int(self._compile_time)))
         return self._learning_func(*variables)
 
     def _learning_updates(self):

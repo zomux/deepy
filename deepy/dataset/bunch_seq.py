@@ -6,7 +6,8 @@ logging = loggers.getLogger(__name__)
 
 from . import MiniBatches
 import numpy as np
-from deepy.utils import global_rand, FakeGenerator
+from deepy.utils import FakeGenerator
+from deepy.core import env
 
 
 class BunchSequences(MiniBatches):
@@ -24,7 +25,7 @@ class BunchSequences(MiniBatches):
 
     def _yield_data(self, subset):
         subset = list(subset)
-        global_rand.shuffle(subset)
+        env.numpy_rand.shuffle(subset)
 
         bunch_stack_x = [[] for _ in range(self.size)]
         bunch_stack_y = [[] for _ in range(self.size)]

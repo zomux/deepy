@@ -7,10 +7,11 @@ import logging as loggers
 import numpy as np
 import theano
 
-from deepy.utils import FLOATX, UniformInitializer, neural_computation, neural_computation_prefer_tensor
-from deepy.utils import convert_to_neural_var, convert_to_theano_var, build_activation
+from deepy.utils import UniformInitializer
+from deepy.core.env import env
+from deepy.core.tensor_conversion import neural_computation_prefer_tensor, convert_to_theano_var
 
-logging = loggers.getLogger(__name__)
+logging = loggers.getLogger("deepy")
 
 class NeuralLayer(object):
 
@@ -45,12 +46,6 @@ class NeuralLayer(object):
 
     def init(self, input_dim=0, input_dims=None, no_prepare=False):
         """
-        A short version for initialize function.
-        """
-        return self.initialize(input_dim, input_dims, no_prepare)
-
-    def initialize(self, input_dim=0, input_dims=None, no_prepare=False):
-        """
         Initialize the layer.
         :param no_prepare: avoid calling preparation function
         """
@@ -78,38 +73,33 @@ class NeuralLayer(object):
         :type inputs:  list of NeuralVariable
         :return: NeuralVariable
         """
-        from neural_var import NeuralVariable
+        from deepy.core.neural_var import NeuralVariable
+        from deepy.core.graph import graph
         if type(inputs[0]) != NeuralVariable:
             raise SystemError("The input of `compute` must be NeuralVar")
 
         dims = [t.dim() for t in inputs]
         if len(inputs) == 1:
-            self.initialize(input_dim=dims[0])
+            self.init(input_dim=dims[0])
         else:
-            self.initialize(input_dims=dims)
+            self.init(input_dims=dims)
+        # Check block
+        if self.parameters and not self._linked_block:
+            self.belongs_to(graph.default_block())
         # convert kwargs
-        train_kwargs, test_kwargs, _, _ = convert_to_theano_var(kwargs)
+        train_kwargs, _, _ = convert_to_theano_var(kwargs)
 
         output = self.compute_tensor(*[t.tensor for t in inputs], **train_kwargs)
-        test_output = self.compute_test_tesnor(*[t.test_tensor for t in inputs], **test_kwargs)
 
         if type(output) != list and type(output) != tuple:
-            return NeuralVariable(output, test_output, self.output_dim)
+            return NeuralVariable(output, dim=self.output_dim)
         else:
-            return [NeuralVariable(*item) for item in zip(output, test_output, self.output_dims)]
+            return [NeuralVariable(*item) for item in zip(output, self.output_dims)]
 
     def prepare(self):
         """
         Prepare function will be called after connected.
         """
-        return self.setup()
-
-    def setup(self):
-        """
-        !!! DEPRECATED !!!
-        Setup function will be called after connected.
-        """
-        pass
 
     @neural_computation_prefer_tensor
     def compute_tensor(self, *args, **kwargs):
@@ -118,23 +108,6 @@ class NeuralLayer(object):
         """
         raise NotImplementedError("output function of '%s' is not implemented" % self.name)
 
-    @neural_computation_prefer_tensor
-    def compute_test_tesnor(self, *args, **kwargs):
-        """
-        Compute with tensors in Theano in test time.
-        """
-        return self.compute_tensor(*args, **kwargs)
-
-    def compute_flexible_tensor(self, x, test=False):
-        """
-        Deprecated.
-        Compute with tensors in Theano, with a parameter to switch test or not.
-        """
-        if test:
-            return self.compute_test_tesnor(x)
-        else:
-            return self.compute_tensor(x)
-
     def belongs_to(self, block):
         """
         Let the given block or network manage the parameters of this layer.
@@ -142,7 +115,7 @@ class NeuralLayer(object):
         :return: NeuralLayer
         """
         if self._linked_block:
-            raise SystemError("One layer can not belong to two blocks")
+            raise SystemError("The layer {} has already blonged to {}".format(self.name, self._linked_block.name))
         self._linked_block = block
         block.register_layer(self)
         return self
@@ -158,6 +131,8 @@ class NeuralLayer(object):
             self.register_parameters(*layer.parameters)
             self.register_updates(*layer.updates)
             self.register_training_updates(*layer.training_updates)
+            self.training_monitors.extend(layer.training_monitors)
+            self.testing_monitors.extend(layer.testing_monitors)
 
     def register_parameters(self, *parameters):
         """
@@ -197,6 +172,7 @@ class NeuralLayer(object):
         """
         for key, node in monitors:
             if key not in self._registered_monitors:
+                node *= 1.0 # Avoid CudaNdarray
                 self.training_monitors.append((key, node))
                 self.testing_monitors.append((key, node))
                 self._registered_monitors.add(key)
@@ -231,52 +207,59 @@ class NeuralLayer(object):
         """
         self.epoch_callbacks.extend(callbacks)
 
-    def create_weight(self, input_n=1, output_n=1, suffix="W", initializer=None, shape=None):
+    def create_weight(self, input_n=1, output_n=1, label="W", initializer=None, shape=None):
         if not shape:
             shape = (input_n, output_n)
 
         if not initializer:
-            initializer = UniformInitializer()
+            initializer = env.default_initializer
 
-        weight = theano.shared(initializer.sample(shape).astype(FLOATX), name='{}_{}'.format(self.name, suffix))
+        weight = theano.shared(initializer.sample(shape).astype(env.FLOATX), name='{}_{}'.format(self.name, label))
 
-        logging.info('create weight W_%s: %s', suffix, str(shape))
+        logging.info('create param %s %s for %s', label, str(shape), self.name)
         return weight
 
-    def create_bias(self, output_n=1, suffix="B", value=0., shape=None):
+    def create_bias(self, output_n=1, label="B", value=0., shape=None):
         if not shape:
             shape = (output_n, )
         bs =  np.ones(shape)
         bs *= value
-        bias = theano.shared(bs.astype(FLOATX), name='{}_{}'.format(self.name, suffix))
-        logging.info('create bias B_%s: %s', suffix, str(shape))
+        bias = theano.shared(bs.astype(env.FLOATX), name='{}_{}'.format(self.name, label))
+        logging.info('create param %s %s for %s', label, str(shape), self.name)
         return bias
 
-    def create_scalar(self, name="S", value=0, dtype=FLOATX):
-        bs = np.array(0)
+    def create_scalar(self, name="S", value=0, dtype=env.FLOATX):
+        bs = np.array(0, dtype=dtype)
         bs += value
-        v = theano.shared(bs.astype(dtype), name='{}_{}'.format(self.name, name))
+        v = theano.shared(bs, name='{}_{}'.format(self.name, name))
 
         logging.info('create scalar %s', name)
         return v
 
-    def create_vector(self, n, name="V", dtype=FLOATX):
-        bs =  np.zeros(n)
-        v = theano.shared(bs.astype(dtype), name='{}_{}'.format(self.name, name))
+    def create_vector(self, n, name="V", dtype=env.FLOATX):
+        bs =  np.zeros(n, dtype=dtype)
+        v = theano.shared(bs, name='{}_{}'.format(self.name, name))
 
         logging.info('create vector %s: %d', name, n)
         return v
 
     def create_matrix(self, m, n, name="M"):
 
-        matrix = theano.shared(np.zeros((m, n)).astype(FLOATX), name="{}_{}".format(self.name, name))
+        matrix = theano.shared(np.zeros((m, n)).astype(env.FLOATX), name="{}_{}".format(self.name, name))
 
         logging.info('create matrix %s: %d x %d', name, m, n)
         return matrix
 
     def activation(self, name):
-        return build_activation(name)
+        from deepy.tensor.activations import get_activation
+        return get_activation(name)
 
     def callback_forward_propagation(self):
         pass
 
+    def set_name(self, name):
+        """
+        Set the name of this layer.
+        This will be the key of saved parameters.
+        """
+        self.name = name

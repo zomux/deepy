@@ -24,4 +24,4 @@ class Timer(object):
         """
         if not self.end_time:
             self.end()
-        print "Time:", ((self.end_time - self.start_time )/ 60), "mins"
+        print ("Time: {} mins".format((self.end_time - self.start_time )/ 60))

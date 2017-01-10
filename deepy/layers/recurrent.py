@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from . import NeuralLayer
-from neural_var import NeuralVariable
-from deepy.utils import build_activation, FLOATX, XavierGlorotInitializer, OrthogonalInitializer, Scanner, neural_computation
+from abc import ABCMeta, abstractmethod
+
 import numpy as np
 import theano.tensor as T
-from abc import ABCMeta, abstractmethod
+
+from deepy.core.tensor_conversion import neural_computation
+from deepy.utils import XavierGlorotInitializer, OrthogonalInitializer, Scanner
+from deepy.core import env
+import deepy.tensor as DT
+from . import NeuralLayer
 
 OUTPUT_TYPES = ["sequence", "one"]
 INPUT_TYPES = ["sequence", "one"]
@@ -21,14 +25,16 @@ class RecurrentLayer(NeuralLayer):
                  gate_activation='sigmoid', activation='tanh',
                  steps=None, backward=False, mask=None,
                  additional_input_dims=None):
+        from deepy.core.neural_var import NeuralVariable
+        from deepy.tensor.activations import get_activation
         super(RecurrentLayer, self).__init__(name)
         self.state_names = state_names
         self.main_state = state_names[0]
         self.hidden_size = hidden_size
         self._gate_activation = gate_activation
         self._activation = activation
-        self.gate_activate = build_activation(self._gate_activation)
-        self.activate = build_activation(self._activation)
+        self.gate_activate = get_activation(self._gate_activation)
+        self.activate = get_activation(self._activation)
         self._input_type = input_type
         self._output_type = output_type
         self.inner_init = inner_init if inner_init else OrthogonalInitializer()
@@ -81,11 +87,19 @@ class RecurrentLayer(NeuralLayer):
         Compute one step in the RNN.
         :return: one variable for RNN and GRU, multiple variables for LSTM
         """
+        if not self.initialized:
+            input_dim = None
+            if input and hasattr(input.tag, 'last_dim'):
+                input_dim = input.tag.last_dim
+            self.init(input_dim)
+
         input_map = self.merge_inputs(input, additional_inputs=additional_inputs)
         input_map.update({"state": state, "lstm_cell": lstm_cell})
         output_map = self.compute_new_state(input_map)
         outputs = [output_map.pop("state")]
         outputs += output_map.values()
+        for tensor in outputs:
+            tensor.tag.last_dim = self.hidden_size
         if len(outputs) == 1:
             return outputs[0]
         else:
@@ -101,9 +115,9 @@ class RecurrentLayer(NeuralLayer):
         for state in self.state_names:
             if state != "state" or not init_state:
                 if self._input_type == 'sequence' and input_var.ndim == 2:
-                    init_state = T.alloc(np.cast[FLOATX](0.), self.hidden_size)
+                    init_state = T.alloc(np.cast[env.FLOATX](0.), self.hidden_size)
                 else:
-                    init_state = T.alloc(np.cast[FLOATX](0.), input_var.shape[0], self.hidden_size)
+                    init_state = T.alloc(np.cast[env.FLOATX](0.), input_var.shape[0], self.hidden_size)
             initial_states[state] = init_state
         return initial_states
 
@@ -131,6 +145,7 @@ class RecurrentLayer(NeuralLayer):
         return step_inputs
 
     def compute(self, input_var, mask=None, additional_inputs=None, steps=None, backward=False, init_states=None, return_all_states=False):
+        from deepy.core.neural_var import NeuralVariable
         if additional_inputs and not self.additional_input_dims:
             self.additional_input_dims = map(lambda var: var.dim(), additional_inputs)
         result_var = super(RecurrentLayer, self).compute(input_var,
@@ -138,7 +153,7 @@ class RecurrentLayer(NeuralLayer):
         if return_all_states:
             state_map = {}
             for k in result_var.tensor:
-                state_map[k] = NeuralVariable(result_var.tensor[k], result_var.test_tensor[k], self.output_dim)
+                state_map[k] = NeuralVariable(result_var.tensor[k], self.output_dim)
             return state_map
         else:
             return result_var
