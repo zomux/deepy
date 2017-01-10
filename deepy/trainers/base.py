@@ -5,10 +5,10 @@ import time
 import numpy as np
 import theano
 
-from deepy.conf import TrainerConfig
-from deepy.dataset import Dataset
-from deepy.utils import Timer
-from deepy.core import runtime
+from ..conf import TrainerConfig
+from ..core import env, runtime
+from ..utils import Timer
+from ..dataset import Dataset
 from controllers import TrainingController
 
 from abc import ABCMeta, abstractmethod
@@ -22,7 +22,7 @@ class NeuralTrainer(object):
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, network, config=None, iter_controllers=None, epoch_controllers=None):
+    def __init__(self, network, config=None, validator=None, annealer=None):
         """
         Basic neural network trainer.
         :type network: deepy.NeuralNetwork
@@ -38,6 +38,8 @@ class NeuralTrainer(object):
             self.config = TrainerConfig(config)
         else:
             self.config = TrainerConfig()
+        if type(self.config.learning_rate) == float:
+            self.config.learning_rate = np.array(self.config.learning_rate, dtype=env.FLOATX)
         # Model and network all refer to the computational graph
         self.model = self.network = network
 
@@ -50,8 +52,14 @@ class NeuralTrainer(object):
         self.min_improvement = self.config.min_improvement
         self.patience = self.config.patience
 
-        self._iter_controllers = iter_controllers if iter_controllers else []
-        self._epoch_controllers = epoch_controllers if epoch_controllers else []
+        self._iter_controllers = []
+        self._epoch_controllers = []
+        if annealer:
+            annealer.bind(self)
+            self._epoch_controllers.append(annealer)
+        if validator:
+            validator.bind(self)
+            self._iter_controllers.append(validator)
 
         self.best_cost = 1e100
         self.best_epoch = 0
@@ -282,7 +290,7 @@ class NeuralTrainer(object):
             self.network.train_logger.record_progress(self._progress)
             self.network.save_params(save_path, new_thread=True)
 
-    def report(self, score_map, type="valid", epoch=0, new_best=False):
+    def report(self, score_map, type="valid", epoch=-1, new_best=False):
         """
         Report the scores and record them in the log.
         """
@@ -292,9 +300,8 @@ class NeuralTrainer(object):
         info = " ".join("%s=%.2f" % el for el in score_map.items())
         current_epoch = epoch if epoch > 0 else self.current_epoch()
         epoch_str = "epoch={}".format(current_epoch + 1)
-        if epoch == 0:
-            epoch_str = "dryrun" + " " * (len(epoch_str) - 6)
-        if epoch == 0:
+        if epoch < 0:
+            epoch_str = "dryrun"
             sys.stdout.write("\r")
             sys.stdout.flush()
         marker = " *" if new_best else ""
@@ -393,12 +400,13 @@ class NeuralTrainer(object):
         else:
             return None
 
-    def run(self, train_set, valid_set=None, test_set=None, train_size=None, controllers=None):
+    def run(self, train_set, valid_set=None, test_set=None, train_size=None, epoch_controllers=None):
         """
         Run until the end.
+        :param epoch_controllers: deprecated
         """
-        controllers = controllers if controllers else []
-        controllers += self._epoch_controllers
+        epoch_controllers = epoch_controllers if epoch_controllers else []
+        epoch_controllers += self._epoch_controllers
         if isinstance(train_set, Dataset):
             dataset = train_set
             train_set = dataset.train_set()
@@ -408,15 +416,14 @@ class NeuralTrainer(object):
         self._current_train_set = train_set
         self._current_valid_set = valid_set
         self._current_test_set = test_set
-        if controllers:
-            for controller in controllers:
+        if epoch_controllers:
+            for controller in epoch_controllers:
                 controller.bind(self)
         timer = Timer()
         for _ in self.train(train_set, valid_set=valid_set, test_set=test_set, train_size=train_size):
-            if controllers:
-                for controller in controllers:
-                    if hasattr(controller, 'invoke') and controller.invoke():
-                        self.exit()
+            if epoch_controllers:
+                for controller in epoch_controllers:
+                    controller.invoke()
             if self._ended:
                 break
         if self._report_time:

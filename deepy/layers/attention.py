@@ -11,7 +11,6 @@ class Attention(NeuralLayer):
         super(Attention, self).__init__("attention")
         self.input_dim = input_dim if input_dim else hidden_size
         self.hidden_size = hidden_size
-        self._precomputed_inputs = None
         self.init(input_dim)
 
     def prepare(self):
@@ -22,19 +21,18 @@ class Attention(NeuralLayer):
 
 
     def precompute(self, inputs):
-        self._precomputed_inputs = T.dot(inputs, self.Ua)
+        """
+        Precompute partial values in the score function.
+        """
+        return T.dot(inputs, self.Ua)
 
-    def compute_alignments(self, prev_state, inputs=None, mask=None):
+    def compute_alignments(self, prev_state, precomputed_values, mask=None):
         """
         Compute the alignment weights based on the previous state.
         """
-        if not inputs and not self._precomputed_inputs:
-            raise Exception("Either inputs or precomputed inputs shall be provided.")
-        elif not self._precomputed_inputs:
-            self.precompute(inputs)
 
         WaSp = T.dot(prev_state, self.Wa)
-        UaH = self._precomputed_inputs
+        UaH = precomputed_values
         # For test time the UaH will be (time, output_dim)
         if UaH.ndim == 2:
             preact = WaSp[:, None, :] + UaH[None, :, :]
@@ -51,10 +49,11 @@ class Attention(NeuralLayer):
         align_weights = T.nnet.softmax(align_scores)
         return align_weights
 
-    def compute_context_vector(self, prev_state, inputs=None, mask=None):
+    def compute_context_vector(self, prev_state, inputs, precomputed_values=None, mask=None):
         """
         Compute the context vector with soft attention.
         """
-        align_weights = self.compute_alignments(prev_state, inputs, mask)
+        precomputed_values = precomputed_values if precomputed_values else self.precompute(inputs)
+        align_weights = self.compute_alignments(prev_state, precomputed_values, mask)
         context_vector = T.sum(align_weights[:, :, None] * inputs, axis=1)
         return context_vector

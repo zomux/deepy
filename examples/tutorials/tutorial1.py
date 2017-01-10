@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     annealer = LearningRateAnnealer()
 
-    trainer.run(mnist, controllers=[annealer])
+    trainer.run(mnist, epoch_controllers=[annealer])
 
     model.save_params(model_path)
 

@@ -29,6 +29,6 @@ if __name__ == '__main__':
 
     batches = MiniBatches(MnistDataset(), batch_size=60)
 
-    trainer.run(batches, controllers=[])
+    trainer.run(batches, epoch_controllers=[])
 
     model.save_params(default_model)

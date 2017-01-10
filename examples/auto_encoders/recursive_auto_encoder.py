@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     annealer = LearningRateAnnealer()
 
-    trainer.run(get_data(), controllers=[annealer])
+    trainer.run(get_data(), epoch_controllers=[annealer])
 
     model.save_params(model_path)
 

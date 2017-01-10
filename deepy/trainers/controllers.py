@@ -20,20 +20,20 @@ class TrainingController(object):
         """
         return False
 
-class TrainingMonitor(TrainingController):
+class TrainingValidator(TrainingController):
     """
-    A monitor called between iterations.
+    A validator that allows validating the model with another graph.
     """
 
-    def __init__(self, valid_model, data_split='valid', freq=1500, save_path=None, criteria='cost',
+    def __init__(self, valid_model=None, data_split='valid', freq=1500, save_path=None, criteria='cost',
                  smaller_is_better=True):
         """
-        Initialize the training monitor.
+        Initialize the training validator.
         """
         self._model = valid_model
         self._data_split = data_split
         self._freq = freq
-        self._save_path = None
+        self._save_path = save_path
         self._criteria = criteria
         self._smaller_is_better = smaller_is_better
         self._best_criteria = None

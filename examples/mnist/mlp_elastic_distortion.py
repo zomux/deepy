@@ -53,6 +53,6 @@ if __name__ == '__main__':
 
     mnist = MiniBatches(expanded_mnist, batch_size=20)
 
-    trainer.run(mnist, controllers=[annealer])
+    trainer.run(mnist, epoch_controllers=[annealer])
 
     model.save_params(default_model)

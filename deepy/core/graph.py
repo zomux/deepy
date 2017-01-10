@@ -117,13 +117,13 @@ class GraphBuilder(object):
         from loop import Loop
         return Loop(sequences, outputs, non_sequences, block, **kwargs)
 
-    def get_trainer(self, model,  method='sgd', config=None):
+    def get_trainer(self, model,  method='sgd', config=None, annealer=None, validator=None):
         """
         Get a trainer to optimize given model.
         :rtype: deepy.trainers.GeneralNeuralTrainer
         """
         from deepy.trainers import GeneralNeuralTrainer
-        return GeneralNeuralTrainer(model, method=method, config=config)
+        return GeneralNeuralTrainer(model, method=method, config=config, annealer=annealer, validator=validator)
 
     @neural_computation
     def shared(self, value, name=None):

@@ -44,6 +44,6 @@ if __name__ == '__main__':
     trainer = SGDTrainer(model)
     annealer = LearningRateAnnealer()
 
-    trainer.run(batch, controllers=[annealer])
+    trainer.run(batch, epoch_controllers=[annealer])
 
     model.save_params(args.model)

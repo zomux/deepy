@@ -59,5 +59,5 @@ if __name__ == '__main__':
 
     annealer = LearningRateAnnealer()
 
-    trainer.run(batch_set.train_set(), batch_set.valid_set(), controllers=[annealer])
+    trainer.run(batch_set.train_set(), batch_set.valid_set(), epoch_controllers=[annealer])
 

@@ -96,13 +96,23 @@ def var(tensor_type, last_dim=0, test_shape=None):
             # May be it's a value
             var.set_test_value(test_shape)
         else:
-            var.set_test_value(env.numpy_rand.rand(*test_shape).astype(var.tensor.dtype))
+            test_val = env.numpy_rand.rand(*test_shape)
+            if len(test_shape) > 0:
+                test_val = test_val.astype(var.tensor.dtype)
+            elif var.tensor.dtype.startswith("int"):
+                test_val = 1
+            var.set_test_value(test_val)
     else:
         # Create a general test_shape
         dims = [(d + 1) * 3 for d in range(var.tensor.ndim)]
         if var.dim() != 0:
             dims[-1] = var.dim()
-        var.set_test_value(env.numpy_rand.rand(*dims).astype(var.tensor.dtype))
+        test_val = env.numpy_rand.rand(*dims)
+        if len(dims) > 0:
+            test_val = test_val.astype(var.tensor.dtype)
+        elif var.tensor.dtype.startswith("int"):
+            test_val = 1
+        var.set_test_value(test_val)
     return var
 
 

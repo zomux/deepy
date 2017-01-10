@@ -37,6 +37,6 @@ if __name__ == '__main__':
                                  "weight_l2": 1e-7})
     annealer = LearningRateAnnealer()
 
-    trainer.run(lmdata, controllers=[annealer])
+    trainer.run(lmdata, epoch_controllers=[annealer])
 
     model.save_params(default_model)

@@ -72,6 +72,6 @@ if __name__ == '__main__':
 
     trainer = MomentumTrainer(model, {'weight_l2': 0.0001})
 
-    trainer.run(mnist, controllers=[LearningRateAnnealer()])
+    trainer.run(mnist, epoch_controllers=[LearningRateAnnealer()])
 
     model.save_params(model_path)
