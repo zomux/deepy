@@ -30,7 +30,6 @@ class Attention(NeuralLayer):
         """
         Compute the alignment weights based on the previous state.
         """
-
         WaSp = T.dot(prev_state, self.Wa)
         UaH = precomputed_values
         # For test time the UaH will be (time, output_dim)

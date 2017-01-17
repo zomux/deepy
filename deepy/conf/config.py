@@ -26,7 +26,7 @@ class GeneralConfig(object):
 
     def get(self, key, default=None):
         key = getattr(self, key)
-        if key != None:
+        if key is not None:
             return key
         else:
             return default

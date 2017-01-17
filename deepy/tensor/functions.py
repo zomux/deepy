@@ -18,9 +18,10 @@ def concat(vars, axis=-1):
 @neural_computation
 def reverse(tensor, axis=-1):
     ndim = tensor.ndim
-    selectors = [slice(None)] * ndim
-    selectors[axis] = slice(None, None, -1)
-    ret = tensor[selectors]
+    if ndim == 1:
+        ret = tensor[::-1]
+    else:
+        ret = tensor[:, ::-1]
     if hasattr(tensor.tag, "last_dim"):
         ret.tag.last_dim = tensor.tag.last_dim
     return ret

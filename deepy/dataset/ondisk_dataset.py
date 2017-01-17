@@ -4,7 +4,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import types
+
 from . import Dataset
 from data_processor import DataProcessor
 from deepy.utils import FakeGenerator, StreamPickler

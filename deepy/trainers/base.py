@@ -39,7 +39,7 @@ class NeuralTrainer(object):
         else:
             self.config = TrainerConfig()
         if type(self.config.learning_rate) == float:
-            self.config.learning_rate = np.array(self.config.learning_rate, dtype=env.FLOATX)
+            self.config.learning_rate = theano.shared(np.array(self.config.learning_rate, dtype=env.FLOATX), "lr")
         # Model and network all refer to the computational graph
         self.model = self.network = network
 
