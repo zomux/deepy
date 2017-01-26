@@ -128,7 +128,7 @@ class AdamTrainer(GeneralNeuralTrainer):
     AdaGrad trainer.
     """
     def __init__(self, network, config=None):
-        super(AdamTrainer, self).__init__(network, config, "ADAM")
+        super(AdamTrainer, self).__init__(network, "ADAM", config)
 
 class RmspropTrainer(GeneralNeuralTrainer):
     """

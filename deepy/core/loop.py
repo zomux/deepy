@@ -42,7 +42,7 @@ class Loop(object):
             nonseq_keys = self._non_sequences.keys()
             dummy_tensors, self._scan_local_vars = get_dummy_args(
                 sequences=[self._sequences[k].tensor for k in seq_keys],
-                outputs_info=[self._outputs[k].tensor for k in self._ordered_out_keys],
+                outputs_info=[self._outputs[k].tensor if self._outputs[k] else None for k in self._ordered_out_keys],
                 non_sequences=[self._non_sequences[k].tensor for k in nonseq_keys],
                 **self._kwargs
             )
@@ -67,7 +67,8 @@ class Loop(object):
         for k in self._ordered_out_keys:
             if k not in self._loop_vars:
                 raise Exception("{} can not be found in loop vars.".format(k))
-            output_tensors.append(self._loop_vars[k].tensor)
+            tensor_k = self._loop_vars[k].tensor if isinstance(self._loop_vars[k], NeuralVariable) else self._loop_vars[k]
+            output_tensors.append(tensor_k)
 
         result_tensors, updates = finish_scan(output_tensors, self._scan_local_vars)
         if self._block and updates:

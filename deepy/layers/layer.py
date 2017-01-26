@@ -50,7 +50,7 @@ class NeuralLayer(object):
         :param no_prepare: avoid calling preparation function
         """
         if self.initialized:
-            return
+            return self
         # configure input dimensions
         if input_dims:
             self.input_dims = input_dims
