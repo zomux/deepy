@@ -7,10 +7,10 @@ import deepy.tensor as T
 class Attention(NeuralLayer):
 
 
-    def __init__(self, hidden_size, input_dim):
+    def __init__(self, input_dim, hidden_size=None):
         super(Attention, self).__init__("attention")
-        self.input_dim = input_dim if input_dim else hidden_size
-        self.hidden_size = hidden_size
+        self.input_dim = input_dim
+        self.hidden_size = hidden_size if hidden_size else input_dim
         self.init(input_dim)
 
     def prepare(self):
