@@ -99,7 +99,7 @@ class NeuralTrainer(object):
         """
         Get current epoch.
         """
-        return self._epoch
+        return self._epoch + 1
 
     def _setup_costs(self):
         self.cost = self._add_regularization(self.network.cost)
@@ -384,7 +384,7 @@ class NeuralTrainer(object):
         """
         Get current epoch.
         """
-        return self._epoch
+        return self._epoch + 1
 
 
     def get_data(self, data_split="train"):
