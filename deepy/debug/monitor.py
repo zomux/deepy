@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+import numpy as np
 import theano
 from theano import tensor as T
+from theano.gradient import DisconnectedType
 
 from deepy.core.env import FLOATX, EPSILON
 from collections import defaultdict
@@ -31,8 +34,8 @@ class FuncBreakpointOp(theano.Op):
         if self.fn is not None:
             self.fn(xin)
 
-    def grad(self, input, output_gradients):
-        return output_gradients
+    def grad(self, inputs, output_gradients):
+        return ([DisconnectedType()()] + output_gradients)
 
     def R_op(self, inputs, eval_points):
         return [x for x in eval_points]
@@ -56,7 +59,7 @@ class RecordOp(FuncBreakpointOp):
         xin, = inputs
         xout, = output_storage
         xout[0] = xin
-        stack[self.key].append(xin)
+        stack[self.key].append(np.asarray(xin))
 
 
 def monitor(var, name=""):
