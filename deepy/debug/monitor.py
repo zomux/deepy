@@ -67,7 +67,7 @@ def monitor_tensor(value, name="", disabled=False):
     if disabled:
         return T.sum(value)*0
     else:
-        val = T.sum(theano.printing.Print(name)(value))*T.constant(EPSILON, dtype=FLOATX)
+        val = T.sum(theano.printing.Print(name)(value)) * EPSILON
         return T.cast(val, FLOATX)
 
 
@@ -76,7 +76,7 @@ def breakpoint(value, func):
 
 
 def breakpoint_tensor(value, func):
-    val = T.sum(FuncBreakpointOp(func)(value)) * T.constant(EPSILON, dtype=FLOATX)
+    val = T.sum(FuncBreakpointOp(func)(value)) * EPSILON
     return T.cast(val, FLOATX)
 
 
@@ -85,7 +85,7 @@ def record(value, key="general"):
 
 
 def record_tensor(value, key="general"):
-    val = T.sum(RecordOp(key)(value)) * T.constant(EPSILON, dtype=FLOATX)
+    val = T.sum(RecordOp(key)(value)) * EPSILON
     return T.cast(val, FLOATX)
 
 
