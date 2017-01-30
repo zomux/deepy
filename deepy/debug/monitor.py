@@ -47,7 +47,7 @@ class FuncBreakpointOp(theano.Op):
 
 class RecordOp(FuncBreakpointOp):
 
-    __props__ = ('key')
+    __props__ = ('key',)
 
     def __init__(self, key="general"):
         self._key = key
