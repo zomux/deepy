@@ -21,7 +21,7 @@ class DebugOp(theano.Op):
 
     view_map = {0: [0]}
 
-    __props__ = ('fn')
+    __props__ = ('fn',)
 
     def __init__(self, fn=None):
         self.fn = fn
