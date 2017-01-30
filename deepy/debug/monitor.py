@@ -59,7 +59,7 @@ class RecordOp(FuncBreakpointOp):
         xin, = inputs
         xout, = output_storage
         xout[0] = xin
-        stack[self.key].append(np.asarray(xin))
+        stack[self.key].append(np.copy(xin))
 
 
 def monitor(var, name=""):
