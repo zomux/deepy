@@ -3,21 +3,15 @@
 import theano
 from theano import tensor as T
 
-from deepy.core.env import FLOATX
-
-def monitor(var, name=""):
-    return monitor_tensor(var.tensor, name=name)
+from deepy.core.env import FLOATX, EPSILON
+from collections import defaultdict
 
 
-def monitor_tensor(value, name="", disabled=False):
-    if disabled:
-        return T.sum(value)*0
-    else:
-        val = T.sum(theano.printing.Print(name)(value))*T.constant(0.0000001, dtype=FLOATX)
-        return T.cast(val, FLOATX)
+if "stack" not in globals():
+    stack = defaultdict(list)
 
 
-class DebugOp(theano.Op):
+class FuncBreakpointOp(theano.Op):
 
     view_map = {0: [0]}
 
@@ -49,3 +43,49 @@ class DebugOp(theano.Op):
 
     def c_code_cache_version(self):
         return (1,)
+
+
+class RecordOp(FuncBreakpointOp):
+
+    __props__ = ('key')
+
+    def __init__(self, key="general"):
+        self._key = key
+
+    def perform(self, node, inputs, output_storage, **kwargs):
+        xin, = inputs
+        xout, = output_storage
+        xout[0] = xin
+        stack[self._key].append(xin)
+
+
+def monitor(var, name=""):
+    return monitor_tensor(var.tensor, name=name)
+
+
+def monitor_tensor(value, name="", disabled=False):
+    if disabled:
+        return T.sum(value)*0
+    else:
+        val = T.sum(theano.printing.Print(name)(value))*T.constant(EPSILON, dtype=FLOATX)
+        return T.cast(val, FLOATX)
+
+
+def breakpoint(value, func):
+    return breakpoint_tensor(value.tensor, func)
+
+
+def breakpoint_tensor(value, func):
+    val = T.sum(FuncBreakpointOp(func)(value)) * T.constant(EPSILON, dtype=FLOATX)
+    return T.cast(val, FLOATX)
+
+
+def record(value, key="general"):
+    return record_tensor(value.tensor, key)
+
+
+def record_tensor(value, key="general"):
+    val = T.sum(RecordOp(key)(value)) * T.constant(EPSILON, dtype=FLOATX)
+    return T.cast(val, FLOATX)
+
+
