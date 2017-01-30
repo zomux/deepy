@@ -125,11 +125,11 @@ class GraphBuilder(object):
         from deepy.trainers import GeneralNeuralTrainer
         return GeneralNeuralTrainer(model, method=method, config=config, annealer=annealer, validator=validator)
 
-    @neural_computation
     def shared(self, value, name=None):
         """
         Create a shared theano scalar value.
         """
+        from neural_var import NeuralVariable
         if type(value) == int:
             final_value = np.array(value, dtype="int32")
         elif type(value) == float:
@@ -137,7 +137,8 @@ class GraphBuilder(object):
         else:
             final_value = value
 
-        return theano.shared(final_value, name=name)
+        last_dim = final_value.shape[-1] if hasattr(final_value, 'shape') and final_value.shape else 0
+        return NeuralVariable(theano.shared(final_value, name=name), last_dim)
 
     @neural_computation
     def disconnect(self, x):
@@ -147,7 +148,7 @@ class GraphBuilder(object):
         return disconnected_grad(x)
 
     def compile(self, input_dim=0, model=None, input_tensor=None, monitors=None,
-                 cost=None, output=None, outputs=None, blocks=None, input_vars=None, target_vars=None):
+                 cost=None, output=None, outputs=None, blocks=None, input_vars=None, target_vars=None, updates=None):
         from comp_graph import ComputationalGraph
         # Pass the arguments to `ComputationalGraph`
         args = [arg for arg in getargspec(GraphBuilder.compile).args if arg != "self"]
