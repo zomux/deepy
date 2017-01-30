@@ -50,13 +50,13 @@ class RecordOp(FuncBreakpointOp):
     __props__ = ('key',)
 
     def __init__(self, key="general"):
-        self._key = key
+        self.key = key
 
     def perform(self, node, inputs, output_storage, **kwargs):
         xin, = inputs
         xout, = output_storage
         xout[0] = xin
-        stack[self._key].append(xin)
+        stack[self.key].append(xin)
 
 
 def monitor(var, name=""):
