@@ -10,7 +10,6 @@ from deepy.core.env import FLOATX
 import theano
 import numpy as np
 import theano.tensor as T
-import scipy
 
 
 class ScipyTrainer(NeuralTrainer):
@@ -38,7 +37,7 @@ class ScipyTrainer(NeuralTrainer):
         self.learning_func = True
 
     def train_step(self, train_set, train_size=None):
-
+        import scipy
         res = scipy.optimize.minimize(
             fun=self._function_at,
             jac=self._gradient_at,

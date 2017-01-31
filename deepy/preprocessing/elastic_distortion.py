@@ -9,7 +9,6 @@ Default parameters are modified.
 
 import numpy as np
 import math
-from scipy.signal import convolve2d
 
 from deepy.core import env
 
@@ -65,6 +64,7 @@ def elastic_distortion(image, kernel_dim=21, sigma=6, alpha=30, negated=True):
     :param negated: a flag indicating whether the image is negated or not
     :returns: a nd array transformed image
     """
+    from scipy.signal import convolve2d
     # check if the image is a negated one
     if not negated:
         image = 255-image

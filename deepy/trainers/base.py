@@ -141,7 +141,7 @@ class NeuralTrainer(object):
         self.set_params(*self.best_params)
         self.network.save_params(path)
 
-    def load_params(self, path, exclude_free_params=False):
+    def load_params(self, path, exclude_free_params=False, resume=True):
         """
         Load parameters for the training.
         This method can load free parameters and resume the training progress.
@@ -149,7 +149,7 @@ class NeuralTrainer(object):
         self.network.load_params(path, exclude_free_params=exclude_free_params)
         self.best_params = self.copy_params()
         # Resume the progress
-        if self.network.train_logger.progress() > 0 or self.network.train_logger.epoch() > 0:
+        if resume and (self.network.train_logger.progress() > 0 or self.network.train_logger.epoch() > 0):
             self.skip(self.network.train_logger.progress(), self.network.train_logger.epoch() - 1)
 
     def copy_params(self):
