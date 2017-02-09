@@ -88,7 +88,7 @@ class GeneralNeuralTrainer(NeuralTrainer):
         givens = None
         return theano.function(
             variables,
-            map(lambda v: theano.Out(v, borrow=True), self.training_variables),
+            self.training_variables,
             updates=update_list, allow_input_downcast=True,
             mode=self.config.get("theano_mode", None),
             givens=givens)
