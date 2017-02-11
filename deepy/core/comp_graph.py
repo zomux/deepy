@@ -66,6 +66,13 @@ class ComputationalGraph(NeuralNetwork):
                 self.training_monitors.append((name, var))
                 self.testing_monitors.append((name, var))
 
+    def get_trainer(self, method='sgd', config=None, annealer=None, validator=None):
+        """
+        Get a trainer for this graph.
+        """
+        from graph import graph as g
+        return g.get_trainer(self, method=method, config=config, annealer=annealer, validator=validator)
+
 
     @property
     def cost(self):

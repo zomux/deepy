@@ -6,6 +6,8 @@ import sys
 import numpy as np
 import theano
 import theano.tensor as TT
+from argparse import ArgumentParser
+import pickle
 
 import deepy as D
 import layers as L
