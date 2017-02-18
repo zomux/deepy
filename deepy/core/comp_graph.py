@@ -27,6 +27,8 @@ class ComputationalGraph(NeuralNetwork):
         super(ComputationalGraph, self).__init__(input_dim, input_tensor=input_tensor)
         self.input_variables = []
         self.target_variables = []
+        if cost is None and output is None and outputs is None and model is None:
+            self._test_output = None
         if model:
             self.stack(model)
         if cost:
