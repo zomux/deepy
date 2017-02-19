@@ -49,7 +49,10 @@ def cross_entropy_3d(y, target_index, mask=None, after_softmax=False):
 @neural_computation
 def least_squares(y, target):
     err = y - target
-    return T.mean((err * err).sum(axis=target.ndim - 1)) / 2
+    if target.ndim == 1:
+        return T.mean((err * err)) * 0.5
+    else:
+        return T.mean((err * err).sum(axis=target.ndim - 1)) * 0.5
 
 @neural_computation
 def accuracy(y, target_index, mask=None):

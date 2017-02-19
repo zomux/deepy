@@ -207,14 +207,20 @@ class NeuralLayer(object):
         """
         self.epoch_callbacks.extend(callbacks)
 
-    def create_weight(self, input_n=1, output_n=1, label="W", initializer=None, shape=None):
+    def create_weight(self, input_n=1, output_n=1, label="W", initializer=None, shape=None, on_cpu=False):
         if not shape:
             shape = (input_n, output_n)
 
         if not initializer:
             initializer = env.default_initializer
-
-        weight = theano.shared(initializer.sample(shape).astype(env.FLOATX), name='{}_{}'.format(self.name, label))
+        
+        device = "cpu" if on_cpu else None
+        vals = initializer.sample(shape).astype(env.FLOATX)
+        name = '{}_{}'.format(self.name, label)
+        if on_cpu:
+            weight = theano.shared(vals, name=name, target='cpu')
+        else:
+            weight = theano.shared(vals, name=name)
 
         logging.info('create param %s %s for %s', label, str(shape), self.name)
         return weight
