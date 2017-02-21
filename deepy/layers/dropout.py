@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import theano
-
-from deepy.core import runtime
-from deepy.core import env
 from layer import NeuralLayer
 
 class Dropout(NeuralLayer):
@@ -14,6 +11,7 @@ class Dropout(NeuralLayer):
         self.p = p
 
     def compute_tensor(self, x):
+        from deepy.core import runtime, env
         if self.p > 0:
             # deal with the problem of test_value
             backup_test_value_setting = theano.config.compute_test_value
