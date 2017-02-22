@@ -3,6 +3,7 @@
 
 import os
 import sys
+import pdb
 import numpy as np
 import theano
 import theano.tensor as TT

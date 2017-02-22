@@ -28,6 +28,7 @@ class Loop(object):
         self._scan_local_vars = None
         self._ordered_out_keys = []
         self._scan_outputs = None
+        self._scan_updates = None
 
     def _build_loop_vars(self):
         """
@@ -83,6 +84,7 @@ class Loop(object):
                 out_var.output_dim = self._outputs[k].dim()
             outputs[k] = out_var
         self._scan_outputs = outputs
+        self._scan_updates = updates
 
     def _scan_step(self, vars):
         """
@@ -113,6 +115,17 @@ class Loop(object):
             raise Exception("The loop is not executed.")
         else:
             return self._scan_outputs
+        
+    @property
+    def updates(self):
+        """
+        Get the updates of the loop.
+        :rtype: MapDict
+        """
+        if not self._scan_outputs:
+            raise Exception("The loop is not executed.")
+        else:
+            return self._scan_updates
 
     def get_outputs(self, *args):
         """
