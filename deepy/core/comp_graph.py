@@ -23,7 +23,6 @@ class ComputationalGraph(NeuralNetwork):
         """
         from deepy.core.neural_var import NeuralVariable
         from deepy.core.tensor_conversion import convert_to_theano_var
-        from theano.sandbox.cuda import CudaNdarraySharedVariable
         super(ComputationalGraph, self).__init__(input_dim, input_tensor=input_tensor)
         self.input_variables = []
         self.target_variables = []
@@ -63,7 +62,7 @@ class ComputationalGraph(NeuralNetwork):
                 name, var = monitor
                 if isinstance(var, NeuralVariable):
                     var = var.tensor
-                if isinstance(var, CudaNdarraySharedVariable):
+                if "SharedVariable" in str(type(var)):
                     var *= 1.0  # Avoid CudaNdarray
                 self.training_monitors.append((name, var))
                 self.testing_monitors.append((name, var))
