@@ -84,7 +84,7 @@ class Loop(object):
                 out_var.output_dim = self._outputs[k].dim()
             outputs[k] = out_var
         self._scan_outputs = outputs
-        self._scan_updates = updates
+        self._scan_updates = updates.items()
 
     def _scan_step(self, vars):
         """

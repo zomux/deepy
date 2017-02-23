@@ -2,24 +2,33 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from itertools import izip, izip_longest, imap
 
-
-def pad_sequence(batch, pad_value=0, pad_side='right', output_mask=False):
+def pad_sequence(batch, pad_value=0, pad_side='right', output_mask=False, length=None, dtype=None):
     """
     Pad a sequence with a value either in the left or right side.
     """
-    max_len = max(map(len, batch))
-    mask = None
-    if output_mask:
-        mask = []
-        for i in range(len(batch)):
-            mask.append([1] * len(batch[i]) + [0] * (max_len - len(batch[i])))
-        mask = np.array(mask, dtype="float32")
-    if pad_side == 'right':
-        new_batch = np.array(list(izip(*izip_longest(*batch, fillvalue=pad_value))))
+    import deepy as D
+    if length is not None:
+        max_len = length
     else:
-        new_batch = np.array(list(izip(*izip_longest(*imap(lambda x: x[::-1], batch), fillvalue=pad_value))))[:, ::-1]
+        max_len = max(map(len, batch))
+    if output_mask:
+        mask = np.zeros((len(batch), max_len), dtype=D.FLOATX)
+    else:
+        mask = None
+    new_batch = np.zeros((len(batch), max_len))
+    if pad_value != 0:
+        new_batch.fill(pad_value)
+    for i in range(len(batch)):
+        if pad_side == 'right':
+            new_batch[i, :len(batch[i])] = batch[i]
+        else:
+            new_batch[i, -len(batch[i]):] = batch[i]
+        if output_mask:
+            if pad_side == 'right':
+                mask[i, :len(batch[i])].fill(1.)
+            else:
+                mask[i, -len(batch[i]):].fill(1.)
     if output_mask:
         return new_batch, mask
     else:

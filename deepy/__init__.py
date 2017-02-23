@@ -11,3 +11,5 @@ import layers
 import networks
 import preprocessing
 import trainers
+
+FLOATX = env.FLOATX
