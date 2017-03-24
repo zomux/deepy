@@ -35,7 +35,7 @@ class FuncBreakpointOp(theano.Op):
             self.fn(xin)
 
     def grad(self, inputs, output_gradients):
-        return ([DisconnectedType()()] + output_gradients)
+        return [DisconnectedType()()]  # + output_gradients
 
     def R_op(self, inputs, eval_points):
         return [x for x in eval_points]

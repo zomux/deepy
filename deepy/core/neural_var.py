@@ -77,7 +77,10 @@ class NeuralVariable(NeuralLayer):
 
     def __rdiv__(self, other):
         return NeuralVariable(self._other_tensor(other) / self.tensor, dim=self.dim())
-
+    
+    def __rtruediv__(self, other):
+        return NeuralVariable(self._other_tensor(other) / self.tensor, dim=self.dim())
+    
     def __getitem__(self, index):
         @neural_computation
         def getitem_wrapper(t, index):

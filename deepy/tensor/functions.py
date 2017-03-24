@@ -54,6 +54,14 @@ def ifelse(condition, then_branch, else_branch):
     return theano_ifelse(condition, then_branch, else_branch)
 
 
+def tovar(theano_tensor, last_dim=None):
+    """
+    Convert a theano tensor to deepy variable.
+    """
+    from deepy.core.neural_var import NeuralVariable
+    return NeuralVariable(theano_tensor, dim=last_dim)
+
+
 def apply(func, *args, **kwargs):
     from deepy.core.neural_var import NeuralVariable
     dim = kwargs['dim'] if 'dim' in kwargs else args[0].dim()

@@ -3,7 +3,7 @@
 
 import numpy as np
 
-def pad_sequence(batch, pad_value=0, pad_side='right', output_mask=False, length=None, dtype=None):
+def pad_sequence(batch, pad_value=0, pad_side='right', output_mask=False, length=None, dtype="int32"):
     """
     Pad a sequence with a value either in the left or right side.
     """
@@ -16,7 +16,7 @@ def pad_sequence(batch, pad_value=0, pad_side='right', output_mask=False, length
         mask = np.zeros((len(batch), max_len), dtype=D.FLOATX)
     else:
         mask = None
-    new_batch = np.zeros((len(batch), max_len))
+    new_batch = np.zeros((len(batch), max_len), dtype=dtype)
     if pad_value != 0:
         new_batch.fill(pad_value)
     for i in range(len(batch)):
