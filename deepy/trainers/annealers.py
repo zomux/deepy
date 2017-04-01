@@ -45,7 +45,7 @@ class LearningRateAnnealer(TrainingController):
                 self._trainer.exit()
             else:
                 self._trainer.set_params(*self._trainer.best_params)
-                self._learning_rate.set_value(self._learning_rate.get_value() * 0.5)
+                self._learning_rate.set_value(np.array(self._learning_rate.get_value() * 0.5, dtype=FLOATX))
                 self._annealed_times += 1
                 self._annealed_iter = self._iter
                 logging.info("annealed learning rate to %f" % self._learning_rate.get_value())

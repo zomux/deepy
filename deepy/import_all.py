@@ -13,6 +13,6 @@ import pickle
 import deepy as D
 import layers as L
 import tensor as T
-
+from deepy.utils import MapDict
 
 
