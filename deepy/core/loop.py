@@ -63,6 +63,8 @@ class Loop(object):
         return self._loop_vars
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type is not None:
+            return False
         from neural_var import NeuralVariable
         output_tensors = []
         for k in self._ordered_out_keys:
