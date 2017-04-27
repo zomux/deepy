@@ -15,4 +15,5 @@ import layers as L
 import tensor as T
 from deepy.utils import MapDict
 
-
+import logging
+logging.basicConfig(level=logging.INFO)
