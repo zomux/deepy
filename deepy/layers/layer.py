@@ -100,6 +100,10 @@ class NeuralLayer(object):
         """
         Prepare function will be called after connected.
         """
+        
+    @property
+    def all_parameters(self):
+        return self.parameters
 
     @neural_computation_prefer_tensor
     def compute_tensor(self, *args, **kwargs):
