@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from deepy.core.env import EPSILON
+from deepy.core.env import EPSILON, FLOATX
 from deepy.core import neural_computation
 
 import theano.tensor as T
@@ -60,7 +60,7 @@ def accuracy(y, target_index, mask=None):
         target_index = target_index * mask - (1 - mask)
     hits = T.eq(y, target_index)
     if mask:
-        return T.sum(hits) / T.sum(mask)
+        return T.sum(hits).astype(FLOATX) / T.sum(mask)
     else:
         return T.mean(hits)
 
