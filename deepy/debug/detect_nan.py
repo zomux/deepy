@@ -32,3 +32,7 @@ def detect_nan(i, node, fn):
             import pdb;pdb.set_trace()
 
 DETECT_NAN_MODE = theano.compile.MonitorMode(post_func=detect_nan)
+
+def enable_nan_detection():
+    from ..utils.options import deepy_global_options
+    deepy_global_options["theano_mode"] = DETECT_NAN_MODE
