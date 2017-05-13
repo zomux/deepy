@@ -43,7 +43,7 @@ def cross_entropy_3d(y, target_index, mask=None, after_softmax=False):
     prob_vector = result_vector[target_index_vector]
     prob_vector = T.clip(prob_vector, EPSILON, 1.0 - EPSILON)
     log_prob_vector = - T.log(prob_vector) * flat_mask
-    cost = T.sum(log_prob_vector) / T.sum(flat_mask)
+    cost = T.sum(log_prob_vector) / (T.sum(flat_mask) + EPSILON)
     return cost
 
 @neural_computation
@@ -60,7 +60,7 @@ def accuracy(y, target_index, mask=None):
         target_index = target_index * mask - (1 - mask)
     hits = T.eq(y, target_index)
     if mask:
-        return T.sum(hits).astype(FLOATX) / T.sum(mask)
+        return T.sum(hits).astype(FLOATX) / (T.sum(mask) + EPSILON)
     else:
         return T.mean(hits)
 

@@ -26,7 +26,7 @@ def detect_nan(i, node, fn):
         if (not isinstance(output[0], np.random.RandomState) and
             np.isnan(output[0]).any()):
             print '*** NaN detected ***'
-            theano.printing.debugprint(node)
+            theano.printing.debugprint(node, stop_on_name=True)
             print 'Inputs : %s' % [input[0] for input in fn.inputs]
             print 'Outputs: %s' % [output[0] for output in fn.outputs]
             import pdb;pdb.set_trace()
