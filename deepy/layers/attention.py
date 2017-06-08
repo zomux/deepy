@@ -25,6 +25,26 @@ class Attention(NeuralLayer):
         Precompute partial values in the score function.
         """
         return T.dot(inputs, self.Ua)
+    
+    def compute_alignments_3d(self, states, precomputed_values, mask=None):
+        """
+        Compute the alignment weights when states are 3d tensors.
+        :param states: tensor ~ (B, T2, H)
+        :param precomputed_values: tensor ~ (B, T1, H)
+        :param mask: matrix ~ (B, T1)
+        :return: tensor ~ (B, T2, T1)
+        """
+        WaSp = T.dot(states, self.Wa)[:, :, None, :]
+        UaH = precomputed_values[:, None, :, :]
+        preact = WaSp + UaH
+        act = T.tanh(preact)
+        align_scores = T.dot(act, self.Va)
+        if mask:
+            mask = (1 - mask) * -99.00
+            align_scores += mask[:, None, :]
+        ashp = align_scores.shape
+        align_weights = T.nnet.softmax(align_scores.reshape((ashp[0] * ashp[1], ashp[2]))).reshape(ashp)
+        return align_weights
 
     def compute_alignments(self, prev_state, precomputed_values, mask=None):
         """
