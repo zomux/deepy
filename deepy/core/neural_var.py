@@ -105,10 +105,13 @@ class NeuralVariable(NeuralLayer):
             raise Exception("Theano tensor variables can not be used together with neural variables.")
 
         return NeuralVariable(self.tensor(*normal_args, **normal_kwargs), dim=self.dim())
-
-    def debug_monitor(self, name=""):
-        from deepy.debug import monitor_var_sum
-        self.tensor += monitor_var_sum(self.tensor, name=name)
+    
+    # Debug Functions
+    
+    def monitor(self, name=""):
+        from deepy.debug.monitor import monitor_tensor
+        self.tensor += monitor_tensor(self.tensor, name=name)
+        return self
 
     @property
     def test_value(self):
@@ -131,3 +134,5 @@ class NeuralVariable(NeuralLayer):
             return self.test_value.shape
         else:
             return None
+        
+    
