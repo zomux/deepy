@@ -87,10 +87,12 @@ class TrainingValidator(TrainingController):
         """
         This function will be called after each iteration.
         """
+        from deepy import runtime
         self._counter += 1
         if self._counter % self._freq == 0:
             cnt = 0.
             sum_map = defaultdict(float)
+            runtime.switch_training(False)
             for x in self._trainer.get_data(self._data_split):
                 val_map = self.run(x)
                 if not isinstance(val_map, dict):
@@ -98,6 +100,7 @@ class TrainingValidator(TrainingController):
                 for k, val in val_map.items():
                     sum_map[k] += val
                 cnt += 1
+            runtime.switch_training(True)
             for k in sum_map:
                 sum_map[k] /= cnt
             new_best = self.compare(sum_map)
