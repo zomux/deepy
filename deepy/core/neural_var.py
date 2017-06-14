@@ -135,4 +135,12 @@ class NeuralVariable(NeuralLayer):
         else:
             return None
         
+    def __str__(self):
+        pp = "{} ~ {}\n".format(str(self.tensor.type), str(self.ts))
+        pp += str(self.tv)
+        return pp
+    
+    def __repr__(self):
+        return self.__str__()
+    
     
