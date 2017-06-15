@@ -93,6 +93,9 @@ def optimize_updates(params, gradients, config=None, shapes=None):
     elif method == "MOMENTUM":
         from cores.momentum import momentum_core
         func = momentum_core
+    elif method == "NAG":
+        from cores.nag import nag_core
+        func = nag_core
 
     if not func:
         raise NotImplementedError("method '%s' is not supported" % method)

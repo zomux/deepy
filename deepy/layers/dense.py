@@ -1,5 +1,6 @@
 from deepy.core.env import FLOATX
 import theano.tensor as T
+import numpy as np
 from . import NeuralLayer
 
 class Dense(NeuralLayer):
@@ -22,8 +23,8 @@ class Dense(NeuralLayer):
 
     def compute_tensor(self, x):
         if self._wnorm:
-            fix = (self.g/T.sqrt(T.sum(T.square(self.W),axis=0)))[None, :]
-            W = self.W *fix
+            fix = (self.g * T.sqrt(T.sum(T.square(self.W),axis=0)))[None, :]
+            W = self.W * fix
         else:
             W = self.W
         return self._activation(T.dot(x, W) + self.B)
@@ -37,6 +38,7 @@ class Dense(NeuralLayer):
         self.register_parameters(self.W)
         if self._wnorm:
             self.g = self.create_weight(shape=(self.output_dim,), label="g")
+            self.g.tensor.set_value(1. / np.sqrt(np.sum(np.square(self.W.tensor.get_value()), axis=0)))
             self.register_parameters(self.g)
         if self.disable_bias:
             self.B = T.constant(0, dtype=FLOATX)
