@@ -19,6 +19,7 @@ class LearningRateAnnealer(TrainingController):
         """
         :type trainer: deepy.trainers.base.NeuralTrainer
         """
+        logging.info("learning rate annealing: patience={} anneal_times={} anneal_factor={}".format(patience, anneal_times, anneal_factor))
         self._iter = 0
         self._annealed_iter = 0
         self._patience = patience
