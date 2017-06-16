@@ -13,7 +13,6 @@ class TrainingController(object):
         :type trainer: deepy.trainers.base.NeuralTrainer
         """
         self._trainer = trainer
-        self._learning_rate = self._trainer.config.learning_rate
 
     def invoke(self):
         """
@@ -27,7 +26,7 @@ class TrainingValidator(TrainingController):
     """
 
     def __init__(self, valid_model=None, data_split='valid', freq=1500, save_path=None, criteria='cost',
-                 smaller_is_better=True, halving=False):
+                 smaller_is_better=True):
         """
         Initialize the training validator.
         """
@@ -101,7 +100,7 @@ class TrainingValidator(TrainingController):
                 for k, val in val_map.items():
                     sum_map[k] += val
                 cnt += 1
-            runtime.switch_training(False)
+            
             for k in sum_map:
                 sum_map[k] /= cnt
             new_best = self.compare(sum_map)
