@@ -15,7 +15,7 @@ class LearningRateAnnealer(TrainingController):
     Learning rate annealer.
     """
 
-    def __init__(self, patience=3, anneal_times=4):
+    def __init__(self, patience=3, anneal_times=4, anneal_factor=0.5):
         """
         :type trainer: deepy.trainers.base.NeuralTrainer
         """
@@ -23,14 +23,16 @@ class LearningRateAnnealer(TrainingController):
         self._annealed_iter = 0
         self._patience = patience
         self._anneal_times = anneal_times
+        self._anneal_factor = anneal_factor
         self._annealed_times = 0
-        self._learning_rate = 0
-        if type(self._learning_rate) == float:
-            raise Exception("use shared_scalar to wrap the value in the config.")
+        self._learning_rate = None
 
     def bind(self, trainer):
         super(LearningRateAnnealer, self).bind(trainer)
         self._learning_rate = self._trainer.config.learning_rate
+        if type(self._learning_rate) == float:
+            raise Exception("use shared_scalar to wrap the value in the config.")
+        assert self._learning_rate
         self._iter = 0
         self._annealed_iter = 0
 
@@ -46,7 +48,7 @@ class LearningRateAnnealer(TrainingController):
             else:
                 self._trainer.set_params(*self._trainer.best_params)
                 self._learning_rate.set_value(
-                    np.array(self._learning_rate.get_value() * 0.5, dtype=FLOATX))
+                    np.array(self._learning_rate.get_value() * self._anneal_factor, dtype=FLOATX))
                 self._annealed_times += 1
                 self._annealed_iter = self._iter
                 logging.info("annealed learning rate to %f" % self._learning_rate.get_value())
