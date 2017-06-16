@@ -28,7 +28,7 @@ class TrainingValidator(TrainingController):
     """
 
     def __init__(self, valid_model=None, data_split='valid', freq=1500, save_path=None, criteria='cost',
-                 smaller_is_better=True, annealing=False, anneal_times=3, anneal_factor=0.5):
+                 smaller_is_better=True, annealing=False, anneal_times=3, anneal_factor=0.5, anneal_patience=2):
         """
         Initialize the training validator.
         """
@@ -43,7 +43,9 @@ class TrainingValidator(TrainingController):
         self._annealing = annealing
         self._anneal_times = anneal_times
         self._annealed_times = 0
+        self._failed_times= 0
         self._anneal_factor = 0.5
+        self._anneal_patience = anneal_patience
 
     def compare(self, cost_map):
         """
@@ -113,13 +115,17 @@ class TrainingValidator(TrainingController):
             self._trainer.report(sum_map, self._data_split, new_best=new_best)
             if new_best:
                 self._trainer.save_checkpoint(self._save_path)
+                self._failed_times = 0
             if self._annealing and not new_best:
-                lr = self._trainer.config.learning_rate
-                if self._annealed_times >= self._anneal_times:
-                    logging.info("ending")
-                    self._trainer.exit()
-                else:
-                    lr.set_value(
-                        np.array(lr.get_value() * self._anneal_factor, dtype=FLOATX))
-                    self._annealed_times += 1
-                    logging.info("annealed learning rate to %f" % lr.get_value())
+                self._failed_times += 1
+                if self._failed_times >= self._anneal_patience:
+                    self._failed_times = 0
+                    lr = self._trainer.config.learning_rate
+                    if self._annealed_times >= self._anneal_times:
+                        logging.info("ending")
+                        self._trainer.exit()
+                    else:
+                        lr.set_value(
+                            np.array(lr.get_value() * self._anneal_factor, dtype=FLOATX))
+                        self._annealed_times += 1
+                        logging.info("annealed learning rate to %f" % lr.get_value())
