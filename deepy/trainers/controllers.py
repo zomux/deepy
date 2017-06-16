@@ -44,7 +44,7 @@ class TrainingValidator(TrainingController):
         self._anneal_times = anneal_times
         self._annealed_times = 0
         self._failed_times= 0
-        self._anneal_factor = 0.5
+        self._anneal_factor = anneal_factor
         self._anneal_patience = anneal_patience
 
     def compare(self, cost_map):
