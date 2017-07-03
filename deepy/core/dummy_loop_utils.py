@@ -713,18 +713,17 @@ def finish_scan(fn_outputs, local_vars):
     # the file because that would force on the user some dependencies that we
     # might do not want to. Currently we are working on removing the
     # dependencies on sandbox code completeley.
-    from theano.sandbox import cuda, gpuarray
-    if cuda.cuda_available or gpuarray.pygpu_activated:
+    from theano import gpuarray
+    if gpuarray.pygpu_activated:
         # very often we end up in this situation when we want to
         # replace w with w_copy, where w is a GPU variable
         # and w_copy is TensorType. This is caused because shared
-        # variables are put on GPU right aways >:| ,
+        # variables are put on GPU right away >:| ,
         new_givens = OrderedDict()
-
+    
         for w, w_copy in iteritems(givens):
-            if ((isinstance(w.type, cuda.CudaNdarrayType) or
-                 isinstance(w.type, gpuarray.GpuArrayType)) and
-                isinstance(w_copy.type, tensor.TensorType)):
+            if (isinstance(w.type, gpuarray.GpuArrayType) and
+                    isinstance(w_copy.type, tensor.TensorType)):
                 for o in inner_outs:
                     new_givens = traverse(o, w, w_copy, new_givens)
             else:
