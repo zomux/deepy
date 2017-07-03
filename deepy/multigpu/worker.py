@@ -7,6 +7,8 @@ from collections import OrderedDict
 import numpy as np
 
 from deepy.trainers import GeneralNeuralTrainer
+from deepy.utils.timeout import TimeoutError, timeout
+from deepy.core import runtime
 
 import logging
 
@@ -19,25 +21,34 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
     def __init__(self,
                  network, config=None, method='sgd',
                  server_port=5567,
-                 start_halving_at=6, end_at=10, sync_freq=3,
-                 valid_freq=1500, learning_rate=None, halving_freq=1,
-                 using_easgd=True
+                 anneal_rule='simple',
+                 start_anneal_at=6, anneal_freq=1,
+                 anneal_factor=0.5, anneal_patience=1,
+                 anneal_times=4,
+                 end_at=10,
+                 pack_size=5,
+                 valid_freq=1500, learning_rate=None,
+                 type="average"
                  ):
         super(MultiGPUTrainer, self).__init__(network, method, config)
         self._report_time = False
         self._port = server_port
         self.logger = logging.getLogger('MultiGPUTrainingWorker')
         self.epoch = 0
-        self._using_easgd = using_easgd
+        self._type = type
         if not learning_rate:
             learning_rate = float(self.config.learning_rate.get_value())
         self._schedule_params = {
             'learning_rate': learning_rate,
-            'start_halving_at': start_halving_at,
+            'start_anneal_at': start_anneal_at,
             'end_at': end_at,
-            'sync_freq': sync_freq,
+            'pack_size': pack_size,
             'valid_freq': valid_freq,
-            'halving_freq': halving_freq
+            'anneal_freq': anneal_freq,
+            'anneal_rule': anneal_rule,
+            'anneal_factor': anneal_factor,
+            'anneal_patience': anneal_patience,
+            'anneal_times': anneal_times
         }
 
     def create_param_map(self):
@@ -47,7 +58,10 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         return param_map
 
     def sync_hyperparams(self, param_map):
-        self.logger.info("(proc {}) sync hyperparameters".format(os.getpid()))
+        if abs(self.config.learning_rate.get_value() -  param_map['learning_rate']) < 1e-08:
+            self.logger.info(
+                "(proc {}) set learning rate to {}".format(
+                    os.getpid(), param_map['learning_rate']))
         if 'epoch' in param_map:
             self.epoch = param_map['epoch']
         if 'learning_rate' in param_map:
@@ -61,7 +75,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         Train the model in multi-GPU environment.
         """
         from platoon.channel import Worker
-        from platoon.param_sync import EASGD, ASGD
+        from platoon.training.global_dynamics import AverageSGD
         server_port = self._port
         param_map = self.create_param_map()
         # Initialize the worker
@@ -69,13 +83,11 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         if self.config.learning_rate:
             worker.send_req({'init_schedule': self._schedule_params})
         self.sync_hyperparams(worker.send_req('sync_hyperparams')['sync_hyperparams'])
-        easgd_alpha = worker.send_req('get_easgd_alpha')
-        if self._using_easgd:
-            self.logger.info("using EASGD with alpha={}".format(easgd_alpha))
-        else:
-            self.logger.info("using ASGD rule")
-        rule = EASGD(easgd_alpha) if self._using_easgd else ASGD()
-        worker.init_shared_params(param_map.values(), param_sync_rule=rule)
+        self.logger.info("Synchronizing type: {}".format(self._type))
+        if self._type != "average":
+            raise NotImplementedError
+        rule = AverageSGD(worker)
+        rule.make_rule(param_map.values())
         worker.send_req({
             "set_names": None,
             "training_names": self.training_names,
@@ -88,16 +100,15 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         network_callback = bool(self.network.training_callbacks)
         trainer_callback = bool(self._iter_controllers)
         # Start from valid, so the performance when a worked join can be known
-        worker.copy_to_local()
         if valid_set:
             self._run_valid(self.epoch, valid_set, dry_run=True)
             self.fix_costs()
-        worker.send_req({
-            "valid_done": None,
-            "valid_costs": self.last_run_costs,
-            "auto_save": self.config.auto_save
-        })
-        worker.copy_to_local()
+        # Do not send results
+            # worker.send_req({
+            #     "valid_done": None,
+            #     "valid_costs": self.last_run_costs,
+            #     "auto_save": self.config.auto_save
+            # })
         # Begin the loop
         while True:
             resp = worker.send_req('next')
@@ -109,10 +120,9 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 worker.send_req({'get_num_batches_done': len(train_batches)})
             elif 'eval' in resp:
                 self.best_cost = resp['best_valid_cost']
-                worker.copy_to_local()
                 valid_costs = None
                 test_costs = None
-                if valid_set:
+                if valid_set and False:
                     self._run_valid(self.epoch, valid_set)
                     self.fix_costs()
                     valid_costs = self.last_run_costs
@@ -128,7 +138,6 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 })
             elif 'valid' in resp:
                 self.best_cost = resp['best_valid_cost']
-                worker.copy_to_local()
                 if valid_set:
                     self._run_valid(self.epoch, valid_set, dry_run=True)
                     self.fix_costs()
@@ -140,18 +149,25 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
             elif 'train' in resp:
                 batch_ids = resp['train']
                 batch_costs = [[] for _ in self.training_names]
+                runtime.switch_training(True)
                 for batch_id in batch_ids:
                     x = train_batches[batch_id]
                     cost_x = self.learn(*x)
                     for i, cost in enumerate(cost_x):
                         batch_costs[i].append(cost)
                     self.last_cost = cost_x[0]
+                    try:
+                        with timeout(seconds=10):
+                            rule()
+                    except TimeoutError:
+                        runtime.switch_training(False)
+                        break
+                runtime.switch_training(False)
                 if network_callback:
                     self.network.training_callback()
                 if trainer_callback:
                     for func in self._iter_controllers:
                         func(self)
-                worker.sync_params(synchronous=True)
                 worker.send_req({'train_done': None, 'costs': [float(np.mean(c)) for c in batch_costs]})
             elif 'sync_hyperparams' in resp:
                 self.sync_hyperparams(resp['sync_hyperparams'])

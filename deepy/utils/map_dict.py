@@ -34,3 +34,7 @@ class MapDict(dict):
     def __delitem__(self, key):
         super(MapDict, self).__delitem__(key)
         del self.__dict__[key]
+        
+    def update(self, m):
+        for k, v in m.items():
+            self[k] = v
