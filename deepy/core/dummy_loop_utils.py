@@ -554,13 +554,19 @@ def finish_scan(fn_outputs, local_vars):
     dummy_outs = outputs
     if condition is not None:
         dummy_outs.append(condition)
-    dummy_f = function(dummy_args,
-                       dummy_outs,
-                       updates=updates,
-                       mode=compile.mode.Mode(linker='py',
-                                              optimizer=None),
-                       on_unused_input='ignore',
-                       profile=False)
+    try:
+        dummy_f = function(dummy_args,
+                           dummy_outs,
+                           updates=updates,
+                           mode=compile.mode.Mode(linker='py',
+                                                  optimizer=None),
+                           on_unused_input='ignore',
+                           profile=False)
+    except gof.fg.MissingInputError as err:
+        msg = ("\nPlease pass this variable to the scan's inner function. Do "
+               "not forget to also pass it to the `non_sequences` attribute "
+               "of scan.")
+        raise gof.fg.MissingInputError(err.args[0] + msg)
 
     ##
     # Step 5. Re-arange inputs of scan into a more strict order
@@ -755,7 +761,7 @@ def finish_scan(fn_outputs, local_vars):
     info['name'] = name
     info['mode'] = mode
     info['destroy_map'] = OrderedDict()
-    info['gpu'] = False
+    info['gpua'] = False
     info['as_while'] = as_while
     info['profile'] = profile
     info['allow_gc'] = allow_gc
