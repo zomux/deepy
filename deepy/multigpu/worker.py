@@ -36,6 +36,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         self.logger = logging.getLogger('MultiGPUTrainingWorker')
         self.epoch = 0
         self._type = type
+        self._multinode = False
         if not learning_rate:
             learning_rate = float(self.config.learning_rate.get_value())
         self._schedule_params = {
