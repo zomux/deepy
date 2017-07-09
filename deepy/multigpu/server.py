@@ -73,6 +73,7 @@ class ScheduledTrainingServer(Controller):
         self._n_failed_valid = 0
         self.msgbox = defaultdict(list)
         self.prepared_worker_pool = set()
+        self.log_text = ""
         self.log_file = open(log_path, "w") if log_path else None
         if log_path:
             logging.info("write logs into {}".format(log_path))
@@ -143,6 +144,7 @@ class ScheduledTrainingServer(Controller):
 
     def log(self, msg):
         logging.info(msg)
+        self.log_text += msg + "\n"
         if self.log_file:
             self.log_file.write(msg + "\n")
 
@@ -162,6 +164,9 @@ class ScheduledTrainingServer(Controller):
         self.prepared_worker_pool.clear()
         self.batch_pool = range(self.num_train_batches)
         self.rand.shuffle(self.batch_pool)
+        # Ensure that # pool % (dev * pack) == 0
+        round_size = self.device_num * self.pack_size
+        self.batch_pool = self.batch_pool[:(len(self.batch_pool) // round_size) * round_size]
         if self.epoch > self.end_at:
             self.log("Training is done, wait all workers to stop")
             return False
@@ -316,6 +321,8 @@ class ScheduledTrainingServer(Controller):
             self.num_train_batches = req['get_num_batches_done']
         elif 'sync_hyperparams' in req:
             response = {"sync_hyperparams": self.feed_hyperparams()}
+        elif req == "get_log_text":
+            response = self.log_text
         elif 'init_schedule' in req:
             with self._server_lock:
                 sys.stdout.write("\r")

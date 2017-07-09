@@ -36,7 +36,6 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         self.logger = logging.getLogger('MultiGPUTrainingWorker')
         self.epoch = 0
         self._type = type
-        self._multinode = False
         if not learning_rate:
             learning_rate = float(self.config.learning_rate.get_value())
         self._schedule_params = {
@@ -140,6 +139,10 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
             elif 'valid' in resp:
                 self.best_cost = resp['best_valid_cost']
                 if valid_set:
+                    log_resp = worker.send_req('get_log_text')
+                    import pdb
+                    pdb.set_trace()
+                    self.network.train_logger.log_pool = log_resp.split("\n")
                     self._run_valid(self.epoch, valid_set, dry_run=True)
                     self.fix_costs()
                 worker.send_req({
