@@ -140,8 +140,6 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 self.best_cost = resp['best_valid_cost']
                 if valid_set:
                     log_resp = worker.send_req('get_log_text')
-                    import pdb
-                    pdb.set_trace()
                     self.network.train_logger.log_pool = log_resp.split("\n")
                     self._run_valid(self.epoch, valid_set, dry_run=True)
                     self.fix_costs()
