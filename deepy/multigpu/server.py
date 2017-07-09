@@ -219,11 +219,11 @@ class ScheduledTrainingServer(Controller):
               response = self.msgbox[worker_id].pop()
             elif self.num_train_batches == 0:
                 response = "get_num_batches"
-            elif self._done:
-                response = "stop"
-                self.worker_is_done(worker_id)
             elif self._evaluating:
                 response = 'wait'
+            elif not self.batch_pool and self._done:
+                response = "stop"
+                self.worker_is_done(worker_id)
             elif not self.batch_pool:
                 # End of one iter
                 if self._train_costs:
@@ -302,7 +302,9 @@ class ScheduledTrainingServer(Controller):
                         self._done = True
                         self.log("stop after annealing {} times".format(self._annealed_times))
                         self.log("training time {:.4f}s".format(time.time() - self.start_time))
-                        response = "stop"
+                        # Clean up batch_pool
+                        round_size = self.pack_size * self.device_num
+                        self.batch_pool = self.batch_pool[:len(self.batch_pool) % round_size]
                     else:
                         self._lr *= self._anneal_factor
                         self._n_failed_valid = 0
