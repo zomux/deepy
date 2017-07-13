@@ -53,7 +53,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
 
     def create_param_map(self):
         param_map = OrderedDict()
-        for i, param in enumerate(self.training_params()):
+        for i, param in enumerate(self.network.all_parameters):
             param_map["param_{}".format(i)] = param
         return param_map
 
