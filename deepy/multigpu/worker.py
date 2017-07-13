@@ -173,5 +173,9 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 worker.send_req({'train_done': None, 'costs': [float(np.mean(c)) for c in batch_costs]})
             elif 'sync_hyperparams' in resp:
                 self.sync_hyperparams(resp['sync_hyperparams'])
+                if "reload" in resp and resp["reload"] and os.path.exists(self.config.auto_save):
+                    self.logger.info("reloading parameters ...")
+                    self.load_params(self.config.auto_save)
+                
         worker.close()
         return []

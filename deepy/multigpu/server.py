@@ -311,7 +311,7 @@ class ScheduledTrainingServer(Controller):
                         self._annealed_times += 1
                         self.log("annealing learning rate to {}".format(self._lr))
                         for wid in self.msgbox:
-                            self.msgbox[wid].append({"sync_hyperparams": self.feed_hyperparams()})
+                            self.msgbox[wid].append({"sync_hyperparams": self.feed_hyperparams(), "reload": True})
         elif 'train_done' in req:
             costs = req['costs']
             self._train_costs.append(costs)
