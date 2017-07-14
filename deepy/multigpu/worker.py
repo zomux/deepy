@@ -28,7 +28,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                  end_at=10,
                  pack_size=5,
                  valid_freq=1500, learning_rate=None,
-                 type="average"
+                 type="average", reload_on_anneal=False,
                  ):
         super(MultiGPUTrainer, self).__init__(network, method, config)
         self._report_time = False
@@ -36,6 +36,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         self.logger = logging.getLogger('MultiGPUTrainingWorker')
         self.epoch = 0
         self._type = type
+        self._reload_on_anneal = reload_on_anneal
         if not learning_rate:
             learning_rate = float(self.config.learning_rate.get_value())
         self._schedule_params = {
@@ -173,7 +174,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 worker.send_req({'train_done': None, 'costs': [float(np.mean(c)) for c in batch_costs]})
             elif 'sync_hyperparams' in resp:
                 self.sync_hyperparams(resp['sync_hyperparams'])
-                if "reload" in resp and resp["reload"] and os.path.exists(self.config.auto_save):
+                if self._reload_on_anneal and "reload" in resp and resp["reload"] and os.path.exists(self.config.auto_save):
                     self.logger.info("reloading parameters ...")
                     self.load_params(self.config.auto_save)
                 
