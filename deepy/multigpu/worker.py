@@ -5,6 +5,7 @@ import time
 import os
 from collections import OrderedDict
 import numpy as np
+import theano
 
 from deepy.trainers import GeneralNeuralTrainer
 from deepy.utils.timeout import TimeoutError, timeout
@@ -39,6 +40,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         self._reload_on_anneal = reload_on_anneal
         if not learning_rate:
             learning_rate = float(self.config.learning_rate.get_value())
+        self._optimize_func = None
         self._schedule_params = {
             'learning_rate': learning_rate,
             'start_anneal_at': start_anneal_at,
@@ -51,12 +53,77 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
             'anneal_patience': anneal_patience,
             'anneal_times': anneal_times
         }
+    
+    def build_gradient_caches(self):
+        """
+        Build shared variables contaning gradients.
+        """
+        self.gradient_caches = []
+        params = self.training_params()
+        for i, param in enumerate(params):
+            val = param.get_value()
+            grad_cache = theano.shared(val * 0, name="gc_{}".format(i))
+            self.gradient_caches.append(grad_cache)
+            
+    def _learning_updates(self):
+        """
+        Updating gradient caches.
+        """
+        params = self.training_params()
+        gradients = self.get_gradients(params)
+        gc_updates = []
+        for grad, gc in zip(gradients, self.gradient_caches):
+            gc_updates.append((gc, grad))
+        return gc_updates
+    
+    def learning_function(self):
+        """
+        Get the learning function.
+        :param func:
+        :return:
+        """
+        network_updates = list(self.network.updates) + list(self.network.training_updates)
+        learning_updates = list(self._learning_updates())
+        update_list = network_updates + learning_updates
 
-    def create_param_map(self):
-        param_map = OrderedDict()
-        for i, param in enumerate(self.network.all_parameters):
-            param_map["param_{}".format(i)] = param
-        return param_map
+        logging.info("network updates: %s" % " ".join(map(str, [x[0] for x in network_updates])))
+        logging.info("gradient updates: %s" % " ".join(map(str, [x[0] for x in learning_updates])))
+
+        variables = self.network.input_variables + self.network.target_variables
+        givens = None
+        return theano.function(
+            variables,
+            map(lambda v: theano.Out(v, borrow=True), self.training_variables),
+            updates=update_list, allow_input_downcast=True,
+            mode=self.config.get("theano_mode", None),
+            givens=givens)
+    
+    def optimization_function(self):
+        """
+        Compile the optimization function.
+        """
+        params = self.training_params()
+        opt_updates = self.optimization_updates(params, self.gradient_caches)
+        logging.info("optimization updates: %s" % " ".join(map(str, [x[0] for x in opt_updates])))
+        return theano.function(
+            [],
+            None,
+            updates=opt_updates, allow_input_downcast=True,
+            mode=self.config.get("theano_mode", None))
+    
+    def update_params(self):
+        if not self._optimize_func:
+            start_time = time.time()
+            logging.info('compiling optimization function')
+            self._optimize_func = self.optimization_function()
+            compile_time = time.time() - start_time
+            logging.info("took {} seconds to compile".format(int(compile_time)))
+        return self._optimize_func()
+
+    def check_param_hash(self):
+        params = self.training_params()
+        hash_str = " ".join(["{:.2f}".format(p.get_value().max()) for p in params])
+        logging.info("param hash: {}".format(hash_str))
 
     def sync_hyperparams(self, param_map):
         if abs(self.config.learning_rate.get_value() -  param_map['learning_rate']) < 1e-08:
@@ -78,7 +145,7 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         from platoon.channel import Worker
         from platoon.training.global_dynamics import AverageSGD
         server_port = self._port
-        param_map = self.create_param_map()
+        self.check_param_hash()
         # Initialize the worker
         worker = Worker(control_port=server_port)
         if self.config.learning_rate:
@@ -87,8 +154,10 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
         self.logger.info("Synchronizing type: {}".format(self._type))
         if self._type != "average":
             raise NotImplementedError
-        rule = AverageSGD(worker)
-        rule.make_rule(param_map.values())
+        # Build gradient sync rule
+        self.build_gradient_caches()
+        sync_rule = AverageSGD(worker)
+        sync_rule.make_rule(self.gradient_caches)
         worker.send_req({
             "set_names": None,
             "training_names": self.training_names,
@@ -161,10 +230,11 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                     self.last_cost = cost_x[0]
                     try:
                         with timeout(seconds=10):
-                            rule()
+                            sync_rule()
                     except TimeoutError:
                         runtime.switch_training(False)
                         break
+                    self.update_params()
                 runtime.switch_training(False)
                 if network_callback:
                     self.network.training_callback()
