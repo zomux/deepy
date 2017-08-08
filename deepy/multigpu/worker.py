@@ -18,7 +18,6 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
     General neural network trainer.
     """
 
-
     def __init__(self,
                  network, config=None, method='sgd',
                  server_port=5567,
@@ -156,8 +155,11 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
             raise NotImplementedError
         # Build gradient sync rule
         self.build_gradient_caches()
+        training_cnt = 0
         sync_rule = AverageSGD(worker)
         sync_rule.make_rule(self.gradient_caches)
+        param_sync_rule = AverageSGD(worker)
+        param_sync_rule.make_rule(self.network.all_parameters)
         worker.send_req({
             "set_names": None,
             "training_names": self.training_names,
@@ -179,6 +181,10 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
             #     "valid_costs": self.last_run_costs,
             #     "auto_save": self.config.auto_save
             # })
+        # Pre-sync params
+        self.logger.info("pre-sync parameters ...")
+        param_sync_rule()
+        self.check_param_hash()
         # Begin the loop
         while True:
             resp = worker.send_req('next')
@@ -241,6 +247,10 @@ class MultiGPUTrainer(GeneralNeuralTrainer):
                 if trainer_callback:
                     for func in self._iter_controllers:
                         func(self)
+                training_cnt += 1
+                if training_cnt >= 100:
+                    param_sync_rule()
+                    training_cnt = 0
                 worker.send_req({'train_done': None, 'costs': [float(np.mean(c)) for c in batch_costs]})
             elif 'sync_hyperparams' in resp:
                 self.sync_hyperparams(resp['sync_hyperparams'])
